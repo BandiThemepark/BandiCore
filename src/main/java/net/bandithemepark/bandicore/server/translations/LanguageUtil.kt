@@ -3,6 +3,7 @@ package net.bandithemepark.bandicore.server.translations
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.getTranslatedMessage
 import net.bandithemepark.bandicore.util.Util
+import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
@@ -28,18 +29,18 @@ object LanguageUtil {
     }
 
     fun getMessage(language: Language, messageId: String, vararg replacements: MessageReplacement): String {
-        val message = getMessage(language, messageId)
+        var message = getMessage(language, messageId)
         for(replacement in replacements) {
-            message.replace("%${replacement.variable}%", replacement.replacement)
+            message = message.replace("%${replacement.variable}%", replacement.replacement)
         }
         return message
     }
 
     // Function that gets a message from a player and message id
     fun getMessage(player: Player, messageId: String, vararg replacements: MessageReplacement): String {
-        val message = getMessage(getLanguage(player), messageId)
+        var message = getMessage(getLanguage(player), messageId)
         for(replacement in replacements) {
-            message.replace("%${replacement.variable}%", replacement.replacement)
+            message = message.replace("%${replacement.variable}%", replacement.replacement)
         }
         return message
     }
