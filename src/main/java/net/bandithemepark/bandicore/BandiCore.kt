@@ -20,7 +20,7 @@ class BandiCore: JavaPlugin() {
         if(!dataFolder.exists()) {
             val fm = FileManager()
             fm.getConfig("config.yml").saveDefaultConfig()
-            fm.getConfig("translations/english.yml").saveDefaultConfig()
+            fm.getConfig("translations/english.json").saveDefaultConfig()
         }
 
         server = Server()
