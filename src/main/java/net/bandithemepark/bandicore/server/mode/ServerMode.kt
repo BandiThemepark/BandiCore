@@ -11,5 +11,9 @@ class ServerMode(val id: String, val motd: String, val vipsCanJoin: Boolean, val
         fun getFromId(id: String): ServerMode? {
             return types.find { it.id == id }
         }
+
+        fun getAllIds(): List<String> {
+            return types.map { it.id }
+        }
     }
 }

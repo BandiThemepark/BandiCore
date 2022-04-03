@@ -3,6 +3,7 @@ package net.bandithemepark.bandicore.util
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.entity.Player
+import org.bukkit.util.StringUtil
 
 object Util {
 
@@ -20,5 +21,12 @@ object Util {
 
     fun Player.sendColoredActionBar(message: String) {
         this.sendActionBar(color(message))
+    }
+
+    fun getTabCompletions(currentArg: String, options: List<String>): MutableList<String> {
+        val completions = mutableListOf<String>()
+        StringUtil.copyPartialMatches(currentArg, options, completions)
+        completions.sort()
+        return completions
     }
 }
