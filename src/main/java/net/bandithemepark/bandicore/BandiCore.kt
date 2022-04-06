@@ -4,6 +4,8 @@ import net.bandithemepark.bandicore.network.queue.BandiQueueUpdater
 import net.bandithemepark.bandicore.server.Server
 import net.bandithemepark.bandicore.server.mode.ServerModeCommand
 import net.bandithemepark.bandicore.util.FileManager
+import net.bandithemepark.bandicore.util.npc.NPC
+import net.bandithemepark.bandicore.util.npc.NPCPathfinding
 import org.bukkit.plugin.java.JavaPlugin
 
 class BandiCore: JavaPlugin() {
@@ -28,6 +30,9 @@ class BandiCore: JavaPlugin() {
         // Registering everything
         registerCommands()
 
+        // Starting the necessary timers
+        NPC.startTimer()
+
         // Setting up the network messaging channels
 //        server.messenger.registerIncomingPluginChannel(this, "bandicore:queue", BandiQueueUpdater())
 //        server.messenger.registerOutgoingPluginChannel(this, "bandicore:queue")
@@ -35,10 +40,12 @@ class BandiCore: JavaPlugin() {
     }
 
     override fun onDisable() {
-
+        // Deleting/removing entities
+        NPC.removeAll()
     }
 
-    fun registerCommands() {
+    private fun registerCommands() {
         getCommand("servermode")!!.setExecutor(ServerModeCommand())
+        getCommand("npctest")!!.setExecutor(NPCPathfinding.TestCommand())
     }
 }

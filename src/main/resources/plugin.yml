@@ -5,3 +5,5 @@ api-version: 1.18
 commands:
   servermode:
     description: Change the server mode
+  npctest:
+    description: Test command for npcs
