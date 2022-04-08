@@ -29,6 +29,7 @@ class BandiCore: JavaPlugin() {
 
         // Registering everything
         registerCommands()
+        registerEvents()
 
         // Starting the necessary timers
         NPC.startTimer()
@@ -47,5 +48,9 @@ class BandiCore: JavaPlugin() {
     private fun registerCommands() {
         getCommand("servermode")!!.setExecutor(ServerModeCommand())
         getCommand("npctest")!!.setExecutor(NPCPathfinding.TestCommand())
+    }
+
+    private fun registerEvents() {
+        getServer().pluginManager.registerEvents(NPC.Events(), this)
     }
 }

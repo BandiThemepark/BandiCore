@@ -15,41 +15,51 @@ class NPCPathfinding(val npc: NPC, var speed: Double) {
     var path: NPCPath? = null
     var goal: Location? = null
 
+    // Function to convert a PaperSpigot Path to our own Path class
     private fun toPath(paperPath: Pathfinder.PathResult, world: World): NPCPath {
         val newPoints = mutableListOf<Vector>()
         paperPath.points.forEach { newPoints.add(Vector(it.x+0.5, it.y, it.z+0.5)) }
         return NPCPath(world, newPoints)
     }
 
+    // Function that makes the NPC calculate a path and then follow it to a location
     fun walkTo(location: Location) {
         val paperPath = getPath(npc.location!!, location)
         if(paperPath != null) {
             path = toPath(paperPath, npc.location!!.world)
         } else {
-            // TODO Situatie handelen als er geen path gevonden is
+            // TODO Manage the situation when no path is found (or the pathfinding zombie is dead?)
         }
     }
 
+    // The updating function that handles moving the NPC along the path
     fun update() {
         if(npc.spawned) {
             if (goal != null) {
                 val distanceToMovePerTick = speed / 20.0
                 val distanceToGoal = Util.getLengthBetween(npc.location!!, goal!!)
 
+                // If check to see if the NPC isn't already at the goal
                 if(distanceToGoal > distanceToMovePerTick) {
+                    // Moving the NPC towards it's next goal on the path
                     val newLocation = goal!!.clone().subtract(npc.location!!.clone()).toVector().normalize().multiply(distanceToMovePerTick).add(npc.location!!.toVector())
 
                     val directionLoc = goal!!.clone()
                     directionLoc.direction = newLocation.clone().subtract(npc.location!!.clone().toVector())
 
                     npc.moveHead(directionLoc.pitch, directionLoc.yaw)
-                    npc.teleport(newLocation.toLocation(npc.location!!.world))
+                    npc.teleport(newLocation.toLocation(npc.location!!.world, directionLoc.yaw, directionLoc.pitch))
                 } else {
+                    // Moving the NPC to the final goal
                     val directionLoc = goal!!.clone()
                     directionLoc.direction = goal!!.clone().subtract(npc.location!!.clone()).toVector()
 
                     npc.moveHead(directionLoc.pitch, directionLoc.yaw)
-                    npc.teleport(goal!!)
+
+                    val newLocation = goal!!.clone()
+                    newLocation.pitch = directionLoc.pitch
+                    newLocation.yaw = directionLoc.yaw
+                    npc.teleport(newLocation)
 
                     goal = null
                 }

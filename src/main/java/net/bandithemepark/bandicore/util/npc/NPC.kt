@@ -3,12 +3,14 @@ package net.bandithemepark.bandicore.util.npc
 import com.mojang.authlib.GameProfile
 import com.mojang.datafixers.util.Pair
 import net.bandithemepark.bandicore.BandiCore
+import net.kyori.adventure.text.Component
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.*
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EquipmentSlot
+import net.minecraft.world.scores.PlayerTeam
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
@@ -42,9 +44,11 @@ class NPC(val name: String, val skinOwner: Player, var visibilityType: NPCVisibi
         profile = GameProfile(UUID.randomUUID(), name)
         profile!!.properties.put("textures", (skinOwner as CraftPlayer).handle.gameProfile.properties.get("textures").iterator().next())
 
+        // Creating the actual NPC instance and moving it to the spawn location
         npc = ServerPlayer(server, (location.world as CraftWorld).handle, profile!!)
         npc!!.setPos(location.x, location.y, location.z)
 
+        // Sending packets for spawning the NPC
         sendPacket(ClientboundPlayerInfoPacket(ClientboundPlayerInfoPacket.Action.ADD_PLAYER, npc))
         sendPacket(ClientboundAddPlayerPacket(npc!!))
         showSecondLayer()
@@ -52,9 +56,11 @@ class NPC(val name: String, val skinOwner: Player, var visibilityType: NPCVisibi
         spawned = true
         active.add(this)
 
+        // Hiding the NPC on the tablist (they are automatically shown there)
         Bukkit.getScheduler().scheduleSyncDelayedTask(BandiCore.instance, { hideFromTabList() }, 2)
     }
 
+    // The spawning function, just for one player and with some extra stuff for when the NPC has already been spawned
     fun spawnFor(player: Player) {
         (player as CraftPlayer).handle.connection.send(ClientboundPlayerInfoPacket(ClientboundPlayerInfoPacket.Action.ADD_PLAYER, npc))
         player.handle.connection.send(ClientboundAddPlayerPacket(npc!!))
@@ -65,6 +71,8 @@ class NPC(val name: String, val skinOwner: Player, var visibilityType: NPCVisibi
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(BandiCore.instance, {
             player.handle.connection.send(ClientboundPlayerInfoPacket(ClientboundPlayerInfoPacket.Action.REMOVE_PLAYER, npc))
+            showSecondLayer()
+            moveHead(location!!.pitch, location!!.yaw)
             updatePosition(true)
             updateHelmet()
             updateItemInMainHand()
@@ -83,11 +91,11 @@ class NPC(val name: String, val skinOwner: Player, var visibilityType: NPCVisibi
 
     private fun showSecondLayer() {
         val data = npc!!.entityData
-        data.set(net.minecraft.world.entity.player.Player.DATA_PLAYER_MODE_CUSTOMISATION, 127.toByte())
+        data.set(net.minecraft.world.entity.player.Player.DATA_PLAYER_MODE_CUSTOMISATION, 0x7E.toByte())
         sendPacket(ClientboundSetEntityDataPacket(npc!!.id, data, true))
     }
 
-    // Items
+    // All items to hold
     var itemInMainHand: ItemStack? = null
         set(value) {
             field = value
@@ -119,6 +127,7 @@ class NPC(val name: String, val skinOwner: Player, var visibilityType: NPCVisibi
     }
 
     // Everything related to moving/teleporting
+    // Utility function to check if a certain block is a trapdoor
     private fun isOpenTrapdoor(block: Block): Boolean {
         if(block.type.toString().endsWith("TRAPDOOR")) {
             val trapdoor = location!!.block.blockData as TrapDoor
@@ -128,6 +137,7 @@ class NPC(val name: String, val skinOwner: Player, var visibilityType: NPCVisibi
         return false
     }
 
+    // Utility function to get the height at a certain location/get the height of the block at that location
     private fun getHeightAtLocation(): Double {
         // Special case where open trapdoors would lift NPCs up
         if(isOpenTrapdoor(location!!.block)) return location!!.blockY.toDouble()
@@ -176,6 +186,7 @@ class NPC(val name: String, val skinOwner: Player, var visibilityType: NPCVisibi
         }
     }
 
+    // Function that moves the NPC to a certain location
     private fun updatePosition(heightCorrection: Boolean) {
         if(heightCorrection) {
             val newY = getHeightAtLocation()
@@ -187,6 +198,7 @@ class NPC(val name: String, val skinOwner: Player, var visibilityType: NPCVisibi
         sendPacket(ClientboundTeleportEntityPacket(npc as Entity))
     }
 
+    // Function to move the head of the NPC
     fun moveHead(pitch: Float, yaw: Float) {
         sendPacket(ClientboundRotateHeadPacket(npc!!, ((yaw%360)*256/360).toInt().toByte()))
         sendPacket(ClientboundMoveEntityPacket.Rot(npc!!.id, ((yaw%360)*256/360).toInt().toByte(), ((pitch%360)*256/360).toInt().toByte(), false))
@@ -250,7 +262,9 @@ class NPC(val name: String, val skinOwner: Player, var visibilityType: NPCVisibi
     class Events: Listener {
         @EventHandler
         fun onJoin(event: PlayerJoinEvent) {
-            for(npc in active) npc.spawnFor(event.player)
+            Bukkit.getScheduler().scheduleSyncDelayedTask(BandiCore.instance, {
+                for(npc in active) npc.spawnFor(event.player)
+            }, 40)
         }
     }
 
