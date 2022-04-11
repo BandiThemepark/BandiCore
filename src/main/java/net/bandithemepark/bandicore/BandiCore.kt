@@ -1,6 +1,8 @@
 package net.bandithemepark.bandicore
 
+import net.bandithemepark.bandicore.bandithemepark.kaliba.KalibaEffects
 import net.bandithemepark.bandicore.network.queue.BandiQueueUpdater
+import net.bandithemepark.bandicore.park.effect.AmbientEffect
 import net.bandithemepark.bandicore.server.Server
 import net.bandithemepark.bandicore.server.mode.ServerModeCommand
 import net.bandithemepark.bandicore.util.FileManager
@@ -33,6 +35,9 @@ class BandiCore: JavaPlugin() {
 
         // Starting the necessary timers
         NPC.startTimer()
+
+        KalibaEffects()
+        AmbientEffect.startTimer()
 
         // Setting up the network messaging channels
 //        server.messenger.registerIncomingPluginChannel(this, "bandicore:queue", BandiQueueUpdater())

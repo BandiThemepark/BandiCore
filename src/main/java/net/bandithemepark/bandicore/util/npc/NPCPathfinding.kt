@@ -2,6 +2,7 @@ package net.bandithemepark.bandicore.util.npc
 
 import com.destroystokyo.paper.entity.Pathfinder
 import net.bandithemepark.bandicore.util.Util
+import net.kyori.adventure.text.Component
 import org.bukkit.*
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -87,6 +88,8 @@ class NPCPathfinding(val npc: NPC, var speed: Double) {
             testEntity.isSilent = true
             testEntity.isInvulnerable = true
             testEntity.equipment.setItemInMainHand(null)
+            testEntity.isPersistent = true
+            testEntity.customName(Component.text("PathfindingZombie"))
         }
 
         fun getPath(from: Location, to: Location): Pathfinder.PathResult? {
