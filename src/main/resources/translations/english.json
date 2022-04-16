@@ -3,5 +3,7 @@
   "no-permission": "You don't have permission to do this",
   "server-mode-invalid-mode": "This server mode does not exist",
   "server-mode-changed": "The server mode has been changed to %mode%",
-  "server-mode-invalid-args": "Invalid arguments! Usage: /servermode <mode>"
+  "server-mode-invalid-args": "Invalid arguments! Usage: /servermode <mode>",
+  "armor-stand-editor-started": "You have started the ArmorStandEditor",
+  "armor-stand-editor-stopped": "You have stopped the ArmorStandEditor"
 }

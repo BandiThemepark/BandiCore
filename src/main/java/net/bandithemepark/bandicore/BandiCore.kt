@@ -4,6 +4,8 @@ import net.bandithemepark.bandicore.util.entity.PacketEntity
 import net.bandithemepark.bandicore.bandithemepark.kaliba.KalibaEffects
 import net.bandithemepark.bandicore.park.effect.AmbientEffect
 import net.bandithemepark.bandicore.server.Server
+import net.bandithemepark.bandicore.server.armorstandtools.ArmorStandEditorCommand
+import net.bandithemepark.bandicore.server.armorstandtools.ArmorStandEditorEvents
 import net.bandithemepark.bandicore.server.customplayer.CustomPlayer
 import net.bandithemepark.bandicore.server.mode.ServerModeCommand
 import net.bandithemepark.bandicore.util.FileManager
@@ -55,13 +57,13 @@ class BandiCore: JavaPlugin() {
     private fun registerCommands() {
         getCommand("servermode")!!.setExecutor(ServerModeCommand())
         getCommand("npctest")!!.setExecutor(NPCPathfinding.TestCommand())
-        //getCommand("ast")!!.setExecutor(ArmorStandEditorCommand())
+        getCommand("ast")!!.setExecutor(ArmorStandEditorCommand())
         getCommand("customplayertest")!!.setExecutor(CustomPlayer.TestCommand())
     }
 
     private fun registerEvents() {
         getServer().pluginManager.registerEvents(PacketEntity.Events(), this)
         getServer().pluginManager.registerEvents(NPC.Events(), this)
-        //getServer().pluginManager.registerEvents(ArmorStandEditorEvents(), this)
+        getServer().pluginManager.registerEvents(ArmorStandEditorEvents(), this)
     }
 }

@@ -7,6 +7,7 @@ import net.bandithemepark.bandicore.util.entity.PacketEntity
 import net.bandithemepark.bandicore.util.math.MathUtil
 import net.bandithemepark.bandicore.util.math.Quaternion
 import net.kyori.adventure.text.Component
+import net.minecraft.world.entity.decoration.ArmorStand
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.command.Command
@@ -40,49 +41,50 @@ class CustomPlayer(val skin: CustomPlayerSkin) {
         this.location = spawnLocation.clone().add(0.0, 0.63, 0.0)
         this.location!!.yaw = 0.0f
 
-        //head.spawn(location!!.clone().add(5.0/16.0, 0.5/16.0-0.63, 0.0))
         head.spawn(location!!.clone().add(headOffset))
         head.handle!!.isInvisible = true
+        (head.handle!! as ArmorStand).isMarker = true
         head.itemInMainHand = ItemUtils.getPlayerHead(Bukkit.getOfflinePlayer(skin.uuid), 8)
         head.setArmsVisible()
         head.setRightArmPose(0.0, 0.0, 0.0)
 
         tempHead.spawn(location!!.clone().add(0.0, -2.1-0.63, 0.0))
         tempHead.handle!!.isInvisible = true
+        (tempHead.handle!! as ArmorStand).isMarker = true
         tempHead.helmet = ItemUtils.getPlayerHead(Bukkit.getOfflinePlayer(skin.uuid), 8)
         tempHead.setHeadPose(0.0, 0.0, 0.0)
 
-        //rightArm.spawn(location!!.clone().add(0.025, -0.05-0.63, 0.0))
         rightArm.spawn(location!!.clone().add(rightArmOffset))
         rightArm.handle!!.isInvisible = true
+        (rightArm.handle!! as ArmorStand).isMarker = true
         rightArm.itemInMainHand = ItemUtils.getPlayerHead(Bukkit.getOfflinePlayer(skin.uuid), 4)
         rightArm.setArmsVisible()
         rightArm.setRightArmPose(0.0, 0.0, 0.0)
 
-        //leftArm.spawn(location!!.clone().add(-0.025, -0.05-0.63, 0.0))
         leftArm.spawn(location!!.clone().add(leftArmOffset))
         leftArm.handle!!.isInvisible = true
+        (leftArm.handle!! as ArmorStand).isMarker = true
         leftArm.itemInMainHand = ItemUtils.getPlayerHead(Bukkit.getOfflinePlayer(skin.uuid), 3)
         leftArm.setArmsVisible()
         leftArm.setRightArmPose(0.0, 0.0, 0.0)
 
-        //body.spawn(location!!.clone().add(5.0/16.0, -0.63-0.63, 0.0))
         body.spawn(location!!.clone().add(bodyOffset))
         body.handle!!.isInvisible = true
+        (body.handle!! as ArmorStand).isMarker = true
         body.itemInMainHand = ItemUtils.getPlayerHead(Bukkit.getOfflinePlayer(skin.uuid), 7)
         body.setArmsVisible()
         body.setRightArmPose(0.0, 0.0, 0.0)
 
-        //rightLeg.spawn(location!!.clone().add(4.2/16.0, -0.63-0.63, 0.0))
         rightLeg.spawn(location!!.clone().add(rightLegOffset))
         rightLeg.handle!!.isInvisible = true
+        (rightLeg.handle!! as ArmorStand).isMarker = true
         rightLeg.itemInMainHand = ItemUtils.getPlayerHead(Bukkit.getOfflinePlayer(skin.uuid), 2)
         rightLeg.setArmsVisible()
         rightLeg.setRightArmPose(0.0, 0.0, 0.0)
 
-        //leftLeg.spawn(location!!.clone().add(-4.2/16.0, -0.63-0.63, 0.0))
         leftLeg.spawn(location!!.clone().add(leftLegOffset))
         leftLeg.handle!!.isInvisible = true
+        (leftLeg.handle!! as ArmorStand).isMarker = true
         leftLeg.itemInMainHand = ItemUtils.getPlayerHead(Bukkit.getOfflinePlayer(skin.uuid), 1)
         leftLeg.setArmsVisible()
         leftLeg.setRightArmPose(0.0, 0.0, 0.0)
@@ -183,9 +185,6 @@ class CustomPlayer(val skin: CustomPlayerSkin) {
                     customPlayer.setVisibilityType(PacketEntity.VisibilityType.WHITELIST)
                     customPlayer.setVisibilityList(mutableListOf(sender))
                     customPlayer.spawn(sender.location)
-
-//                    customPlayer.completeRotation = Quaternion.fromYawPitchRoll(90.0, 0.0, 0.0)
-//                    customPlayer.updatePosition()
 
                     var currentRotation = 0
                     Bukkit.getScheduler().scheduleSyncRepeatingTask(BandiCore.instance, {
