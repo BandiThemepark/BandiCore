@@ -1,6 +1,7 @@
 package net.bandithemepark.bandicore.util.npc
 
 import com.destroystokyo.paper.entity.Pathfinder
+import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent
 import net.bandithemepark.bandicore.util.Util
 import net.kyori.adventure.text.Component
 import org.bukkit.*
@@ -93,6 +94,7 @@ class NPCPathfinding(val npc: NPC, var speed: Double) {
             testEntity.equipment.setItemInMainHand(null)
             testEntity.isPersistent = true
             testEntity.customName(Component.text("PathfindingZombie"))
+            testEntity.removeWhenFarAway = false
         }
 
         fun getPath(from: Location, to: Location): Pathfinder.PathResult? {
@@ -100,15 +102,6 @@ class NPCPathfinding(val npc: NPC, var speed: Double) {
             val path = testEntity.pathfinder.findPath(to)
             testEntity.teleport(holdingLocation)
             return path
-        }
-    }
-
-    class Events: Listener {
-        @EventHandler
-        fun onEntityDamage(event: EntityDamageEvent) {
-            if(event.entity == testEntity) {
-                event.isCancelled = true
-            }
         }
     }
 

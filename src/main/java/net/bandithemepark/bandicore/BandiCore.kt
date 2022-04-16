@@ -62,7 +62,6 @@ class BandiCore: JavaPlugin() {
     private fun registerEvents() {
         getServer().pluginManager.registerEvents(PacketEntity.Events(), this)
         getServer().pluginManager.registerEvents(NPC.Events(), this)
-        getServer().pluginManager.registerEvents(NPCPathfinding.Events(), this)
         //getServer().pluginManager.registerEvents(ArmorStandEditorEvents(), this)
     }
 }
