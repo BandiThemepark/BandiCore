@@ -3,7 +3,6 @@ package net.bandithemepark.bandicore.server.armorstandtools
 import net.bandithemepark.bandicore.BandiCore
 import org.bukkit.Bukkit
 import org.bukkit.Material
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity
 import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -83,7 +82,7 @@ class ArmorStandEditorEvents: Listener {
                             Bukkit.getScheduler().runTask(BandiCore.instance, Runnable { session.openGUI(session.editing!!) })
                         }
                         25 -> {
-                            // naam zetten met chatprompt util
+                            // TODO Add a way to change the name of the armor stand (using something like a chat prompt)
                         }
                         32 -> {
                             session.editing!!.isInvisible = !session.editing!!.isInvisible
