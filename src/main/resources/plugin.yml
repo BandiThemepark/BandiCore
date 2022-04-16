@@ -7,3 +7,12 @@ commands:
     description: Change the server mode
   npctest:
     description: Test command for npcs
+  ast:
+    description: Armorstand editor
+    aliases:
+      - astools
+      - armorstandtools
+      - asedit
+      - ase
+  customplayertest:
+    description: Test command for custom players

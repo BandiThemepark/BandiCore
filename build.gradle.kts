@@ -17,9 +17,9 @@ java {
 }
 
 repositories {
-//    maven {
-//        url = uri("https://repo.dmulloy2.net/repository/public/")
-//    }
+    maven {
+        url = uri("https://repo.dmulloy2.net/repository/public/")
+    }
 }
 
 dependencies {
@@ -27,7 +27,7 @@ dependencies {
     compileOnly("javax.annotation:javax.annotation-api:1.3.2")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10")
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.6.10")
-//    compileOnly("com.comphenix.protocol", "ProtocolLib", "4.8.0")
+    compileOnly("com.comphenix.protocol", "ProtocolLib", "4.8.0")
 }
 
 tasks {

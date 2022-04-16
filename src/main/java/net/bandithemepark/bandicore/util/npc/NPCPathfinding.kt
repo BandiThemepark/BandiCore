@@ -10,6 +10,9 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
 import org.bukkit.entity.Zombie
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.util.Vector
 
 class NPCPathfinding(val npc: NPC, var speed: Double) {
@@ -97,6 +100,15 @@ class NPCPathfinding(val npc: NPC, var speed: Double) {
             val path = testEntity.pathfinder.findPath(to)
             testEntity.teleport(holdingLocation)
             return path
+        }
+    }
+
+    class Events: Listener {
+        @EventHandler
+        fun onEntityDamage(event: EntityDamageEvent) {
+            if(event.entity == testEntity) {
+                event.isCancelled = true
+            }
         }
     }
 
