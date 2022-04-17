@@ -3,10 +3,13 @@ package net.bandithemepark.bandicore.util
 import com.mojang.authlib.GameProfile
 import com.mojang.authlib.properties.Property
 import net.kyori.adventure.text.Component
+import org.bukkit.Color
 import org.bukkit.Material
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.LeatherArmorMeta
 import org.bukkit.inventory.meta.SkullMeta
+import org.bukkit.material.Colorable
 import java.lang.reflect.Field
 import java.util.*
 
@@ -14,6 +17,22 @@ object ItemFactory {
     fun create(material: Material, amount: Int, customModelData: Int, name: Component, vararg lores: Component): ItemStack {
         val item = ItemStack(material, amount)
         val meta = item.itemMeta!!
+        meta.displayName(name)
+        meta.setCustomModelData(customModelData)
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+
+        val lores2 = mutableListOf<Component>()
+        lores2.addAll(lores)
+        meta.lore(lores2)
+
+        item.itemMeta = meta
+        return item
+    }
+
+    fun create(material: Material, amount: Int, customModelData: Int, color: Color, name: Component, vararg lores: Component): ItemStack {
+        val item = ItemStack(material, amount)
+        val meta = item.itemMeta!! as LeatherArmorMeta
+        meta.setColor(color)
         meta.displayName(name)
         meta.setCustomModelData(customModelData)
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)

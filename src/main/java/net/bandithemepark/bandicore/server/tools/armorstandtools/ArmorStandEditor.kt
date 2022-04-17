@@ -1,4 +1,4 @@
-package net.bandithemepark.bandicore.server.armorstandtools
+package net.bandithemepark.bandicore.server.tools.armorstandtools
 
 import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.Util

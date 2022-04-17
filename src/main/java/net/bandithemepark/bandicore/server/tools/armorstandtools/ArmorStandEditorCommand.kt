@@ -1,4 +1,4 @@
-package net.bandithemepark.bandicore.server.armorstandtools
+package net.bandithemepark.bandicore.server.tools.armorstandtools
 
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedMessage
 import org.bukkit.command.Command
@@ -10,7 +10,7 @@ class ArmorStandEditorCommand: CommandExecutor {
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if(command.name.equals("ast", true)) {
             if(sender is Player) {
-                if(sender.hasPermission("phantasiamc.crew")) {
+                if(sender.hasPermission("bandithemepark.crew")) {
                     if(ArmorStandEditor.getSession(sender) == null) {
                         ArmorStandEditor.startSession(sender)
                         sender.sendTranslatedMessage("armor-stand-editor-started", "#E0D268")

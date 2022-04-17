@@ -4,10 +4,11 @@ import net.bandithemepark.bandicore.util.entity.PacketEntity
 import net.bandithemepark.bandicore.bandithemepark.kaliba.KalibaEffects
 import net.bandithemepark.bandicore.park.effect.AmbientEffect
 import net.bandithemepark.bandicore.server.Server
-import net.bandithemepark.bandicore.server.armorstandtools.ArmorStandEditorCommand
-import net.bandithemepark.bandicore.server.armorstandtools.ArmorStandEditorEvents
+import net.bandithemepark.bandicore.server.tools.armorstandtools.ArmorStandEditorCommand
+import net.bandithemepark.bandicore.server.tools.armorstandtools.ArmorStandEditorEvents
 import net.bandithemepark.bandicore.server.customplayer.CustomPlayer
 import net.bandithemepark.bandicore.server.mode.ServerModeCommand
+import net.bandithemepark.bandicore.server.tools.painter.ItemPainter
 import net.bandithemepark.bandicore.util.FileManager
 import net.bandithemepark.bandicore.util.npc.NPC
 import net.bandithemepark.bandicore.util.npc.NPCPathfinding
@@ -59,11 +60,13 @@ class BandiCore: JavaPlugin() {
         getCommand("npctest")!!.setExecutor(NPCPathfinding.TestCommand())
         getCommand("ast")!!.setExecutor(ArmorStandEditorCommand())
         getCommand("customplayertest")!!.setExecutor(CustomPlayer.TestCommand())
+        getCommand("painter")!!.setExecutor(ItemPainter.Command())
     }
 
     private fun registerEvents() {
         getServer().pluginManager.registerEvents(PacketEntity.Events(), this)
         getServer().pluginManager.registerEvents(NPC.Events(), this)
         getServer().pluginManager.registerEvents(ArmorStandEditorEvents(), this)
+        getServer().pluginManager.registerEvents(ItemPainter.Events(), this)
     }
 }

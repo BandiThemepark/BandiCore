@@ -16,3 +16,10 @@ commands:
       - ase
   customplayertest:
     description: Test command for custom players
+  painter:
+    description: Painter GUI for painting leather items
+    alises:
+      - paint
+      - paintgui
+      - bandicolor
+      - color
