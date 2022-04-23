@@ -3,6 +3,7 @@ package net.bandithemepark.bandicore.server.mode
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedMessage
 import net.bandithemepark.bandicore.server.translations.MessageReplacement
+import net.bandithemepark.bandicore.util.BandiColors
 import net.bandithemepark.bandicore.util.Util
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -17,16 +18,16 @@ class ServerModeCommand: CommandExecutor, TabCompleter {
                     val newServerMode = ServerMode.getFromId(args[0])
 
                     if(newServerMode == null) {
-                        sender.sendTranslatedMessage("server-mode-invalid-mode", "#963939")
+                        sender.sendTranslatedMessage("server-mode-invalid-mode", BandiColors.RED.toString())
                     } else {
                         BandiCore.instance.server.changeServerMode(newServerMode)
-                        sender.sendTranslatedMessage("server-mode-changed", "#E0D268", MessageReplacement("mode", newServerMode.id))
+                        sender.sendTranslatedMessage("server-mode-changed", BandiColors.YELLOW.toString(), MessageReplacement("mode", newServerMode.id))
                     }
                 } else {
-                    sender.sendTranslatedMessage("server-mode-invalid-args", "#963939")
+                    sender.sendTranslatedMessage("server-mode-invalid-args", BandiColors.RED.toString())
                 }
             } else {
-                sender.sendTranslatedMessage("no-permission", "#963939")
+                sender.sendTranslatedMessage("no-permission", BandiColors.RED.toString())
             }
         }
         return false

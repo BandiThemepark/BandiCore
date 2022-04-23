@@ -18,8 +18,15 @@ commands:
     description: Test command for custom players
   painter:
     description: Painter GUI for painting leather items
-    alises:
+    aliases:
       - paint
       - paintgui
       - bandicolor
       - color
+  track:
+    description: All commands related to TrackCoasters
+    aliases:
+      - trck
+      - tracks
+      - trcks
+      - tr

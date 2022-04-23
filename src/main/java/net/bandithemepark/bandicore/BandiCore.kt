@@ -2,6 +2,9 @@ package net.bandithemepark.bandicore
 
 import net.bandithemepark.bandicore.util.entity.PacketEntity
 import net.bandithemepark.bandicore.bandithemepark.kaliba.KalibaEffects
+import net.bandithemepark.bandicore.park.attractions.tracks.TrackManager
+import net.bandithemepark.bandicore.park.attractions.tracks.commands.TrackCommand
+import net.bandithemepark.bandicore.park.attractions.tracks.splines.BezierSpline
 import net.bandithemepark.bandicore.park.effect.AmbientEffect
 import net.bandithemepark.bandicore.server.Server
 import net.bandithemepark.bandicore.server.tools.armorstandtools.ArmorStandEditorCommand
@@ -20,6 +23,7 @@ class BandiCore: JavaPlugin() {
     }
 
     lateinit var server: Server
+    lateinit var trackManager: TrackManager
 
     override fun onEnable() {
         instance = this
@@ -32,6 +36,8 @@ class BandiCore: JavaPlugin() {
         }
 
         server = Server()
+        trackManager = TrackManager(BezierSpline(), 25, 0.02)
+        trackManager.setup()
 
         // Registering everything
         registerCommands()
@@ -61,6 +67,7 @@ class BandiCore: JavaPlugin() {
         getCommand("ast")!!.setExecutor(ArmorStandEditorCommand())
         getCommand("customplayertest")!!.setExecutor(CustomPlayer.TestCommand())
         getCommand("painter")!!.setExecutor(ItemPainter.Command())
+        getCommand("track")!!.setExecutor(TrackCommand.Command())
     }
 
     private fun registerEvents() {

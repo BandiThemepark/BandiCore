@@ -8,7 +8,7 @@ import org.bukkit.Bukkit
 import java.io.File
 import java.nio.charset.Charset
 
-class Language(val id: String) {
+class Language(val id: String, val shortenedId: String) {
     val translations = hashMapOf<String, String>()
 
     init {

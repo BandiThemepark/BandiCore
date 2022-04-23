@@ -56,4 +56,12 @@ object LanguageUtil {
             this.sendMessage(Util.color("<$color>"+getMessage(BandiCore.instance.server.getLanguage("english")!!, messageId, *replacements)))
         }
     }
+
+    fun CommandSender.sendTranslatedActionBar(messageId: String, color: String, vararg replacements: MessageReplacement) {
+        if(this is Player) {
+            this.sendActionBar(Util.color("<$color>"+this.getTranslatedMessage(messageId, *replacements)))
+        } else {
+            this.sendActionBar(Util.color("<$color>"+getMessage(BandiCore.instance.server.getLanguage("english")!!, messageId, *replacements)))
+        }
+    }
 }

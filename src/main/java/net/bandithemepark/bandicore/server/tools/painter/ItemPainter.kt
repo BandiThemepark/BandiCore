@@ -1,6 +1,7 @@
 package net.bandithemepark.bandicore.server.tools.painter
 
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedMessage
+import net.bandithemepark.bandicore.util.BandiColors
 import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.Util
 import net.kyori.adventure.text.Component
@@ -34,36 +35,36 @@ class ItemPainter {
         val inv = Bukkit.createInventory(null, 45, Component.text("Item Painter"))
         for(slot in 0..44) inv.setItem(slot, ItemFactory.create(Material.GRAY_STAINED_GLASS_PANE, Util.color(" ")))
 
-        inv.setItem(1, ItemFactory.create(Material.LIME_TERRACOTTA, Util.color("<!i><#7FB375>Add 10 to Red")))
-        inv.setItem(2, ItemFactory.create(Material.LIME_TERRACOTTA, Util.color("<!i><#7FB375>Add 10 to Green")))
-        inv.setItem(3, ItemFactory.create(Material.LIME_TERRACOTTA, Util.color("<!i><#7FB375>Add 10 to Blue")))
-        inv.setItem(5, ItemFactory.create(Material.LIME_TERRACOTTA, Util.color("<!i><#7FB375>Add 10 to Custom Model Data")))
+        inv.setItem(1, ItemFactory.create(Material.LIME_TERRACOTTA, Util.color("<!i><${BandiColors.GREEN}>Add 10 to Red")))
+        inv.setItem(2, ItemFactory.create(Material.LIME_TERRACOTTA, Util.color("<!i><${BandiColors.GREEN}>Add 10 to Green")))
+        inv.setItem(3, ItemFactory.create(Material.LIME_TERRACOTTA, Util.color("<!i><${BandiColors.GREEN}>Add 10 to Blue")))
+        inv.setItem(5, ItemFactory.create(Material.LIME_TERRACOTTA, Util.color("<!i><${BandiColors.GREEN}>Add 10 to Custom Model Data")))
 
-        inv.setItem(10, ItemFactory.create(Material.LIME_TERRACOTTA, Util.color("<!i><#7FB375>Add 1 to Red")))
-        inv.setItem(11, ItemFactory.create(Material.LIME_TERRACOTTA, Util.color("<!i><#7FB375>Add 1 to Green")))
-        inv.setItem(12, ItemFactory.create(Material.LIME_TERRACOTTA, Util.color("<!i><#7FB375>Add 1 to Blue")))
-        inv.setItem(14, ItemFactory.create(Material.LIME_TERRACOTTA, Util.color("<!i><#7FB375>Add 1 to Custom Model Data")))
+        inv.setItem(10, ItemFactory.create(Material.LIME_TERRACOTTA, Util.color("<!i><${BandiColors.GREEN}>Add 1 to Red")))
+        inv.setItem(11, ItemFactory.create(Material.LIME_TERRACOTTA, Util.color("<!i><${BandiColors.GREEN}>Add 1 to Green")))
+        inv.setItem(12, ItemFactory.create(Material.LIME_TERRACOTTA, Util.color("<!i><${BandiColors.GREEN}>Add 1 to Blue")))
+        inv.setItem(14, ItemFactory.create(Material.LIME_TERRACOTTA, Util.color("<!i><${BandiColors.GREEN}>Add 1 to Custom Model Data")))
 
-        inv.setItem(28, ItemFactory.create(Material.RED_TERRACOTTA, Util.color("<!i><#7FB375>Remove 1 from Red")))
-        inv.setItem(29, ItemFactory.create(Material.RED_TERRACOTTA, Util.color("<!i><#7FB375>Remove 1 from Green")))
-        inv.setItem(30, ItemFactory.create(Material.RED_TERRACOTTA, Util.color("<!i><#7FB375>Remove 1 from Blue")))
-        inv.setItem(32, ItemFactory.create(Material.RED_TERRACOTTA, Util.color("<!i><#7FB375>Remove 1 from Custom Model Data")))
+        inv.setItem(28, ItemFactory.create(Material.RED_TERRACOTTA, Util.color("<!i><${BandiColors.GREEN}>Remove 1 from Red")))
+        inv.setItem(29, ItemFactory.create(Material.RED_TERRACOTTA, Util.color("<!i><${BandiColors.GREEN}>Remove 1 from Green")))
+        inv.setItem(30, ItemFactory.create(Material.RED_TERRACOTTA, Util.color("<!i><${BandiColors.GREEN}>Remove 1 from Blue")))
+        inv.setItem(32, ItemFactory.create(Material.RED_TERRACOTTA, Util.color("<!i><${BandiColors.GREEN}>Remove 1 from Custom Model Data")))
 
-        inv.setItem(37, ItemFactory.create(Material.RED_TERRACOTTA, Util.color("<!i><#7FB375>Remove 10 from Red")))
-        inv.setItem(38, ItemFactory.create(Material.RED_TERRACOTTA, Util.color("<!i><#7FB375>Remove 10 from Green")))
-        inv.setItem(39, ItemFactory.create(Material.RED_TERRACOTTA, Util.color("<!i><#7FB375>Remove 10 from Blue")))
-        inv.setItem(41, ItemFactory.create(Material.RED_TERRACOTTA, Util.color("<!i><#7FB375>Remove 10 from Custom Model Data")))
+        inv.setItem(37, ItemFactory.create(Material.RED_TERRACOTTA, Util.color("<!i><${BandiColors.GREEN}>Remove 10 from Red")))
+        inv.setItem(38, ItemFactory.create(Material.RED_TERRACOTTA, Util.color("<!i><${BandiColors.GREEN}>Remove 10 from Green")))
+        inv.setItem(39, ItemFactory.create(Material.RED_TERRACOTTA, Util.color("<!i><${BandiColors.GREEN}>Remove 10 from Blue")))
+        inv.setItem(41, ItemFactory.create(Material.RED_TERRACOTTA, Util.color("<!i><${BandiColors.GREEN}>Remove 10 from Custom Model Data")))
 
-        inv.setItem(19, ItemFactory.create(Material.RED_DYE, getOneIfZero(r), 0, Util.color("<!i><#7FB375>Red ($r)")))
-        inv.setItem(20, ItemFactory.create(Material.GREEN_DYE, getOneIfZero(g), 0, Util.color("<!i><#7FB375>Green ($g)")))
-        inv.setItem(21, ItemFactory.create(Material.BLUE_DYE, getOneIfZero(b), 0, Util.color("<!i><#7FB375>Blue ($b)")))
-        inv.setItem(23, ItemFactory.create(Material.DIAMOND_SWORD, getOneIfZero(customModelData), 0, Util.color("<!i><#7FB375>Custom Model Data ($customModelData)")))
+        inv.setItem(19, ItemFactory.create(Material.RED_DYE, getOneIfZero(r), 0, Util.color("<!i><${BandiColors.GREEN}>Red ($r)")))
+        inv.setItem(20, ItemFactory.create(Material.GREEN_DYE, getOneIfZero(g), 0, Util.color("<!i><${BandiColors.GREEN}>Green ($g)")))
+        inv.setItem(21, ItemFactory.create(Material.BLUE_DYE, getOneIfZero(b), 0, Util.color("<!i><${BandiColors.GREEN}>Blue ($b)")))
+        inv.setItem(23, ItemFactory.create(Material.DIAMOND_SWORD, getOneIfZero(customModelData), 0, Util.color("<!i><${BandiColors.GREEN}>Custom Model Data ($customModelData)")))
 
-        inv.setItem(7, ItemFactory.create(Material.LEATHER_HELMET, 1, customModelData, Color.fromRGB(r, g, b), Util.color("<!i><#7FB375>Get Helmet")))
-        inv.setItem(16, ItemFactory.create(Material.LEATHER_CHESTPLATE, 1, customModelData, Color.fromRGB(r, g, b), Util.color("<!i><#7FB375>Get Chestplate")))
-        inv.setItem(25, ItemFactory.create(Material.LEATHER_LEGGINGS, 1, customModelData, Color.fromRGB(r, g, b), Util.color("<!i><#7FB375>Get Leggings")))
-        inv.setItem(34, ItemFactory.create(Material.LEATHER_BOOTS, 1, customModelData, Color.fromRGB(r, g, b), Util.color("<!i><#7FB375>Get Boots")))
-        inv.setItem(43, ItemFactory.create(Material.LEATHER_HORSE_ARMOR, 1, customModelData, Color.fromRGB(r, g, b), Util.color("<!i><#7FB375>Get Horse Armor")))
+        inv.setItem(7, ItemFactory.create(Material.LEATHER_HELMET, 1, customModelData, Color.fromRGB(r, g, b), Util.color("<!i><${BandiColors.GREEN}>Get Helmet")))
+        inv.setItem(16, ItemFactory.create(Material.LEATHER_CHESTPLATE, 1, customModelData, Color.fromRGB(r, g, b), Util.color("<!i><${BandiColors.GREEN}>Get Chestplate")))
+        inv.setItem(25, ItemFactory.create(Material.LEATHER_LEGGINGS, 1, customModelData, Color.fromRGB(r, g, b), Util.color("<!i><${BandiColors.GREEN}>Get Leggings")))
+        inv.setItem(34, ItemFactory.create(Material.LEATHER_BOOTS, 1, customModelData, Color.fromRGB(r, g, b), Util.color("<!i><${BandiColors.GREEN}>Get Boots")))
+        inv.setItem(43, ItemFactory.create(Material.LEATHER_HORSE_ARMOR, 1, customModelData, Color.fromRGB(r, g, b), Util.color("<!i><${BandiColors.GREEN}>Get Horse Armor")))
 
         player.openInventory(inv)
     }
@@ -80,7 +81,7 @@ class ItemPainter {
                     if (sender.hasPermission("bandithemepark.crew")) {
                         ItemPainter().open(sender)
                     } else {
-                        sender.sendTranslatedMessage("no-permission", "#963939")
+                        sender.sendTranslatedMessage("no-permission", BandiColors.RED.toString())
                     }
                 }
             }

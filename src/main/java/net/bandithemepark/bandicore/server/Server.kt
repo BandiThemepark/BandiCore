@@ -16,13 +16,17 @@ class Server {
         val fm = FileManager()
         serverMode = ServerMode.getFromId(fm.getConfig("config.yml").get().getString("serverMode")!!)!!
         for(language in fm.getConfig("config.yml").get().getStringList("languages")) {
-            languages.add(Language(language))
+            languages.add(Language(language.split("-")[0], language.split("-")[1]))
         }
     }
 
     // Utility to get a language from an id
     fun getLanguage(id: String): Language? {
         return languages.find { it.id == id }
+    }
+
+    fun getShortenedLanguage(shortenedId: String): Language? {
+        return languages.find { it.shortenedId == shortenedId }
     }
 
     fun changeServerMode(mode: ServerMode) {

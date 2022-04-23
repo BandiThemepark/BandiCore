@@ -29,6 +29,14 @@ object MathUtil {
         return Vector(newMatrix.m[0][0], newMatrix.m[1][0], newMatrix.m[2][0])
     }
 
+    fun getDistanceBetween(p0: Vector, p1: Vector): Double {
+        val x = p1.x - p0.x
+        val y = p1.y - p0.y
+        val z = p1.z - p0.z
+        val one = sqrt(x * x + z * z)
+        return sqrt(one * one + y * y)
+    }
+
     fun getNormalizationFactor(x: Double, y: Double, z: Double, w: Double): Double {
         return getNormalizationFactorLS(x * x + y * y + z * z + w * w)
     }
