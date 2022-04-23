@@ -16,6 +16,14 @@ object MathUtil {
 //        return Vector(newMatrix.m[0][0], newMatrix.m[1][0], newMatrix.m[2][0])
 //    }
 
+    /**
+     * Rotates an offset around a certain point
+     * @param rotation The rotation to apply as a Quaternion
+     * @param x The x offset
+     * @param y The y offset
+     * @param z The z offset
+     * @return The rotated offset
+     */
     fun rotateAroundPoint(rotation: Quaternion, x: Double, y: Double, z: Double): Vector {
         val rotationMatrix = rotation.toMatrix()
 
@@ -29,6 +37,12 @@ object MathUtil {
         return Vector(newMatrix.m[0][0], newMatrix.m[1][0], newMatrix.m[2][0])
     }
 
+    /**
+     * Gives the distance between two vectors
+     * @param p0 The first vector
+     * @param p1 The second vector
+     * @return The distance between the two vectors
+     */
     fun getDistanceBetween(p0: Vector, p1: Vector): Double {
         val x = p1.x - p0.x
         val y = p1.y - p0.y
@@ -37,6 +51,9 @@ object MathUtil {
         return sqrt(one * one + y * y)
     }
 
+    /**
+     * IDK what this does, it's also witchery to me. Used in the Quaternion class
+     */
     fun getNormalizationFactor(x: Double, y: Double, z: Double, w: Double): Double {
         return getNormalizationFactorLS(x * x + y * y + z * z + w * w)
     }
@@ -50,6 +67,11 @@ object MathUtil {
         }
     }
 
+    /**
+     * Converts a Quaternion to an armor stand pose
+     * @param rotation The Quaternion to convert
+     * @return Vector with x, y and z rotations in degrees
+     */
     fun getArmorStandPose(rotation: Quaternion): Vector {
         val qx = rotation.x
         val qy = rotation.y

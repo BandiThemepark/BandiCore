@@ -6,6 +6,8 @@ import net.bandithemepark.bandicore.park.attractions.tracks.editing.TrackEditor
 import net.bandithemepark.bandicore.park.attractions.tracks.editing.editors.TrackEditorNode
 import net.bandithemepark.bandicore.park.attractions.tracks.runnables.TrackRunnable
 import net.bandithemepark.bandicore.park.attractions.tracks.splines.SplineType
+import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.TrackVehicleManager
+import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.ModelAttachment
 import net.bandithemepark.bandicore.util.FileManager
 import org.bukkit.Bukkit
 import org.bukkit.Location
@@ -14,7 +16,7 @@ import org.bukkit.util.Vector
 class TrackManager(val splineType: SplineType, val pointsPerMeter: Int, val frictionCoefficient: Double) {
     val loadedTracks = mutableListOf<TrackLayout>()
     val editor = TrackEditor()
-    // TODO Vehicle manager
+    val vehicleManager = TrackVehicleManager()
 
     fun setup() {
         registerSegments()
@@ -48,7 +50,7 @@ class TrackManager(val splineType: SplineType, val pointsPerMeter: Int, val fric
     }
 
     private fun registerAttachments() {
-
+        ModelAttachment().register()
     }
 
     private fun internalSetup() {
@@ -64,6 +66,10 @@ class TrackManager(val splineType: SplineType, val pointsPerMeter: Int, val fric
         getLoadedTrackIds().forEach { loadInternally(it) }
     }
 
+    /**
+     * Loads a track (only do if the track used is not loaded already)
+     * @param id The id of the track to load
+     */
     fun loadTrack(id: String) {
         val fm = FileManager()
 
@@ -75,6 +81,10 @@ class TrackManager(val splineType: SplineType, val pointsPerMeter: Int, val fric
         loadInternally(id)
     }
 
+    /**
+     * Unloads a loaded track
+     * @param id The id of the track to unload
+     */
     fun unloadTrack(id: String) {
         val fm = FileManager()
 
@@ -116,7 +126,7 @@ class TrackManager(val splineType: SplineType, val pointsPerMeter: Int, val fric
                 val roll = fm.getConfig("tracks/$id.trck").get().getDouble("rollNodes.$rollNodeId.roll")
                 val node = nodes.find { it.id == nodeId }
 
-                rollNodes.add(RollNode(node!!, position, roll))
+                rollNodes.add(RollNode(TrackPosition(node!!, position), roll))
             }
         }
 
@@ -127,6 +137,11 @@ class TrackManager(val splineType: SplineType, val pointsPerMeter: Int, val fric
         loadedTracks.add(track)
     }
 
+    /**
+     * Creates a new track
+     * @param id The id to name the track to
+     * @param origin The origin of the track
+     */
     fun createTrack(id: String, origin: Location) {
         val track = TrackLayout(id, origin.toVector(), origin.world!!, mutableListOf(TrackNode("0", 0.0, 0.0, 0.0, false)), mutableListOf())
         loadedTracks.add(track)

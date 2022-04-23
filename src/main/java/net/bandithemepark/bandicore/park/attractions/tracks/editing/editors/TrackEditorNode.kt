@@ -154,7 +154,7 @@ class TrackEditorNode: TrackEditorType() {
                     selectedNode!!.disconnect(layout!!)
                     player!!.sendTranslatedActionBar("track-editor-disconnected-node", BandiColors.YELLOW.toString())
                 } else {
-                   val nearest = layout!!.getNearestNode(player!!.location)!!
+                   val nearest = layout!!.getNearestNode(player!!.location)
 
                     if(nearest == selectedNode) {
                         player!!.sendTranslatedActionBar("track-editor-cannot-connect-to-self", BandiColors.RED.toString())

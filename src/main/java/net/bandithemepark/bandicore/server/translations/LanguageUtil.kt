@@ -10,8 +10,14 @@ import org.bukkit.entity.Player
 object LanguageUtil {
     val loadedLanguages = hashMapOf<Player, Language>()
 
-    fun getLanguage(player: Player): Language {
-        return if(loadedLanguages.containsKey(player)) {
+    /**
+     * Gets the language of a player
+     * @param player The player to get the language of
+     * @param forceCheck optional parameter that forces the server to load the language from the API
+     * @return The language of the player
+     */
+    fun getLanguage(player: Player, forceCheck: Boolean = false): Language {
+        return if(loadedLanguages.containsKey(player) && !forceCheck) {
             loadedLanguages[player]!!
         } else {
             // TODO Actually retrieve the language from the API and storing it so it can be retrieved later
@@ -20,6 +26,12 @@ object LanguageUtil {
     }
 
     // Function that gets a message from a given language and message id. If the message is null, it will retrieve the message from english
+    /**
+     * Gets a translated message for a certain language. Returns english version if translation could not be found
+     * @param language The language to get the message from
+     * @param messageId The message id to get the message from
+     * @return The translated message
+     */
     fun getMessage(language: Language, messageId: String): String {
         val message = language.translations[messageId]
         if (message != null) {
@@ -28,6 +40,13 @@ object LanguageUtil {
         return BandiCore.instance.server.getLanguage("english")!!.translations[messageId]!!
     }
 
+    /**
+     * Gets a translated message for a certain language with additional replacements. Returns english version if translation could not be found
+     * @param language The language to get the message from
+     * @param messageId The message id to get the message from
+     * @param replacements The replacements to replace in the message. Optional
+     * @return The translated message
+     */
     fun getMessage(language: Language, messageId: String, vararg replacements: MessageReplacement): String {
         var message = getMessage(language, messageId)
         for(replacement in replacements) {
@@ -37,6 +56,13 @@ object LanguageUtil {
     }
 
     // Function that gets a message from a player and message id
+    /**
+     * Gets a translated message for a player. Returns english version if translation could not be found
+     * @param player The player to get the message for
+     * @param messageId The message id to get the message from
+     * @param replacements The replacements to replace in the message. Optional
+     * @return The translated message
+     */
     fun getMessage(player: Player, messageId: String, vararg replacements: MessageReplacement): String {
         var message = getMessage(getLanguage(player), messageId)
         for(replacement in replacements) {
@@ -45,10 +71,22 @@ object LanguageUtil {
         return message
     }
 
+    /**
+     * Gets a translated message for a player. Returns english version if translation could not be found
+     * @param messageId The message id to get the message from
+     * @param replacements The replacements to replace in the message. Optional
+     * @return The translated message
+     */
     fun Player.getTranslatedMessage(messageId: String, vararg replacements: MessageReplacement): String {
         return getMessage(this, messageId, *replacements)
     }
 
+    /**
+     * Sends a translated message to a CommandSender. Message is in english if translation cannot be found
+     * @param messageId The ID of the message.
+     * @param color Hex color code to use. Format as #FFFFFF
+     * @param replacements The replacements to replace in the message. Optional
+     */
     fun CommandSender.sendTranslatedMessage(messageId: String, color: String, vararg replacements: MessageReplacement) {
         if(this is Player) {
             this.sendMessage(Util.color("<$color>"+this.getTranslatedMessage(messageId, *replacements)))
@@ -57,6 +95,12 @@ object LanguageUtil {
         }
     }
 
+    /**
+     * Sends a translated message to a CommandSender as an action bar. Message is in english if translation cannot be found
+     * @param messageId The ID of the message.
+     * @param color Hex color code to use. Format as #FFFFFF
+     * @param replacements The replacements to replace in the message. Optional
+     */
     fun CommandSender.sendTranslatedActionBar(messageId: String, color: String, vararg replacements: MessageReplacement) {
         if(this is Player) {
             this.sendActionBar(Util.color("<$color>"+this.getTranslatedMessage(messageId, *replacements)))

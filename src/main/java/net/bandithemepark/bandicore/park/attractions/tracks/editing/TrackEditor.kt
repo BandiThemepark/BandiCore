@@ -17,10 +17,18 @@ import org.bukkit.inventory.EquipmentSlot
 class TrackEditor {
     val activeSessions = mutableListOf<TrackEditorSession>()
 
+    /**
+     * Starts a new track editor session for the given player
+     * @param player The player to start the session for
+     */
     fun startEditor(player: Player, layout: TrackLayout) {
         activeSessions.add(TrackEditorSession(player, layout))
     }
 
+    /**
+     * Stops the editor of a player
+     * @param player The player to stop the editor of
+     */
     fun stopEditor(player: Player) {
         val session = activeSessions.find { it.player == player }
 
@@ -31,10 +39,20 @@ class TrackEditor {
         }
     }
 
+    /**
+     * Gives you the track editor session of a player
+     * @param player The player to get the session of
+     * @return The session of the player, null if the player is not editing a track
+     */
     fun getSession(player: Player): TrackEditorSession? {
         return activeSessions.find { it.player == player }
     }
 
+    /**
+     * Tells you if a player is in a track editor
+     * @param player The player to check
+     * @return True if the player is in a track editor, false otherwise
+     */
     fun isEditing(player: Player): Boolean {
         return activeSessions.find { it.player == player } != null
     }

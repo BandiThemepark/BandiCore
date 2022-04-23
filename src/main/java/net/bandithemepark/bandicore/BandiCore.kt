@@ -3,6 +3,7 @@ package net.bandithemepark.bandicore
 import net.bandithemepark.bandicore.util.entity.PacketEntity
 import net.bandithemepark.bandicore.bandithemepark.kaliba.KalibaEffects
 import net.bandithemepark.bandicore.park.attractions.tracks.TrackManager
+import net.bandithemepark.bandicore.park.attractions.tracks.TrackPosition
 import net.bandithemepark.bandicore.park.attractions.tracks.commands.TrackCommand
 import net.bandithemepark.bandicore.park.attractions.tracks.splines.BezierSpline
 import net.bandithemepark.bandicore.park.effect.AmbientEffect
@@ -39,6 +40,7 @@ class BandiCore: JavaPlugin() {
         server = Server()
         trackManager = TrackManager(BezierSpline(), 25, 0.02)
         trackManager.setup()
+        trackManager.vehicleManager.loadTrain("test", trackManager.loadedTracks[0], TrackPosition(trackManager.loadedTracks[0].nodes[0], 0), 20.0)
 
         // Registering everything
         registerCommands()
@@ -58,8 +60,9 @@ class BandiCore: JavaPlugin() {
 
     override fun onDisable() {
         // Deleting/removing entities
-        NPC.removeAll()
+        trackManager.vehicleManager.deSpawnAllVehicles()
         PacketEntity.removeAll()
+        NPC.removeAll()
     }
 
     private fun registerCommands() {

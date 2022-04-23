@@ -38,6 +38,10 @@ class NPC(val name: String, val skinOwner: Player, var visibilityType: NPCVisibi
         private set
 
     // Spawning and despawning
+    /**
+     * Spawns the NPC at a given location
+     * @param location The location to spawn the NPC at
+     */
     fun spawn(location: Location) {
         this.location = location
 
@@ -61,6 +65,10 @@ class NPC(val name: String, val skinOwner: Player, var visibilityType: NPCVisibi
     }
 
     // The spawning function, just for one player and with some extra stuff for when the NPC has already been spawned
+    /**
+     * Spawns the NPC for a player (used for example when a player joins and needs to see the NPC after it has spawned)
+     * @param player The player to spawn the NPC for
+     */
     fun spawnFor(player: Player) {
         (player as CraftPlayer).handle.connection.send(ClientboundPlayerInfoPacket(ClientboundPlayerInfoPacket.Action.ADD_PLAYER, npc))
         player.handle.connection.send(ClientboundAddPlayerPacket(npc!!))
@@ -79,6 +87,9 @@ class NPC(val name: String, val skinOwner: Player, var visibilityType: NPCVisibi
             updateItemInOffHand() }, 2)
     }
 
+    /**
+     * Despawns the NPC for everyone
+     */
     fun deSpawn() {
         sendPacket(ClientboundRemoveEntitiesPacket(npc!!.id))
         spawned = false
@@ -199,11 +210,21 @@ class NPC(val name: String, val skinOwner: Player, var visibilityType: NPCVisibi
     }
 
     // Function to move the head of the NPC
+    /**
+     * Rotates the head of the NPC
+     * @param pitch The pitch to rotate to
+     * @param yaw The yaw to rotate to
+     */
     fun moveHead(pitch: Float, yaw: Float) {
         sendPacket(ClientboundRotateHeadPacket(npc!!, ((yaw%360)*256/360).toInt().toByte()))
         sendPacket(ClientboundMoveEntityPacket.Rot(npc!!.id, ((yaw%360)*256/360).toInt().toByte(), ((pitch%360)*256/360).toInt().toByte(), false))
     }
 
+    /**
+     * Teleports the NPC to a given location
+     * @param location The location to teleport to
+     * @param heightCorrection Whether to correct the height of the NPC (for example when you have slabs). Default is true
+     */
     fun teleport(location: Location, heightCorrection: Boolean = true) {
         this.location = location
         updatePosition(heightCorrection)
@@ -211,13 +232,18 @@ class NPC(val name: String, val skinOwner: Player, var visibilityType: NPCVisibi
 
     // Pathfinding
     private var pathfinder = NPCPathfinding(this, 2.0)
-    fun walkTo(location: Location) {
-        pathfinder.walkTo(location)
-    }
     var walkSpeed: Double
     get() { return pathfinder.speed }
     set(value) {
         pathfinder.speed = value
+    }
+
+    /**
+     * Makes the NPC pathfind to a given location
+     * @param location The location to pathfind to
+     */
+    fun walkTo(location: Location) {
+        pathfinder.walkTo(location)
     }
 
     // Utilities
@@ -238,12 +264,20 @@ class NPC(val name: String, val skinOwner: Player, var visibilityType: NPCVisibi
     companion object {
         val active = mutableListOf<NPC>()
 
+        /**
+         * Gets the MinecraftServer a player is on (NMS Instance)
+         * @param player The player to get the server of
+         * @return The NMS MinecraftServer the player is on
+         */
         fun getMinecraftServer(player: Player): MinecraftServer? {
             return (player as CraftPlayer).handle.getServer()
         }
 
+        /**
+         * Despawns all active NPCs
+         */
         fun removeAll() {
-            active.toList().forEach { it.deSpawn() }
+            if(active.isNotEmpty()) active.toList().forEach { it.deSpawn() }
         }
 
         fun startTimer() {

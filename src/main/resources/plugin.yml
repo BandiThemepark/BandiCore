@@ -2,6 +2,8 @@ name: BandiCore
 version: '${version}'
 main: net.bandithemepark.bandicore.BandiCore
 api-version: 1.18
+depend:
+  - ProtocolLib
 commands:
   servermode:
     description: Change the server mode

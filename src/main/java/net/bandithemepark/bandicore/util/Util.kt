@@ -9,11 +9,12 @@ import org.bukkit.util.Vector
 import kotlin.math.sqrt
 
 object Util {
-
-    // Documentation for MiniMessage format can be found at https://docs.adventure.kyori.net/minimessage/format.html
-    // Simply use <#FFFFFF>, <u> Underlined, <b> Bold, <i> Italic, <st> Strikethrough, <obf> Obfuscated, <newline> Newline
-    // All tags can optionally be ended
-    // There are also tags for gradients, transitions, hover events, and click events
+    /**
+     * Formats a string using MiniMessage. MiniMessage documnetation can be found at https://docs.adventure.kyori.net/minimessage/format.html.
+     * Use things like <#FFFFFF>, <u> Underlined, <b> Bold, <i> Italic, <st> Strikethrough, <obf> Obfuscated, <newline> Newline in your messages.
+     * @param message String to format
+     * @return Formatted string as Paper Component
+     */
     fun color(message: String): Component {
         return MiniMessage.miniMessage().deserialize(message)
     }
@@ -26,6 +27,12 @@ object Util {
         this.sendActionBar(color(message))
     }
 
+    /**
+     * Utility function that generates tab completions
+     * @param currentArg Currently filled in argument
+     * @param options Available options that should be presented to the sender
+     * @return Tab completions
+     */
     fun getTabCompletions(currentArg: String, options: List<String>): MutableList<String> {
         val completions = mutableListOf<String>()
         StringUtil.copyPartialMatches(currentArg, options, completions)
@@ -33,6 +40,12 @@ object Util {
         return completions
     }
 
+    /**
+     * Calculates the distance between two locations
+     * @param loc1 First location
+     * @param loc2 Second location
+     * @return Distance between the two locations as a double
+     */
     fun getLengthBetween(loc1: Location, loc2: Location): Double {
         val x = loc2.x - loc1.x
         val y = loc2.y - loc1.y
@@ -41,6 +54,12 @@ object Util {
         return sqrt(one * one + y * y)
     }
 
+    /**
+     * Calculates the distance between two vectors
+     * @param loc1 First vector
+     * @param loc2 Second vector
+     * @return Distance between the two vectors as a double
+     */
     fun getLengthBetween(loc1: Vector, loc2: Vector): Double {
         val x = loc2.x - loc1.x
         val y = loc2.y - loc1.y

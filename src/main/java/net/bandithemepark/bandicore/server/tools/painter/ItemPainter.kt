@@ -92,7 +92,7 @@ class ItemPainter {
     class Events: Listener {
         @EventHandler
         fun onInventoryClick(event: InventoryClickEvent) {
-            if(event.view.title == "Item Painter") {
+            if(event.view.title() == Component.text("Item Painter")) {
                 event.isCancelled = true
 
                 when(event.slot) {

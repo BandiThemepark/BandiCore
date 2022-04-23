@@ -28,6 +28,10 @@ class NPCPathfinding(val npc: NPC, var speed: Double) {
     }
 
     // Function that makes the NPC calculate a path and then follow it to a location
+    /**
+     * Makes the NPC walk to a given location
+     * @param location The location to walk to
+     */
     fun walkTo(location: Location) {
         val paperPath = getPath(npc.location!!, location)
         if(paperPath != null) {
@@ -97,6 +101,12 @@ class NPCPathfinding(val npc: NPC, var speed: Double) {
             testEntity.removeWhenFarAway = false
         }
 
+        /**
+         * Function that gets the path from one location to another. Uses zombie pathfinding
+         * @param from The location to start the path from
+         * @param to The location to end the path at
+         * @return The path as a Paper instance
+         */
         fun getPath(from: Location, to: Location): Pathfinder.PathResult? {
             testEntity.teleport(from)
             val path = testEntity.pathfinder.findPath(to)

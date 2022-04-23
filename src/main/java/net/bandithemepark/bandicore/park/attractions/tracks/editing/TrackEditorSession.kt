@@ -15,11 +15,17 @@ class TrackEditorSession(val player: Player, val layout: TrackLayout) {
         updatePlayerItems()
     }
 
+    /**
+     * Updates the player's inventory with the current editor's items.
+     */
     fun updatePlayerItems() {
         player.inventory.setItem(8, ItemFactory.create(Material.ARROW, Util.color("<!i><${BandiColors.YELLOW}>Next editor (Left click) | Save track (Right click)")))
         for(i in 0..7) player.inventory.setItem(i, currentEditor.getItem(i))
     }
 
+    /**
+     * Switches to the next editor.
+     */
     fun openNextEditor() {
         val index = TrackEditorType.types.indexOf(currentEditor)
 
@@ -32,6 +38,9 @@ class TrackEditorSession(val player: Player, val layout: TrackLayout) {
         updatePlayerItems()
     }
 
+    /**
+     * Restores the inventory of the player to what it was before editing
+     */
     fun resetInventory() {
         player.inventory.clear()
         player.inventory.contents = beforeInventory

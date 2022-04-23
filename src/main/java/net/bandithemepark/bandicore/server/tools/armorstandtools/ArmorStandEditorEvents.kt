@@ -1,6 +1,7 @@
 package net.bandithemepark.bandicore.server.tools.armorstandtools
 
 import net.bandithemepark.bandicore.BandiCore
+import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.ArmorStand
@@ -51,7 +52,7 @@ class ArmorStandEditorEvents: Listener {
 
     @EventHandler
     fun onInventoryClick(event: InventoryClickEvent) {
-        if(event.view.title == "Editing an ArmorStand") {
+        if(event.view.title() == Component.text("Editing an ArmorStand")) {
             if(event.view.topInventory == event.clickedInventory) {
                 val session = ArmorStandEditor.getSession(event.whoClicked as Player)!!
 
@@ -109,7 +110,7 @@ class ArmorStandEditorEvents: Listener {
             }
         }
 
-        if(event.view.title == "ArmorStandEditor GUI") {
+        if(event.view.title() == Component.text("ArmorStandEditor GUI")) {
             val session = ArmorStandEditor.getSession(event.whoClicked as Player)!!
             event.isCancelled = true
 

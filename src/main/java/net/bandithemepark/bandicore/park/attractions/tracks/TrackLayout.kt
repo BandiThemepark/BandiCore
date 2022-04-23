@@ -43,26 +43,52 @@ class TrackLayout(val id: String, var origin: Vector, var world: World, var node
         // TODO update roll nodes
     }
 
+    /**
+     * Updates a node and it's neighbours
+     * @param node The node to update
+     */
     fun updateMovedNode(node: TrackNode) {
         TrackUtil.updateMovedNode(this, node)
     }
 
+    /**
+     * Connects a node to another node
+     * @param from The node that will be connected
+     * @param to The node that from will be connected to
+     */
     fun connectTo(from: TrackNode, to: TrackNode) {
         TrackUtil.connectTo(this, from, to)
     }
 
+    /**
+     * Disconnects a node if it is connected
+     * @param node The node to disconnect
+     */
     fun disconnect(node: TrackNode) {
         TrackUtil.disconnect(this, node)
     }
 
-    fun getNearestNode(location: Location): TrackNode? {
+    /**
+     * Gives the node nearest to a certain location
+     * @param location The location to check from
+     * @return The node nearest to the location
+     */
+    fun getNearestNode(location: Location): TrackNode {
         return TrackUtil.getNearestNode(this, location)
     }
 
+    /**
+     * Gets the node before another node
+     * @param node The node to get the node before
+     * @return The node before the node, null if not found
+     */
     fun getBefore(node: TrackNode): TrackNode? {
         return TrackUtil.getNodeBeforeNode(this, node)
     }
 
+    /**
+     * Saves a track to it's file
+     */
     fun save() {
         val fm = FileManager()
 
@@ -92,8 +118,8 @@ class TrackLayout(val id: String, var origin: Vector, var world: World, var node
 
         // Saving roll nodes
         for((index, rollNode) in rollNodes.withIndex()) {
-            fm.getConfig("tracks/$id.trck").get().set("rollNodes.$index.node", rollNode.nodePosition.id)
-            fm.getConfig("tracks/$id.trck").get().set("rollNodes.$index.position", rollNode.position)
+            fm.getConfig("tracks/$id.trck").get().set("rollNodes.$index.node", rollNode.position.nodePosition.id)
+            fm.getConfig("tracks/$id.trck").get().set("rollNodes.$index.position", rollNode.position.position.toInt())
             fm.getConfig("tracks/$id.trck").get().set("rollNodes.$index.roll", rollNode.roll)
         }
         fm.saveConfig("tracks/$id.trck")

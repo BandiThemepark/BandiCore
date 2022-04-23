@@ -12,6 +12,12 @@ abstract class TrackEditorType: Cloneable {
     abstract fun getItem(slot: Int): ItemStack?
     abstract fun use(slot: Int, clickType: ClickType)
 
+    /**
+     * Returns a new TrackEditorType instance
+     * @param player The player who the TrackEditor is for
+     * @param layout The layout of the TrackEditor
+     * @return A new TrackEditorType instance
+     */
     fun getNew(player: Player, layout: TrackLayout): TrackEditorType {
         val clone = clone()
         clone.player = player

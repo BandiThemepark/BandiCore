@@ -21,14 +21,28 @@ class Server {
     }
 
     // Utility to get a language from an id
+    /**
+     * Gets a language from an id
+     * @param id The id of the language
+     * @return The language, null if not found or loaded
+     */
     fun getLanguage(id: String): Language? {
         return languages.find { it.id == id }
     }
 
+    /**
+     * Gets a language from a language code (ShortenedId). This is the format that is stored in the database
+     * @param shortenedId The language code
+     * @return The language, null if not found or loaded
+     */
     fun getShortenedLanguage(shortenedId: String): Language? {
         return languages.find { it.shortenedId == shortenedId }
     }
 
+    /**
+     * Changes the server mode
+     * @param mode The new server mode
+     */
     fun changeServerMode(mode: ServerMode) {
         serverMode = mode
         val fm = FileManager()

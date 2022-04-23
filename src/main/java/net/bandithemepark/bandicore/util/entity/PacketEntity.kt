@@ -33,6 +33,10 @@ abstract class PacketEntity {
     // Spawning and despawning
     abstract fun getInstance(world: ServerLevel, x: Double, y: Double, z: Double): LivingEntity
 
+    /**
+     * Spawns the entity at a certain location
+     * @param location The location to spawn the entity at
+     */
     fun spawn(location: Location) {
         handle = getInstance((location.world as CraftWorld).handle, location.x, location.y, location.z)
 
@@ -47,15 +51,21 @@ abstract class PacketEntity {
         active.add(this)
     }
 
+    /**
+     * Spawns the entity for a certain player
+     * @param player The player to spawn the entity for
+     */
     fun spawnFor(player: Player) {
         val packet = ClientboundAddEntityPacket(handle!!)
         (player as CraftPlayer).handle.connection.send(packet)
     }
 
+    /**
+     * Despawns the entity
+     */
     fun deSpawn() {
         val packet = ClientboundRemoveEntitiesPacket(handle!!.id)
         sendPacket(packet)
-        //for(player in Bukkit.getOnlinePlayers()) (player as CraftPlayer).handle.connection.send(packet)
 
         spawned = false
         active.remove(this)
@@ -85,12 +95,21 @@ abstract class PacketEntity {
                 }
             }
         }
-
-        //for(player in Bukkit.getOnlinePlayers()) packet.sendPacket(player)
     }
 
+    /**
+     * Teleports the entity to a given location
+     */
     fun teleport(location: Location) {
         this.location = location
+        updateLocation()
+    }
+
+    /**
+     * Moves the entity to a given location. Basically the same as teleport()
+     */
+    fun moveEntity(x: Double, y: Double, z: Double) {
+        this.location = Location(location!!.world, x, y, z)
         updateLocation()
     }
 
@@ -99,56 +118,42 @@ abstract class PacketEntity {
         set(value) {
             field = value
             sendPacket(ClientboundSetEquipmentPacket(handle!!.id, listOf(Pair(EquipmentSlot.HEAD, CraftItemStack.asNMSCopy(helmet)))))
-//            for(player in Bukkit.getOnlinePlayers()) {
-//                (player as CraftPlayer).handle.connection.send(ClientboundSetEquipmentPacket(handle!!.id, listOf(Pair(EquipmentSlot.HEAD, CraftItemStack.asNMSCopy(helmet)))))
-//            }
         }
 
     var chestPlate: ItemStack? = null
         set(value) {
             field = value
             sendPacket(ClientboundSetEquipmentPacket(handle!!.id, listOf(Pair(EquipmentSlot.CHEST, CraftItemStack.asNMSCopy(chestPlate)))))
-//            for(player in Bukkit.getOnlinePlayers()) {
-//                (player as CraftPlayer).handle.connection.send(ClientboundSetEquipmentPacket(handle!!.id, listOf(Pair(EquipmentSlot.CHEST, CraftItemStack.asNMSCopy(chestPlate)))))
-//            }
         }
 
     var leggings: ItemStack? = null
         set(value) {
             field = value
             sendPacket(ClientboundSetEquipmentPacket(handle!!.id, listOf(Pair(EquipmentSlot.LEGS, CraftItemStack.asNMSCopy(leggings)))))
-//            for(player in Bukkit.getOnlinePlayers()) {
-//                (player as CraftPlayer).handle.connection.send(ClientboundSetEquipmentPacket(handle!!.id, listOf(Pair(EquipmentSlot.LEGS, CraftItemStack.asNMSCopy(leggings)))))
-//            }
         }
 
     var boots: ItemStack? = null
         set(value) {
             field = value
             sendPacket(ClientboundSetEquipmentPacket(handle!!.id, listOf(Pair(EquipmentSlot.FEET, CraftItemStack.asNMSCopy(boots)))))
-//            for(player in Bukkit.getOnlinePlayers()) {
-//                (player as CraftPlayer).handle.connection.send(ClientboundSetEquipmentPacket(handle!!.id, listOf(Pair(EquipmentSlot.FEET, CraftItemStack.asNMSCopy(boots)))))
-//            }
         }
 
     var itemInMainHand: ItemStack? = null
         set(value) {
             field = value
             sendPacket(ClientboundSetEquipmentPacket(handle!!.id, listOf(Pair(EquipmentSlot.MAINHAND, CraftItemStack.asNMSCopy(itemInMainHand)))))
-//            for(player in Bukkit.getOnlinePlayers()) {
-//                (player as CraftPlayer).handle.connection.send(ClientboundSetEquipmentPacket(handle!!.id, listOf(Pair(EquipmentSlot.MAINHAND, CraftItemStack.asNMSCopy(itemInMainHand)))))
-//            }
         }
 
     var itemInOffHand: ItemStack? = null
         set(value) {
             field = value
             sendPacket(ClientboundSetEquipmentPacket(handle!!.id, listOf(Pair(EquipmentSlot.OFFHAND, CraftItemStack.asNMSCopy(itemInOffHand)))))
-//            for(player in Bukkit.getOnlinePlayers()) {
-//                (player as CraftPlayer).handle.connection.send(ClientboundSetEquipmentPacket(handle!!.id, listOf(Pair(EquipmentSlot.OFFHAND, CraftItemStack.asNMSCopy(itemInOffHand)))))
-//            }
         }
 
+    /**
+     * Sends the update packets of the equipment to one player
+     * @param player The player to send the packets to
+     */
     fun updateEquipmentFor(player: Player) {
         (player as CraftPlayer).handle.connection.send(ClientboundSetEquipmentPacket(handle!!.id, listOf(
             Pair(EquipmentSlot.MAINHAND, CraftItemStack.asNMSCopy(itemInMainHand)),
@@ -161,12 +166,18 @@ abstract class PacketEntity {
     }
 
     // Metadata
+    /**
+     * Updates entity metadata for all players that can see the armor stand
+     */
     fun updateMetadata() {
         val packet = ClientboundSetEntityDataPacket(handle!!.id, handle!!.entityData, true)
         sendPacket(packet)
-        //for(player in Bukkit.getOnlinePlayers()) (player as CraftPlayer).handle.connection.send(packet)
     }
 
+    /**
+     * Updates the entity metadata for one single player
+     * @param player The player to update the metadata for
+     */
     fun updateMetadataFor(player: Player) {
         val packet = ClientboundSetEntityDataPacket(handle!!.id, handle!!.entityData, true)
         (player as CraftPlayer).handle.connection.send(packet)
@@ -186,6 +197,11 @@ abstract class PacketEntity {
         }
     }
 
+    /**
+     * Tells you whether this entity is visible for a certain player
+     * @param player The player to check
+     * @return Whether the entity is visible for the player
+     */
     fun isVisibleFor(player: Player): Boolean {
         return if(visibilityType == VisibilityType.WHITELIST) {
             visibilityList.contains(player)
@@ -197,9 +213,11 @@ abstract class PacketEntity {
     companion object {
         val active = mutableListOf<PacketEntity>()
 
+        /**
+         * Removes all PacketEntities and despawns them
+         */
         fun removeAll() {
-            val clonedList = active.toList()
-            for(entity in clonedList) entity.deSpawn()
+            if(active.isNotEmpty()) active.toList().forEach { it.deSpawn() }
         }
     }
 

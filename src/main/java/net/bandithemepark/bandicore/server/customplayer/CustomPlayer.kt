@@ -37,6 +37,10 @@ class CustomPlayer(val skin: CustomPlayerSkin) {
     var leftLegRotation = Quaternion()
     var rightLegRotation = Quaternion()
 
+    /**
+     * Spawns the custom player model at the given location
+     * @param spawnLocation The location to spawn the custom player at
+     */
     fun spawn(spawnLocation: Location) {
         this.location = spawnLocation.clone().add(0.0, 0.63, 0.0)
         this.location!!.yaw = 0.0f
@@ -95,6 +99,9 @@ class CustomPlayer(val skin: CustomPlayerSkin) {
     // Position stuff
     var completeRotation = Quaternion()
 
+    /**
+     * Updates the position of the custom player and all of its limbs
+     */
     fun updatePosition() {
         val headPosition = location!!.clone().add(MathUtil.rotateAroundPoint(completeRotation, headOffset.x, headOffset.y, headOffset.z))
         val newHeadRotation = completeRotation.clone()
@@ -137,6 +144,9 @@ class CustomPlayer(val skin: CustomPlayerSkin) {
         rightLeg.setRightArmPose(Math.toDegrees(rightLegPose.x), Math.toDegrees(rightLegPose.y), Math.toDegrees(rightLegPose.z))
     }
 
+    /**
+     * Despawns the custom player
+     */
     fun deSpawn() {
         location = null
 
@@ -148,6 +158,10 @@ class CustomPlayer(val skin: CustomPlayerSkin) {
         rightLeg.deSpawn()
     }
 
+    /**
+     * Sets the visibility type of the custom player. It is recommended to do this before spawning
+     * @param type The type to set it to
+     */
     fun setVisibilityType(type: PacketEntity.VisibilityType) {
         head.visibilityType = type
         tempHead.visibilityType = type
@@ -158,6 +172,10 @@ class CustomPlayer(val skin: CustomPlayerSkin) {
         rightLeg.visibilityType = type
     }
 
+    /**
+     * Sets the list the visibility type should be applied to. It is recommended to do this before spawning
+     * @param list The list to set it to
+     */
     fun setVisibilityList(list: MutableList<Player>) {
         head.visibilityList = list
         tempHead.visibilityList = list

@@ -10,6 +10,10 @@ import org.bukkit.command.CommandSender
 abstract class TrackCommand(val id: String, val howToUse: String) {
     abstract fun onUse(sender: CommandSender, args: MutableList<String>)
 
+    /**
+     * Sends the command usage of a command
+     * @param sender Who to send the usage to
+     */
     fun sendUsage(sender: CommandSender) {
         sender.sendTranslatedMessage("track-command-usage", BandiColors.RED.toString(), MessageReplacement("id", id), MessageReplacement("howToUse", howToUse))
     }
@@ -21,6 +25,10 @@ abstract class TrackCommand(val id: String, val howToUse: String) {
     companion object {
         val registeredCommands = mutableListOf<TrackCommand>()
 
+        /**
+         * Sends a sender a help message
+         * @param sender The sender to send the help message to
+         */
         fun sendHelp(sender: CommandSender) {
             sender.sendTranslatedMessage("track-command-help", BandiColors.RED.toString())
 
@@ -29,6 +37,11 @@ abstract class TrackCommand(val id: String, val howToUse: String) {
             }
         }
 
+        /**
+         * Used to retrieve a command from its ID. Ignores casing
+         * @param id The id of the command
+         * @return The command if it exists, null otherwise
+         */
         fun getCommand(id: String): TrackCommand? {
             return registeredCommands.find { it.id == id.lowercase() }
         }
