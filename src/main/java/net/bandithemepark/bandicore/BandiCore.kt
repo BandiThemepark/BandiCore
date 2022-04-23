@@ -10,6 +10,7 @@ import net.bandithemepark.bandicore.server.Server
 import net.bandithemepark.bandicore.server.tools.armorstandtools.ArmorStandEditorCommand
 import net.bandithemepark.bandicore.server.tools.armorstandtools.ArmorStandEditorEvents
 import net.bandithemepark.bandicore.server.customplayer.CustomPlayer
+import net.bandithemepark.bandicore.server.essentials.GamemodeCommand
 import net.bandithemepark.bandicore.server.mode.ServerModeCommand
 import net.bandithemepark.bandicore.server.tools.painter.ItemPainter
 import net.bandithemepark.bandicore.util.FileManager
@@ -68,6 +69,7 @@ class BandiCore: JavaPlugin() {
         getCommand("customplayertest")!!.setExecutor(CustomPlayer.TestCommand())
         getCommand("painter")!!.setExecutor(ItemPainter.Command())
         getCommand("track")!!.setExecutor(TrackCommand.Command())
+        getCommand("gamemode")!!.setExecutor(GamemodeCommand())
     }
 
     private fun registerEvents() {

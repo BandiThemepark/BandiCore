@@ -1,6 +1,7 @@
 {
   "language-name": "English",
   "no-permission": "You don't have permission to do this",
+  "player-not-online": "This Player is not online",
   "server-mode-invalid-mode": "This server mode does not exist",
   "server-mode-changed": "The server mode has been changed to %mode%",
   "server-mode-invalid-args": "Invalid arguments! Usage: /servermode <mode>",
@@ -31,5 +32,8 @@
   "track-editor-deleted-node": "Deletd the selected node",
   "track-editor-node-snapped": "Snapped the selected node to the middle",
   "track-editor-node-strict": "Selected node is now strict",
-  "track-editor-node-not-strict": "Selected node is no longer strict"
+  "track-editor-node-not-strict": "Selected node is no longer strict",
+  "gamemode-changed-self": "Changed gamemode to %gamemode%",
+  "gamemode-changed-player": "Changed gamemode of %player% to %gamemode%",
+  "gamemode-invalid-args": "Invalid arguments! Usage: /gamemode <gamemode> [player]"
 }

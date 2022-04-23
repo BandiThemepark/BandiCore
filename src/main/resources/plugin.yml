@@ -30,3 +30,7 @@ commands:
       - tracks
       - trcks
       - tr
+  gamemode:
+    description: Command to players gamemode
+    aliases:
+      - gm
