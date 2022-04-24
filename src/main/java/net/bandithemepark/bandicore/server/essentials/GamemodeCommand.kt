@@ -23,10 +23,13 @@ class GamemodeCommand : CommandExecutor, TabCompleter {
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (!command.name.equals("gamemode", true)) return false
-        if (!sender.hasPermission("bandithemepark.crew")) sender.sendTranslatedMessage(
-            "no-permission",
-            BandiColors.RED.toString()
-        )
+        if (!sender.hasPermission("bandithemepark.crew")) {
+            sender.sendTranslatedMessage(
+                "no-permission",
+                BandiColors.RED.toString()
+            )
+            return true
+        }
         if (args.size >= 1 && args.size <= 2) {
             val gameMode = getGamenode(args[0])
             if (gameMode == null) {
