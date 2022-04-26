@@ -40,7 +40,13 @@ class TrackVisualiser {
                     }
                 }
 
-                // TODO Show all others like roll nodes, segment separators and triggers
+                for(rollNode in session.layout.rollNodes) {
+                    val node = rollNode.position.getPathPoint().asVector()
+                    node.add(origin)
+                    session.player.spawnParticle(Particle.REDSTONE, node.toLocation(session.layout.world), 1, rollOptions)
+                }
+
+                // TODO Show all others like segment separators and triggers
             }
         }
     }
