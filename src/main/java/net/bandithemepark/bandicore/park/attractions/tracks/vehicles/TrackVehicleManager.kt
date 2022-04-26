@@ -6,6 +6,7 @@ import net.bandithemepark.bandicore.park.attractions.tracks.TrackPosition
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.Attachment
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.AttachmentPosition
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.AttachmentType
+import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.commands.*
 import net.bandithemepark.bandicore.util.FileManager
 import org.bukkit.Bukkit
 import org.bukkit.Location
@@ -13,6 +14,15 @@ import org.bukkit.Location
 class TrackVehicleManager {
     val vehicles = mutableListOf<TrackVehicle>()
     // TODO Keep track of segments
+
+    init {
+        // Setting up all commands
+        VehicleCommandList().register()
+        VehicleCommandSpeed().register()
+        VehicleCommandSpawn().register()
+        VehicleCommandDeSpawn().register()
+        VehicleCommandEdit().register()
+    }
 
     /**
      * Gets a spawned vehicle by its ID
@@ -28,7 +38,7 @@ class TrackVehicleManager {
      */
     fun deSpawnAllVehicles() {
         for (vehicle in vehicles) {
-            vehicle.deSpawn()
+            vehicle.deSpawnAttachments()
         }
         vehicles.clear()
     }
@@ -121,11 +131,10 @@ class TrackVehicleManager {
             member.attachments = attachments
             vehicle.members.add(member)
 
-            for(attachment in vehicle.getAllAttachments()) {
+            for(attachment in member.getAllAttachments()) {
                 attachment.type.onSpawn(Location(layout.world, layout.origin.x + position.nodePosition.x, layout.origin.y + position.nodePosition.y, layout.origin.z + position.nodePosition.z))
             }
         }
-
 
         // Adding the vehicle
         vehicles.add(vehicle)
