@@ -3,7 +3,7 @@ package net.bandithemepark.bandicore.server.mode
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedMessage
 import net.bandithemepark.bandicore.server.translations.MessageReplacement
-import net.bandithemepark.bandicore.util.BandiColors
+import net.bandithemepark.bandicore.util.chat.BandiColors
 import net.bandithemepark.bandicore.util.Util
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor

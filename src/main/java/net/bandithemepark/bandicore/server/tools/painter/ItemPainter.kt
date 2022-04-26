@@ -1,7 +1,7 @@
 package net.bandithemepark.bandicore.server.tools.painter
 
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedMessage
-import net.bandithemepark.bandicore.util.BandiColors
+import net.bandithemepark.bandicore.util.chat.BandiColors
 import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.Util
 import net.kyori.adventure.text.Component

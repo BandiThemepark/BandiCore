@@ -1,6 +1,11 @@
 package net.bandithemepark.bandicore.server.tools.armorstandtools
 
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.server.translations.LanguageUtil.getTranslatedMessage
+import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedMessage
+import net.bandithemepark.bandicore.util.Util
+import net.bandithemepark.bandicore.util.chat.BandiColors
+import net.bandithemepark.bandicore.util.chat.prompt.ChatPrompt
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -83,7 +88,14 @@ class ArmorStandEditorEvents: Listener {
                             Bukkit.getScheduler().runTask(BandiCore.instance, Runnable { session.openGUI(session.editing!!) })
                         }
                         25 -> {
-                            // TODO Add a way to change the name of the armor stand (using something like a chat prompt)
+                            Bukkit.getScheduler().runTask(BandiCore.instance, Runnable { event.whoClicked.closeInventory() })
+
+                            ChatPrompt(event.whoClicked as Player, (event.whoClicked as Player).getTranslatedMessage("armor-stand-editor-rename"), BandiColors.YELLOW.toString(), (event.whoClicked as Player).getTranslatedMessage("armor-stand-editor-rename-cancelled")) { player: Player, message: String ->
+                                run {
+                                    session.editing!!.customName(Util.color(message))
+                                    player.sendTranslatedMessage("armor-stand-editor-rename-success", BandiColors.YELLOW.toString())
+                                }
+                            }
                         }
                         32 -> {
                             session.editing!!.isInvisible = !session.editing!!.isInvisible

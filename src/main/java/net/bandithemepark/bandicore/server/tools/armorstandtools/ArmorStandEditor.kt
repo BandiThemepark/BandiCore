@@ -1,6 +1,6 @@
 package net.bandithemepark.bandicore.server.tools.armorstandtools
 
-import net.bandithemepark.bandicore.util.BandiColors
+import net.bandithemepark.bandicore.util.chat.BandiColors
 import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.Util
 import net.kyori.adventure.text.Component
@@ -76,16 +76,16 @@ class ArmorStandEditor(val player: Player) {
         inv.setItem(29, armorStand.equipment.leggings)
         inv.setItem(38, armorStand.equipment.boots)
 
-        inv.setItem(15, ItemFactory.create(Material.GLOWSTONE, 1, 0, Util.color("<!i><${BandiColors.GREEN}>Toggle glowing"), Util.color("<!i><${BandiColors.GRAY}>Currently ").append(convertBoolean(armorStand.isGlowing))))
-        inv.setItem(16, ItemFactory.create(Material.ENCHANTED_GOLDEN_APPLE, 1, 0, Util.color("<!i><${BandiColors.GREEN}>Toggle invulnerability"), Util.color("<!i><${BandiColors.GRAY}>Currently ").append(convertBoolean(armorStand.isInvulnerable))))
-        inv.setItem(23, ItemFactory.create(Material.EMERALD, 1, 0, Util.color("<!i><${BandiColors.GREEN}>Toggle small"), Util.color("<!i><${BandiColors.GRAY}>Currently ").append(convertBoolean(armorStand.isSmall))))
-        inv.setItem(24, ItemFactory.create(Material.NAME_TAG, 1, 0, Util.color("<!i><${BandiColors.GREEN}>Toggle name visibility"), Util.color("<!i><${BandiColors.GRAY}>Currently ").append(convertBoolean(armorStand.isCustomNameVisible))))
-        inv.setItem(25, ItemFactory.create(Material.ANVIL, 1, 0, Util.color("<!i><${BandiColors.GREEN}>Set name"), Util.color("<!i><${BandiColors.GRAY}>Currently <white>").append(convertName(armorStand.customName()))))
-        inv.setItem(32, ItemFactory.create(Material.GOLD_NUGGET, 1, 0, Util.color("<!i><${BandiColors.GREEN}>Toggle visibility"), Util.color("<!i><${BandiColors.GRAY}>Currently ").append(convertBoolean(!armorStand.isInvisible))))
-        inv.setItem(33, ItemFactory.create(Material.SMOOTH_STONE_SLAB, 1, 0, Util.color("<!i><${BandiColors.GREEN}>Toggle baseplate"), Util.color("<!i><${BandiColors.GRAY}>Currently ").append(convertBoolean(armorStand.hasBasePlate()))))
-        inv.setItem(34, ItemFactory.create(Material.WOODEN_SWORD, 1, 0, Util.color("<!i><${BandiColors.GREEN}>Toggle arms"), Util.color("<!i><${BandiColors.GRAY}>Currently ").append(convertBoolean(armorStand.hasArms()))))
-        inv.setItem(42, ItemFactory.create(Material.GRAVEL, 1, 0, Util.color("<!i><${BandiColors.GREEN}>Toggle gravity"), Util.color("<!i><${BandiColors.GRAY}>Currently ").append(convertBoolean(armorStand.hasGravity()))))
-        inv.setItem(43, ItemFactory.create(Material.BARRIER, 1, 0, Util.color("<!i><${BandiColors.GREEN}>Remove/delete"), Util.color("<!i><${BandiColors.GRAY}>Removes the armor stand (forever!)")))
+        inv.setItem(15, ItemFactory.create(Material.GLOWSTONE, 1, 0, Util.color("<!i><${BandiColors.GREEN}>Toggle glowing"), Util.color("<!i><${BandiColors.LIGHT_GRAY}>Currently ").append(convertBoolean(armorStand.isGlowing))))
+        inv.setItem(16, ItemFactory.create(Material.ENCHANTED_GOLDEN_APPLE, 1, 0, Util.color("<!i><${BandiColors.GREEN}>Toggle invulnerability"), Util.color("<!i><${BandiColors.LIGHT_GRAY}>Currently ").append(convertBoolean(armorStand.isInvulnerable))))
+        inv.setItem(23, ItemFactory.create(Material.EMERALD, 1, 0, Util.color("<!i><${BandiColors.GREEN}>Toggle small"), Util.color("<!i><${BandiColors.LIGHT_GRAY}>Currently ").append(convertBoolean(armorStand.isSmall))))
+        inv.setItem(24, ItemFactory.create(Material.NAME_TAG, 1, 0, Util.color("<!i><${BandiColors.GREEN}>Toggle name visibility"), Util.color("<!i><${BandiColors.LIGHT_GRAY}>Currently ").append(convertBoolean(armorStand.isCustomNameVisible))))
+        inv.setItem(25, ItemFactory.create(Material.ANVIL, 1, 0, Util.color("<!i><${BandiColors.GREEN}>Set name"), Util.color("<!i><${BandiColors.LIGHT_GRAY}>Currently <white>").append(convertName(armorStand.customName()))))
+        inv.setItem(32, ItemFactory.create(Material.GOLD_NUGGET, 1, 0, Util.color("<!i><${BandiColors.GREEN}>Toggle visibility"), Util.color("<!i><${BandiColors.LIGHT_GRAY}>Currently ").append(convertBoolean(!armorStand.isInvisible))))
+        inv.setItem(33, ItemFactory.create(Material.SMOOTH_STONE_SLAB, 1, 0, Util.color("<!i><${BandiColors.GREEN}>Toggle baseplate"), Util.color("<!i><${BandiColors.LIGHT_GRAY}>Currently ").append(convertBoolean(armorStand.hasBasePlate()))))
+        inv.setItem(34, ItemFactory.create(Material.WOODEN_SWORD, 1, 0, Util.color("<!i><${BandiColors.GREEN}>Toggle arms"), Util.color("<!i><${BandiColors.LIGHT_GRAY}>Currently ").append(convertBoolean(armorStand.hasArms()))))
+        inv.setItem(42, ItemFactory.create(Material.GRAVEL, 1, 0, Util.color("<!i><${BandiColors.GREEN}>Toggle gravity"), Util.color("<!i><${BandiColors.LIGHT_GRAY}>Currently ").append(convertBoolean(armorStand.hasGravity()))))
+        inv.setItem(43, ItemFactory.create(Material.BARRIER, 1, 0, Util.color("<!i><${BandiColors.GREEN}>Remove/delete"), Util.color("<!i><${BandiColors.LIGHT_GRAY}>Removes the armor stand (forever!)")))
 
         player.openInventory(inv)
     }
