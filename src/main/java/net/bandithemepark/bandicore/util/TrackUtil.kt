@@ -1,8 +1,10 @@
 package net.bandithemepark.bandicore.util
 
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.park.attractions.tracks.RollNode
 import net.bandithemepark.bandicore.park.attractions.tracks.TrackLayout
 import net.bandithemepark.bandicore.park.attractions.tracks.TrackNode
+import net.bandithemepark.bandicore.park.attractions.tracks.TrackPosition
 import net.bandithemepark.bandicore.util.math.MathUtil
 import org.bukkit.Location
 
@@ -119,5 +121,68 @@ object TrackUtil {
         }
 
         return nearest
+    }
+
+    /**
+     * Gets the roll node that is closest to a given location
+     * @param layout The layout that should be checked for
+     * @param location The location to check for
+     * @return The roll node that is closest to the given location
+     */
+    fun getNearestRollNode(layout: TrackLayout, location: Location): RollNode? {
+        if(layout.rollNodes.size > 0) {
+            var nearest = layout.rollNodes[0]
+            var currentDistance = 9999.0
+
+            for(node in layout.rollNodes) {
+                val rollNodeLocation = node.position.getPathPoint().asVector()
+                rollNodeLocation.add(layout.origin)
+                val distance = MathUtil.getDistanceBetween(location.toVector(), rollNodeLocation)
+
+                if(distance < currentDistance) {
+                    currentDistance = distance
+                    nearest = node
+                }
+            }
+
+            return nearest
+        } else {
+            return null
+        }
+    }
+
+    /**
+     * Gets all path points between two TrackPositions
+     * @param position1 The first position
+     * @param position2 The second position
+     * @return List of path points between the two positions
+     */
+    fun getCurveBetweenPositions(position1: TrackPosition, position2: TrackPosition): List<TrackNode> {
+        val node1 = position1.nodePosition
+        val pos1 = position1.position.toInt()
+
+        val node2 = position2.nodePosition
+        val pos2 = position2.position.toInt()
+
+        if(node1 != node2) {
+            val curve = mutableListOf<TrackNode>()
+            for(i in pos1 until node1.curve.size) curve.add(node1.curve[i])
+
+            var currentNode = node1.connectedTo
+            while(currentNode != null && currentNode != node2) {
+                curve.addAll(currentNode.curve)
+                currentNode = currentNode.connectedTo
+            }
+
+            if(currentNode != null) {
+                for(i in 0 until pos2) curve.add(node2.curve[i])
+            }
+
+            return curve.distinct()
+        } else {
+            val curve = mutableListOf<TrackNode>()
+            for(i in pos1 until pos2) curve.add(node1.curve[i])
+            return curve.distinct()
+        }
     }
 }
