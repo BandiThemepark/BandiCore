@@ -1,8 +1,11 @@
 package net.bandithemepark.bandicore.server.translations
 
+import kotlinx.coroutines.*
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.network.backend.BackendPlayer
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.getTranslatedMessage
 import net.bandithemepark.bandicore.util.Util
+import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -13,16 +16,26 @@ object LanguageUtil {
     /**
      * Gets the language of a player
      * @param player The player to get the language of
-     * @param forceCheck optional parameter that forces the server to load the language from the API
      * @return The language of the player
      */
-    fun getLanguage(player: Player, forceCheck: Boolean = false): Language {
-        return if(loadedLanguages.containsKey(player) && !forceCheck) {
+    fun getLanguage(player: Player): Language {
+        return if(loadedLanguages.containsKey(player)) {
             loadedLanguages[player]!!
         } else {
-            // TODO Actually retrieve the language from the API and storing it so it can be retrieved later
             BandiCore.instance.server.getLanguage("english")!!
         }
+    }
+
+    /**
+     * Loads the language of a player. This function is called when a player joins the server.
+     * @param player The player to load the language of
+     */
+    fun loadLanguage(player: Player) {
+          val backendPlayer = BackendPlayer(player)
+          backendPlayer.get { data ->
+              val language = BandiCore.instance.server.getShortenedLanguage(data.get("lang").asString)!!
+              loadedLanguages[player] = language
+          }
     }
 
     // Function that gets a message from a given language and message id. If the message is null, it will retrieve the message from english
