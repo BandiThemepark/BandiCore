@@ -4,8 +4,10 @@ import org.bukkit.scheduler.BukkitRunnable
 
 class TrackRunnable: BukkitRunnable() {
     private val trackVisualiser = TrackVisualiser()
+    private val trackVehicleUpdater = TrackVehicleUpdater()
 
     override fun run() {
         trackVisualiser.onTick()
+        trackVehicleUpdater.onTick()
     }
 }
