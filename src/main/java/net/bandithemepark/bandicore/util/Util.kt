@@ -1,7 +1,9 @@
 package net.bandithemepark.bandicore.util
 
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.TextComponent
 import net.kyori.adventure.text.minimessage.MiniMessage
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.Location
 import org.bukkit.entity.Player
 import org.bukkit.util.StringUtil
@@ -66,5 +68,13 @@ object Util {
         val z = loc2.z - loc1.z
         val one = sqrt(x * x + z * z)
         return sqrt(one * one + y * y)
+    }
+
+    /**
+     * Gets the text from a component
+     * @return The text from the component
+     */
+    fun Component.getText(): String {
+        return PlainTextComponentSerializer.plainText().serialize(this)
     }
 }
