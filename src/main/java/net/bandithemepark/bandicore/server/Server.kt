@@ -1,5 +1,8 @@
 package net.bandithemepark.bandicore.server
 
+import net.bandithemepark.bandicore.network.backend.BackendSetting
+import net.bandithemepark.bandicore.server.essentials.ranks.RankManager
+import net.bandithemepark.bandicore.server.essentials.ranks.scoreboard.BandiScoreboard
 import net.bandithemepark.bandicore.server.mode.ServerMode
 import net.bandithemepark.bandicore.server.translations.Language
 import net.bandithemepark.bandicore.util.FileManager
@@ -7,20 +10,45 @@ import net.bandithemepark.bandicore.util.FileManager
 class Server {
     var serverMode: ServerMode
     val languages = mutableListOf<Language>()
+    val apiKey: String
+
+    val queueServer: String
+    val queueServerHost: String
+    val queueServerPort: Int
+
+    val rankManager = RankManager()
+    val scoreboard = BandiScoreboard()
 
     init {
-        ServerMode("open", "Yey we are open!", true, true).register()
-        ServerMode("vip", "Open only for our VIPs!", true, false).register()
-        ServerMode("maintenance", "We are in maintenance!", false, false).register()
+        ServerMode("open", "§6§lBandiThemepark §7- §aOpen||§7Come and visit us right now!", true, true).register()
+        ServerMode("vip", "§6§lBandiThemepark §7- §eVIPs only||§7Come and visit us right now! (If you're a VIP)", true, false).register()
+        ServerMode("maintenance", "§6§lBandiThemepark §7- §cMaintenance||§7Check our Discord for more information", false, false).register()
+        ServerMode("restart", "§6§lBandiThemepark §7- §cRestarting||§7You can still join our queue though!", false, false).register()
 
         val fm = FileManager()
-        serverMode = ServerMode.getFromId(fm.getConfig("config.yml").get().getString("serverMode")!!)!!
+
+        // Loading the server mode. It will get the server mode from before a restart if it is present.
+        serverMode = if(fm.getConfig("config.yml").get().contains("preRestartMode")) {
+            val serverMode = ServerMode.getFromId(fm.getConfig("config.yml").get().getString("preRestartMode")!!)!!
+            fm.getConfig("config.yml").get().set("preRestartMode", null)
+            fm.getConfig("config.yml").get().set("serverMode", serverMode.id)
+            fm.saveConfig("config.yml")
+            serverMode
+        } else {
+            ServerMode.getFromId(fm.getConfig("config.yml").get().getString("serverMode")!!)!!
+        }
+
+        apiKey = fm.getConfig("config.yml").get().getString("apiKey")!!
+
+        queueServer = fm.getConfig("config.yml").get().getString("queueServer")!!
+        queueServerHost = fm.getConfig("config.yml").get().getString("queueServerHost")!!
+        queueServerPort = fm.getConfig("config.yml").get().getInt("queueServerPort")
+
         for(language in fm.getConfig("config.yml").get().getStringList("languages")) {
             languages.add(Language(language.split("-")[0], language.split("-")[1]))
         }
     }
 
-    // Utility to get a language from an id
     /**
      * Gets a language from an id
      * @param id The id of the language
@@ -48,5 +76,8 @@ class Server {
         val fm = FileManager()
         fm.getConfig("config.yml").get().set("serverMode", mode.id)
         fm.saveConfig("config.yml")
+
+        BackendSetting("serverMode").setValue(mode.id)
+        BackendSetting("motd").setValue(mode.motd)
     }
 }
