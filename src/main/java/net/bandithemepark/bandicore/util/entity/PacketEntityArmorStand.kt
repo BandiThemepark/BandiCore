@@ -61,7 +61,7 @@ class PacketEntityArmorStand: PacketEntity() {
      */
     fun moveWithHead(position: Vector, rotation: Quaternion) {
         val armorStandPose = MathUtil.getArmorStandPose(rotation)
-        setHeadPose(armorStandPose.x, armorStandPose.y, armorStandPose.z)
+        setHeadPose(Math.toDegrees(armorStandPose.x), Math.toDegrees(armorStandPose.y), Math.toDegrees(armorStandPose.z))
         moveEntity(position.x, position.y, position.z)
     }
 }
