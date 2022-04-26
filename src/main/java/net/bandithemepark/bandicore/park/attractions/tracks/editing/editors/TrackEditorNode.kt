@@ -2,12 +2,16 @@ package net.bandithemepark.bandicore.park.attractions.tracks.editing.editors
 
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.park.attractions.tracks.TrackNode
+import net.bandithemepark.bandicore.park.attractions.tracks.editing.TrackEditor
 import net.bandithemepark.bandicore.park.attractions.tracks.editing.TrackEditorType
+import net.bandithemepark.bandicore.server.translations.LanguageUtil.getTranslatedMessage
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedActionBar
+import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedMessage
 import net.bandithemepark.bandicore.server.translations.MessageReplacement
-import net.bandithemepark.bandicore.util.BandiColors
+import net.bandithemepark.bandicore.util.chat.BandiColors
 import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.Util
+import net.bandithemepark.bandicore.util.chat.prompt.ChatPrompt
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -55,7 +59,7 @@ class TrackEditorNode: TrackEditorType() {
             }
 
             1 -> {
-                if(selectedNode == null) {
+                if(selectedNode == null && !selectedOrigin) {
                     player!!.sendTranslatedActionBar("no-node-selected", BandiColors.RED.toString())
                     return
                 }
@@ -81,7 +85,7 @@ class TrackEditorNode: TrackEditorType() {
             }
 
             2 -> {
-                if(selectedNode == null) {
+                if(selectedNode == null && !selectedOrigin) {
                     player!!.sendTranslatedActionBar("no-node-selected", BandiColors.RED.toString())
                     return
                 }
@@ -107,7 +111,7 @@ class TrackEditorNode: TrackEditorType() {
             }
 
             3 -> {
-                if(selectedNode == null) {
+                if(selectedNode == null && !selectedOrigin) {
                     player!!.sendTranslatedActionBar("no-node-selected", BandiColors.RED.toString())
                     return
                 }
@@ -253,7 +257,14 @@ class TrackEditorNode: TrackEditorType() {
                     }
 
                     4 -> {
-                        // TODO Change node ID using chat prompt
+                        Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
+                            event.whoClicked.closeInventory()
+                        })
+
+                        ChatPrompt(event.whoClicked as Player, (event.whoClicked as Player).getTranslatedMessage("track-editor-rename-node"), BandiColors.YELLOW.toString(), (event.whoClicked as Player).getTranslatedMessage("track-editor-rename-node-cancelled")) { player: Player, message: String ->
+                            selectedNode.id = message
+                            session.player.sendTranslatedMessage("track-editor-renamed-node", BandiColors.YELLOW.toString(), MessageReplacement("to", selectedNode.id!!))
+                        }
                     }
                 }
             }
