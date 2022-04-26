@@ -3,5 +3,8 @@
   "no-permission": "Je hebt geen toestemming om dit te doen!",
   "server-mode-invalid-mode": "Deze servermodus bestaat niet",
   "server-mode-changed": "De modus van de server staat nu op %mode%",
-  "server-mode-invalid-args": "Ongeldige argumenten! Gebruik: /servermode <modus>"
+  "server-mode-invalid-args": "Ongeldige argumenten! Gebruik: /servermode <modus>",
+  "set-language-invalid-args": "Ongeldige argumenten! Gebruik: /setlanguage <taal>",
+  "language-not-found": "De opgegeven taal kon niet worden gevonden!",
+  "language-changed": "Je taal staat nu op %language%"
 }
