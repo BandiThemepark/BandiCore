@@ -1,6 +1,6 @@
 package net.bandithemepark.bandicore.park.attractions.tracks
 
-class TrackPosition(var nodePosition: TrackNode, position: Int) {
+class TrackPosition(var nodePosition: TrackNode, position: Int): Cloneable {
     var position = position.toDouble()
 
     /**
@@ -35,5 +35,17 @@ class TrackPosition(var nodePosition: TrackNode, position: Int) {
 
         nodePosition = currentNode
         position = newPosition
+    }
+
+    /**
+     * Gets the path point this TrackPosition represents
+     * @return The path point this TrackPosition represents
+     */
+    fun getPathPoint(): TrackNode {
+        return nodePosition.curve[position.toInt()]
+    }
+
+    public override fun clone(): TrackPosition {
+        return TrackPosition(nodePosition, position.toInt())
     }
 }

@@ -3,6 +3,7 @@ package net.bandithemepark.bandicore.park.attractions.tracks
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.util.FileManager
 import net.bandithemepark.bandicore.util.TrackUtil
+import net.bandithemepark.bandicore.util.math.MathUtil
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Location
@@ -39,8 +40,65 @@ class TrackLayout(val id: String, var origin: Vector, var world: World, var node
         }
     }
 
-    private fun updateRoll() {
-        // TODO update roll nodes
+    /**
+     * Updates all roll nodes on the track
+     */
+    fun updateRoll() {
+        if(rollNodes.isEmpty()) return
+
+        if(rollNodes.size == 1) {
+            val roll = rollNodes[0].roll
+            for(node in getAllPathPoints()) node.roll = roll
+            return
+        }
+
+        for(rollNode in rollNodes) {
+            var currentNode = rollNode.position.nodePosition
+            var done = false
+
+            while(currentNode.connectedTo != null && !done) {
+                val rollNodesOnNode = rollNodes.filter { it.position.nodePosition == currentNode }
+                if(rollNodesOnNode.isNotEmpty() && !rollNodesOnNode.contains(rollNode)) {
+                    val next = rollNodesOnNode[0]
+                    val curve = TrackUtil.getCurveBetweenPositions(rollNode.position, next.position)
+
+                    if(rollNode.roll != 0.0 && next.roll != 0.0) {
+                        for((index, curvePoint) in curve.withIndex()) {
+                            var roll = MathUtil.interpolateAngles(rollNode.roll, next.roll, index.toDouble()/curve.size.toDouble())
+                            if(roll > 180) {
+                                roll -= 360
+                            } else if(roll < -180) {
+                                roll += 360
+                            }
+                            //Bukkit.broadcast(Component.text("Calculating roll. From: ${rollNode.roll}, to: ${next.roll}, T: ${index.toDouble()/curve.size.toDouble()}, roll: $roll"))
+                            curvePoint.roll = roll
+                        }
+                    }
+
+                    done = true
+                }
+
+                if(!done) currentNode = currentNode.connectedTo!!
+            }
+
+            if(currentNode.connectedTo == null && !done) {
+                val curve = TrackUtil.getCurveBetweenPositions(rollNode.position, TrackPosition(currentNode, currentNode.curve.size-1))
+                for(point in curve) point.roll = rollNode.roll
+            }
+        }
+
+        //getAllPathPoints().forEach { Bukkit.broadcast(Component.text("Roll: ${it.roll}")) }
+    }
+
+    /**
+     * Gets all path points on this track
+     */
+    fun getAllPathPoints(): List<TrackNode> {
+        val pathPoints = mutableListOf<TrackNode>()
+        for(node in nodes) {
+            pathPoints.addAll(node.curve)
+        }
+        return pathPoints
     }
 
     /**
@@ -87,6 +145,15 @@ class TrackLayout(val id: String, var origin: Vector, var world: World, var node
     }
 
     /**
+     * Gets the roll node nearest to a certain location
+     * @param location The location to check from
+     * @return The roll node nearest to the location
+     */
+    fun getNearestRollNode(location: Location): RollNode? {
+        return TrackUtil.getNearestRollNode(this, location)
+    }
+
+    /**
      * Saves a track to it's file
      */
     fun save() {
@@ -118,7 +185,7 @@ class TrackLayout(val id: String, var origin: Vector, var world: World, var node
 
         // Saving roll nodes
         for((index, rollNode) in rollNodes.withIndex()) {
-            fm.getConfig("tracks/$id.trck").get().set("rollNodes.$index.node", rollNode.position.nodePosition.id)
+            fm.getConfig("tracks/$id.trck").get().set("rollNodes.$index.nodeId", rollNode.position.nodePosition.id)
             fm.getConfig("tracks/$id.trck").get().set("rollNodes.$index.position", rollNode.position.position.toInt())
             fm.getConfig("tracks/$id.trck").get().set("rollNodes.$index.roll", rollNode.roll)
         }

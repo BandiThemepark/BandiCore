@@ -4,6 +4,7 @@ import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.park.attractions.tracks.commands.*
 import net.bandithemepark.bandicore.park.attractions.tracks.editing.TrackEditor
 import net.bandithemepark.bandicore.park.attractions.tracks.editing.editors.TrackEditorNode
+import net.bandithemepark.bandicore.park.attractions.tracks.editing.editors.TrackEditorRoll
 import net.bandithemepark.bandicore.park.attractions.tracks.runnables.TrackRunnable
 import net.bandithemepark.bandicore.park.attractions.tracks.splines.SplineType
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.TrackVehicleManager
@@ -47,6 +48,7 @@ class TrackManager(val splineType: SplineType, val pointsPerMeter: Int, val fric
     private fun registerEditors() {
         TrackEditorNode().register()
         BandiCore.instance.getServer().pluginManager.registerEvents(TrackEditorNode.Events(), BandiCore.instance)
+        TrackEditorRoll().register()
     }
 
     private fun registerAttachments() {
