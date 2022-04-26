@@ -1,0 +1,133 @@
+package net.bandithemepark.bandicore.park.attractions.tracks.runnables
+
+import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.park.attractions.tracks.splines.BezierSpline
+import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.TrackVehicle
+import net.bandithemepark.bandicore.util.math.Quaternion
+import org.bukkit.Location
+import org.bukkit.util.Vector
+import kotlin.math.cos
+import kotlin.math.sin
+
+class TrackVehicleUpdater {
+    fun onTick() {
+        for(vehicle in BandiCore.instance.trackManager.vehicleManager.vehicles) {
+            // Saving the position before moving to use later
+            val oldPosition = vehicle.position.clone()
+
+            // Moving the train with its speed
+            try {
+                vehicle.position.move(vehicle.ridingOn, vehicle.speed * BandiCore.instance.trackManager.pointsPerMeter)
+            } catch(e: IllegalStateException) {
+                vehicle.position = oldPosition
+                vehicle.speed *= -1.0
+            }
+
+            // Getting the front and back of the train
+            val totalLength = vehicle.getLengthInPoints()
+            var back = vehicle.position.clone()
+            var front = vehicle.position.clone()
+
+            try {
+                back.move(vehicle.ridingOn, -totalLength / 2.0)
+                front.move(vehicle.ridingOn, totalLength / 2.0)
+            } catch(e: IllegalStateException) {
+                vehicle.position = oldPosition
+                vehicle.speed *= -1.0
+                back = oldPosition.clone()
+                front = oldPosition.clone()
+
+                back.move(vehicle.ridingOn, -totalLength / 2.0)
+                front.move(vehicle.ridingOn, totalLength / 2.0)
+            }
+
+            // Physics calculations
+            if(vehicle.physicsType != TrackVehicle.PhysicsType.NONE) {
+                // Getting the train pitch
+                val directionLocation = Location(vehicle.ridingOn.world, 0.0, 0.0, 0.0)
+                directionLocation.direction = back.getPathPoint().asVector().subtract(front.getPathPoint().asVector())
+                val pitch = -directionLocation.pitch.toDouble()
+
+                // Calculating acceleration and friction
+                var acceleration = 9.81 * sin(Math.toRadians(pitch))
+                val normalForce = 9.81 * cos(Math.toRadians(pitch))
+                var friction = normalForce * BandiCore.instance.trackManager.frictionCoefficient * vehicle.frictionMultiplier / 20
+
+                // Applying physics types
+                if(vehicle.physicsType == TrackVehicle.PhysicsType.UP && pitch > 0) {
+                    acceleration = 0.0
+                    friction = 0.0
+                }
+
+                if(vehicle.physicsType == TrackVehicle.PhysicsType.DOWN && pitch < 0) {
+                    acceleration = 0.0
+                    friction = 0.0
+                }
+
+                // Applying the speeds
+                if(acceleration != 0.0 && friction != 0.0) {
+                    vehicle.speedMS += acceleration / 20
+
+                    if(vehicle.speedMS > 0) {
+                        if(friction > vehicle.speed) friction = vehicle.speed
+                        vehicle.speedMS -= friction
+                    } else {
+                        if(friction < vehicle.speed) friction = vehicle.speed
+                        vehicle.speedMS += friction
+                    }
+                }
+            }
+
+            // TODO Update segments
+
+            // TODO Update triggers
+
+            // Updating individual members
+            var currentSize = 0.0
+            for(member in vehicle.members) {
+                // Getting the position of the member
+                val memberPosition = vehicle.position.clone()
+                memberPosition.move(vehicle.ridingOn, totalLength/2.0 - currentSize - member.size/2.0)
+
+                // Updating the currentSize for the next member
+                currentSize += member.size
+
+                // Getting the back and front of the member
+                val wheelsBack = memberPosition.clone()
+                val wheelsFront = memberPosition.clone()
+
+                wheelsBack.move(vehicle.ridingOn, -member.size/2.0)
+                wheelsFront.move(vehicle.ridingOn, member.size/2.0)
+
+                val wheelsBackPoint = wheelsBack.nodePosition.curve[wheelsBack.position.toInt()]
+                val wheelsFrontPoint = wheelsFront.nodePosition.curve[wheelsFront.position.toInt()]
+
+                // Getting the center of those wheels
+                val x = BezierSpline().linear(wheelsBackPoint.x, wheelsFrontPoint.x, 0.5) + vehicle.ridingOn.origin.x
+                val y = BezierSpline().linear(wheelsBackPoint.y, wheelsFrontPoint.y, 0.5) + vehicle.ridingOn.origin.y
+                val z = BezierSpline().linear(wheelsBackPoint.z, wheelsFrontPoint.z, 0.5) + vehicle.ridingOn.origin.z
+
+                // Roll at current position
+                val roll = (wheelsBackPoint.roll + wheelsFrontPoint.roll) / 2.0
+
+                // Preparing pitch and yaw to calculate a rotation quaternion
+                val deltaLoc = wheelsFrontPoint.asVector().subtract(wheelsBackPoint.asVector())
+                val directionLoc = Location(vehicle.ridingOn.world, 0.0, 0.0, 0.0)
+                directionLoc.direction = deltaLoc
+
+                val pitch = directionLoc.pitch.toDouble()
+                val yaw = directionLoc.yaw.toDouble()
+
+                // Calculating the rotation quaternion
+                val upVectorQuaternion = Quaternion.fromYawPitchRoll(pitch, yaw, roll)
+                val upVector = upVectorQuaternion.upVector()
+                val rotationQuaternion = Quaternion.fromLookDirection(deltaLoc, upVector)
+
+                // Updating the attachments themselves
+                for(attachment in member.attachments) {
+                    attachment.update(Vector(x, y, z), rotationQuaternion.clone(), Vector(pitch, yaw, roll))
+                }
+            }
+        }
+    }
+}
