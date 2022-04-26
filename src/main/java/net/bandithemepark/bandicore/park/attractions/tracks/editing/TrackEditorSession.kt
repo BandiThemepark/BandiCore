@@ -1,7 +1,7 @@
 package net.bandithemepark.bandicore.park.attractions.tracks.editing
 
 import net.bandithemepark.bandicore.park.attractions.tracks.TrackLayout
-import net.bandithemepark.bandicore.util.BandiColors
+import net.bandithemepark.bandicore.util.chat.BandiColors
 import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.Util
 import org.bukkit.Material
@@ -9,7 +9,8 @@ import org.bukkit.entity.Player
 
 class TrackEditorSession(val player: Player, val layout: TrackLayout) {
     val beforeInventory = player.inventory.contents
-    var currentEditor = TrackEditorType.types[0].getNew(player, layout)
+    var currentEditorIndex = 0
+    var currentEditor = TrackEditorType.types[currentEditorIndex].getNew(player, layout)
 
     init {
         updatePlayerItems()
@@ -27,14 +28,8 @@ class TrackEditorSession(val player: Player, val layout: TrackLayout) {
      * Switches to the next editor.
      */
     fun openNextEditor() {
-        val index = TrackEditorType.types.indexOf(currentEditor)
-
-        currentEditor = if(index == TrackEditorType.types.size - 1) {
-            TrackEditorType.types[0].getNew(player, layout)
-        } else {
-            TrackEditorType.types[index + 1].getNew(player, layout)
-        }
-
+        currentEditorIndex = if(currentEditorIndex == TrackEditorType.types.size - 1) 0 else currentEditorIndex + 1
+        currentEditor = TrackEditorType.types[currentEditorIndex].getNew(player, layout)
         updatePlayerItems()
     }
 
