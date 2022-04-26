@@ -1,7 +1,9 @@
 package net.bandithemepark.bandicore.util.math
 
+import net.bandithemepark.bandicore.park.attractions.tracks.splines.BezierSpline
 import org.bukkit.util.Vector
 import kotlin.math.*
+
 
 object MathUtil {
 //    fun rotateAroundPoint(x: Double, y: Double, z: Double, pitch: Double, yaw: Double, roll: Double): Vector {
@@ -90,5 +92,44 @@ object MathUtil {
             val sign = if (rz < 0) -1.0 else 1.0
             Vector(0.0, sign * 90.0, -sign * 2.0 * atan2(qx, qw))
         }
+    }
+
+    /**
+     * Interpolates between two angles
+     * @param a1 The first angle
+     * @param a2 The second angle
+     * @param t The interpolation value (ranging from 0 to 1)
+     * @return Interpolated angle
+     */
+//    fun interpolateAngles(a1: Double, a2: Double, t: Double): Double {
+//        val difBetween = a2 - a1
+//        if(difBetween > 180.0 || difBetween < -180.0) {
+//            val delta = (a2 - a1 + 360 + 180) % 360 - 180
+//            return (a1 + delta * t + 360) % 360
+//        } else {
+//            return BezierSpline().linear(a1, a2, t)
+//        }
+//    }
+
+    private fun lerp(start: Double, end: Double, t: Double): Double {
+        return (1-t)*start+t*end
+    }
+
+    private fun clamp(number: Double, min: Double, max: Double): Double {
+        return number.coerceAtLeast(min).coerceAtMost(max)
+    }
+
+    private fun repeat(t: Double, m: Double): Double {
+        return clamp(t - floor(t / m) * m, 0.0, m)
+    }
+
+    fun interpolateAngles(a1: Double, a2: Double, t: Double): Double {
+        val dt = repeat(a2 - a1, 360.0)
+        val stuff = if(dt > 180) {
+            dt - 360
+        } else {
+            dt
+        }
+        return lerp(a1, a1 + stuff, t)
     }
 }
