@@ -4,7 +4,7 @@ import net.bandithemepark.bandicore.util.math.Matrix
 import net.bandithemepark.bandicore.util.math.Quaternion
 import org.bukkit.util.Vector
 
-class AttachmentPosition(val x: Double, val y: Double, val z: Double, val pitch: Double, val yaw: Double, val roll: Double) {
+class AttachmentPosition(var x: Double, var y: Double, var z: Double, var pitch: Double, var yaw: Double, var roll: Double) {
     /**
      * Calculates the position of the attachment when a certain rotation is applied
      * @param rotation The rotation to apply
@@ -21,5 +21,13 @@ class AttachmentPosition(val x: Double, val y: Double, val z: Double, val pitch:
 
         val newMatrix = Matrix.multiply(rotationMatrix, coordinateMatrix)
         return Vector(newMatrix.m[0][0], newMatrix.m[1][0], newMatrix.m[2][0])
+    }
+
+    /**
+     * Creates a list containing all axis and rotation
+     * @return A list containing all axis and rotation
+     */
+    fun getList(): List<Double> {
+        return listOf(x, y, z, pitch, yaw, roll)
     }
 }

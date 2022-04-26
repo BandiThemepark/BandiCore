@@ -1,8 +1,9 @@
 package net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments
 
-class Attachment(val id: String, val position: AttachmentPosition, val secondaryPositions: List<AttachmentPosition>, var type: AttachmentType, val children: MutableList<Attachment>) {
-    // TODO Update method die ook alle children update
+import net.bandithemepark.bandicore.util.math.Quaternion
+import org.bukkit.util.Vector
 
+class Attachment(var id: String, val position: AttachmentPosition, val secondaryPositions: List<AttachmentPosition>, var type: AttachmentType, val children: MutableList<Attachment>) {
     /**
      * @return Returns all the attachments inside this attachment, including itself
      */
@@ -15,5 +16,37 @@ class Attachment(val id: String, val position: AttachmentPosition, val secondary
         }
 
         return attachments
+    }
+
+    /**
+     * Updates the attachment and it's children with a given position and rotation.
+     * @param position A vector representing the position of the attachment
+     * @param rotation A quaternion representing the rotation of the attachment
+     */
+    fun update(position: Vector, rotation: Quaternion, originalRotation: Vector) {
+        // Updating the personal position of this attachment
+        val newPosition = position.clone()
+        newPosition.add(this.position.getPosition(rotation))
+        val newRotation = rotation.clone()
+        newRotation.multiply(Quaternion.fromYawPitchRoll(this.position.pitch, this.position.yaw, this.position.roll))
+
+        // Updating for secondary positions
+        val secondPositions = hashMapOf<Vector, Quaternion>()
+        for(secondaryPosition in secondaryPositions) {
+            val newSecondaryPosition = position.clone()
+            newSecondaryPosition.add(secondaryPosition.getPosition(rotation))
+            val newSecondaryRotation = rotation.clone()
+            newSecondaryRotation.multiply(Quaternion.fromYawPitchRoll(secondaryPosition.pitch, secondaryPosition.yaw, secondaryPosition.roll))
+
+            secondPositions[newSecondaryPosition] = newSecondaryRotation
+        }
+
+        // Updating the type
+        type.onUpdate(newPosition.clone(), newRotation.clone(), secondPositions, originalRotation.clone())
+
+        // Also updating children
+        for(child in children) {
+            child.update(newPosition.clone(), newRotation.clone(), originalRotation.clone())
+        }
     }
 }

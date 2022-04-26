@@ -6,6 +6,8 @@ import org.bukkit.entity.Player
 import org.bukkit.util.Vector
 
 abstract class AttachmentType(val id: String, val howToConfigure: String): Cloneable {
+    lateinit var metadata: List<String>
+
     override fun clone(): AttachmentType {
         return super.clone() as AttachmentType
     }
@@ -15,7 +17,7 @@ abstract class AttachmentType(val id: String, val howToConfigure: String): Clone
     }
 
     abstract fun onSpawn(location: Location)
-    abstract fun onUpdate(mainPosition: Vector, mainRotation: Quaternion, secondaryPositions: HashMap<Vector, Quaternion>)
+    abstract fun onUpdate(mainPosition: Vector, mainRotation: Quaternion, secondaryPositions: HashMap<Vector, Quaternion>, rotationDegrees: Vector)
     abstract fun onDeSpawn()
     abstract fun onMetadataLoad(metadata: List<String>)
     abstract fun markFor(player: Player)
@@ -43,6 +45,7 @@ abstract class AttachmentType(val id: String, val howToConfigure: String): Clone
             val type = get(id)
             if(type != null) {
                 val newType = type.clone()
+                newType.metadata = metadata
                 newType.onMetadataLoad(metadata)
                 return newType
             }
