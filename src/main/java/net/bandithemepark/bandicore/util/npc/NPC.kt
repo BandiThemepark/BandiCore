@@ -37,7 +37,6 @@ class NPC(val name: String, val skinOwner: Player, var visibilityType: NPCVisibi
     var location: Location? = null
         private set
 
-    // Spawning and despawning
     /**
      * Spawns the NPC at a given location
      * @param location The location to spawn the NPC at
@@ -59,6 +58,9 @@ class NPC(val name: String, val skinOwner: Player, var visibilityType: NPCVisibi
 
         spawned = true
         active.add(this)
+
+        // Updating the scoreboard so their nametag gets hidden
+        BandiCore.instance.server.scoreboard.updateScoreboard()
 
         // Hiding the NPC on the tablist (they are automatically shown there)
         Bukkit.getScheduler().scheduleSyncDelayedTask(BandiCore.instance, { hideFromTabList() }, 2)
