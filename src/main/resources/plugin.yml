@@ -32,7 +32,24 @@ commands:
       - tracks
       - trcks
       - tr
+  trackvehicle:
+    description: All commands related to TrackCoasters vehicles
+    aliases:
+      - trckvehicle
+      - tracksvehicle
+      - trcksvehicle
+      - trv
   gamemode:
     description: Command to players gamemode
     aliases:
       - gm
+  setlanguage:
+    description: Command to set your preferred language
+    aliases:
+      - lang
+      - language
+      - setlang
+  setrank:
+    description: Set the rank of a player
+  bandirestart:
+    description: Restart the server using our custom system

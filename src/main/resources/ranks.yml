@@ -1,0 +1,54 @@
+guest:
+  name: Guest
+  color: "#64666b"
+  textColor: "#a8a8a8"
+  scoreboardName: f
+  permissions:
+    - test
+  blocked:
+    - minecraft.command.me
+vip:
+  name: VIP
+  color: "#ffcc00"
+  textColor: "#a8a8a8"
+  scoreboardName: e
+  permissions:
+    - test
+  blocked:
+    - test
+media:
+  name: Media
+  color: "#0cadc9"
+  textColor: "#FFFFFF"
+  scoreboardName: d
+  permissions:
+    - test
+  blocked:
+    - test
+intern:
+  name: Intern
+  color: "#9e1606"
+  textColor: "#FFFFFF"
+  scoreboardName: c
+  permissions:
+    - bandithemepark.crew
+  blocked:
+    - test
+crew:
+  name: Crew
+  color: "#148ec7"
+  textColor: "#FFFFFF"
+  scoreboardName: b
+  permissions:
+    - bandithemepark.crew
+  blocked:
+    - test
+owner:
+  name: Owner
+  color: "#d69315"
+  textColor: "#FFFFFF"
+  scoreboardName: a
+  permissions:
+    - bandithemepark.crew
+  blocked:
+    - test

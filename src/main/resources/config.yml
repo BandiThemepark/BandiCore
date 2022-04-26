@@ -1,3 +1,8 @@
 serverMode: maintenance
+preRestartMode: maintenance
+apiKey: INSERT_API_KEY_HERE
+queueServer: queue
+queueServerHost: INSERT_QUEUE_IP_HERE
+queueServerPort: INSERT_QUEUE_PORT_HERE
 languages:
   - english-en
