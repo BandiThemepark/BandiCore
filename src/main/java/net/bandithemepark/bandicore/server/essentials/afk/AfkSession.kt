@@ -48,8 +48,8 @@ class AfkSession(val player: Player) {
 
     enum class AfkTitle(val title: Component, val subtitle: Component) {
         COINS(Util.color("<${BandiColors.YELLOW}>Coins..."), Util.color("<${BandiColors.LIGHT_GRAY}>You aren't getting any")),
-        BANDIBOY(Util.color("<${BandiColors.BLUE}>Away from keyboard"), Util.color("<${BandiColors.LIGHT_BLUE}>You aren't getting any")),
-        PORTAL(Util.color("<${BandiColors.BLUE}>Are you still alive?"), Util.color("<${BandiColors.LIGHT_BLUE}>(The cake is a lie)")),
+        BANDIBOY(Util.color("<${BandiColors.LIGHT_BLUE}>Away from keyboard"), Util.color("<${BandiColors.BLUE}>Playing on your BandiBoy?")),
+        PORTAL(Util.color("<${BandiColors.LIGHT_BLUE}>Are you still alive?"), Util.color("<${BandiColors.BLUE}>(The cake is a lie)")),
         W(Util.color("<${BandiColors.GREEN}>You are AFK"), Util.color("<${BandiColors.DARK_GREEN}>I recommend you press the W button")),
         TIKTOK(Util.color("<${BandiColors.LIGHT_BLUE}>Watching TikTok?"), Util.color("<${BandiColors.PINK}>Follow us @bandithemepark")),
         TWITTER(Util.color("<${BandiColors.LIGHT_BLUE}>Scrolling through Twitter?"), Util.color("<${BandiColors.BLUE}>Follow us @BandiThemepark")),
