@@ -87,4 +87,36 @@ class BackendPlayer(val player: Player) {
             }
         })
     }
+
+    /**
+     * Updates data about the player.
+     * @param data JSON data to set. You can find available data on the documentation
+     * @param callback What to do when the update is complete, with the player's data
+     */
+    fun updatePlayer(data: JsonObject, callback: (JsonObject) -> Unit) {
+        val client = BandiCore.instance.okHttpClient
+        val mediaType = "application/json".toMediaTypeOrNull()
+
+        val request = Request.Builder()
+            .url("https://api.bandithemepark.net/players/${player.uniqueId.toString()}")
+            .method("PUT", data.toString().toRequestBody(mediaType))
+            .header("Authorization", BandiCore.instance.server.apiKey)
+            .build()
+
+        client.newCall(request).enqueue(object: Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val responseJson = JsonParser.parseString(response.body!!.string()).asJsonObject
+                if (responseJson.has("data") && !responseJson.get("data").isJsonNull) {
+                    val returnData = responseJson.getAsJsonObject("data")
+                    callback.invoke(returnData)
+                } else {
+                    BandiCore.instance.logger.severe("An attempt was made at changing data of player ${player.name}, but no response data was found. The following message was given: ${responseJson.get("message")}")
+                }
+            }
+        })
+    }
 }
