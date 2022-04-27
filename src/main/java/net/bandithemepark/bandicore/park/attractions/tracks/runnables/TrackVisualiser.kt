@@ -52,7 +52,11 @@ class TrackVisualiser {
                     session.player.spawnParticle(Particle.REDSTONE, node.toLocation(session.layout.world), 1, segmentOptions)
                 }
 
-                // TODO Show triggers
+                for(trigger in session.layout.triggers) {
+                    val node = trigger.position.getPathPoint().asVector()
+                    node.add(origin)
+                    session.player.spawnParticle(Particle.REDSTONE, node.toLocation(session.layout.world), 1, triggerOptions)
+                }
             }
         }
     }

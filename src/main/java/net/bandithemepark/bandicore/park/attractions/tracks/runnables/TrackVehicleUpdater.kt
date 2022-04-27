@@ -3,6 +3,7 @@ package net.bandithemepark.bandicore.park.attractions.tracks.runnables
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.park.attractions.tracks.splines.BezierSpline
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.TrackVehicle
+import net.bandithemepark.bandicore.util.TrackUtil
 import net.bandithemepark.bandicore.util.math.Quaternion
 import org.bukkit.Location
 import org.bukkit.util.Vector
@@ -113,7 +114,15 @@ class TrackVehicleUpdater {
                 }
             }
 
-            // TODO Update triggers
+            // Updating triggers
+            if (vehicle.ridingOn.triggers.isNotEmpty()) {
+                val travelledCurve = TrackUtil.getCurveBetweenPositions(oldPosition, vehicle.position)
+
+                for(trigger in vehicle.ridingOn.triggers.filter { it.type != null }) {
+                    val curvePoint = trigger.position.getPathPoint()
+                    if(travelledCurve.contains(curvePoint)) trigger.type!!.onActivation(vehicle)
+                }
+            }
 
             // Updating individual members
             var currentSize = 0.0
