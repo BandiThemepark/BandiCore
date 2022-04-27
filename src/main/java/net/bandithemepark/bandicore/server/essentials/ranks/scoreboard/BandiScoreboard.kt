@@ -3,6 +3,7 @@ package net.bandithemepark.bandicore.server.essentials.ranks.scoreboard
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.server.essentials.VanishCommand
 import net.bandithemepark.bandicore.server.statistics.Playtime.Companion.getPlaytime
+import net.bandithemepark.bandicore.server.statistics.Playtime.Companion.getPlaytimeAfk
 import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.chat.BandiColors
 import net.bandithemepark.bandicore.util.npc.NPC
@@ -63,7 +64,7 @@ class BandiScoreboard {
             val onlinePlayers = Bukkit.getOnlinePlayers().size - VanishCommand.currentlyHidden.size
 
             this.sendPlayerListHeaderAndFooter(Util.color("<newline><#ffbb1d><bold>BandiThemepark<newline><!bold><${BandiColors.LIGHT_GRAY}> Welcome! There are $onlinePlayers player(s) online <newline>"),
-            Util.color("<newline><${BandiColors.LIGHT_GRAY}>You've played for ${formatTime(player!!.getPlaytime())}<newline>and been AFK for 0d 0h 0m 0s<newline>"))
+            Util.color("<newline><${BandiColors.LIGHT_GRAY}>You've played for ${formatTime(player!!.getPlaytime())}<newline>and been AFK for ${formatTime(player!!.getPlaytimeAfk())}<newline>"))
         }
 
         private fun formatTime(time: Int): String {
@@ -76,7 +77,7 @@ class BandiScoreboard {
             if(days > 0) timeText += "${days}d "
             if(hours > 0) timeText += "${hours}h "
             if(minutes > 0) timeText += "${minutes}m "
-            if(seconds > 0) timeText += "${seconds}s"
+            timeText += "${seconds}s"
 
             return timeText
         }

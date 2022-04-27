@@ -14,8 +14,10 @@ import org.bukkit.scheduler.BukkitRunnable
 class Playtime {
     companion object {
         val saved = hashMapOf<Player, Int>()
+        val savedAfk = hashMapOf<Player, Int>()
+
         val toSave = hashMapOf<Player, Int>()
-        val toSaveAFK = hashMapOf<Player, Int>() // TODO Integrate AFK time
+        val toSaveAFK = hashMapOf<Player, Int>()
 
         fun startTimer() {
             Timer().runTaskTimerAsynchronously(BandiCore.instance, 0, 20)
@@ -29,10 +31,16 @@ class Playtime {
                 saved[player] = it.get("playtime").asInt
                 toSave[player] = 0
             }
+
+            // TODO Save AFK time here
         }
 
         fun Player.getPlaytime(): Int {
             return saved.getOrDefault(this, 0) + toSave.getOrDefault(this, 0)
+        }
+
+        fun Player.getPlaytimeAfk(): Int {
+            return savedAfk.getOrDefault(this, 0) + toSaveAFK.getOrDefault(this, 0)
         }
     }
 
@@ -48,6 +56,8 @@ class Playtime {
 
             for(player in Bukkit.getOnlinePlayers()) {
                 toSave[player] = toSave.getOrDefault(player, 0) + 1
+                if(BandiCore.instance.afkManager.isAfk(player)) toSaveAFK[player] = toSaveAFK.getOrDefault(player, 0) + 1
+
                 player.updatePlayerList()
             }
         }

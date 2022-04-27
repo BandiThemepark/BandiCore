@@ -81,6 +81,7 @@ class RankManager {
         backendPlayer.get { data ->
             // Setting saved playtime
             Playtime.saved[player] = data.get("playtime").asInt
+            // TODO Loading afk playtime
 
             // Loading rank
             val rank = loadedRanks.find { it.id == data.get("rank").asString }!!
