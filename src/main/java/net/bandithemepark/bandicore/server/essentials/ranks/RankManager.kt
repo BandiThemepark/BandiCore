@@ -5,6 +5,7 @@ import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.network.backend.BackendPlayer
 import net.bandithemepark.bandicore.server.essentials.ranks.nametag.PlayerNameTag
 import net.bandithemepark.bandicore.server.essentials.ranks.nametag.PlayerNameTag.Companion.getNameTag
+import net.bandithemepark.bandicore.server.statistics.Playtime
 import net.bandithemepark.bandicore.util.FileManager
 import net.bandithemepark.bandicore.util.Util
 import net.kyori.adventure.text.format.TextColor
@@ -72,12 +73,16 @@ class RankManager {
     }
 
     /**
-     * Internal function to load a player's rank. Do not use this externally! Use [RankManager.setNewRank] instead.
+     * Internal function to load a player's rank. Do not use this externally! Use [RankManager.setNewRank] instead. Also loads the player's playtime
      * @param player The player to load the rank of
      */
     fun loadRank(player: Player) {
         val backendPlayer = BackendPlayer(player)
         backendPlayer.get { data ->
+            // Setting saved playtime
+            Playtime.saved[player] = data.get("playtime").asInt
+
+            // Loading rank
             val rank = loadedRanks.find { it.id == data.get("rank").asString }!!
             loadedPlayerRanks[player] = rank
             rank.applyPermissions(player)

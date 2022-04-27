@@ -1,6 +1,8 @@
 package net.bandithemepark.bandicore.server.essentials.ranks.scoreboard
 
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.server.essentials.VanishCommand
+import net.bandithemepark.bandicore.server.statistics.Playtime.Companion.getPlaytime
 import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.chat.BandiColors
 import net.bandithemepark.bandicore.util.npc.NPC
@@ -12,6 +14,8 @@ import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.scoreboard.Scoreboard
 import org.bukkit.scoreboard.Team
+import java.text.SimpleDateFormat
+import java.util.*
 
 class BandiScoreboard {
     val mainScoreboard: Scoreboard = Bukkit.getScoreboardManager().newScoreboard
@@ -56,8 +60,25 @@ class BandiScoreboard {
 
     companion object {
         fun Player.updatePlayerList() {
-            this.sendPlayerListHeaderAndFooter(Util.color("<newline><#ffbb1d><bold>BandiThemepark<newline><!bold><${BandiColors.LIGHT_GRAY}> Welcome! There are ${Bukkit.getOnlinePlayers().size} player(s) online <newline>"),
-            Util.color("<newline><${BandiColors.LIGHT_GRAY}>You've played for 0d 0h 0m 0s<newline>and been AFK for 0d 0h 0m 0s<newline>"))
+            val onlinePlayers = Bukkit.getOnlinePlayers().size - VanishCommand.currentlyHidden.size
+
+            this.sendPlayerListHeaderAndFooter(Util.color("<newline><#ffbb1d><bold>BandiThemepark<newline><!bold><${BandiColors.LIGHT_GRAY}> Welcome! There are $onlinePlayers player(s) online <newline>"),
+            Util.color("<newline><${BandiColors.LIGHT_GRAY}>You've played for ${formatTime(player!!.getPlaytime())}<newline>and been AFK for 0d 0h 0m 0s<newline>"))
+        }
+
+        private fun formatTime(time: Int): String {
+            var timeText = ""
+            val days = time / 86400
+            val hours = time % 86400 / 3600
+            val minutes = time % 3600 / 60
+            val seconds = time % 60
+
+            if(days > 0) timeText += "${days}d "
+            if(hours > 0) timeText += "${hours}h "
+            if(minutes > 0) timeText += "${minutes}m "
+            if(seconds > 0) timeText += "${seconds}s"
+
+            return timeText
         }
     }
 
