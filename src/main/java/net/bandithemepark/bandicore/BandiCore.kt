@@ -17,6 +17,7 @@ import net.bandithemepark.bandicore.server.tools.armorstandtools.ArmorStandEdito
 import net.bandithemepark.bandicore.server.customplayer.CustomPlayer
 import net.bandithemepark.bandicore.server.essentials.GamemodeCommand
 import net.bandithemepark.bandicore.server.essentials.JoinMessages
+import net.bandithemepark.bandicore.server.essentials.VanishCommand
 import net.bandithemepark.bandicore.server.essentials.ranks.RankManager
 import net.bandithemepark.bandicore.server.essentials.ranks.SetRankCommand
 import net.bandithemepark.bandicore.server.essentials.ranks.nametag.PlayerNameTag
@@ -24,6 +25,7 @@ import net.bandithemepark.bandicore.server.essentials.ranks.scoreboard.BandiScor
 import net.bandithemepark.bandicore.server.mode.ServerModeCommand
 import net.bandithemepark.bandicore.server.restart.Restart
 import net.bandithemepark.bandicore.server.restart.RestartCommand
+import net.bandithemepark.bandicore.server.statistics.Playtime
 import net.bandithemepark.bandicore.server.tools.painter.ItemPainter
 import net.bandithemepark.bandicore.server.translations.Language
 import net.bandithemepark.bandicore.server.translations.LanguageUtil
@@ -71,7 +73,7 @@ class BandiCore: JavaPlugin() {
         // Starting the necessary timers
         NPC.startTimer()
         PlayerNameTag.Timer().runTaskTimerAsynchronously(this, 0, 1)
-
+        Playtime.startTimer()
         KalibaEffects()
         AmbientEffect.startTimer()
 
@@ -104,6 +106,7 @@ class BandiCore: JavaPlugin() {
         getCommand("setlanguage")!!.setExecutor(Language.Command())
         getCommand("setrank")!!.setExecutor(SetRankCommand())
         getCommand("bandirestart")!!.setExecutor(RestartCommand())
+        getCommand("vanish")!!.setExecutor(VanishCommand())
     }
 
     private fun registerEvents() {
@@ -118,6 +121,7 @@ class BandiCore: JavaPlugin() {
         getServer().pluginManager.registerEvents(PlayerNameTag.Events(), this)
         getServer().pluginManager.registerEvents(TrackVehicleEditor.Events(), this)
         getServer().pluginManager.registerEvents(JoinMessages(), this)
+        getServer().pluginManager.registerEvents(Playtime.Events(), this)
     }
 
     private fun prepareSettings() {

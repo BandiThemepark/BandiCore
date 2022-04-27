@@ -88,5 +88,7 @@
   "vehicle-editor-save-success": "Successfully saved this vehicle",
   "vehicle-editor-id": "Please enter the ID you would like to set for this attachment. Type 'cancel' to cancel",
   "vehicle-editor-id-cancelled": "Successfully cancelled setting the ID of the chosen attachment",
-  "vehicle-editor-id-success": "Successfully set the ID of the chosen attachment"
+  "vehicle-editor-id-success": "Successfully set the ID of the chosen attachment",
+  "vanish-enabled": "You are now hidden from other players",
+  "vanish-disabled": "You are no longer hidden from other players"
 }
