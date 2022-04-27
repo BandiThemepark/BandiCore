@@ -45,8 +45,9 @@ class BandiScoreboard {
         }
 
         for(player in Bukkit.getOnlinePlayers()) {
-            val rank = BandiCore.instance.server.rankManager.loadedPlayerRanks[player]!!
-            player.playerListName(Util.color("${rank.name} ${player.name}").color(TextColor.fromHexString(rank.color)))
+            val rank = BandiCore.instance.server.rankManager.loadedPlayerRanks[player]
+            val rankName = rank?.name ?: "Guest"
+            player.playerListName(Util.color("$rankName ${player.name}").color(TextColor.fromHexString(rank?.color ?: "#64666b")))
             player.updatePlayerList()
         }
     }
