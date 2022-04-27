@@ -6,6 +6,7 @@ import net.bandithemepark.bandicore.park.attractions.tracks.editing.TrackEditor
 import net.bandithemepark.bandicore.park.attractions.tracks.editing.editors.TrackEditorNode
 import net.bandithemepark.bandicore.park.attractions.tracks.editing.editors.TrackEditorRoll
 import net.bandithemepark.bandicore.park.attractions.tracks.editing.editors.TrackEditorSegment
+import net.bandithemepark.bandicore.park.attractions.tracks.editing.editors.TrackEditorTrigger
 import net.bandithemepark.bandicore.park.attractions.tracks.runnables.TrackRunnable
 import net.bandithemepark.bandicore.park.attractions.tracks.segments.SegmentSeparator
 import net.bandithemepark.bandicore.park.attractions.tracks.segments.SegmentType
@@ -13,6 +14,9 @@ import net.bandithemepark.bandicore.park.attractions.tracks.segments.types.TestB
 import net.bandithemepark.bandicore.park.attractions.tracks.segments.types.TestLiftHillSegment
 import net.bandithemepark.bandicore.park.attractions.tracks.segments.types.TestSegment
 import net.bandithemepark.bandicore.park.attractions.tracks.splines.SplineType
+import net.bandithemepark.bandicore.park.attractions.tracks.triggers.TrackTrigger
+import net.bandithemepark.bandicore.park.attractions.tracks.triggers.TrackTriggerType
+import net.bandithemepark.bandicore.park.attractions.tracks.triggers.types.TestTrigger
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.TrackVehicleManager
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.ModelAttachment
 import net.bandithemepark.bandicore.util.FileManager
@@ -41,7 +45,7 @@ class TrackManager(val splineType: SplineType, val pointsPerMeter: Int, val fric
     }
 
     private fun registerTriggers() {
-
+        TestTrigger().register()
     }
 
     private fun registerCommands() {
@@ -58,6 +62,7 @@ class TrackManager(val splineType: SplineType, val pointsPerMeter: Int, val fric
         BandiCore.instance.getServer().pluginManager.registerEvents(TrackEditorNode.Events(), BandiCore.instance)
         TrackEditorRoll().register()
         TrackEditorSegment().register()
+        TrackEditorTrigger().register()
     }
 
     private fun registerAttachments() {
@@ -163,10 +168,27 @@ class TrackManager(val splineType: SplineType, val pointsPerMeter: Int, val fric
             }
         }
 
-        // TODO Load triggers
+        // Triggers
+        val triggers = mutableListOf<TrackTrigger>()
+        if(fm.getConfig("tracks/$id.trck").get().contains("triggers")) {
+            for(triggerId in fm.getConfig("tracks/$id.trck").get().getConfigurationSection("triggers")!!.getKeys(false)) {
+                val nodeId = fm.getConfig("tracks/$id.trck").get().getString("triggers.$triggerId.nodeId")
+                val position = fm.getConfig("tracks/$id.trck").get().getInt("triggers.$triggerId.position")
+                val node = nodes.find { it.id == nodeId }!!
+
+                val trigger = TrackTrigger(TrackPosition(node, position), null)
+
+                val typeId = fm.getConfig("tracks/$id.trck").get().getString("triggers.$triggerId.type")!!
+                val metadata = fm.getConfig("tracks/$id.trck").get().getStringList("triggers.$triggerId.metadata")
+                val type = TrackTriggerType.getNew(typeId, trigger, metadata)
+                trigger.type = type
+
+                triggers.add(trigger)
+            }
+        }
 
         // Creating the track
-        val track = TrackLayout(id, origin, world!!, nodes, rollNodes, segmentSeparators)
+        val track = TrackLayout(id, origin, world!!, nodes, rollNodes, segmentSeparators, triggers)
         loadedTracks.add(track)
     }
 
@@ -176,7 +198,7 @@ class TrackManager(val splineType: SplineType, val pointsPerMeter: Int, val fric
      * @param origin The origin of the track
      */
     fun createTrack(id: String, origin: Location) {
-        val track = TrackLayout(id, origin.toVector(), origin.world!!, mutableListOf(TrackNode("0", 0.0, 0.0, 0.0, false)), mutableListOf(), mutableListOf())
+        val track = TrackLayout(id, origin.toVector(), origin.world!!, mutableListOf(TrackNode("0", 0.0, 0.0, 0.0, false)), mutableListOf(), mutableListOf(), mutableListOf())
         loadedTracks.add(track)
 
         val fm = FileManager()

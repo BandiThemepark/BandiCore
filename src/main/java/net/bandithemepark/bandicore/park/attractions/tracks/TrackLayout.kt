@@ -2,6 +2,7 @@ package net.bandithemepark.bandicore.park.attractions.tracks
 
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.park.attractions.tracks.segments.SegmentSeparator
+import net.bandithemepark.bandicore.park.attractions.tracks.triggers.TrackTrigger
 import net.bandithemepark.bandicore.util.FileManager
 import net.bandithemepark.bandicore.util.TrackUtil
 import net.bandithemepark.bandicore.util.math.MathUtil
@@ -11,8 +12,7 @@ import org.bukkit.Location
 import org.bukkit.World
 import org.bukkit.util.Vector
 
-class TrackLayout(val id: String, var origin: Vector, var world: World, var nodes: MutableList<TrackNode>, var rollNodes: MutableList<RollNode>, var segmentSeparators: MutableList<SegmentSeparator>) {
-    // TODO Add track triggers
+class TrackLayout(val id: String, var origin: Vector, var world: World, var nodes: MutableList<TrackNode>, var rollNodes: MutableList<RollNode>, var segmentSeparators: MutableList<SegmentSeparator>, var triggers: MutableList<TrackTrigger>) {
     var eStop = false
 
     init {
@@ -235,12 +235,21 @@ class TrackLayout(val id: String, var origin: Vector, var world: World, var node
     }
 
     /**
-     * Gets the roll node nearest to a certain location
+     * Gets the segment separator nearest to a certain location
      * @param location The location to check from
-     * @return The roll node nearest to the location
+     * @return The segment separator nearest to the location
      */
     fun getNearestSegmentSeparator(location: Location): SegmentSeparator? {
         return TrackUtil.getNearestSegmentSeparator(this, location)
+    }
+
+    /**
+     * Gets the track trigger nearest to a certain location
+     * @param location The location to check from
+     * @return The track trigger nearest to the location
+     */
+    fun getNearestTrigger(location: Location): TrackTrigger? {
+        return TrackUtil.getNearestTrigger(this, location)
     }
 
     /**
@@ -293,6 +302,13 @@ class TrackLayout(val id: String, var origin: Vector, var world: World, var node
         }
         fm.saveConfig("tracks/$id.trck")
 
-        // TODO Save track triggers
+        // Saving the track triggers
+        for((index, trigger) in triggers.withIndex()) {
+            fm.getConfig("tracks/$id.trck").get().set("triggers.$index.nodeId", trigger.position.nodePosition.id)
+            fm.getConfig("tracks/$id.trck").get().set("triggers.$index.position", trigger.position.position.toInt())
+            fm.getConfig("tracks/$id.trck").get().set("triggers.$index.type", trigger.type!!.id)
+            fm.getConfig("tracks/$id.trck").get().set("triggers.$index.metadata", trigger.type!!.metadata)
+        }
+        fm.saveConfig("tracks/$id.trck")
     }
 }
