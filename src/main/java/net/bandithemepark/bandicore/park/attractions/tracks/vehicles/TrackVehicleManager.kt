@@ -15,7 +15,6 @@ import org.bukkit.Location
 class TrackVehicleManager {
     val vehicles = mutableListOf<TrackVehicle>()
     val lastSegments = hashMapOf<TrackVehicle, SegmentSeparator>()
-    // TODO Keep track of segments
 
     init {
         // Setting up all commands

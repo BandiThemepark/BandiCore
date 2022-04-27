@@ -3,6 +3,7 @@ package net.bandithemepark.bandicore.park.attractions.tracks.vehicles
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.park.attractions.tracks.TrackLayout
 import net.bandithemepark.bandicore.park.attractions.tracks.TrackPosition
+import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.actions.TrackVehicleAction
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.Attachment
 import net.bandithemepark.bandicore.util.FileManager
 import java.io.File
@@ -12,7 +13,7 @@ class TrackVehicle(val ridingOn: TrackLayout, var position: TrackPosition, val i
     var speed = 0.0
     var frictionMultiplier = 1.0
     var physicsType = PhysicsType.ALL
-    // TODO Keep track of vehicle actions
+    var actions = mutableListOf<TrackVehicleAction>()
 
     var speedMS: Double
         get() = speed * 20.0
