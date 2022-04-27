@@ -59,7 +59,8 @@ class BandiCore: JavaPlugin() {
             val fm = FileManager()
             fm.getConfig("config.yml").saveDefaultConfig()
             fm.getConfig("ranks.yml").saveDefaultConfig()
-            fm.getConfig("translations/english.json").saveDefaultConfig()
+            fm.getConfig("translations/english/crew.json").saveDefaultConfig()
+            fm.getConfig("translations/english/player.json").saveDefaultConfig()
         }
 
         server = Server()

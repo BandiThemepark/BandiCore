@@ -6,3 +6,6 @@ queueServerHost: INSERT_QUEUE_IP_HERE
 queueServerPort: INSERT_QUEUE_PORT_HERE
 languages:
   - english-en
+filesToTranslate:
+  - crew
+  - player

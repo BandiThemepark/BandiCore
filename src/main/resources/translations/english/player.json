@@ -1,0 +1,13 @@
+{
+  "language-name": "English",
+  "no-permission": "You don't have permission to do this",
+  "player-not-online": "This player is not online",
+  "set-language-invalid-args": "Invalid arguments! Usage: /setlanguage <language>",
+  "language-not-found": "The entered language was not found",
+  "language-changed": "Your language has been changed to %language%",
+  "restarting-soon-title": "BandiThemepark is restarting",
+  "restarting-soon-subtitle": "We are waiting for all rides to finish",
+  "restarting-soon-message": "BandiThemepark will restart after all rides have finished",
+  "restarting-in-seconds": "BandiThemepark is restarting in %seconds% seconds",
+  "not-a-number": "The entered value is not a number!"
+}
