@@ -36,7 +36,9 @@ tasks {
     assemble {
         dependsOn(reobfJar)
     }
-
+    compileKotlin {
+        kotlinOptions.jvmTarget = "1.8"
+    }
     compileJava {
         options.encoding = Charsets.UTF_8.name()
         options.release.set(17)

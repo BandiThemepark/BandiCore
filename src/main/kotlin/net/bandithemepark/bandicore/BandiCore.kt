@@ -30,6 +30,7 @@ import net.bandithemepark.bandicore.server.statistics.Playtime
 import net.bandithemepark.bandicore.server.tools.painter.ItemPainter
 import net.bandithemepark.bandicore.server.translations.Language
 import net.bandithemepark.bandicore.server.translations.LanguageUtil
+import net.bandithemepark.bandicore.server.translations.MessageReplacement
 import net.bandithemepark.bandicore.util.FileManager
 import net.bandithemepark.bandicore.util.chat.prompt.ChatPrompt
 import net.bandithemepark.bandicore.util.npc.NPC
@@ -85,9 +86,8 @@ class BandiCore: JavaPlugin() {
         // Things that need to be done for players who are already online (Like when a reload happens)
         forOnlinePlayers()
 
-        // Setting up the network messaging channels
-        getServer().messenger.registerOutgoingPluginChannel(this, "BungeeCord")
-
+        // Registering the messaging channel for sending players
+        Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord")
     }
 
     override fun onDisable() {

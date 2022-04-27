@@ -14,7 +14,7 @@ class JoinMessages: Listener {
     @EventHandler
     fun onJoin(event: PlayerJoinEvent) {
         event.joinMessage(Util.color("<${BandiColors.LIGHT_GRAY}>${event.player.name} joined"))
-        event.player.showTitle(Title.title(Component.text("\uE000"), Component.text(""), Title.Times.times(Duration.ofMillis(0), Duration.ofMillis(3000), Duration.ofMillis(500))))
+        event.player.showTitle(Title.title(Component.text("\uE000"), Util.color("<${BandiColors.LIGHT_GRAY}>Welcome to BandiThemepark"), Title.Times.times(Duration.ofMillis(0), Duration.ofMillis(3000), Duration.ofMillis(500))))
     }
 
     @EventHandler
