@@ -18,6 +18,7 @@ import net.bandithemepark.bandicore.server.customplayer.CustomPlayer
 import net.bandithemepark.bandicore.server.essentials.GamemodeCommand
 import net.bandithemepark.bandicore.server.essentials.JoinMessages
 import net.bandithemepark.bandicore.server.essentials.VanishCommand
+import net.bandithemepark.bandicore.server.essentials.afk.AfkManager
 import net.bandithemepark.bandicore.server.essentials.ranks.RankManager
 import net.bandithemepark.bandicore.server.essentials.ranks.SetRankCommand
 import net.bandithemepark.bandicore.server.essentials.ranks.nametag.PlayerNameTag
@@ -44,6 +45,8 @@ class BandiCore: JavaPlugin() {
 
     lateinit var server: Server
     lateinit var trackManager: TrackManager
+    lateinit var afkManager: AfkManager
+
     var okHttpClient = OkHttpClient()
     var restarter = Restart()
 
@@ -60,6 +63,8 @@ class BandiCore: JavaPlugin() {
 
         server = Server()
         prepareSettings()
+
+        afkManager = AfkManager()
 
         trackManager = TrackManager(BezierSpline(), 25, 0.02)
         trackManager.setup()

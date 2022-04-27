@@ -26,12 +26,8 @@ class SetRankCommand: CommandExecutor, TabCompleter {
                         val player = Bukkit.getPlayer(args[0])
 
                         if(player != null) {
-                            GlobalScope.launch {
-                                withContext(Dispatchers.IO) {
-                                    BandiCore.instance.server.rankManager.setNewRank(player, rank)
-                                    sender.sendTranslatedMessage("rank-changed", BandiColors.YELLOW.toString(), MessageReplacement("rank", rank.id), MessageReplacement("player", player.name))
-                                }
-                            }
+                            BandiCore.instance.server.rankManager.setNewRank(player, rank)
+                            sender.sendTranslatedMessage("rank-changed", BandiColors.YELLOW.toString(), MessageReplacement("rank", rank.id), MessageReplacement("player", player.name))
                         } else {
                             sender.sendTranslatedMessage("player-not-online", BandiColors.RED.toString())
                         }

@@ -263,7 +263,7 @@ class TrackEditorNode: TrackEditorType() {
 
                         ChatPrompt(event.whoClicked as Player, (event.whoClicked as Player).getTranslatedMessage("track-editor-rename-node"), BandiColors.YELLOW.toString(), (event.whoClicked as Player).getTranslatedMessage("track-editor-rename-node-cancelled")) { player: Player, message: String ->
                             selectedNode.id = message
-                            session.player.sendTranslatedMessage("track-editor-renamed-node", BandiColors.YELLOW.toString(), MessageReplacement("to", selectedNode.id!!))
+                            player.sendTranslatedMessage("track-editor-renamed-node", BandiColors.YELLOW.toString(), MessageReplacement("to", selectedNode.id!!))
                         }
                     }
                 }
