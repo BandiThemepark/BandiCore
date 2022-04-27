@@ -6,6 +6,7 @@ import net.bandithemepark.bandicore.park.attractions.tracks.TrackLayout
 import net.bandithemepark.bandicore.park.attractions.tracks.TrackNode
 import net.bandithemepark.bandicore.park.attractions.tracks.TrackPosition
 import net.bandithemepark.bandicore.park.attractions.tracks.segments.SegmentSeparator
+import net.bandithemepark.bandicore.park.attractions.tracks.triggers.TrackTrigger
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.TrackVehicle
 import net.bandithemepark.bandicore.util.math.MathUtil
 import org.bukkit.Location
@@ -165,6 +166,34 @@ object TrackUtil {
             var currentDistance = 9999.0
 
             for(node in layout.segmentSeparators) {
+                val rollNodeLocation = node.position.getPathPoint().asVector()
+                rollNodeLocation.add(layout.origin)
+                val distance = MathUtil.getDistanceBetween(location.toVector(), rollNodeLocation)
+
+                if(distance < currentDistance) {
+                    currentDistance = distance
+                    nearest = node
+                }
+            }
+
+            return nearest
+        } else {
+            return null
+        }
+    }
+
+    /**
+     * Gets the track trigger that is closest to a given location
+     * @param layout The layout that should be checked for
+     * @param location The location to check for
+     * @return The track trigger that is closest to the given location
+     */
+    fun getNearestTrigger(layout: TrackLayout, location: Location): TrackTrigger? {
+        if(layout.triggers.size > 0) {
+            var nearest = layout.triggers[0]
+            var currentDistance = 9999.0
+
+            for(node in layout.triggers) {
                 val rollNodeLocation = node.position.getPathPoint().asVector()
                 rollNodeLocation.add(layout.origin)
                 val distance = MathUtil.getDistanceBetween(location.toVector(), rollNodeLocation)
