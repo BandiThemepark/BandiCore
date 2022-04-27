@@ -101,35 +101,35 @@ object MathUtil {
      * @param t The interpolation value (ranging from 0 to 1)
      * @return Interpolated angle
      */
-//    fun interpolateAngles(a1: Double, a2: Double, t: Double): Double {
-//        val difBetween = a2 - a1
-//        if(difBetween > 180.0 || difBetween < -180.0) {
-//            val delta = (a2 - a1 + 360 + 180) % 360 - 180
-//            return (a1 + delta * t + 360) % 360
-//        } else {
-//            return BezierSpline().linear(a1, a2, t)
-//        }
-//    }
-
-    private fun lerp(start: Double, end: Double, t: Double): Double {
-        return (1-t)*start+t*end
-    }
-
-    private fun clamp(number: Double, min: Double, max: Double): Double {
-        return number.coerceAtLeast(min).coerceAtMost(max)
-    }
-
-    private fun repeat(t: Double, m: Double): Double {
-        return clamp(t - floor(t / m) * m, 0.0, m)
-    }
-
     fun interpolateAngles(a1: Double, a2: Double, t: Double): Double {
-        val dt = repeat(a2 - a1, 360.0)
-        val stuff = if(dt > 180) {
-            dt - 360
+        val difBetween = a2 - a1
+        if(difBetween > 180.0 || difBetween < -180.0) {
+            val delta = (a2 - a1 + 360 + 180) % 360 - 180
+            return (a1 + delta * t + 360) % 360
         } else {
-            dt
+            return BezierSpline().linear(a1, a2, t)
         }
-        return lerp(a1, a1 + stuff, t)
     }
+
+//    private fun lerp(start: Double, end: Double, t: Double): Double {
+//        return (1-t)*start+t*end
+//    }
+//
+//    private fun clamp(number: Double, min: Double, max: Double): Double {
+//        return number.coerceAtLeast(min).coerceAtMost(max)
+//    }
+//
+//    private fun repeat(t: Double, m: Double): Double {
+//        return clamp(t - floor(t / m) * m, 0.0, m)
+//    }
+//
+//    fun interpolateAngles(a1: Double, a2: Double, t: Double): Double {
+//        val dt = repeat(a2 - a1, 360.0)
+//        val stuff = if(dt > 180) {
+//            dt - 360
+//        } else {
+//            dt
+//        }
+//        return lerp(a1, a1 + stuff, t)
+//    }
 }

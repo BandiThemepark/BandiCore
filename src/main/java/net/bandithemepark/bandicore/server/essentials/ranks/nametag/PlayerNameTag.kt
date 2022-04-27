@@ -25,7 +25,10 @@ class PlayerNameTag(val player: Player) {
     set(value) {
         field = value
         if(value) {
-            if(isVisible) deSpawn()
+            if(isVisible) {
+                deSpawn()
+                isVisible = true
+            }
         } else {
             if(isVisible) spawn()
         }
