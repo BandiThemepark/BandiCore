@@ -7,7 +7,6 @@ import net.bandithemepark.bandicore.park.attractions.tracks.TrackManager
 import net.bandithemepark.bandicore.park.attractions.tracks.TrackPosition
 import net.bandithemepark.bandicore.park.attractions.tracks.commands.TrackCommand
 import net.bandithemepark.bandicore.park.attractions.tracks.splines.BezierSpline
-import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.ModelAttachment
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.commands.TrackVehicleCommand
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.editing.TrackVehicleEditor
 import net.bandithemepark.bandicore.park.effect.AmbientEffect
@@ -30,7 +29,6 @@ import net.bandithemepark.bandicore.server.statistics.Playtime
 import net.bandithemepark.bandicore.server.tools.painter.ItemPainter
 import net.bandithemepark.bandicore.server.translations.Language
 import net.bandithemepark.bandicore.server.translations.LanguageUtil
-import net.bandithemepark.bandicore.server.translations.MessageReplacement
 import net.bandithemepark.bandicore.util.FileManager
 import net.bandithemepark.bandicore.util.chat.prompt.ChatPrompt
 import net.bandithemepark.bandicore.util.npc.NPC

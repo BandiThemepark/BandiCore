@@ -46,7 +46,13 @@ class TrackVisualiser {
                     session.player.spawnParticle(Particle.REDSTONE, node.toLocation(session.layout.world), 1, rollOptions)
                 }
 
-                // TODO Show all others like segment separators and triggers
+                for(segmentSeparator in session.layout.segmentSeparators) {
+                    val node = segmentSeparator.position.getPathPoint().asVector()
+                    node.add(origin)
+                    session.player.spawnParticle(Particle.REDSTONE, node.toLocation(session.layout.world), 1, segmentOptions)
+                }
+
+                // TODO Show triggers
             }
         }
     }

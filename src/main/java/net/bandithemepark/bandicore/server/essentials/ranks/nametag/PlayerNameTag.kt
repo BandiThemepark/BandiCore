@@ -6,10 +6,13 @@ import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.entity.PacketEntity
 import net.bandithemepark.bandicore.util.entity.PacketEntityArmorStand
 import net.minecraft.world.entity.decoration.ArmorStand
+import org.bukkit.GameMode
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerGameModeChangeEvent
 import org.bukkit.event.player.PlayerQuitEvent
+import org.bukkit.event.player.PlayerToggleFlightEvent
 import org.bukkit.event.player.PlayerToggleSneakEvent
 import org.bukkit.scheduler.BukkitRunnable
 
@@ -21,18 +24,20 @@ class PlayerNameTag(val player: Player) {
      * Spawns the name tag. Automatically called on initialization.
      */
     fun spawn() {
-        armorStand.visibilityType = PacketEntity.VisibilityType.BLACKLIST
-        armorStand.visibilityList = mutableListOf(player)
+        if(!armorStand.spawned) {
+            armorStand.visibilityType = PacketEntity.VisibilityType.BLACKLIST
+            armorStand.visibilityList = mutableListOf(player)
 
-        armorStand.spawn(player.location.clone().add(0.0, 1.7+heightOffset, 0.0))
-        armorStand.handle!!.isInvisible = true
-        armorStand.handle!!.isNoGravity = true
-        armorStand.handle!!.isCustomNameVisible = true
-        (armorStand.handle!! as ArmorStand).isMarker = true
+            armorStand.spawn(player.location.clone().add(0.0, 1.7 + heightOffset, 0.0))
+            armorStand.handle!!.isInvisible = true
+            armorStand.handle!!.isNoGravity = true
+            armorStand.handle!!.isCustomNameVisible = true
+            (armorStand.handle!! as ArmorStand).isMarker = true
 
-        val rank = BandiCore.instance.server.rankManager.loadedPlayerRanks[player]!!
-        armorStand.handle!!.customName = PaperAdventure.asVanilla(Util.color("<${rank.color}>${rank.name} ${player.name}"))
-        armorStand.updateMetadata()
+            val rank = BandiCore.instance.server.rankManager.loadedPlayerRanks[player]!!
+            armorStand.handle!!.customName = PaperAdventure.asVanilla(Util.color("<${rank.color}>${rank.name} ${player.name}"))
+            armorStand.updateMetadata()
+        }
     }
 
     /**
@@ -78,11 +83,43 @@ class PlayerNameTag(val player: Player) {
     class Events: Listener {
         @EventHandler
         fun onSneak(event: PlayerToggleSneakEvent) {
+            if(event.player.gameMode == GameMode.SPECTATOR) return
             val nameTag = event.player.getNameTag()
             if(event.isSneaking) {
-                nameTag?.deSpawn()
+                if(!event.player.isFlying) {
+                    nameTag?.deSpawn()
+                }
             } else {
                 nameTag?.spawn()
+            }
+        }
+
+        @EventHandler
+        fun onFlyingLand(event: PlayerToggleFlightEvent) {
+            if(event.player.gameMode == GameMode.SPECTATOR) return
+            if(!event.isFlying) {
+                if(event.player.isSneaking) {
+                    event.player.getNameTag()?.deSpawn()
+                }
+            }
+        }
+
+        @EventHandler
+        fun onGameModeSwitch(event: PlayerGameModeChangeEvent) {
+            if(event.newGameMode == GameMode.SPECTATOR) {
+                event.player.getNameTag()?.deSpawn()
+            } else {
+                if(event.player.gameMode == GameMode.SPECTATOR) {
+                    if(!event.player.isSneaking) {
+                        event.player.getNameTag()?.spawn()
+                    } else {
+                        if(event.player.isFlying) {
+                            event.player.getNameTag()?.spawn()
+                        } else {
+                            event.player.getNameTag()?.deSpawn()
+                        }
+                    }
+                }
             }
         }
 

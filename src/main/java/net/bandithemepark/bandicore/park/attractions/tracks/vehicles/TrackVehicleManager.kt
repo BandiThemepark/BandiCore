@@ -3,6 +3,7 @@ package net.bandithemepark.bandicore.park.attractions.tracks.vehicles
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.park.attractions.tracks.TrackLayout
 import net.bandithemepark.bandicore.park.attractions.tracks.TrackPosition
+import net.bandithemepark.bandicore.park.attractions.tracks.segments.SegmentSeparator
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.Attachment
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.AttachmentPosition
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.AttachmentType
@@ -13,6 +14,7 @@ import org.bukkit.Location
 
 class TrackVehicleManager {
     val vehicles = mutableListOf<TrackVehicle>()
+    val lastSegments = hashMapOf<TrackVehicle, SegmentSeparator>()
     // TODO Keep track of segments
 
     init {

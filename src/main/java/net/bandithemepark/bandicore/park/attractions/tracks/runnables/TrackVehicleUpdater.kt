@@ -78,7 +78,40 @@ class TrackVehicleUpdater {
                 }
             }
 
-            // TODO Update segments
+            // Updating segments
+            if(vehicle.ridingOn.segmentSeparators.size > 1) {
+                val currentCurvePoint = vehicle.position.getPathPoint()
+                val segmentSeparator = vehicle.ridingOn.getSegmentFromCurvePoint(currentCurvePoint)
+
+                if(segmentSeparator == null) {
+                    if(BandiCore.instance.trackManager.vehicleManager.lastSegments.containsKey(vehicle)) {
+                        val lastSegment = BandiCore.instance.trackManager.vehicleManager.lastSegments[vehicle]!!
+                        lastSegment.vehicles.remove(vehicle)
+                        if(lastSegment.type != null) lastSegment.type!!.onVehicleLeave(vehicle)
+                        BandiCore.instance.trackManager.vehicleManager.lastSegments.remove(vehicle)
+                    }
+                } else {
+                    val lastSegment = BandiCore.instance.trackManager.vehicleManager.lastSegments[vehicle]
+
+                    if(lastSegment != null) {
+                        if(lastSegment == segmentSeparator) {
+                            if(lastSegment.type != null) lastSegment.type!!.onVehicleUpdate(vehicle)
+                        } else {
+                            lastSegment.vehicles.remove(vehicle)
+                            segmentSeparator.vehicles.add(vehicle)
+
+                            if(lastSegment.type != null) lastSegment.type!!.onVehicleLeave(vehicle)
+                            if(segmentSeparator.type != null) segmentSeparator.type!!.onVehicleEnter(vehicle)
+
+                            BandiCore.instance.trackManager.vehicleManager.lastSegments[vehicle] = segmentSeparator
+                        }
+                    } else {
+                        segmentSeparator.vehicles.add(vehicle)
+                        if(segmentSeparator.type != null) segmentSeparator.type!!.onVehicleEnter(vehicle)
+                        BandiCore.instance.trackManager.vehicleManager.lastSegments[vehicle] = segmentSeparator
+                    }
+                }
+            }
 
             // TODO Update triggers
 

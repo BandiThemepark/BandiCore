@@ -79,5 +79,18 @@
   "vehicle-editor-id-cancelled": "Successfully cancelled setting the ID of the chosen attachment",
   "vehicle-editor-id-success": "Successfully set the ID of the chosen attachment",
   "vanish-enabled": "You are now hidden from other players",
-  "vanish-disabled": "You are no longer hidden from other players"
+  "vanish-disabled": "You are no longer hidden from other players",
+  "track-editor-selected-segment": "You've selected a new segment separator",
+  "track-editor-no-segment-selected": "You haven't selected a segment separator yet",
+  "track-editor-segment-moved": "Successfully moved the selected segment separator to position %pos% on node %nodePos%",
+  "track-editor-move-segment-fail": "Failed to move the selected segment separator, is it at the end of a piece of track?",
+  "track-editor-segment-created": "Successfully created and selected a new segment separator",
+  "track-editor-segment-deleted": "Successfully deleted the selected segment separator",
+  "track-editor-segment-metadata-prompt": "Please enter the metadata you would like to set for this segment. Type 'cancel' to cancel. Use the following format: %format%",
+  "track-editor-segment-metadata-cancelled": "Successfully cancelled setting the metadata of the chosen segment",
+  "track-editor-segment-metadata-success": "Successfully set the metadata of the chosen segment",
+  "track-editor-segment-type-prompt": "Please enter the type you would like to set for this segment. Type 'cancel' to cancel. Type 'none' to remove the type",
+  "track-editor-segment-type-cancelled": "Successfully cancelled setting the type of the chosen segment",
+  "track-editor-segment-type-cleared": "Successfully cleared the type of the chosen segment",
+  "segment-type-not-found": "The segment type you specified was not found"
 }

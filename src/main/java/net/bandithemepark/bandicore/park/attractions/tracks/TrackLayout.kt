@@ -1,6 +1,7 @@
 package net.bandithemepark.bandicore.park.attractions.tracks
 
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.park.attractions.tracks.segments.SegmentSeparator
 import net.bandithemepark.bandicore.util.FileManager
 import net.bandithemepark.bandicore.util.TrackUtil
 import net.bandithemepark.bandicore.util.math.MathUtil
@@ -10,14 +11,15 @@ import org.bukkit.Location
 import org.bukkit.World
 import org.bukkit.util.Vector
 
-class TrackLayout(val id: String, var origin: Vector, var world: World, var nodes: MutableList<TrackNode>, var rollNodes: MutableList<RollNode>) {
-    // TODO Add segment separators, track triggers, e-stop
+class TrackLayout(val id: String, var origin: Vector, var world: World, var nodes: MutableList<TrackNode>, var rollNodes: MutableList<RollNode>, var segmentSeparators: MutableList<SegmentSeparator>) {
+    // TODO Add track triggers
+    var eStop = false
 
     init {
-        // TODO updating the segments
         updateConnections()
         updatePath()
         updateRoll()
+        updateSegments()
     }
 
     private fun updateConnections() {
@@ -36,6 +38,51 @@ class TrackLayout(val id: String, var origin: Vector, var world: World, var node
                 val connectedTo = node.connectedTo!!
                 val before = TrackUtil.getNodeBeforeNode(this, node)
                 node.curve = splineType.interpolate(before, node, connectedTo, connectedTo.connectedTo)
+            }
+        }
+    }
+
+    /**
+     * Updates all segment separators on the track
+     */
+    fun updateSegments() {
+        if(segmentSeparators.isEmpty()) return
+        if(segmentSeparators.size == 1) {
+            segmentSeparators[0].curve = getAllPathPoints()
+            return
+        }
+
+        for(current in segmentSeparators) {
+            var currentNode = current.position.nodePosition
+            var done = false
+            val passedNodes = mutableListOf<TrackNode>()
+
+            while(currentNode.connectedTo != null && !done && !passedNodes.contains(currentNode)) {
+                passedNodes.add(currentNode)
+
+                val list = getSegments(currentNode)
+                if(list.isNotEmpty()) {
+                    if(!list.contains(current)) {
+                       val next = list[0]
+                       current.next = next
+                       current.curve = TrackUtil.getCurveBetweenPositions(current.position, next.position)
+                       done = true
+                    } else {
+                        val nextSegment = getNextSegment(currentNode, current)
+
+                        if(nextSegment != null) {
+                            current.next = nextSegment
+                            current.curve = TrackUtil.getCurveBetweenPositions(current.position, nextSegment.position)
+                            done = true
+                        }
+                    }
+                }
+
+                if(!done) currentNode = currentNode.connectedTo!!
+            }
+
+            if(currentNode.connectedTo == null && !done) {
+                current.curve = TrackUtil.getCurveBetweenPositions(current.position, TrackPosition(currentNode, currentNode.curve.size-1))
             }
         }
     }
@@ -88,6 +135,40 @@ class TrackLayout(val id: String, var origin: Vector, var world: World, var node
         }
 
         //getAllPathPoints().forEach { Bukkit.broadcast(Component.text("Roll: ${it.roll}")) }
+    }
+
+    /**
+     * Gets the next segment at a certain node from a certain separator
+     * @param node The node to get the next segment from
+     * @param separator The separator to get the next segment from
+     * @return The next segment, null if there isn't one
+     */
+    fun getNextSegment(node: TrackNode, separator: SegmentSeparator): SegmentSeparator? {
+        val separators = getSegments(node)
+        var currentSeparator: SegmentSeparator? = null
+        var currentPosition = node.curve.size-1
+
+        for(other in separators) {
+            if(other.position.position > separator.position.position && other.position.position < currentPosition ) {
+                currentPosition = other.position.position.toInt()
+                currentSeparator = other
+            }
+        }
+
+        return currentSeparator
+    }
+
+    fun getSegmentFromCurvePoint(curvePoint: TrackNode): SegmentSeparator? {
+        return segmentSeparators.find { it.curve.contains(curvePoint) }
+    }
+
+    /**
+     * Gets all segments that start on a given node
+     * @param node The node to get the segments from
+     * @return A list of segments
+     */
+    fun getSegments(node: TrackNode): List<SegmentSeparator> {
+        return segmentSeparators.filter { it.position.nodePosition == node }
     }
 
     /**
@@ -154,6 +235,15 @@ class TrackLayout(val id: String, var origin: Vector, var world: World, var node
     }
 
     /**
+     * Gets the roll node nearest to a certain location
+     * @param location The location to check from
+     * @return The roll node nearest to the location
+     */
+    fun getNearestSegmentSeparator(location: Location): SegmentSeparator? {
+        return TrackUtil.getNearestSegmentSeparator(this, location)
+    }
+
+    /**
      * Saves a track to it's file
      */
     fun save() {
@@ -162,7 +252,7 @@ class TrackLayout(val id: String, var origin: Vector, var world: World, var node
         // Clearing the old config
         fm.getConfig("tracks/$id.trck").get().set("nodes", null)
         fm.getConfig("tracks/$id.trck").get().set("rollNodes", null)
-        fm.getConfig("tracks/$id.trck").get().set("segmentSeparators", null)
+        fm.getConfig("tracks/$id.trck").get().set("segments", null)
         fm.getConfig("tracks/$id.trck").get().set("trackTriggers", null)
         fm.saveConfig("tracks/$id.trck")
 
@@ -191,6 +281,18 @@ class TrackLayout(val id: String, var origin: Vector, var world: World, var node
         }
         fm.saveConfig("tracks/$id.trck")
 
-        // TODO Save segment separators, track triggers
+        // Saving segment separators
+        for((index, separator) in segmentSeparators.withIndex()) {
+            fm.getConfig("tracks/$id.trck").get().set("segments.$index.nodeId", separator.position.nodePosition.id)
+            fm.getConfig("tracks/$id.trck").get().set("segments.$index.position", separator.position.position.toInt())
+
+            if(separator.type != null) {
+                fm.getConfig("tracks/$id.trck").get().set("segments.$index.type", separator.type!!.id)
+                fm.getConfig("tracks/$id.trck").get().set("segments.$index.metadata", separator.type!!.metadata)
+            }
+        }
+        fm.saveConfig("tracks/$id.trck")
+
+        // TODO Save track triggers
     }
 }

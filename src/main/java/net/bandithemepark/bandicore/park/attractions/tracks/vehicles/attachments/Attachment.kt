@@ -22,6 +22,7 @@ class Attachment(var id: String, val position: AttachmentPosition, val secondary
      * Updates the attachment and it's children with a given position and rotation.
      * @param position A vector representing the position of the attachment
      * @param rotation A quaternion representing the rotation of the attachment
+     * @param originalRotation A vector containing the original pitch, yaw and roll
      */
     fun update(position: Vector, rotation: Quaternion, originalRotation: Vector) {
         // Updating the personal position of this attachment

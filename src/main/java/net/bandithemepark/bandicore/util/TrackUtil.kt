@@ -5,6 +5,8 @@ import net.bandithemepark.bandicore.park.attractions.tracks.RollNode
 import net.bandithemepark.bandicore.park.attractions.tracks.TrackLayout
 import net.bandithemepark.bandicore.park.attractions.tracks.TrackNode
 import net.bandithemepark.bandicore.park.attractions.tracks.TrackPosition
+import net.bandithemepark.bandicore.park.attractions.tracks.segments.SegmentSeparator
+import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.TrackVehicle
 import net.bandithemepark.bandicore.util.math.MathUtil
 import org.bukkit.Location
 
@@ -152,6 +154,34 @@ object TrackUtil {
     }
 
     /**
+     * Gets the segment separator that is closest to a given location
+     * @param layout The layout that should be checked for
+     * @param location The location to check for
+     * @return The segment separator that is closest to the given location
+     */
+    fun getNearestSegmentSeparator(layout: TrackLayout, location: Location): SegmentSeparator? {
+        if(layout.segmentSeparators.size > 0) {
+            var nearest = layout.segmentSeparators[0]
+            var currentDistance = 9999.0
+
+            for(node in layout.segmentSeparators) {
+                val rollNodeLocation = node.position.getPathPoint().asVector()
+                rollNodeLocation.add(layout.origin)
+                val distance = MathUtil.getDistanceBetween(location.toVector(), rollNodeLocation)
+
+                if(distance < currentDistance) {
+                    currentDistance = distance
+                    nearest = node
+                }
+            }
+
+            return nearest
+        } else {
+            return null
+        }
+    }
+
+    /**
      * Gets all path points between two TrackPositions
      * @param position1 The first position
      * @param position2 The second position
@@ -184,5 +214,52 @@ object TrackUtil {
             for(i in pos1 until pos2) curve.add(node1.curve[i])
             return curve.distinct()
         }
+    }
+
+    /**
+     * Finds the track a segment separator is part of
+     * @param segmentSeparator To find the track of
+     * @return The track the segment separator is part of, null if not found
+     */
+    fun getTrack(segmentSeparator: SegmentSeparator): TrackLayout? {
+        return BandiCore.instance.trackManager.loadedTracks.find { it.segmentSeparators.contains(segmentSeparator) }
+    }
+
+    /**
+     * Tells you whether a given vehicle is past the middle of a given segment
+     * @param vehicle The vehicle to check
+     * @param segment The segment to check
+     * @return Whether the vehicle is past the middle of the segment
+     */
+    fun isPastMiddle(segment: SegmentSeparator, vehicle: TrackVehicle): Boolean {
+        return isPast(segment, vehicle, 0.5)
+    }
+
+    /**
+     * Tells you whether a given vehicle is past a given point on a segment
+     * @param vehicle The vehicle to check
+     * @param segment The segment to check
+     * @param t The percentage of how far the point is
+     * @return Whether the vehicle is past the given percentage of the segment
+     */
+    fun isPast(segment: SegmentSeparator, vehicle: TrackVehicle, t: Double): Boolean {
+        val vehicleCurvePoint = vehicle.position.getPathPoint()
+        val middleIndex = (segment.curve.size * t).toInt()
+        val vehicleIndex = segment.curve.indexOf(vehicleCurvePoint)
+        return vehicleIndex >= middleIndex
+    }
+
+    /**
+     * Tells you whether a given vehicle is before a given point on a segment
+     * @param vehicle The vehicle to check
+     * @param segment The segment to check
+     * @param t The percentage of how far the point is
+     * @return Whether the vehicle is before the given percentage of the segment
+     */
+    fun isBefore(segment: SegmentSeparator, vehicle: TrackVehicle, t: Double): Boolean {
+        val vehicleCurvePoint = vehicle.position.getPathPoint()
+        val middleIndex = (segment.curve.size * t).toInt()
+        val vehicleIndex = segment.curve.indexOf(vehicleCurvePoint)
+        return vehicleIndex <= middleIndex
     }
 }
