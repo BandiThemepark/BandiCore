@@ -18,6 +18,9 @@ class ModelAttachment: AttachmentType("model", "MATERIAL, CUSTOM_MODEL_DATA") {
     var debug = false
     var model: ItemStack? = null
 
+    var lastRotation: Quaternion? = null
+    var lastRotationDegrees: Vector? = null
+
     override fun onSpawn(location: Location) {
         armorStand = PacketEntityArmorStand()
         armorStand!!.spawn(location)
@@ -34,12 +37,18 @@ class ModelAttachment: AttachmentType("model", "MATERIAL, CUSTOM_MODEL_DATA") {
 
         val newPosition = mainPosition.clone().add(Vector(0.0, -1.4375, 0.0))
 
-        if(rotationDegrees.x.toInt() == 0 && rotationDegrees.z.toInt() == 0) {
+        if(lastRotationDegrees == null) lastRotationDegrees = rotationDegrees
+        if(lastRotation == null) lastRotation = mainRotation
+
+        if(lastRotationDegrees!!.x.toInt() == 0 && lastRotationDegrees!!.z.toInt() == 0) {
             armorStand!!.moveEntity(newPosition.x, newPosition.y, newPosition.z)
-            armorStand!!.setHeadPose(0.0, rotationDegrees.y, 0.0)
+            armorStand!!.setHeadPose(0.0, lastRotationDegrees!!.y, 0.0)
         } else {
-            armorStand!!.moveWithHead(newPosition, mainRotation)
+            armorStand!!.moveWithHead(newPosition, lastRotation!!)
         }
+
+        lastRotationDegrees = rotationDegrees
+        lastRotation = mainRotation
     }
 
     override fun onDeSpawn() {
