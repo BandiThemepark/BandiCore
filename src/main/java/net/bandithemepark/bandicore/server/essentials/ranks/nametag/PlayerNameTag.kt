@@ -19,12 +19,24 @@ import org.bukkit.scheduler.BukkitRunnable
 class PlayerNameTag(val player: Player) {
     val armorStand = PacketEntityArmorStand()
     var heightOffset = 0.0
+    private var isVisible = false
+
+    var hidden = false
+    set(value) {
+        field = value
+        if(value) {
+            if(isVisible) deSpawn()
+        } else {
+            if(isVisible) spawn()
+        }
+    }
 
     /**
      * Spawns the name tag. Automatically called on initialization.
      */
     fun spawn() {
-        if(!armorStand.spawned) {
+        isVisible = true
+        if(!armorStand.spawned && !hidden) {
             armorStand.visibilityType = PacketEntity.VisibilityType.BLACKLIST
             armorStand.visibilityList = mutableListOf(player)
 
@@ -44,6 +56,7 @@ class PlayerNameTag(val player: Player) {
      * De-spawns the name tag, automatically called on player quit
      */
     fun deSpawn() {
+        isVisible = false
         armorStand.deSpawn()
     }
 
