@@ -92,5 +92,18 @@
   "track-editor-segment-type-prompt": "Please enter the type you would like to set for this segment. Type 'cancel' to cancel. Type 'none' to remove the type",
   "track-editor-segment-type-cancelled": "Successfully cancelled setting the type of the chosen segment",
   "track-editor-segment-type-cleared": "Successfully cleared the type of the chosen segment",
-  "segment-type-not-found": "The segment type you specified was not found"
+  "segment-type-not-found": "The segment type you specified was not found",
+  "track-editor-selected-trigger": "You've selected a new trigger",
+  "track-editor-no-trigger-selected": "You haven't selected a trigger yet",
+  "track-editor-trigger-moved": "Successfully moved the selected trigger to position %pos% on node %nodePos%",
+  "track-editor-move-trigger-fail": "Failed to move the selected trigger, is it at the end of a piece of track?",
+  "track-editor-trigger-created": "Successfully created and selected a new trigger",
+  "track-editor-trigger-deleted": "Successfully deleted the selected trigger",
+  "track-editor-trigger-metadata-prompt": "Please enter the metadata you would like to set for this trigger. Type 'cancel' to cancel. Use the following format: %format%",
+  "track-editor-trigger-metadata-cancelled": "Successfully cancelled setting the metadata of the chosen trigger",
+  "track-editor-trigger-metadata-success": "Successfully set the metadata of the chosen trigger",
+  "track-editor-trigger-type-prompt": "Please enter the type you would like to set for this trigger. Type 'cancel' to cancel. Type 'none' to remove the type",
+  "track-editor-trigger-type-cancelled": "Successfully cancelled setting the type of the chosen trigger",
+  "track-editor-trigger-type-cleared": "Successfully cleared the type of the chosen trigger",
+  "trigger-type-not-found": "The trigger type you specified was not found"
 }
