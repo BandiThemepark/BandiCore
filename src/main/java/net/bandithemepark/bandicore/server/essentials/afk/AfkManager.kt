@@ -60,7 +60,7 @@ class AfkManager {
 
             for(session in afkManager.sessions) session.sendNormalTitle()
 
-            for(player in afkManager.timeSinceLastUpdate.keys) {
+            for(player in afkManager.timeSinceLastUpdate.keys.toList()) {
                 if(afkManager.timeSinceLastUpdate[player]!! >= afkManager.timeToAfk) {
                     afkManager.startAfk(player)
                 }
