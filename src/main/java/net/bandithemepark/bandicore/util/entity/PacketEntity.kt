@@ -1,13 +1,23 @@
 package net.bandithemepark.bandicore.util.entity
 
+import com.comphenix.protocol.PacketType
+import com.comphenix.protocol.ProtocolLibrary
+import com.comphenix.protocol.events.ListenerPriority
+import com.comphenix.protocol.events.PacketAdapter
+import com.comphenix.protocol.events.PacketContainer
+import com.comphenix.protocol.events.PacketEvent
 import com.mojang.datafixers.util.Pair
 import me.partypronl.themeparkcore.util.packetwrappers.WrapperPlayServerEntityTeleport
-import net.bandithemepark.bandicore.util.npc.NPC
+import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.util.entity.event.PacketEntityDismountEvent
+import net.bandithemepark.bandicore.util.entity.event.PacketEntityInteractEvent
+import net.bandithemepark.bandicore.util.entity.event.PacketEntityInputEvent
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket
 import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket
 import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket
 import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket
+import net.minecraft.network.protocol.game.ServerboundPlayerInputPacket
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EquipmentSlot
@@ -30,6 +40,9 @@ abstract class PacketEntity {
     var visibilityType = VisibilityType.BLACKLIST
     var visibilityList = mutableListOf<Player>()
 
+    private val passengers = mutableListOf<org.bukkit.entity.Entity>()
+    private val passengerIds = mutableListOf<Int>()
+
     // Spawning and despawning
     abstract fun getInstance(world: ServerLevel, x: Double, y: Double, z: Double): LivingEntity
 
@@ -37,7 +50,7 @@ abstract class PacketEntity {
      * Spawns the entity at a certain location
      * @param location The location to spawn the entity at
      */
-    fun spawn(location: Location) {
+    open fun spawn(location: Location) {
         handle = getInstance((location.world as CraftWorld).handle, location.x, location.y, location.z)
 
         val packet = ClientboundAddEntityPacket(handle!!)
@@ -63,12 +76,21 @@ abstract class PacketEntity {
     /**
      * Despawns the entity
      */
-    fun deSpawn() {
+    open fun deSpawn() {
         val packet = ClientboundRemoveEntitiesPacket(handle!!.id)
         sendPacket(packet)
 
         spawned = false
         active.remove(this)
+    }
+
+    /**
+     * Despawns the entity for just one player. Does not despawn the entity on the server side
+     * @param player The player to despawn the entity for
+     */
+    fun deSpawnFor(player: Player) {
+        val packet = ClientboundRemoveEntitiesPacket(handle!!.id)
+        (player as CraftPlayer).handle.connection.send(packet)
     }
 
     // Position
@@ -110,6 +132,14 @@ abstract class PacketEntity {
      */
     fun moveEntity(x: Double, y: Double, z: Double) {
         this.location = Location(location!!.world, x, y, z)
+        updateLocation()
+    }
+
+    /**
+     * Other move entity but with pitch and yaw
+     */
+    fun moveEntity(x: Double, y: Double, z: Double, pitch: Float, yaw: Float) {
+        this.location = Location(location!!.world, x, y, z, pitch, yaw)
         updateLocation()
     }
 
@@ -189,11 +219,19 @@ abstract class PacketEntity {
         }
 
         if(visibilityType == VisibilityType.BLACKLIST) {
-            for (player in Bukkit.getOnlinePlayers()) {
-                if(!visibilityList.contains(player)) {
-                    (player as CraftPlayer).handle.connection.send(packet)
-                }
-            }
+            for(player in Bukkit.getOnlinePlayers().filter { !visibilityList.contains(it) }) (player as CraftPlayer).handle.connection.send(packet)
+        }
+    }
+
+    private fun sendPacket(packet: PacketContainer) {
+        val pm = ProtocolLibrary.getProtocolManager()
+
+        if(visibilityType == VisibilityType.WHITELIST) {
+            for(player in visibilityList) pm.sendServerPacket(player, packet)
+        }
+
+        if(visibilityType == VisibilityType.BLACKLIST) {
+            for(player in Bukkit.getOnlinePlayers().filter { !visibilityList.contains(it) }) pm.sendServerPacket(player, packet)
         }
     }
 
@@ -208,6 +246,156 @@ abstract class PacketEntity {
         } else {
             !visibilityList.contains(player)
         }
+    }
+
+    /**
+     * Updates the passengers in this vehicle for everyone that can see this entity
+     */
+    fun updatePassengers() {
+        val ids = passengers.map { it.entityId }.toMutableList()
+        ids.addAll(passengerIds)
+
+        val pm = ProtocolLibrary.getProtocolManager()
+        val packet = pm.createPacket(PacketType.Play.Server.MOUNT)
+        packet.modifier.writeDefaults()
+        packet.integers.write(0, handle!!.id)
+        packet.integerArrays.write(0, ids.toIntArray())
+
+        sendPacket(packet)
+    }
+
+    /**
+     * Updates the passengers in this vehicle for one player
+     * @param player The player to update the passengers for
+     */
+    fun updatePassengersFor(player: Player) {
+        val ids = passengers.map { it.entityId }.toMutableList()
+        ids.addAll(passengerIds)
+
+        val pm = ProtocolLibrary.getProtocolManager()
+        val packet = pm.createPacket(PacketType.Play.Server.MOUNT)
+        packet.modifier.writeDefaults()
+        packet.integers.write(0, handle!!.id)
+        packet.integerArrays.write(0, ids.toIntArray())
+
+        pm.sendServerPacket(player, packet)
+    }
+
+    /**
+     * Adds an entity to the passengers of this vehicle. Does NOT update the passengers for anyone.
+     * @param entity The entity to add
+     */
+    fun addPassenger(entity: org.bukkit.entity.Entity) {
+        passengers.add(entity)
+    }
+
+    /**
+     * Removes an entity from the passengers of this vehicle. Does NOT update the passengers for anyone.
+     * @param entity The entity to remove
+     */
+    @Deprecated("Use ejectPassenger() instead")
+    fun removePassenger(entity: org.bukkit.entity.Entity) {
+        passengers.remove(entity)
+    }
+
+    /**
+     * Ejects the given passenger. Also updates the passengers, and resets Smooth Coasters rotation
+     * @param entity The entity to eject
+     */
+    fun ejectPassenger(entity: org.bukkit.entity.Entity) {
+        passengers.remove(entity)
+        updatePassengers()
+        if(entity is Player) BandiCore.instance.smoothCoastersAPI.resetRotation(null, entity)
+
+        Bukkit.getScheduler().scheduleSyncDelayedTask(BandiCore.instance, {
+            val location = location!!.clone()
+            location.pitch = entity.location.pitch
+            location.yaw = entity.location.yaw
+            entity.teleport(location.add(0.0, 0.5+1.4375, 0.0))
+
+        }, 1)
+    }
+
+    /**
+     * Ejects the given passenger at a given location. Also updates the passengers, and resets Smooth Coasters rotation
+     * @param entity The entity to eject
+     * @param location The location to eject the passenger at
+     */
+    fun ejectPassengerAt(entity: org.bukkit.entity.Entity, location: Location) {
+        passengers.remove(entity)
+        updatePassengers()
+        if(entity is Player) BandiCore.instance.smoothCoastersAPI.resetRotation(null, entity)
+
+        Bukkit.getScheduler().scheduleSyncDelayedTask(BandiCore.instance, {
+            entity.teleport(location)
+        }, 1)
+    }
+
+    /**
+     * Ejects the given passenger. Also updates the passengers, and resets Smooth Coasters rotation
+     */
+    fun ejectPassengers() {
+        val passengersCopy = passengers.toMutableList()
+        passengers.clear()
+        updatePassengers()
+        passengersCopy.forEach {
+            if(it is Player) BandiCore.instance.smoothCoastersAPI.resetRotation(null, it)
+        }
+
+        Bukkit.getScheduler().scheduleSyncDelayedTask(BandiCore.instance, {
+            passengersCopy.forEach {
+                val location = location!!.clone()
+                location.pitch = it.location.pitch
+                location.yaw = it.location.yaw
+                it.teleport(location.add(0.0, 0.5+1.4375, 0.0))
+            }
+        }, 1)
+    }
+
+    /**
+     * Ejects all passengers at a given location. Also updates the passengers, and resets Smooth Coasters rotation
+     * @param location The location to eject the passenger at
+     */
+    fun ejectPassengersAt(location: Location) {
+        val passengersCopy = passengers.toMutableList()
+        passengers.clear()
+        updatePassengers()
+        passengersCopy.forEach {
+            it.teleport(location)
+            if(it is Player) BandiCore.instance.smoothCoastersAPI.resetRotation(null, it)
+        }
+    }
+
+    /**
+     * Adds an entity to the passengers of this vehicle. Does NOT update the passengers for anyone.
+     * @param id The ID of the entity to add
+     */
+    fun addPassenger(id: Int) {
+        passengerIds.add(id)
+    }
+
+    /**
+     * Removes an entity from the passengers of this vehicle. Does NOT update the passengers for anyone.
+     * @param id The ID of the entity to remove
+     */
+    fun removePassenger(id: Int) {
+        passengerIds.remove(id)
+    }
+
+    /**
+     * Gets the passengers on this entity
+     * @return The passengers on this entity
+     */
+    fun getPassengers(): List<org.bukkit.entity.Entity> {
+        return passengers
+    }
+
+    /**
+     * Gets all manually added passenger IDs
+     * @return All manually added passenger IDs
+     */
+    fun getPassengerIds(): List<Int> {
+        return passengerIds
     }
 
     companion object {
@@ -229,8 +417,54 @@ abstract class PacketEntity {
                     entity.spawnFor(event.player)
                     entity.updateMetadataFor(event.player)
                     entity.updateEquipmentFor(event.player)
+                    entity.updatePassengersFor(event.player)
                 }
             }
+        }
+    }
+
+    object PacketListeners {
+        fun startListeners() {
+            val pm = ProtocolLibrary.getProtocolManager()
+
+            pm.addPacketListener(object: PacketAdapter(BandiCore.instance, ListenerPriority.NORMAL, PacketType.Play.Client.STEER_VEHICLE) {
+                override fun onPacketReceiving(event: PacketEvent) {
+                    val packet = event.packet.handle as ServerboundPlayerInputPacket
+
+                    for(entity in active) {
+                        if(entity.passengers.contains(event.player)) {
+                            Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
+                                val inputEvent = PacketEntityInputEvent(entity, event.player, packet.xxa, packet.zza, packet.isShiftKeyDown, packet.isJumping)
+                                Bukkit.getPluginManager().callEvent(inputEvent)
+
+                                if (packet.isShiftKeyDown) {
+                                    val dismountEvent = PacketEntityDismountEvent(entity, event.player)
+                                    Bukkit.getPluginManager().callEvent(dismountEvent)
+                                    if (!event.isCancelled) entity.ejectPassenger(event.player)
+                                }
+                            })
+                        }
+                    }
+                }
+            })
+
+            pm.addPacketListener(object: PacketAdapter(BandiCore.instance, ListenerPriority.NORMAL, PacketType.Play.Client.USE_ENTITY) {
+                override fun onPacketReceiving(event: PacketEvent) {
+                    val packet = event.packet
+                    val entityId = packet.integers.read(0)
+
+                    for(entity in active) {
+                        if(entity.handle!!.id == entityId) {
+                            Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
+                                val interactEvent = PacketEntityInteractEvent(entity, event.player)
+                                Bukkit.getPluginManager().callEvent(interactEvent)
+
+                                if(interactEvent.isCancelled) event.isCancelled = true
+                            })
+                        }
+                    }
+                }
+            })
         }
     }
 
