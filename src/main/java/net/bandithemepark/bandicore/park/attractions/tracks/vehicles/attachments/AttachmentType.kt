@@ -16,7 +16,7 @@ abstract class AttachmentType(val id: String, val howToConfigure: String): Clone
         types.add(this)
     }
 
-    abstract fun onSpawn(location: Location)
+    abstract fun onSpawn(location: Location, parent: Attachment)
     abstract fun onUpdate(mainPosition: Vector, mainRotation: Quaternion, secondaryPositions: HashMap<Vector, Quaternion>, rotationDegrees: Vector)
     abstract fun onDeSpawn()
     abstract fun onMetadataLoad(metadata: List<String>)

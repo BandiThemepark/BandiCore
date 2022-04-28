@@ -1,5 +1,6 @@
 package net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types
 
+import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.Attachment
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.AttachmentType
 import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.entity.PacketEntityArmorStand
@@ -21,7 +22,7 @@ class ModelAttachment: AttachmentType("model", "MATERIAL, CUSTOM_MODEL_DATA") {
     var lastRotation: Quaternion? = null
     var lastRotationDegrees: Vector? = null
 
-    override fun onSpawn(location: Location) {
+    override fun onSpawn(location: Location, parent: Attachment) {
         armorStand = PacketEntityArmorStand()
         armorStand!!.spawn(location)
 

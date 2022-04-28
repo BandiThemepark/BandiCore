@@ -30,4 +30,8 @@ class AttachmentPosition(var x: Double, var y: Double, var z: Double, var pitch:
     fun getList(): List<Double> {
         return listOf(x, y, z, pitch, yaw, roll)
     }
+
+    fun toVector(): Vector {
+        return Vector(x, y, z)
+    }
 }
