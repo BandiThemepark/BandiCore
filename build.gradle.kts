@@ -20,6 +20,10 @@ repositories {
     maven {
         url = uri("https://repo.dmulloy2.net/repository/public/")
     }
+
+    maven {
+        url = uri("https://ci.mg-dev.eu/plugin/repository/everything/")
+    }
 }
 
 dependencies {
@@ -30,6 +34,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.6.10")
     compileOnly("com.comphenix.protocol", "ProtocolLib", "4.8.0")
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation("me.m56738:SmoothCoastersAPI:1.6")
 }
 
 tasks {
