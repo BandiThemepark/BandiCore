@@ -5,6 +5,8 @@ import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.entity.PacketEntity
 import net.bandithemepark.bandicore.util.entity.PacketEntityArmorStand
+import net.bandithemepark.bandicore.util.entity.event.SeatEnterEvent
+import net.bandithemepark.bandicore.util.entity.event.SeatExitEvent
 import net.minecraft.world.entity.decoration.ArmorStand
 import org.bukkit.GameMode
 import org.bukkit.entity.Player
@@ -144,6 +146,16 @@ class PlayerNameTag(val player: Player) {
             val nameTag = event.player.getNameTag()
             nameTag?.deSpawn()
             active.remove(nameTag)
+        }
+
+        @EventHandler
+        fun onSeatEnter(event: SeatEnterEvent) {
+            event.player.getNameTag()?.hidden = true
+        }
+
+        @EventHandler
+        fun onSeatExit(event: SeatExitEvent) {
+            event.player.getNameTag()?.hidden = false
         }
     }
 
