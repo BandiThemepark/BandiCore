@@ -12,8 +12,8 @@ class AfkSession(val player: Player) {
 
     fun sendFadeInTitle() {
         player.showTitle(Title.title(
-            Util.color("<${BandiColors.RED}>Welcome back!"),
-            Util.color("<${BandiColors.LIGHT_GRAY}>We've missed you!"),
+            title.title,
+            title.subtitle,
             Title.Times.times(
                 Duration.ofMillis(500),
                 Duration.ofSeconds(1),
