@@ -49,8 +49,8 @@ class AttachmentEditor(vehicle: TrackVehicle, session: TrackVehicleEditor, val m
             }
 
             1 -> {
-                val attachment = Attachment("main", AttachmentPosition(0.0, 0.0, 0.0, 0.0, 0.0, 0.0), listOf(), AttachmentType.get("model", listOf("DIAMOND_SWORD", "1"))!!, mutableListOf())
-                attachment.type.onSpawn(vehicle.ridingOn.origin.toLocation(vehicle.ridingOn.world))
+                val attachment = Attachment("main", AttachmentPosition(0.0, 0.0, 0.0, 0.0, 0.0, 0.0), mutableListOf(), AttachmentType.get("model", listOf("DIAMOND_SWORD", "1"))!!, mutableListOf())
+                attachment.type.onSpawn(vehicle.ridingOn.origin.toLocation(vehicle.ridingOn.world), attachment)
                 this.attachment.children.add(attachment)
 
                 session.updatePlayerItems()
@@ -76,12 +76,13 @@ class AttachmentEditor(vehicle: TrackVehicle, session: TrackVehicleEditor, val m
 
                                 attachment.type.onDeSpawn()
                                 attachment.type = AttachmentType.get(type, metadataList)!!
-                                attachment.type.onSpawn(vehicle.ridingOn.origin.toLocation(vehicle.ridingOn.world))
+                                attachment.type.onSpawn(vehicle.ridingOn.origin.toLocation(vehicle.ridingOn.world), attachment)
                                 session.updatePlayerItems()
                                 markAll()
 
                                 player2.sendTranslatedMessage("vehicle-editor-metadata-success", BandiColors.YELLOW.toString())
                             } catch(e: Exception) {
+                                e.printStackTrace()
                                 player2.sendTranslatedMessage("vehicle-editor-metadata-invalid", BandiColors.RED.toString())
                             }
                         }
@@ -101,12 +102,13 @@ class AttachmentEditor(vehicle: TrackVehicle, session: TrackVehicleEditor, val m
                         attachment.type.onDeSpawn()
                         val oldType = attachment.type.id
                         attachment.type = AttachmentType.get(oldType, metadataList)!!
-                        attachment.type.onSpawn(vehicle.ridingOn.origin.toLocation(vehicle.ridingOn.world))
+                        attachment.type.onSpawn(vehicle.ridingOn.origin.toLocation(vehicle.ridingOn.world), attachment)
                         session.updatePlayerItems()
                         markAll()
 
                         player2.sendTranslatedMessage("vehicle-editor-metadata-success", BandiColors.YELLOW.toString())
                     } catch(e: Exception) {
+                        e.printStackTrace()
                         player2.sendTranslatedMessage("vehicle-editor-metadata-invalid", BandiColors.RED.toString())
                     }
                 }

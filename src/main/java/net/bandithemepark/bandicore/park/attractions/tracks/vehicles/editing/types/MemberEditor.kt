@@ -57,8 +57,8 @@ class MemberEditor(vehicle: TrackVehicle, session: TrackVehicleEditor, val membe
             }
 
             2 -> {
-                val attachment = Attachment("main", AttachmentPosition(0.0, 0.0, 0.0, 0.0, 0.0, 0.0), listOf(), AttachmentType.get("model", listOf("DIAMOND_SWORD", "1"))!!, mutableListOf())
-                attachment.type.onSpawn(vehicle.ridingOn.origin.toLocation(vehicle.ridingOn.world))
+                val attachment = Attachment("main", AttachmentPosition(0.0, 0.0, 0.0, 0.0, 0.0, 0.0), mutableListOf(), AttachmentType.get("model", listOf("DIAMOND_SWORD", "1"))!!, mutableListOf())
+                attachment.type.onSpawn(vehicle.ridingOn.origin.toLocation(vehicle.ridingOn.world), attachment)
                 member.attachments.add(attachment)
 
                 markAll()

@@ -63,8 +63,8 @@ class VehicleEditor(vehicle: TrackVehicle, session: TrackVehicleEditor): TrackVe
 
             2 -> {
                 val member = TrackVehicleMember(vehicle, BandiCore.instance.trackManager.pointsPerMeter)
-                member.attachments.add(Attachment("main", AttachmentPosition(0.0, 0.0, 0.0, 0.0, 0.0, 0.0), listOf(), AttachmentType.get("model", listOf("DIAMOND_SWORD", "1"))!!, mutableListOf()))
-                member.attachments[0].type.onSpawn(vehicle.ridingOn.origin.toLocation(vehicle.ridingOn.world))
+                member.attachments.add(Attachment("main", AttachmentPosition(0.0, 0.0, 0.0, 0.0, 0.0, 0.0), mutableListOf(), AttachmentType.get("model", listOf("DIAMOND_SWORD", "1"))!!, mutableListOf()))
+                member.attachments[0].type.onSpawn(vehicle.ridingOn.origin.toLocation(vehicle.ridingOn.world), member.attachments[0])
                 vehicle.members.add(member)
 
                 markAll()

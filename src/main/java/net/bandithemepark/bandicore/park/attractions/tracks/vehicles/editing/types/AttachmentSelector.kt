@@ -52,7 +52,7 @@ class AttachmentSelector(vehicle: TrackVehicle, session: TrackVehicleEditor, val
                 if(member.attachments.size == 1) return
                 val index = member.attachments.indexOf(currentSelected)
                 currentSelected = if (index == 0) {
-                    member.attachments[vehicle.members.size - 1]
+                    member.attachments[member.attachments.size - 1]
                 } else {
                     member.attachments[index - 1]
                 }
