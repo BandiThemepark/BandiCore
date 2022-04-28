@@ -36,6 +36,10 @@ import net.bandithemepark.bandicore.util.npc.NPCPathfinding
 import okhttp3.OkHttpClient
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
+import me.m56738.smoothcoasters.api.SmoothCoastersAPI
+import net.bandithemepark.bandicore.util.entity.PacketEntitySeat
+import net.bandithemepark.bandicore.util.math.MathUtil
+import net.kyori.adventure.text.Component
 
 class BandiCore: JavaPlugin() {
     companion object {
@@ -45,12 +49,14 @@ class BandiCore: JavaPlugin() {
     lateinit var server: Server
     lateinit var trackManager: TrackManager
     lateinit var afkManager: AfkManager
+    lateinit var smoothCoastersAPI: SmoothCoastersAPI
 
     var okHttpClient = OkHttpClient()
     var restarter = Restart()
 
     override fun onEnable() {
         instance = this
+        smoothCoastersAPI = SmoothCoastersAPI(this)
 
         // Saving the default settings
         if(!dataFolder.exists()) {
@@ -82,19 +88,29 @@ class BandiCore: JavaPlugin() {
         KalibaEffects()
         AmbientEffect.startTimer()
 
+        // Registering packet listeners
+        PacketEntity.PacketListeners.startListeners()
+
         // Things that need to be done for players who are already online (Like when a reload happens)
         forOnlinePlayers()
+
+//        runAngleInterpolationTest { a1, a2, t ->
+//            return@runAngleInterpolationTest MathUtil.interpolateAngles(a1, a2, t)
+//        }
 
         // Registering the messaging channel for sending players
         Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord")
     }
 
     override fun onDisable() {
+        smoothCoastersAPI.unregister()
+
         // Deleting/removing entities
         trackManager.vehicleManager.deSpawnAllVehicles()
         PacketEntity.removeAll()
         NPC.removeAll()
 
+        // Removing player permissions
         for(player in Bukkit.getOnlinePlayers()) server.rankManager.loadedPlayerRanks[player]?.removePermissions(player)
     }
 
@@ -126,6 +142,7 @@ class BandiCore: JavaPlugin() {
         getServer().pluginManager.registerEvents(TrackVehicleEditor.Events(), this)
         getServer().pluginManager.registerEvents(JoinMessages(), this)
         getServer().pluginManager.registerEvents(Playtime.Events(), this)
+        getServer().pluginManager.registerEvents(PacketEntitySeat.Events(), this)
     }
 
     private fun prepareSettings() {
@@ -140,4 +157,9 @@ class BandiCore: JavaPlugin() {
             server.scoreboard.showFor(player)
         }
     }
+
+//    private fun runAngleInterpolationTest(formula: (Double, Double, Double) -> Double) {
+//        for (i in 0..20) Bukkit.broadcast(Component.text("Interpolating from -175 to 175, with T = ${i/10.0}: ${formula.invoke(-175.0, 175.0, i/20.0)}"))
+//        for (i in 0..20) Bukkit.broadcast(Component.text("Interpolating from 175 to -175, with T = ${i/10.0}: ${formula.invoke(175.0, -175.0, i/20.0)}"))
+//    }
 }

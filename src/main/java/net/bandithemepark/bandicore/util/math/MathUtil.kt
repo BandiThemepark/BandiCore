@@ -1,6 +1,8 @@
 package net.bandithemepark.bandicore.util.math
 
 import net.bandithemepark.bandicore.park.attractions.tracks.splines.BezierSpline
+import net.kyori.adventure.text.Component
+import org.bukkit.Bukkit
 import org.bukkit.util.Vector
 import kotlin.math.*
 
@@ -102,34 +104,29 @@ object MathUtil {
      * @return Interpolated angle
      */
     fun interpolateAngles(a1: Double, a2: Double, t: Double): Double {
-        val difBetween = a2 - a1
-        if(difBetween > 180.0 || difBetween < -180.0) {
-            val delta = (a2 - a1 + 360 + 180) % 360 - 180
-            return (a1 + delta * t + 360) % 360
+        val delta = a2-a1
+        if(delta > 180.0 || delta < -180.0) {
+            val a1Target = if(a1 < 0) -180.0 else 180.0
+            val a2From = if(a2 < 0) -180.0 else 180.0
+
+            val a1Dif = a1Target - a1
+            val a2Dif = a2 - a2From
+
+            val point180 = a1Dif/(a1Dif+a2Dif)
+
+            //Bukkit.broadcast(Component.text("INTERPOLATION ========= From $a1 to $a2"))
+            //Bukkit.broadcast(Component.text("t: $t, a1Target: $a1Target, a2From: $a2From, a1Dif: $a1Dif, a2Dif: $a2Dif, point180: $point180, delta: $delta"))
+            if(t < point180) {
+                //Bukkit.broadcast(Component.text("ONE a1: $a1, a1Target: $a1Target, t: $t"))
+                val newT = t * (1.0/point180)
+                return BezierSpline().linear(a1, a1Target, newT)
+            } else {
+                //Bukkit.broadcast(Component.text("TWO a2From: $a2From, a2: $a2, t: $t"))
+                val newT = (t-point180) * (1.0/point180)
+                return BezierSpline().linear(a2From, a2, newT)
+            }
         } else {
             return BezierSpline().linear(a1, a2, t)
         }
     }
-
-//    private fun lerp(start: Double, end: Double, t: Double): Double {
-//        return (1-t)*start+t*end
-//    }
-//
-//    private fun clamp(number: Double, min: Double, max: Double): Double {
-//        return number.coerceAtLeast(min).coerceAtMost(max)
-//    }
-//
-//    private fun repeat(t: Double, m: Double): Double {
-//        return clamp(t - floor(t / m) * m, 0.0, m)
-//    }
-//
-//    fun interpolateAngles(a1: Double, a2: Double, t: Double): Double {
-//        val dt = repeat(a2 - a1, 360.0)
-//        val stuff = if(dt > 180) {
-//            dt - 360
-//        } else {
-//            dt
-//        }
-//        return lerp(a1, a1 + stuff, t)
-//    }
 }
