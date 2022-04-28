@@ -109,9 +109,10 @@ class TrackLayout(val id: String, var origin: Vector, var world: World, var node
                     val next = rollNodesOnNode[0]
                     val curve = TrackUtil.getCurveBetweenPositions(rollNode.position, next.position)
 
-                    if(rollNode.roll != 0.0 && next.roll != 0.0) {
+                    if(!(rollNode.roll == 0.0 && next.roll == 0.0)) {
                         for((index, curvePoint) in curve.withIndex()) {
                             var roll = MathUtil.interpolateAngles(rollNode.roll, next.roll, index.toDouble()/curve.size.toDouble())
+
                             if(roll > 180) {
                                 roll -= 360
                             } else if(roll < -180) {

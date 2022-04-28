@@ -19,6 +19,7 @@ import net.bandithemepark.bandicore.park.attractions.tracks.triggers.TrackTrigge
 import net.bandithemepark.bandicore.park.attractions.tracks.triggers.types.TestTrigger
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.TrackVehicleManager
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.ModelAttachment
+import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.SeatAttachment
 import net.bandithemepark.bandicore.util.FileManager
 import org.bukkit.Bukkit
 import org.bukkit.Location
@@ -67,6 +68,7 @@ class TrackManager(val splineType: SplineType, val pointsPerMeter: Int, val fric
 
     private fun registerAttachments() {
         ModelAttachment().register()
+        SeatAttachment().register()
     }
 
     private fun internalSetup() {

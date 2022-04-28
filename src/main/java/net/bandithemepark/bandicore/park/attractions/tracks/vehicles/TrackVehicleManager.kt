@@ -133,7 +133,7 @@ class TrackVehicleManager {
             vehicle.members.add(member)
 
             for(attachment in member.getAllAttachments()) {
-                attachment.type.onSpawn(Location(layout.world, layout.origin.x + position.nodePosition.x, layout.origin.y + position.nodePosition.y, layout.origin.z + position.nodePosition.z))
+                attachment.type.onSpawn(Location(layout.world, layout.origin.x + position.nodePosition.x, layout.origin.y + position.nodePosition.y, layout.origin.z + position.nodePosition.z), attachment)
             }
         }
 
