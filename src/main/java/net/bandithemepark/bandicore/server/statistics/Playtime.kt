@@ -26,13 +26,15 @@ class Playtime {
         fun save(player: Player) {
             val data = JsonObject()
             data.addProperty("playtime", saved.getOrDefault(player, 0) + toSave.getOrDefault(player, 0))
+            data.addProperty("afkTime", savedAfk.getOrDefault(player, 0) + toSaveAFK.getOrDefault(player, 0))
 
             BackendPlayer(player).updatePlayer(data) {
                 saved[player] = it.get("playtime").asInt
                 toSave[player] = 0
-            }
 
-            // TODO Save AFK time here
+                savedAfk[player] = it.get("afkTime").asInt
+                toSaveAFK[player] = 0
+            }
         }
 
         fun Player.getPlaytime(): Int {
