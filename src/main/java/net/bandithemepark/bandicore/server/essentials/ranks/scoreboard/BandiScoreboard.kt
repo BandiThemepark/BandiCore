@@ -65,7 +65,7 @@ class BandiScoreboard {
             val onlinePlayers = Bukkit.getOnlinePlayers().size - VanishCommand.currentlyHidden.size
 
             this.sendPlayerListHeaderAndFooter(Util.color("<newline><#ffbb1d><bold>BandiThemepark<newline><!bold><${BandiColors.LIGHT_GRAY}> Welcome! There are $onlinePlayers player(s) online <newline>"),
-            Util.color("<newline><${BandiColors.LIGHT_GRAY}>You've played for ${formatTime(player!!.getPlaytime())}<newline>and been AFK for ${formatTime(player!!.getPlaytimeAfk())}<newline>"))
+            Util.color("<newline><${BandiColors.LIGHT_GRAY}>You've played for ${formatTime(player!!.getPlaytime())}<newline>of which ${formatTime(player!!.getPlaytimeAfk())} you were AFK<newline>"))
         }
 
         private fun formatTime(time: Int): String {
