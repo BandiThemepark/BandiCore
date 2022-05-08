@@ -2,6 +2,9 @@ package net.bandithemepark.bandicore.server.essentials.afk
 
 import io.papermc.paper.event.player.AsyncChatEvent
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.util.FileManager
+import net.bandithemepark.bandicore.util.Util
+import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -21,6 +24,7 @@ class AfkManager {
     init {
         BandiCore.instance.getServer().pluginManager.registerEvents(Events(this), BandiCore.instance)
         Timer(this).runTaskTimerAsynchronously(BandiCore.instance, 0, 20)
+        AfkTitle.load()
     }
 
     fun getSession(player: Player): AfkSession? {
@@ -103,6 +107,26 @@ class AfkManager {
         @EventHandler
         fun onQuit(event: PlayerQuitEvent) {
             afkManager.resetAfkTime(event.player)
+        }
+    }
+
+    class AfkTitle(val title: Component, val subtitle: Component) {
+        companion object {
+            val loaded = mutableListOf<AfkTitle>()
+
+            fun getRandom(): AfkTitle {
+                return loaded.random()
+            }
+
+            fun load() {
+                val fm = FileManager()
+
+                for(id in fm.getConfig("afkTitles.yml").get().getConfigurationSection("titles")!!.getKeys(false)) {
+                    val title = fm.getConfig("afkTitles.yml").get().getString("titles.$id.title")!!
+                    val subtitle = fm.getConfig("afkTitles.yml").get().getString("titles.$id.subtitle")!!
+                    loaded.add(AfkTitle(Util.color(title), Util.color(subtitle)))
+                }
+            }
         }
     }
 }
