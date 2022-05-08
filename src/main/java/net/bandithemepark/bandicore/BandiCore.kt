@@ -37,6 +37,7 @@ import okhttp3.OkHttpClient
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import me.m56738.smoothcoasters.api.SmoothCoastersAPI
+import net.bandithemepark.bandicore.network.queue.QueueCommand
 import net.bandithemepark.bandicore.util.entity.PacketEntitySeat
 import net.bandithemepark.bandicore.util.math.MathUtil
 import net.kyori.adventure.text.Component
@@ -63,6 +64,7 @@ class BandiCore: JavaPlugin() {
             val fm = FileManager()
             fm.getConfig("config.yml").saveDefaultConfig()
             fm.getConfig("ranks.yml").saveDefaultConfig()
+            fm.getConfig("afkTitles.yml").saveDefaultConfig()
             fm.getConfig("translations/english/crew.json").saveDefaultConfig()
             fm.getConfig("translations/english/player.json").saveDefaultConfig()
         }
@@ -127,6 +129,7 @@ class BandiCore: JavaPlugin() {
         getCommand("setrank")!!.setExecutor(SetRankCommand())
         getCommand("bandirestart")!!.setExecutor(RestartCommand())
         getCommand("vanish")!!.setExecutor(VanishCommand())
+        getCommand("queue")!!.setExecutor(QueueCommand())
     }
 
     private fun registerEvents() {

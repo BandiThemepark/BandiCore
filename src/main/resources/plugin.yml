@@ -55,3 +55,5 @@ commands:
     description: Restart the server using our custom system
   vanish:
     description: Hides the player from any other players
+  queue:
+    description: Teleports you to the queue server
