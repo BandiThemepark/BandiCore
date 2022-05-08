@@ -30,13 +30,13 @@ class TrackEditorNode: TrackEditorType() {
 
     override fun getItem(slot: Int): ItemStack? {
         return when(slot) {
-            0 -> ItemFactory.create(Material.NETHER_STAR, Util.color("<!i><${BandiColors.GREEN}>Advanced options menu"))
-            1 -> ItemFactory.create(Material.SHEARS, Util.color("<!i><${BandiColors.GREEN}>Move X"))
-            2 -> ItemFactory.create(Material.SHEARS, Util.color("<!i><${BandiColors.GREEN}>Move Y"))
-            3 -> ItemFactory.create(Material.SHEARS, Util.color("<!i><${BandiColors.GREEN}>Move Z"))
-            4 -> ItemFactory.create(Material.STICK, Util.color("<!i><${BandiColors.GREEN}>Select nearest (Left) | Select origin (Right)"))
-            5 -> ItemFactory.create(Material.STRING, Util.color("<!i><${BandiColors.GREEN}>Deconnect (Left) | Connect to nearest (Right)"))
-            6 -> ItemFactory.create(Material.PISTON, Util.color("<!i><${BandiColors.GREEN}>Create node"))
+            0 -> ItemFactory(Material.NETHER_STAR).setDisplayName(Util.color("<!i><${BandiColors.GREEN}>Advanced options menu")).build()
+            1 -> ItemFactory(Material.SHEARS).setDisplayName(Util.color("<!i><${BandiColors.GREEN}>Move X")).build()
+            2 -> ItemFactory(Material.SHEARS).setDisplayName(Util.color("<!i><${BandiColors.GREEN}>Move Y")).build()
+            3 -> ItemFactory(Material.SHEARS).setDisplayName(Util.color("<!i><${BandiColors.GREEN}>Move Z")).build()
+            4 -> ItemFactory(Material.STICK).setDisplayName(Util.color("<!i><${BandiColors.GREEN}>Select nearest (Left) | Select origin (Right)")).build()
+            5 -> ItemFactory(Material.STRING).setDisplayName(Util.color("<!i><${BandiColors.GREEN}>Deconnect (Left) | Connect to nearest (Right)")).build()
+            6 -> ItemFactory(Material.PISTON).setDisplayName(Util.color("<!i><${BandiColors.GREEN}>Create node")).build()
             else -> null
         }
     }
@@ -50,11 +50,11 @@ class TrackEditorNode: TrackEditorType() {
                 }
 
                 val inv = Bukkit.createInventory(null, 9, Component.text("Advanced node options"))
-                inv.setItem(0, ItemFactory.create(Material.BARRIER, Util.color("<!i><${BandiColors.GREEN}>Delete node")))
-                inv.setItem(1, ItemFactory.create(Material.TARGET, Util.color("<!i><${BandiColors.GREEN}>Snap node to middle")))
-                inv.setItem(2, ItemFactory.create(Material.RED_STAINED_GLASS_PANE, Util.color("<!i><${BandiColors.GREEN}>Set strict")))
-                inv.setItem(3, ItemFactory.create(Material.LIME_STAINED_GLASS_PANE, Util.color("<!i><${BandiColors.GREEN}>Set not strict")))
-                inv.setItem(4, ItemFactory.create(Material.NAME_TAG, Util.color("<!i><${BandiColors.GREEN}>Rename node")))
+                inv.setItem(0, ItemFactory(Material.BARRIER).setDisplayName(Util.color("<!i><${BandiColors.GREEN}>Delete node")).build())
+                inv.setItem(1, ItemFactory(Material.TARGET).setDisplayName(Util.color("<!i><${BandiColors.GREEN}>Snap node to middle")).build())
+                inv.setItem(2, ItemFactory(Material.RED_STAINED_GLASS_PANE).setDisplayName(Util.color("<!i><${BandiColors.GREEN}>Set strict")).build())
+                inv.setItem(3, ItemFactory(Material.LIME_STAINED_GLASS_PANE).setDisplayName(Util.color("<!i><${BandiColors.GREEN}>Set not strict")).build())
+                inv.setItem(4, ItemFactory(Material.NAME_TAG).setDisplayName(Util.color("<!i><${BandiColors.GREEN}>Rename node")).build())
                 player!!.openInventory(inv)
             }
 

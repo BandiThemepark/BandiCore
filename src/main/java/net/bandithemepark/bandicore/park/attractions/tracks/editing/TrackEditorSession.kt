@@ -20,7 +20,7 @@ class TrackEditorSession(val player: Player, val layout: TrackLayout) {
      * Updates the player's inventory with the current editor's items.
      */
     fun updatePlayerItems() {
-        player.inventory.setItem(8, ItemFactory.create(Material.ARROW, Util.color("<!i><${BandiColors.YELLOW}>Next editor (Left click) | Save track (Right click)")))
+        player.inventory.setItem(8, ItemFactory(Material.ARROW).setDisplayName(Util.color("<!i><${BandiColors.YELLOW}>Next editor (Left click) | Save track (Right click)")).build())
         for(i in 0..7) player.inventory.setItem(i, currentEditor.getItem(i))
     }
 
