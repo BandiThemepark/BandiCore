@@ -2,7 +2,6 @@ package net.bandithemepark.bandicore.park.attractions.tracks.editing.editors
 
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.park.attractions.tracks.TrackNode
-import net.bandithemepark.bandicore.park.attractions.tracks.editing.TrackEditor
 import net.bandithemepark.bandicore.park.attractions.tracks.editing.TrackEditorType
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.getTranslatedMessage
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedActionBar
@@ -13,7 +12,6 @@ import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.chat.prompt.ChatPrompt
 import net.bandithemepark.bandicore.util.menu.MenuUtil
-import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -21,11 +19,13 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.inventory.Inventory
+import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemStack
 import java.text.DecimalFormat
 import kotlin.math.floor
 
-class TrackEditorNode: TrackEditorType() {
+class TrackEditorNode: TrackEditorType(), InventoryHolder {
     private var selectedNode: TrackNode? = null
     private var selectedOrigin = false
 
@@ -42,7 +42,8 @@ class TrackEditorNode: TrackEditorType() {
         }
     }
 
-    override fun use(slot: Int, clickType: ClickType) {
+    private var lastInventory = Bukkit.createInventory(this, 9, Util.color(MenuUtil.GENERIC_9))
+        override fun use(slot: Int, clickType: ClickType) {
         when(slot) {
             0 -> {
                 if(selectedNode == null) {
@@ -50,7 +51,8 @@ class TrackEditorNode: TrackEditorType() {
                     return
                 }
 
-                val inv = Bukkit.createInventory(null, 9, Util.color(MenuUtil.GENERIC_9))
+                val inv = Bukkit.createInventory(this, 9, Util.color(MenuUtil.GENERIC_9))
+                lastInventory = inv
                 inv.setItem(0, ItemFactory(Material.BARRIER).setDisplayName(Util.color("<!i><${BandiColors.GREEN}>Delete node")).build())
                 inv.setItem(1, ItemFactory(Material.TARGET).setDisplayName(Util.color("<!i><${BandiColors.GREEN}>Snap node to middle")).build())
                 inv.setItem(2, ItemFactory(Material.RED_STAINED_GLASS_PANE).setDisplayName(Util.color("<!i><${BandiColors.GREEN}>Set strict")).build())
@@ -199,7 +201,7 @@ class TrackEditorNode: TrackEditorType() {
     class Events: Listener {
         @EventHandler
         fun onInventoryClick(event: InventoryClickEvent) {
-            if(event.view.title() == Component.text("Advanced node options")) {
+            if(event.clickedInventory?.holder is TrackEditorNode) {
                 event.isCancelled = true
                 val session = BandiCore.instance.trackManager.editor.getSession(event.whoClicked as Player)!!
                 val selectedNode = (session.currentEditor as TrackEditorNode).selectedNode!!
@@ -270,5 +272,9 @@ class TrackEditorNode: TrackEditorType() {
                 }
             }
         }
+    }
+
+    override fun getInventory(): Inventory {
+        return lastInventory
     }
 }
