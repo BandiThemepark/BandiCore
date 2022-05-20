@@ -15,8 +15,10 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.inventory.Inventory
+import org.bukkit.inventory.InventoryHolder
 
-class ItemPainter {
+class ItemPainter: InventoryHolder {
     companion object {
         val selections = hashMapOf<Player, Selection>()
     }
@@ -31,9 +33,11 @@ class ItemPainter {
         open(player, 0, 0, 0, 0)
     }
 
+    var lastInventory = Bukkit.createInventory(this, 45, Util.color(MenuUtil.GENERIC_45))
     fun open(player: Player, r: Int, g: Int, b: Int, customModelData: Int) {
         selections[player] = Selection(r, g, b, customModelData)
-        val inv = Bukkit.createInventory(null, 45, Util.color(MenuUtil.GENERIC_45))
+        val inv = Bukkit.createInventory(this, 45, Util.color(MenuUtil.GENERIC_45))
+        lastInventory = inv
         for(slot in 0..44) inv.setItem(slot, ItemFactory.create(Material.GRAY_STAINED_GLASS_PANE, Util.color(" ")))
 
         inv.setItem(1, ItemFactory.create(Material.LIME_TERRACOTTA, Util.color("<!i><${BandiColors.GREEN}>Add 10 to Red")))
@@ -93,7 +97,7 @@ class ItemPainter {
     class Events: Listener {
         @EventHandler
         fun onInventoryClick(event: InventoryClickEvent) {
-            if(event.view.title() == Component.text("Item Painter")) {
+            if(event.clickedInventory?.holder is ItemPainter) {
                 event.isCancelled = true
 
                 when(event.slot) {
@@ -157,5 +161,9 @@ class ItemPainter {
 
             ItemPainter().open(player, newSelection.r, newSelection.g, newSelection.b, newSelection.customModelData)
         }
+    }
+
+    override fun getInventory(): Inventory {
+        return lastInventory
     }
 }
