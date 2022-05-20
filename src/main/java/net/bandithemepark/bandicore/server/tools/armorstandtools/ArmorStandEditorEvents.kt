@@ -57,7 +57,10 @@ class ArmorStandEditorEvents: Listener {
 
     @EventHandler
     fun onInventoryClick(event: InventoryClickEvent) {
-        if(event.view.title() == Component.text("Editing an ArmorStand")) {
+        if(event.clickedInventory?.holder !is ArmorStandEditor) return
+        val openGui = (event.clickedInventory?.holder as ArmorStandEditor).openGui
+
+        if(openGui) {
             if(event.view.topInventory == event.clickedInventory) {
                 val session = ArmorStandEditor.getSession(event.whoClicked as Player)!!
 
@@ -120,9 +123,7 @@ class ArmorStandEditorEvents: Listener {
                     }
                 }
             }
-        }
-
-        if(event.view.title() == Component.text("ArmorStandEditor GUI")) {
+        } else {
             val session = ArmorStandEditor.getSession(event.whoClicked as Player)!!
             event.isCancelled = true
 

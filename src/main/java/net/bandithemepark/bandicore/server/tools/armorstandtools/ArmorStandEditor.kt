@@ -9,13 +9,16 @@ import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.Player
+import org.bukkit.inventory.Inventory
+import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemStack
 
-class ArmorStandEditor(val player: Player) {
+class ArmorStandEditor(val player: Player): InventoryHolder {
     private val previousInventory: Array<ItemStack?>? = player.inventory.contents
     var selectedAccuracy = 5
     var editing: ArmorStand? = null
     var mode = Mode.HEAD
+    var openGui = false
 
     init {
         player.inventory.clear()
@@ -35,8 +38,11 @@ class ArmorStandEditor(val player: Player) {
         activeSessions.remove(this)
     }
 
+    var lastInventory = Bukkit.createInventory(this, 54, Util.color(MenuUtil.GENERIC_54))
     fun openGUI() {
-        val inv = Bukkit.createInventory(null, 54, Util.color(MenuUtil.GENERIC_54))
+        openGui = false
+        val inv = Bukkit.createInventory(this, 54, Util.color(MenuUtil.GENERIC_54))
+        lastInventory = inv
 
         for(slot in 0..53) {
             inv.setItem(slot, ItemFactory.create(Material.GRAY_STAINED_GLASS_PANE, Util.color(" ")))
@@ -64,7 +70,9 @@ class ArmorStandEditor(val player: Player) {
 
     fun openGUI(armorStand: ArmorStand) {
         editing = armorStand
-        val inv = Bukkit.createInventory(null, 54, Util.color(MenuUtil.GENERIC_54))
+        openGui = true
+        val inv = Bukkit.createInventory(this, 54, Util.color(MenuUtil.GENERIC_54))
+        lastInventory = inv
 
         for(slot in 0..53) {
             inv.setItem(slot, ItemFactory.create(Material.GRAY_STAINED_GLASS_PANE, Util.color(" ")))
@@ -89,6 +97,10 @@ class ArmorStandEditor(val player: Player) {
         inv.setItem(43, ItemFactory.create(Material.BARRIER, 1, 0, Util.color("<!i><${BandiColors.GREEN}>Remove/delete"), Util.color("<!i><${BandiColors.LIGHT_GRAY}>Removes the armor stand (forever!)")))
 
         player.openInventory(inv)
+    }
+
+    override fun getInventory(): Inventory {
+        return lastInventory
     }
 
     private fun convertBoolean(boolean: Boolean): Component {
