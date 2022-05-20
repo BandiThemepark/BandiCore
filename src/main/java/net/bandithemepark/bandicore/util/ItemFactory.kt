@@ -2,14 +2,17 @@ package net.bandithemepark.bandicore.util
 
 import com.mojang.authlib.GameProfile
 import com.mojang.authlib.properties.Property
+import net.bandithemepark.bandicore.BandiCore
 import net.kyori.adventure.text.Component
 import org.bukkit.Color
 import org.bukkit.Material
+import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.inventory.meta.LeatherArmorMeta
 import org.bukkit.inventory.meta.SkullMeta
+import org.bukkit.persistence.PersistentDataType
 import java.lang.reflect.Field
 import java.util.*
 
@@ -170,6 +173,11 @@ class ItemFactory {
         return this
     }
 
+    fun setKeyInPersistentStorage(key: String, value: String): ItemFactory {
+        itemMeta!!.persistentDataContainer.set(NamespacedKey(BandiCore.instance, key), PersistentDataType.STRING, value)
+        return this
+    }
+
     /**
      * Finish the ItemStack
      * @return returns the finished ItemStack
@@ -188,6 +196,27 @@ class ItemFactory {
     }
 
     companion object {
+        /**
+         * Store persistent data on this ItemStack
+         * @param key the key to store the data at
+         * @param value the value to store
+         */
+        fun ItemStack.setPersistentData(key: String, value: String) {
+            val itemMeta = this.itemMeta
+            itemMeta.persistentDataContainer.set(NamespacedKey(BandiCore.instance, key), PersistentDataType.STRING, value)
+            this.itemMeta = itemMeta
+        }
+
+        /**
+         * Get persistent data from this ItemStack
+         * @param key the key to get the data from
+         * @return the value stored at the given key, or null if no value was found
+         */
+        fun ItemStack.getPersistentData(key: String): String? {
+            val itemMeta = this.itemMeta
+            return itemMeta.persistentDataContainer.get(NamespacedKey(BandiCore.instance, key), PersistentDataType.STRING)
+        }
+
         /**
          * Create a new Instance from an existing ItemStack
          * @param itemStack
@@ -221,13 +250,5 @@ class ItemFactory {
         fun create(material: Material, name: Component): ItemStack {
             return ItemFactory(material).setDisplayName(name).build()
         }
-
-//        /**
-//         * @return
-//         */
-//        @Deprecated("")
-//        fun create(texture: String, name: Component, vararg lores: Component): ItemStack {
-//            return ItemFactory(Material.PLAYER_HEAD).setSkullTexture(texture).setDisplayName(name).setLore(lores.toMutableList()).build()
-//        }
     }
 }
