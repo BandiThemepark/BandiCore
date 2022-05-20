@@ -3,6 +3,7 @@ package net.bandithemepark.bandicore.server.tools.armorstandtools
 import net.bandithemepark.bandicore.util.chat.BandiColors
 import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.Util
+import net.bandithemepark.bandicore.util.menu.MenuUtil
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -35,7 +36,7 @@ class ArmorStandEditor(val player: Player) {
     }
 
     fun openGUI() {
-        val inv = Bukkit.createInventory(null, 54, Component.text("ArmorStandEditor GUI"))
+        val inv = Bukkit.createInventory(null, 54, Util.color(MenuUtil.GENERIC_54))
 
         for(slot in 0..53) {
             inv.setItem(slot, ItemFactory.create(Material.GRAY_STAINED_GLASS_PANE, Util.color(" ")))
@@ -63,7 +64,7 @@ class ArmorStandEditor(val player: Player) {
 
     fun openGUI(armorStand: ArmorStand) {
         editing = armorStand
-        val inv = Bukkit.createInventory(null, 54, Component.text("Editing an ArmorStand"))
+        val inv = Bukkit.createInventory(null, 54, Util.color(MenuUtil.GENERIC_54))
 
         for(slot in 0..53) {
             inv.setItem(slot, ItemFactory.create(Material.GRAY_STAINED_GLASS_PANE, Util.color(" ")))

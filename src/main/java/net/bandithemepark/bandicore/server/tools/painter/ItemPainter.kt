@@ -4,6 +4,7 @@ import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTransla
 import net.bandithemepark.bandicore.util.chat.BandiColors
 import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.Util
+import net.bandithemepark.bandicore.util.menu.MenuUtil
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Color
@@ -32,7 +33,7 @@ class ItemPainter {
 
     fun open(player: Player, r: Int, g: Int, b: Int, customModelData: Int) {
         selections[player] = Selection(r, g, b, customModelData)
-        val inv = Bukkit.createInventory(null, 45, Component.text("Item Painter"))
+        val inv = Bukkit.createInventory(null, 45, Util.color(MenuUtil.GENERIC_45))
         for(slot in 0..44) inv.setItem(slot, ItemFactory.create(Material.GRAY_STAINED_GLASS_PANE, Util.color(" ")))
 
         inv.setItem(1, ItemFactory.create(Material.LIME_TERRACOTTA, Util.color("<!i><${BandiColors.GREEN}>Add 10 to Red")))

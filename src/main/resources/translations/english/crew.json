@@ -105,5 +105,22 @@
   "track-editor-trigger-type-prompt": "Please enter the type you would like to set for this trigger. Type 'cancel' to cancel. Type 'none' to remove the type",
   "track-editor-trigger-type-cancelled": "Successfully cancelled setting the type of the chosen trigger",
   "track-editor-trigger-type-cleared": "Successfully cleared the type of the chosen trigger",
-  "trigger-type-not-found": "The trigger type you specified was not found"
+  "trigger-type-not-found": "The trigger type you specified was not found",
+  "custom-player-editor-body-x": "Updated the X (Pitch) rotation of the whole player body",
+  "custom-player-editor-body-y": "Updated the Y (Yaw) rotation of the whole player body",
+  "custom-player-editor-body-z": "Updated the Z (Roll) rotation of the whole player body",
+  "custom-player-editor-set-mode": "You've set the editor mode to %mode%",
+  "custom-player-editor-rotation-point-moved": "Successfully moved the rotation point on the %axis% axis",
+  "custom-player-editor-rotation-point-rotated": "Successfully rotated the rotation point on the %axis% axis",
+  "custom-player-editor-started": "You've started editing a custom player",
+  "custom-player-editor-stopped": "You've stopped editing a custom player",
+  "custom-player-editor-save": "Please enter the file name to save the current pose to. Type 'cancel' to cancel",
+  "custom-player-editor-save-cancelled": "Successfully cancelled saving the current pose",
+  "custom-player-editor-save-success": "Successfully saved the current pose",
+  "custom-player-editor-load": "Please enter the file name to load the pose from. Type 'cancel' to cancel",
+  "custom-player-editor-load-cancelled": "Successfully cancelled loading the pose",
+  "custom-player-editor-load-success": "Successfully loaded the pose",
+  "custom-player-editor-limb-moved": "Successfully moved the limb on the %axis% axis",
+  "custom-block-not-found": "The block you specified was not found",
+  "custom-block-given": "You received 1x %block%"
 }
