@@ -12,6 +12,7 @@ import net.bandithemepark.bandicore.util.chat.BandiColors
 import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.chat.prompt.ChatPrompt
+import net.bandithemepark.bandicore.util.menu.MenuUtil
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -49,7 +50,7 @@ class TrackEditorNode: TrackEditorType() {
                     return
                 }
 
-                val inv = Bukkit.createInventory(null, 9, Component.text("Advanced node options"))
+                val inv = Bukkit.createInventory(null, 9, Util.color(MenuUtil.GENERIC_9))
                 inv.setItem(0, ItemFactory(Material.BARRIER).setDisplayName(Util.color("<!i><${BandiColors.GREEN}>Delete node")).build())
                 inv.setItem(1, ItemFactory(Material.TARGET).setDisplayName(Util.color("<!i><${BandiColors.GREEN}>Snap node to middle")).build())
                 inv.setItem(2, ItemFactory(Material.RED_STAINED_GLASS_PANE).setDisplayName(Util.color("<!i><${BandiColors.GREEN}>Set strict")).build())
