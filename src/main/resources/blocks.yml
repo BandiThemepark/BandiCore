@@ -1,0 +1,12 @@
+vertical_oak_planks:
+  name: "Vertical Oak Planks"
+  custom-model-data: 1
+  instrument: bass_guitar
+  note: 0
+  powered: false
+vertical_dark_oak_planks:
+  name: "Vertical Dark Oak Planks"
+  custom-model-data: 2
+  instrument: bass_guitar
+  note: 1
+  powered: false

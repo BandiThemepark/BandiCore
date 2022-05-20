@@ -57,3 +57,10 @@ commands:
     description: Hides the player from any other players
   queue:
     description: Teleports you to the queue server
+  customplayereditor:
+    description: Edit custom players and their poses
+    aliases: cpe
+  bandikea:
+    aliases:
+      - ikea
+      - customblock

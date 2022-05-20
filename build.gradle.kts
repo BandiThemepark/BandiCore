@@ -24,6 +24,10 @@ repositories {
     maven {
         url = uri("https://ci.mg-dev.eu/plugin/repository/everything/")
     }
+
+    maven {
+        url = uri("https://repo.eclipse.org/content/repositories/paho-releases/")
+    }
 }
 
 dependencies {
@@ -35,6 +39,7 @@ dependencies {
     compileOnly("com.comphenix.protocol", "ProtocolLib", "4.8.0")
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
     implementation("me.m56738:SmoothCoastersAPI:1.6")
+    implementation("org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5")
 }
 
 tasks {
