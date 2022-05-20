@@ -66,6 +66,7 @@ class MQTTConnector {
      */
     fun disconnect() {
         client?.disconnect()
+        Bukkit.getLogger().info("Disconnected from the MQTT server.")
     }
 
     /**
