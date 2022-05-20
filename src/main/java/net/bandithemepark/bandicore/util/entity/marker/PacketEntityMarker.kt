@@ -46,7 +46,7 @@ class PacketEntityMarker(val world: World): PacketEntity() {
             handle!!.isNoGravity = true
             handle!!.setGlowingTag(true)
             updateMetadata()
-            helmet = ItemStack(Material.GLASS)
+            helmet = ItemStack(Material.STONE_BUTTON)
         } else {
             spawnFor(player)
             updateEquipmentFor(player)
