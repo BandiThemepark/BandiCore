@@ -37,10 +37,14 @@ import okhttp3.OkHttpClient
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import me.m56738.smoothcoasters.api.SmoothCoastersAPI
+import net.bandithemepark.bandicore.network.mqtt.MQTTConnector
+import net.bandithemepark.bandicore.network.mqtt.MQTTListener
 import net.bandithemepark.bandicore.network.queue.QueueCommand
+import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.SeatAttachment
+import net.bandithemepark.bandicore.server.blocks.CustomBlock
+import net.bandithemepark.bandicore.server.blocks.CustomBlockMenu
+import net.bandithemepark.bandicore.server.customplayer.editor.CustomPlayerEditor
 import net.bandithemepark.bandicore.util.entity.PacketEntitySeat
-import net.bandithemepark.bandicore.util.math.MathUtil
-import net.kyori.adventure.text.Component
 
 class BandiCore: JavaPlugin() {
     companion object {
@@ -51,6 +55,8 @@ class BandiCore: JavaPlugin() {
     lateinit var trackManager: TrackManager
     lateinit var afkManager: AfkManager
     lateinit var smoothCoastersAPI: SmoothCoastersAPI
+    lateinit var mqttConnector: MQTTConnector
+    lateinit var customBlockManager: CustomBlock.Manager
 
     var okHttpClient = OkHttpClient()
     var restarter = Restart()
@@ -65,17 +71,33 @@ class BandiCore: JavaPlugin() {
             fm.getConfig("config.yml").saveDefaultConfig()
             fm.getConfig("ranks.yml").saveDefaultConfig()
             fm.getConfig("afkTitles.yml").saveDefaultConfig()
+            fm.getConfig("blocks.yml").saveDefaultConfig()
+
+            fm.getConfig("data/placed-blocks.yml").saveDefaultConfig()
+
             fm.getConfig("translations/english/crew.json").saveDefaultConfig()
             fm.getConfig("translations/english/player.json").saveDefaultConfig()
         }
 
+        // Setting up the server
         server = Server()
         prepareSettings()
 
+        // Connecting to the MQTT server and registering listeners
+        mqttConnector = MQTTConnector()
+        object: MQTTListener("core") {
+            override fun onMessage(message: String) {
+                Bukkit.getLogger().info("Received MQTT message: $message")
+            }
+        }.register()
+
         afkManager = AfkManager()
 
+        // Setting up the track manager
         trackManager = TrackManager(BezierSpline(), 25, 0.02)
         trackManager.setup()
+
+        // Spawning some default trains used for testing
         trackManager.vehicleManager.loadTrain("test", trackManager.loadedTracks[0], TrackPosition(trackManager.loadedTracks[0].nodes[0], 0), 10.0)
         //(trackManager.vehicleManager.vehicles[0].members[0].attachments[0].type as ModelAttachment).debug = true
 
@@ -92,6 +114,10 @@ class BandiCore: JavaPlugin() {
 
         // Registering packet listeners
         PacketEntity.PacketListeners.startListeners()
+
+        // Loading custom blocks
+        customBlockManager = CustomBlock.Manager()
+        customBlockManager.loadPlaced()
 
         // Things that need to be done for players who are already online (Like when a reload happens)
         forOnlinePlayers()
@@ -114,6 +140,9 @@ class BandiCore: JavaPlugin() {
 
         // Removing player permissions
         for(player in Bukkit.getOnlinePlayers()) server.rankManager.loadedPlayerRanks[player]?.removePermissions(player)
+
+        // Disconnect the MQTT Client
+        mqttConnector.disconnect()
     }
 
     private fun registerCommands() {
@@ -130,6 +159,8 @@ class BandiCore: JavaPlugin() {
         getCommand("bandirestart")!!.setExecutor(RestartCommand())
         getCommand("vanish")!!.setExecutor(VanishCommand())
         getCommand("queue")!!.setExecutor(QueueCommand())
+        getCommand("customplayereditor")!!.setExecutor(CustomPlayerEditor.Command())
+        getCommand("bandikea")!!.setExecutor(CustomBlock.Command())
     }
 
     private fun registerEvents() {
@@ -146,6 +177,10 @@ class BandiCore: JavaPlugin() {
         getServer().pluginManager.registerEvents(JoinMessages(), this)
         getServer().pluginManager.registerEvents(Playtime.Events(), this)
         getServer().pluginManager.registerEvents(PacketEntitySeat.Events(), this)
+        getServer().pluginManager.registerEvents(CustomPlayerEditor.Events(), this)
+        getServer().pluginManager.registerEvents(SeatAttachment.Listeners(), this)
+        getServer().pluginManager.registerEvents(CustomBlock.Events(), this)
+        getServer().pluginManager.registerEvents(CustomBlockMenu.Events(), this)
     }
 
     private fun prepareSettings() {
