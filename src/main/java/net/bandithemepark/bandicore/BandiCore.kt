@@ -46,9 +46,6 @@ import net.bandithemepark.bandicore.server.custom.blocks.CustomBlockMenu
 import net.bandithemepark.bandicore.server.custom.player.editor.CustomPlayerEditor
 import net.bandithemepark.bandicore.server.essentials.worlds.WorldCommands
 import net.bandithemepark.bandicore.server.essentials.worlds.WorldManager
-import net.bandithemepark.bandicore.server.blocks.CustomBlock
-import net.bandithemepark.bandicore.server.blocks.CustomBlockMenu
-import net.bandithemepark.bandicore.server.customplayer.editor.CustomPlayerEditor
 import net.bandithemepark.bandicore.server.essentials.teleport.BackCommand
 import net.bandithemepark.bandicore.server.essentials.teleport.TeleportCommand
 import net.bandithemepark.bandicore.util.entity.PacketEntitySeat
@@ -196,6 +193,7 @@ class BandiCore: JavaPlugin() {
         getServer().pluginManager.registerEvents(SeatAttachment.Listeners(), this)
         getServer().pluginManager.registerEvents(CustomBlock.Events(), this)
         getServer().pluginManager.registerEvents(CustomBlockMenu.Events(), this)
+        getServer().pluginManager.registerEvents(BackCommand.Events(), this)
     }
 
     private fun prepareSettings() {
