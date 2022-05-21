@@ -13,7 +13,7 @@ import net.bandithemepark.bandicore.park.effect.AmbientEffect
 import net.bandithemepark.bandicore.server.Server
 import net.bandithemepark.bandicore.server.tools.armorstandtools.ArmorStandEditorCommand
 import net.bandithemepark.bandicore.server.tools.armorstandtools.ArmorStandEditorEvents
-import net.bandithemepark.bandicore.server.customplayer.CustomPlayer
+import net.bandithemepark.bandicore.server.custom.player.CustomPlayer
 import net.bandithemepark.bandicore.server.essentials.GamemodeCommand
 import net.bandithemepark.bandicore.server.essentials.JoinMessages
 import net.bandithemepark.bandicore.server.essentials.VanishCommand
@@ -41,6 +41,11 @@ import net.bandithemepark.bandicore.network.mqtt.MQTTConnector
 import net.bandithemepark.bandicore.network.mqtt.MQTTListener
 import net.bandithemepark.bandicore.network.queue.QueueCommand
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.SeatAttachment
+import net.bandithemepark.bandicore.server.custom.blocks.CustomBlock
+import net.bandithemepark.bandicore.server.custom.blocks.CustomBlockMenu
+import net.bandithemepark.bandicore.server.custom.player.editor.CustomPlayerEditor
+import net.bandithemepark.bandicore.server.essentials.worlds.WorldCommands
+import net.bandithemepark.bandicore.server.essentials.worlds.WorldManager
 import net.bandithemepark.bandicore.server.blocks.CustomBlock
 import net.bandithemepark.bandicore.server.blocks.CustomBlockMenu
 import net.bandithemepark.bandicore.server.customplayer.editor.CustomPlayerEditor
@@ -59,6 +64,7 @@ class BandiCore: JavaPlugin() {
     lateinit var smoothCoastersAPI: SmoothCoastersAPI
     lateinit var mqttConnector: MQTTConnector
     lateinit var customBlockManager: CustomBlock.Manager
+    lateinit var worldManager: WorldManager
 
     var okHttpClient = OkHttpClient()
     var restarter = Restart()
@@ -80,6 +86,8 @@ class BandiCore: JavaPlugin() {
             fm.getConfig("translations/english/crew.json").saveDefaultConfig()
             fm.getConfig("translations/english/player.json").saveDefaultConfig()
         }
+
+        worldManager = WorldManager()
 
         // Setting up the server
         server = Server()
@@ -163,6 +171,9 @@ class BandiCore: JavaPlugin() {
         getCommand("queue")!!.setExecutor(QueueCommand())
         getCommand("customplayereditor")!!.setExecutor(CustomPlayerEditor.Command())
         getCommand("bandikea")!!.setExecutor(CustomBlock.Command())
+        getCommand("loadworld")!!.setExecutor(WorldCommands())
+        getCommand("unloadworld")!!.setExecutor(WorldCommands())
+        getCommand("worldtp")!!.setExecutor(WorldCommands())
         getCommand("teleport")!!.setExecutor(TeleportCommand())
         getCommand("back")!!.setExecutor(BackCommand())
     }

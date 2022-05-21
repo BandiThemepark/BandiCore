@@ -127,4 +127,14 @@
   "teleport-player-to-player": "You have teleported %target1% to %target2%",
   "teleport-usage": "Invalid arguments! Usage: /teleport <player> [<player>]",
   "teleport-back": "You have been teleported to you previous position"
+  "custom-block-given": "You received 1x %block%",
+  "load-world-usage": "Usage: /loadworld <worldId>",
+  "load-world-success": "Successfully loaded a new world",
+  "load-world-failure": "Failed to load the world. Please check the console for the error",
+  "loading-world": "Started loading the selected world...",
+  "unloading-world": "Started unloading the selected world...",
+  "unload-world-usage": "Usage: /unloadworld <worldId>",
+  "unload-world-success": "Successfully unloaded the selected world",
+  "world-teleport-usage": "Usage: /worldtp <worldId>",
+  "world-teleport-success": "Successfully teleported to the selected world"
 }

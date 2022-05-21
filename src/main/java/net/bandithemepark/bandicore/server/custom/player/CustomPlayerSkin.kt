@@ -1,4 +1,4 @@
-package net.bandithemepark.bandicore.server.customplayer
+package net.bandithemepark.bandicore.server.custom.player
 
 import java.util.UUID
 

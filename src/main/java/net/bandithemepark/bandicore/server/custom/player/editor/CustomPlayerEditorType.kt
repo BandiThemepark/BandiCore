@@ -1,6 +1,6 @@
-package net.bandithemepark.bandicore.server.customplayer.editor
+package net.bandithemepark.bandicore.server.custom.player.editor
 
-import net.bandithemepark.bandicore.server.customplayer.CustomPlayer
+import net.bandithemepark.bandicore.server.custom.player.CustomPlayer
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.inventory.ItemStack

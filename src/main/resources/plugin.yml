@@ -64,6 +64,12 @@ commands:
     aliases:
       - ikea
       - customblock
+  loadworld:
+    description: Load a world
+  unloadworld:
+    description: Unload a world
+  worldtp:
+    description: Teleport to a world
   teleport:
     aliases:
       - tp
