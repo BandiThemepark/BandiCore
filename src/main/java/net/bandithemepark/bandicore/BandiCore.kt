@@ -38,12 +38,14 @@ import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import me.m56738.smoothcoasters.api.SmoothCoastersAPI
 import net.bandithemepark.bandicore.network.mqtt.MQTTConnector
-import net.bandithemepark.bandicore.network.mqtt.MQTTListener
 import net.bandithemepark.bandicore.network.queue.QueueCommand
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.SeatAttachment
 import net.bandithemepark.bandicore.server.custom.blocks.CustomBlock
 import net.bandithemepark.bandicore.server.custom.blocks.CustomBlockMenu
 import net.bandithemepark.bandicore.server.custom.player.editor.CustomPlayerEditor
+import net.bandithemepark.bandicore.server.essentials.coins.CoinManager
+import net.bandithemepark.bandicore.server.essentials.coins.CoinsListener
+import net.bandithemepark.bandicore.server.essentials.coins.PlayerBossBar
 import net.bandithemepark.bandicore.server.essentials.worlds.WorldCommands
 import net.bandithemepark.bandicore.server.essentials.worlds.WorldManager
 import net.bandithemepark.bandicore.server.essentials.teleport.BackCommand
@@ -62,6 +64,7 @@ class BandiCore: JavaPlugin() {
     lateinit var mqttConnector: MQTTConnector
     lateinit var customBlockManager: CustomBlock.Manager
     lateinit var worldManager: WorldManager
+    lateinit var coinManager: CoinManager
 
     var okHttpClient = OkHttpClient()
     var restarter = Restart()
@@ -89,14 +92,11 @@ class BandiCore: JavaPlugin() {
         // Setting up the server
         server = Server()
         prepareSettings()
+        coinManager = CoinManager()
 
         // Connecting to the MQTT server and registering listeners
+        CoinsListener().register()
         mqttConnector = MQTTConnector()
-        object: MQTTListener("core") {
-            override fun onMessage(message: String) {
-                Bukkit.getLogger().info("Received MQTT message: $message")
-            }
-        }.register()
 
         afkManager = AfkManager()
 
@@ -194,6 +194,7 @@ class BandiCore: JavaPlugin() {
         getServer().pluginManager.registerEvents(CustomBlock.Events(), this)
         getServer().pluginManager.registerEvents(CustomBlockMenu.Events(), this)
         getServer().pluginManager.registerEvents(BackCommand.Events(), this)
+        getServer().pluginManager.registerEvents(PlayerBossBar.Events(), this)
     }
 
     private fun prepareSettings() {
@@ -203,6 +204,7 @@ class BandiCore: JavaPlugin() {
 
     private fun forOnlinePlayers() {
         for(player in Bukkit.getOnlinePlayers()) {
+            PlayerBossBar.createFor(player)
             LanguageUtil.loadLanguage(player)
             server.rankManager.loadRank(player)
             server.scoreboard.showFor(player)

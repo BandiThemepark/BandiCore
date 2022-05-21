@@ -3,6 +3,7 @@ package net.bandithemepark.bandicore.server.essentials.ranks
 import io.papermc.paper.event.player.AsyncChatEvent
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.network.backend.BackendPlayer
+import net.bandithemepark.bandicore.server.essentials.coins.CoinManager
 import net.bandithemepark.bandicore.server.essentials.ranks.nametag.PlayerNameTag
 import net.bandithemepark.bandicore.server.essentials.ranks.nametag.PlayerNameTag.Companion.getNameTag
 import net.bandithemepark.bandicore.server.statistics.Playtime
@@ -82,6 +83,7 @@ class RankManager {
             // Setting saved playtime
             Playtime.saved[player] = data.get("playtime").asInt
             Playtime.savedAfk[player] = data.get("afkTime").asInt
+            CoinManager.setLoadedBalance(player, data.get("coins").asInt)
 
             // Loading rank
             val rank = loadedRanks.find { it.id == data.get("rank").asString }!!
