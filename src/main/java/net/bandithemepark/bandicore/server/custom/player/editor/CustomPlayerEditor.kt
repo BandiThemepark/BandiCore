@@ -1,8 +1,8 @@
-package net.bandithemepark.bandicore.server.customplayer.editor
+package net.bandithemepark.bandicore.server.custom.player.editor
 
-import net.bandithemepark.bandicore.server.customplayer.CustomPlayer
-import net.bandithemepark.bandicore.server.customplayer.CustomPlayerSkin
-import net.bandithemepark.bandicore.server.customplayer.editor.types.PlayerEditor
+import net.bandithemepark.bandicore.server.custom.player.CustomPlayer
+import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin
+import net.bandithemepark.bandicore.server.custom.player.editor.types.PlayerEditor
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedMessage
 import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.Util

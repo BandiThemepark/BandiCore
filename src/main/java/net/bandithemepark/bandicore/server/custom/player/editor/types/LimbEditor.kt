@@ -1,14 +1,13 @@
-package net.bandithemepark.bandicore.server.customplayer.editor.types
+package net.bandithemepark.bandicore.server.custom.player.editor.types
 
-import net.bandithemepark.bandicore.server.customplayer.CustomPlayer
-import net.bandithemepark.bandicore.server.customplayer.editor.CustomPlayerEditor
-import net.bandithemepark.bandicore.server.customplayer.editor.CustomPlayerEditorType
+import net.bandithemepark.bandicore.server.custom.player.CustomPlayer
+import net.bandithemepark.bandicore.server.custom.player.editor.CustomPlayerEditor
+import net.bandithemepark.bandicore.server.custom.player.editor.CustomPlayerEditorType
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedActionBar
 import net.bandithemepark.bandicore.server.translations.MessageReplacement
 import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.chat.BandiColors
-import net.bandithemepark.bandicore.util.entity.marker.PacketEntityMarker
 import org.bukkit.Material
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.inventory.ItemStack

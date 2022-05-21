@@ -1,4 +1,4 @@
-package net.bandithemepark.bandicore.server.blocks
+package net.bandithemepark.bandicore.server.custom.blocks
 
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.util.ItemFactory

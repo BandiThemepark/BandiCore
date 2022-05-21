@@ -1,12 +1,11 @@
 package net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types
 
 import net.bandithemepark.bandicore.BandiCore
-import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.TrackVehicle
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.Attachment
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.AttachmentPosition
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.AttachmentType
-import net.bandithemepark.bandicore.server.customplayer.CustomPlayer
-import net.bandithemepark.bandicore.server.customplayer.CustomPlayerSkin
+import net.bandithemepark.bandicore.server.custom.player.CustomPlayer
+import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin
 import net.bandithemepark.bandicore.util.entity.PacketEntity
 import net.bandithemepark.bandicore.util.entity.PacketEntitySeat
 import net.bandithemepark.bandicore.util.entity.event.SeatEnterEvent
