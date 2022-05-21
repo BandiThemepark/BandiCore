@@ -6,12 +6,13 @@ import net.bandithemepark.bandicore.BandiCore
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 import java.io.IOException
 import java.util.Date
 import java.util.UUID
 
-class BackendPlayer(val player: Player) {
+class BackendPlayer(val player: OfflinePlayer) {
     /**
      * Gets the player's data.
      * @param callback The callback to be called when the request is complete.
