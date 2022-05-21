@@ -3,6 +3,7 @@ package net.bandithemepark.bandicore.network.mqtt
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.server.mode.ServerMode
 import net.bandithemepark.bandicore.util.FileManager
+import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.eclipse.paho.client.mqttv3.MqttClient
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions
@@ -53,8 +54,11 @@ class MQTTConnector {
         try {
             reconnecting = false
             client!!.connect(options)
-            sendMessage("/core", "connected")
+            sendMessage("/core/connection", "connected")
             Bukkit.getLogger().info("Connected to MQTT server, and sent out a connection message.")
+
+            // Start registered listeners
+            for(listener in MQTTListener.registered) registerListener(listener)
         } catch (e: Exception) {
             Bukkit.getLogger().severe("A failed attempt was made to connect to the MQTT server. The following message was sent back: ${e.message}. The server will now go into maintenance.")
             BandiCore.instance.server.changeServerMode(ServerMode.getFromId("maintenance")!!)
@@ -102,7 +106,7 @@ class MQTTConnector {
      * @param listener The listener to use
      */
     fun registerListener(listener: MQTTListener) {
-        client?.subscribe("/${listener.topic}", 0) { _, message ->
+        client?.subscribe(listener.topic, 0) { _, message ->
             listener.onMessage(message.toString())
         }
     }

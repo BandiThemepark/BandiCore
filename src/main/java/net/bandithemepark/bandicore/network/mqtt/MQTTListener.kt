@@ -1,7 +1,5 @@
 package net.bandithemepark.bandicore.network.mqtt
 
-import net.bandithemepark.bandicore.BandiCore
-
 abstract class MQTTListener(val topic: String) {
     abstract fun onMessage(message: String)
 
@@ -10,7 +8,6 @@ abstract class MQTTListener(val topic: String) {
      */
     fun register() {
         registered.add(this)
-        BandiCore.instance.mqttConnector.registerListener(this)
     }
 
     companion object {
