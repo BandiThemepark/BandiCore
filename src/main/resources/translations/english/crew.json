@@ -122,5 +122,9 @@
   "custom-player-editor-load-success": "Successfully loaded the pose",
   "custom-player-editor-limb-moved": "Successfully moved the limb on the %axis% axis",
   "custom-block-not-found": "The block you specified was not found",
-  "custom-block-given": "You received 1x %block%"
+  "custom-block-given": "You received 1x %block%",
+  "teleport-to-player": "You have been teleported to %target%",
+  "teleport-player-to-player": "You have teleported %target1% to %target2%",
+  "teleport-usage": "Invalid arguments! Usage: /teleport <player> [<player>]",
+  "teleport-back": "You have been teleported to you previous position"
 }

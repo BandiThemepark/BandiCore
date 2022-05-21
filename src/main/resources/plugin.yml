@@ -64,3 +64,7 @@ commands:
     aliases:
       - ikea
       - customblock
+  teleport:
+    aliases:
+      - tp
+  back:

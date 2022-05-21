@@ -44,6 +44,8 @@ import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments
 import net.bandithemepark.bandicore.server.blocks.CustomBlock
 import net.bandithemepark.bandicore.server.blocks.CustomBlockMenu
 import net.bandithemepark.bandicore.server.customplayer.editor.CustomPlayerEditor
+import net.bandithemepark.bandicore.server.essentials.teleport.BackCommand
+import net.bandithemepark.bandicore.server.essentials.teleport.TeleportCommand
 import net.bandithemepark.bandicore.util.entity.PacketEntitySeat
 
 class BandiCore: JavaPlugin() {
@@ -161,6 +163,8 @@ class BandiCore: JavaPlugin() {
         getCommand("queue")!!.setExecutor(QueueCommand())
         getCommand("customplayereditor")!!.setExecutor(CustomPlayerEditor.Command())
         getCommand("bandikea")!!.setExecutor(CustomBlock.Command())
+        getCommand("teleport")!!.setExecutor(TeleportCommand())
+        getCommand("back")!!.setExecutor(BackCommand())
     }
 
     private fun registerEvents() {
