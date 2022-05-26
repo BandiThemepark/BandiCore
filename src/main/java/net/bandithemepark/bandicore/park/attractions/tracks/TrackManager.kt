@@ -1,6 +1,9 @@
 package net.bandithemepark.bandicore.park.attractions.tracks
 
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.segments.LogflumeDropSegment
+import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.segments.LogflumeLiftSegment
+import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.segments.WaterSegment
 import net.bandithemepark.bandicore.park.attractions.tracks.commands.*
 import net.bandithemepark.bandicore.park.attractions.tracks.editing.TrackEditor
 import net.bandithemepark.bandicore.park.attractions.tracks.editing.editors.TrackEditorNode
@@ -43,6 +46,10 @@ class TrackManager(val splineType: SplineType, val pointsPerMeter: Int, val fric
         TestSegment().register()
         TestBrakeSegment().register()
         TestLiftHillSegment().register()
+
+        WaterSegment().register()
+        LogflumeLiftSegment().register()
+        LogflumeDropSegment().register()
     }
 
     private fun registerTriggers() {
