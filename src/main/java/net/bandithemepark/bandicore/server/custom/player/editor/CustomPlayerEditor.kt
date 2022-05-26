@@ -45,6 +45,7 @@ class CustomPlayerEditor(val player: Player) {
         customPlayer.setVisibilityType(PacketEntity.VisibilityType.WHITELIST)
         customPlayer.setVisibilityList(mutableListOf(player))
         customPlayer.spawn(player.location)
+        customPlayer.loadFrom("default")
     }
 
     /**
