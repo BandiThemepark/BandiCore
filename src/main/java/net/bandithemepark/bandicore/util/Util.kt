@@ -1,24 +1,34 @@
 package net.bandithemepark.bandicore.util
 
+import com.google.common.io.BaseEncoding
+import com.google.gson.JsonParser
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextComponent
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
+import org.bukkit.Bukkit
+import org.bukkit.ChatColor
 import org.bukkit.Location
+import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer
 import org.bukkit.entity.Player
 import org.bukkit.util.StringUtil
 import org.bukkit.util.Vector
+import java.util.*
 import kotlin.math.sqrt
 
 object Util {
     /**
-     * Formats a string using MiniMessage. MiniMessage documnetation can be found at https://docs.adventure.kyori.net/minimessage/format.html.
+     * Formats a string using MiniMessage. MiniMessage documentation can be found at https://docs.adventure.kyori.net/minimessage/format.html.
      * Use things like <#FFFFFF>, <u> Underlined, <b> Bold, <i> Italic, <st> Strikethrough, <obf> Obfuscated, <newline> Newline in your messages.
      * @param message String to format
      * @return Formatted string as Paper Component
      */
     fun color(message: String): Component {
         return MiniMessage.miniMessage().deserialize(message)
+    }
+
+    fun legacyColor(message: String): Component {
+        return Component.text(ChatColor.translateAlternateColorCodes('&', message))
     }
 
     fun Player.sendColoredMessage(message: String) {
@@ -76,5 +86,23 @@ object Util {
      */
     fun Component.getText(): String {
         return PlainTextComponentSerializer.plainText().serialize(this)
+    }
+
+    /**
+     * Used to tell you if a player's skin has slim arms (the Alex skin model). Decodes the texture data from the player's GameProfile using Base64.
+     * @return True if the player's skin has slim arms, false if not
+     */
+    fun Player.isAlexSkin(): Boolean {
+        val encodedValue = (this as CraftPlayer).handle.gameProfile.properties.get("textures").iterator().next().value
+        val decodedValue = String(Base64.getDecoder().decode(encodedValue))
+
+        val json = JsonParser.parseString(decodedValue).asJsonObject
+        val skinObject = json.getAsJsonObject("textures").getAsJsonObject("SKIN")
+
+        if(!skinObject.has("metadata")) return false
+        if(!skinObject.getAsJsonObject("metadata").has("model")) return false
+
+        val model = skinObject.getAsJsonObject("metadata").get("model").asString
+        return model == "slim"
     }
 }
