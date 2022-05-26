@@ -20,6 +20,14 @@ class PlayerBossBar(val player: Player) {
         bossBar.setTitle("§7BandiThemepark | ${player.getBalance()} coins")
     }
 
+    fun hideBossBar() {
+        bossBar.removePlayer(player)
+    }
+
+    fun showBossBar() {
+        bossBar.addPlayer(player)
+    }
+
     companion object {
         private val loadedBossBars = hashMapOf<Player, PlayerBossBar>()
 

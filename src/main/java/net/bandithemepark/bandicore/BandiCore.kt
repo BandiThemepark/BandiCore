@@ -43,9 +43,11 @@ import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments
 import net.bandithemepark.bandicore.server.custom.blocks.CustomBlock
 import net.bandithemepark.bandicore.server.custom.blocks.CustomBlockMenu
 import net.bandithemepark.bandicore.server.custom.player.editor.CustomPlayerEditor
+import net.bandithemepark.bandicore.server.essentials.ColoredSigns
 import net.bandithemepark.bandicore.server.essentials.coins.CoinManager
 import net.bandithemepark.bandicore.server.essentials.coins.CoinsListener
 import net.bandithemepark.bandicore.server.essentials.coins.PlayerBossBar
+import net.bandithemepark.bandicore.server.essentials.coins.PlayerBossBar.Companion.getBossBar
 import net.bandithemepark.bandicore.server.essentials.worlds.WorldCommands
 import net.bandithemepark.bandicore.server.essentials.worlds.WorldManager
 import net.bandithemepark.bandicore.server.essentials.teleport.BackCommand
@@ -145,8 +147,11 @@ class BandiCore: JavaPlugin() {
         PacketEntity.removeAll()
         NPC.removeAll()
 
-        // Removing player permissions
-        for(player in Bukkit.getOnlinePlayers()) server.rankManager.loadedPlayerRanks[player]?.removePermissions(player)
+        // Removing player permissions and hiding boss bars
+        for(player in Bukkit.getOnlinePlayers()) {
+            server.rankManager.loadedPlayerRanks[player]?.removePermissions(player)
+            player.getBossBar().hideBossBar()
+        }
 
         // Disconnect the MQTT Client
         mqttConnector.disconnect()
@@ -195,6 +200,7 @@ class BandiCore: JavaPlugin() {
         getServer().pluginManager.registerEvents(CustomBlockMenu.Events(), this)
         getServer().pluginManager.registerEvents(BackCommand.Events(), this)
         getServer().pluginManager.registerEvents(PlayerBossBar.Events(), this)
+        getServer().pluginManager.registerEvents(ColoredSigns(), this)
     }
 
     private fun prepareSettings() {
