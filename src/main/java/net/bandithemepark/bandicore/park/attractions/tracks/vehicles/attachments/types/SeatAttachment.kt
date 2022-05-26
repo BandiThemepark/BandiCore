@@ -6,12 +6,14 @@ import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.AttachmentType
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayer
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin
+import net.bandithemepark.bandicore.util.Util.isAlexSkin
 import net.bandithemepark.bandicore.util.entity.PacketEntity
 import net.bandithemepark.bandicore.util.entity.PacketEntitySeat
 import net.bandithemepark.bandicore.util.entity.event.SeatEnterEvent
 import net.bandithemepark.bandicore.util.entity.event.SeatExitEvent
 import net.bandithemepark.bandicore.util.entity.marker.PacketEntityMarker
 import net.bandithemepark.bandicore.util.math.Quaternion
+import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer
@@ -23,7 +25,7 @@ import org.bukkit.util.Vector
 
 class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
     val BODY_HEIGHT = 1.1
-    val ARMOR_STAND_HEIGHT = 1.4375
+    val ARMOR_STAND_HEIGHT = 1.675
 
     lateinit var parent: Attachment
     var seat: PacketEntitySeat? = null
@@ -80,7 +82,7 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
         marker.removeViewer(player)
     }
 
-    fun updateSecondPosition() {
+    private fun updateSecondPosition() {
         parent.secondaryPositions.clear()
         val pos = parent.position
         parent.secondaryPositions.add(AttachmentPosition(pos.x, pos.y + BODY_HEIGHT, pos.z, pos.pitch, pos.yaw, pos.roll))
@@ -90,10 +92,13 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
     var customPlayer: CustomPlayer? = null
 
     fun spawnCustomPlayer(player: Player) {
+        Bukkit.broadcast(Component.text("Player is slim? " + player.isAlexSkin()))
+
         customPlayer = CustomPlayer(CustomPlayerSkin(player.uniqueId, (player as CraftPlayer).handle.gameProfile.properties.get("textures").iterator().next().value))
         customPlayer!!.setVisibilityType(PacketEntity.VisibilityType.BLACKLIST)
         customPlayer!!.setVisibilityList(mutableListOf(player))
         customPlayer!!.spawn(lastPosition.clone().add(Vector(0.0, 0.63, 0.0)).toLocation(seat!!.location!!.world))
+        customPlayer!!.loadFrom("sit")
     }
 
     fun deSpawnCustomPlayer(player: Player) {
