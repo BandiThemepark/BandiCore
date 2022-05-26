@@ -24,7 +24,7 @@ class PacketEntityMarker(val world: World): PacketEntity() {
         lastPosition = position
 
         if(spawned) {
-            val movedPosition = position.clone().add(Vector(0.0, -1.4375, 0.0))
+            val movedPosition = position.clone().add(Vector(0.0, -1.675, 0.0))
             moveEntity(movedPosition.x, movedPosition.y, movedPosition.z)
         }
     }
@@ -40,7 +40,7 @@ class PacketEntityMarker(val world: World): PacketEntity() {
         visibilityList.add(player)
 
         if(viewers.size == 1) {
-            spawn(lastPosition.toLocation(world).add(Vector(0.0, -1.4375, 0.0)))
+            spawn(lastPosition.toLocation(world).add(Vector(0.0, -1.675, 0.0)))
             handle!!.isInvisible = true
             (handle!! as ArmorStand).isMarker = true
             handle!!.isNoGravity = true
