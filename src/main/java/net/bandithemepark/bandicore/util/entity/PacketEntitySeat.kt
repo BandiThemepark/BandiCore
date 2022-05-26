@@ -8,6 +8,7 @@ import net.bandithemepark.bandicore.util.entity.event.PacketEntityInteractEvent
 import net.bandithemepark.bandicore.util.entity.event.SeatEnterEvent
 import net.bandithemepark.bandicore.util.entity.event.SeatExitEvent
 import net.bandithemepark.bandicore.util.math.Quaternion
+import net.kyori.adventure.text.Component
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.decoration.ArmorStand
@@ -66,18 +67,35 @@ class PacketEntitySeat: PacketEntity() {
         return true
     }
 
+    /**
+     * Whether the given player can be seated on this seat
+     * @param player The player to check
+     * @return Whether the player can be seated
+     */
+    fun canSit(player: Player): Boolean {
+        // TODO Using attraction system, check if a player can actually sit on it
+        if(!harnessesOpen) return false
+        if(getPassengers().isNotEmpty()) return false
+        if(isRiding(player)) return false
+        // TODO Check if player isn't operating this attraction
+
+        return true
+    }
+
     class Events: Listener {
         @EventHandler
         fun onInteract(event: PacketEntityInteractEvent) {
-            if(event.clicked is PacketEntitySeat) {
-                val enterEvent = SeatEnterEvent(event.clicked as PacketEntitySeat, event.player)
-                Bukkit.getPluginManager().callEvent(enterEvent)
+            if(event.clicked !is PacketEntitySeat) return
+            if (!(event.clicked as PacketEntitySeat).canSit(event.player)) return
 
-                if(!enterEvent.isCancelled) {
-                    event.isCancelled = true
-                    (event.clicked as PacketEntitySeat).sit(event.player)
-                }
+            val enterEvent = SeatEnterEvent(event.clicked as PacketEntitySeat, event.player)
+            Bukkit.getPluginManager().callEvent(enterEvent)
+
+            if (!enterEvent.isCancelled) {
+                event.isCancelled = true
+                (event.clicked as PacketEntitySeat).sit(event.player)
             }
+
         }
 
         @EventHandler
