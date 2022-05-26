@@ -12,6 +12,7 @@ class TrackVehicle(val ridingOn: TrackLayout, var position: TrackPosition, val i
     val members = mutableListOf<TrackVehicleMember>()
     var speed = 0.0
     var frictionMultiplier = 1.0
+    var gravityMultiplier = 1.0
     var physicsType = PhysicsType.ALL
     var actions = mutableListOf<TrackVehicleAction>()
 

@@ -50,7 +50,7 @@ class TrackVehicleUpdater {
                 val pitch = -directionLocation.pitch.toDouble()
 
                 // Calculating acceleration and friction
-                var acceleration = 9.81 * sin(Math.toRadians(pitch))
+                var acceleration = 9.81 * sin(Math.toRadians(pitch)) * vehicle.gravityMultiplier
                 val normalForce = 9.81 * cos(Math.toRadians(pitch))
                 var friction = normalForce * BandiCore.instance.trackManager.frictionCoefficient * vehicle.frictionMultiplier / 20
 
@@ -158,7 +158,9 @@ class TrackVehicleUpdater {
                 directionLoc.direction = deltaLoc
 
                 val pitch = directionLoc.pitch.toDouble()
-                val yaw = directionLoc.yaw.toDouble()
+                var yaw = directionLoc.yaw.toDouble()
+                if(yaw == 90.0) yaw = 90.1
+                if(yaw == -90.0) yaw = -90.1
 
                 // Calculating the rotation quaternion
                 val upVectorQuaternion = Quaternion.fromYawPitchRoll(pitch, yaw, roll)
