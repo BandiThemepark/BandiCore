@@ -3,6 +3,7 @@ package net.bandithemepark.bandicore.park.attractions.tracks
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.park.attractions.tracks.segments.SegmentSeparator
 import net.bandithemepark.bandicore.park.attractions.tracks.triggers.TrackTrigger
+import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.TrackVehicle
 import net.bandithemepark.bandicore.util.FileManager
 import net.bandithemepark.bandicore.util.TrackUtil
 import net.bandithemepark.bandicore.util.math.MathUtil
@@ -251,6 +252,13 @@ class TrackLayout(val id: String, var origin: Vector, var world: World, var node
      */
     fun getNearestTrigger(location: Location): TrackTrigger? {
         return TrackUtil.getNearestTrigger(this, location)
+    }
+
+    /**
+     * Gets all the vehicles that ride on this track
+     */
+    fun getVehicles(): List<TrackVehicle> {
+        return BandiCore.instance.trackManager.vehicleManager.vehicles.filter { it.ridingOn == this }
     }
 
     /**

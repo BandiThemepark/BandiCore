@@ -45,6 +45,50 @@ class TrackPosition(var nodePosition: TrackNode, position: Int): Cloneable {
         return nodePosition.curve[position.toInt()]
     }
 
+    /**
+     * Gets all nodes between this TrackPosition and the given TrackPosition
+     * @param other The other boundary TrackPosition
+     * @return A list of all nodes between this TrackPosition and the given TrackPosition
+     */
+    fun getNodesBetween(other: TrackPosition): List<TrackNode> {
+        val nodes = mutableListOf<TrackNode>(nodePosition)
+
+        var currentNode = nodePosition
+        while(currentNode.connectedTo != null) {
+            currentNode = currentNode.connectedTo!!
+            nodes.add(currentNode)
+
+            if(currentNode == other.nodePosition) break
+        }
+
+        return nodes
+    }
+
+    /**
+     * Gets the distance in curve points to the next position
+     * @param other The other boundary TrackPosition
+     * @return The distance in curve points to the next position
+     */
+    fun getDistanceTo(other: TrackPosition): Double {
+        if(nodePosition == other.nodePosition) return other.position - position
+
+        var currentNode = nodePosition
+        var distance = currentNode.curve.size - position
+
+        while(currentNode.connectedTo != null) {
+            currentNode = currentNode.connectedTo!!
+
+            if(currentNode == other.nodePosition) {
+                distance += other.position
+                break
+            }
+
+            distance += currentNode.curve.size
+        }
+
+        return distance
+    }
+
     public override fun clone(): TrackPosition {
         return TrackPosition(nodePosition, position.toInt())
     }

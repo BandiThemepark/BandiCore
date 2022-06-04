@@ -6,6 +6,9 @@ import net.bandithemepark.bandicore.park.attractions.tracks.TrackPosition
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.actions.TrackVehicleAction
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.Attachment
 import net.bandithemepark.bandicore.util.FileManager
+import net.bandithemepark.bandicore.util.TrackUtil
+import net.kyori.adventure.text.Component
+import org.bukkit.Bukkit
 import java.io.File
 
 class TrackVehicle(val ridingOn: TrackLayout, var position: TrackPosition, val id: String) {
@@ -15,6 +18,7 @@ class TrackVehicle(val ridingOn: TrackLayout, var position: TrackPosition, val i
     var gravityMultiplier = 1.0
     var physicsType = PhysicsType.ALL
     var actions = mutableListOf<TrackVehicleAction>()
+    var isCollidingThisTick = false
 
     var speedMS: Double
         get() = speed * 20.0
@@ -105,7 +109,71 @@ class TrackVehicle(val ridingOn: TrackLayout, var position: TrackPosition, val i
         fm.saveConfig("trains/$id.yml")
     }
 
+    /**
+     * Gets the vehicle in front of this vehicle
+     * @return The vehicle in front of this vehicle, null if there is none in front of it
+     */
+    fun getNextVehicle(): TrackVehicle? {
+        val vehiclesOnTrack = ridingOn.getVehicles().filter { it != this }
+
+        var currentNode = position.nodePosition
+        var nextVehicle = null as TrackVehicle?
+
+        while(currentNode.connectedTo != null) {
+            val vehiclesOnNode = vehiclesOnTrack.filter { it.position.nodePosition == currentNode }.filter { it.position.position >= position.position }
+
+            if(vehiclesOnNode.isNotEmpty()) {
+                nextVehicle = vehiclesOnNode.sortedBy { it.position.position }[0]
+                break
+            }
+
+            currentNode = currentNode.connectedTo!!
+        }
+
+        return nextVehicle
+    }
+
+    /**
+     * Checks whether this vehicle overlaps with another
+     * @param otherVehicle The other vehicle
+     * @return Whether this vehicle overlaps with another
+     */
+    fun overlaps(otherVehicle: TrackVehicle): Boolean {
+        // Get front and back of both vehicles
+        val front = getFront()
+        val back = getBack()
+        val nodesBetween = TrackUtil.getCurveBetweenPositions(back, front)
+
+        val otherFront = otherVehicle.getFront()
+        val otherBack = otherVehicle.getBack()
+        val otherNodesBetween = TrackUtil.getCurveBetweenPositions(otherBack, otherFront)
+
+        return nodesBetween.any { otherNodesBetween.contains(it) }
+    }
+
+    /**
+     * Gets the front of this vehicle
+     */
+    fun getFront(): TrackPosition {
+        val totalLength = getLengthInPoints()
+        val front = position.clone()
+
+        front.move(ridingOn, totalLength / 2.0)
+        return front
+    }
+
+    /**
+     * Gets the back of this vehicle
+     */
+    fun getBack(): TrackPosition {
+        val totalLength = getLengthInPoints()
+        val back = position.clone()
+
+        back.move(ridingOn, -totalLength / 2.0)
+        return back
+    }
+
     enum class PhysicsType {
-        ALL, DOWN, UP, NONE
+        ALL, DOWN, UP, NONE, COLLISION_ONLY
     }
 }
