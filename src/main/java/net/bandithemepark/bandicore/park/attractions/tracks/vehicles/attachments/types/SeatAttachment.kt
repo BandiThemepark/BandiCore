@@ -68,6 +68,8 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
         connections.remove(seat)
         seat!!.deSpawn()
         seat = null
+
+        marker.viewers.forEach { marker.removeViewer(it) }
     }
 
     override fun onMetadataLoad(metadata: List<String>) {
