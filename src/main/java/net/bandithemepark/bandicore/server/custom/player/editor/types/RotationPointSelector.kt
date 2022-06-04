@@ -7,7 +7,7 @@ import net.bandithemepark.bandicore.server.custom.player.editor.CustomPlayerEdit
 import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.chat.BandiColors
-import net.bandithemepark.bandicore.util.entity.PacketEntityArmorStand
+import net.bandithemepark.bandicore.util.entity.armorstand.PacketEntityArmorStand
 import net.bandithemepark.bandicore.util.math.MathUtil
 import net.bandithemepark.bandicore.util.math.Quaternion
 import org.bukkit.Bukkit

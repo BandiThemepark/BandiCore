@@ -1,5 +1,6 @@
 package net.bandithemepark.bandicore.server.custom.player.editor
 
+import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayer
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin
 import net.bandithemepark.bandicore.server.custom.player.editor.types.PlayerEditor
@@ -8,6 +9,7 @@ import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.chat.BandiColors
 import net.bandithemepark.bandicore.util.entity.PacketEntity
+import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -45,7 +47,11 @@ class CustomPlayerEditor(val player: Player) {
         customPlayer.setVisibilityType(PacketEntity.VisibilityType.WHITELIST)
         customPlayer.setVisibilityList(mutableListOf(player))
         customPlayer.spawn(player.location)
-        customPlayer.loadFrom("default")
+        customPlayer.marker.addViewer(player)
+
+        Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
+            customPlayer.loadFrom("default")
+        })
     }
 
     /**

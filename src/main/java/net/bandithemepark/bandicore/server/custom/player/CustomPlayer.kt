@@ -2,7 +2,7 @@ package net.bandithemepark.bandicore.server.custom.player
 
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.util.FileManager
-import net.bandithemepark.bandicore.util.entity.PacketEntityArmorStand
+import net.bandithemepark.bandicore.util.entity.armorstand.PacketEntityArmorStand
 import net.bandithemepark.bandicore.util.ItemUtils
 import net.bandithemepark.bandicore.util.entity.PacketEntity
 import net.bandithemepark.bandicore.util.entity.marker.PacketEntityMarker
@@ -54,6 +54,7 @@ class CustomPlayer(val skin: CustomPlayerSkin) {
     var rightLegRotationPoint = Vector(4.2/16.0, -0.63-0.63, 0.0)
     var leftLegRotationPoint = Vector(-4.2/16.0+12.0/16.0, -0.63-0.63, 0.0)
 
+    lateinit var marker: PacketEntityMarker
     init {
         loadFrom("default")
     }
@@ -110,6 +111,8 @@ class CustomPlayer(val skin: CustomPlayerSkin) {
      * @param spawnLocation The location to spawn the custom player at
      */
     fun spawn(spawnLocation: Location) {
+        marker = PacketEntityMarker(spawnLocation.world)
+
         this.location = spawnLocation.clone().add(0.0, 0.63, 0.0)
         this.location!!.yaw = 0.0f
 
@@ -201,7 +204,9 @@ class CustomPlayer(val skin: CustomPlayerSkin) {
         newRightArmRotation.multiply(rightArmRotation)
 
         //val rightArmPosition = rightArmRotationPointPosition.clone().add(MathUtil.rotateAroundPoint(rightArmRotation, rightArmOffset.x, rightArmOffset.y, rightArmOffset.z))
+        // TODO Update marker
         val rightArmPosition = rightArmRotationPointPosition.clone().add(rightArmOffset)
+        marker.moveEntity(rightArmPosition.toVector())
         rightArm.teleport(Location(rightArm.location!!.world, rightArmPosition.x, rightArmPosition.y, rightArmPosition.z))
 
         val rightArmPose = MathUtil.getArmorStandPose(newRightArmRotation)

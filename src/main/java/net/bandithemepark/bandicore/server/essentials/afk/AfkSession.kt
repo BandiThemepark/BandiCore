@@ -47,12 +47,12 @@ class AfkSession(val player: Player) {
     }
 
 //    enum class AfkTitle(val title: Component, val subtitle: Component) {
-//        COINS(Util.color("<${BandiColors.YELLOW}>Coins..."), Util.color("<${BandiColors.LIGHT_GRAY}>You aren't getting any")),
-//        BANDIBOY(Util.color("<${BandiColors.LIGHT_BLUE}>Away from keyboard"), Util.color("<${BandiColors.BLUE}>Playing on your BandiBoy?")),
-//        PORTAL(Util.color("<${BandiColors.LIGHT_BLUE}>Are you still alive?"), Util.color("<${BandiColors.BLUE}>(The cake is a lie)")),
-//        W(Util.color("<${BandiColors.GREEN}>You are AFK"), Util.color("<${BandiColors.DARK_GREEN}>I recommend you press the W button")),
-//        TIKTOK(Util.color("<${BandiColors.LIGHT_BLUE}>Watching TikTok?"), Util.color("<${BandiColors.PINK}>Follow us @bandithemepark")),
-//        TWITTER(Util.color("<${BandiColors.LIGHT_BLUE}>Scrolling through Twitter?"), Util.color("<${BandiColors.BLUE}>Follow us @BandiThemepark")),
-//        DISCORD(Util.color("<${BandiColors.BLUE}>Looks like you're doing something else"), Util.color("<${BandiColors.LIGHT_GRAY}>Meanwhile, why not join our Discord?"))
+//        COINS(LookAtUtil.color("<${BandiColors.YELLOW}>Coins..."), LookAtUtil.color("<${BandiColors.LIGHT_GRAY}>You aren't getting any")),
+//        BANDIBOY(LookAtUtil.color("<${BandiColors.LIGHT_BLUE}>Away from keyboard"), LookAtUtil.color("<${BandiColors.BLUE}>Playing on your BandiBoy?")),
+//        PORTAL(LookAtUtil.color("<${BandiColors.LIGHT_BLUE}>Are you still alive?"), LookAtUtil.color("<${BandiColors.BLUE}>(The cake is a lie)")),
+//        W(LookAtUtil.color("<${BandiColors.GREEN}>You are AFK"), LookAtUtil.color("<${BandiColors.DARK_GREEN}>I recommend you press the W button")),
+//        TIKTOK(LookAtUtil.color("<${BandiColors.LIGHT_BLUE}>Watching TikTok?"), LookAtUtil.color("<${BandiColors.PINK}>Follow us @bandithemepark")),
+//        TWITTER(LookAtUtil.color("<${BandiColors.LIGHT_BLUE}>Scrolling through Twitter?"), LookAtUtil.color("<${BandiColors.BLUE}>Follow us @BandiThemepark")),
+//        DISCORD(LookAtUtil.color("<${BandiColors.BLUE}>Looks like you're doing something else"), LookAtUtil.color("<${BandiColors.LIGHT_GRAY}>Meanwhile, why not join our Discord?"))
 //    }
 }
