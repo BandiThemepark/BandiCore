@@ -1,5 +1,6 @@
-package net.bandithemepark.bandicore.util.entity
+package net.bandithemepark.bandicore.util.entity.armorstand
 
+import net.bandithemepark.bandicore.util.entity.PacketEntity
 import net.bandithemepark.bandicore.util.math.MathUtil
 import net.bandithemepark.bandicore.util.math.Quaternion
 import net.minecraft.core.Rotations
@@ -8,7 +9,7 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.decoration.ArmorStand
 import org.bukkit.util.Vector
 
-class PacketEntityArmorStand: PacketEntity() {
+open class PacketEntityArmorStand: PacketEntity() {
     override fun getInstance(world: ServerLevel, x: Double, y: Double, z: Double): LivingEntity {
         return ArmorStand(world, x, y, z)
     }
