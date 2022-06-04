@@ -3,7 +3,7 @@ package net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachment
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.Attachment
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.AttachmentType
 import net.bandithemepark.bandicore.util.ItemFactory
-import net.bandithemepark.bandicore.util.entity.PacketEntityArmorStand
+import net.bandithemepark.bandicore.util.entity.armorstand.PacketEntityArmorStand
 import net.bandithemepark.bandicore.util.math.Quaternion
 import net.kyori.adventure.text.Component
 import net.minecraft.world.entity.decoration.ArmorStand

@@ -4,7 +4,7 @@ import io.papermc.paper.adventure.PaperAdventure
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.entity.PacketEntity
-import net.bandithemepark.bandicore.util.entity.PacketEntityArmorStand
+import net.bandithemepark.bandicore.util.entity.armorstand.PacketEntityArmorStand
 import net.bandithemepark.bandicore.util.entity.event.SeatEnterEvent
 import net.bandithemepark.bandicore.util.entity.event.SeatExitEvent
 import net.minecraft.world.entity.decoration.ArmorStand
