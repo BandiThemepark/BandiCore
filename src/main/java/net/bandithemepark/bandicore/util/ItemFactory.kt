@@ -7,6 +7,7 @@ import net.kyori.adventure.text.Component
 import org.bukkit.Color
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
+import org.bukkit.OfflinePlayer
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
@@ -147,6 +148,20 @@ class ItemFactory {
         return this
     }
 
+    /**
+     * Set the owner of the item (player head)
+     * @param offlinePlayer The player to set it to
+     */
+    fun setSkullOwner(offlinePlayer: OfflinePlayer): ItemFactory {
+        require(itemStack.type == Material.PLAYER_HEAD) { "You can not apply a player skull texture to an item that is not a skull" }
+        val skullMeta = itemMeta as SkullMeta
+
+        skullMeta.owningPlayer = offlinePlayer
+        itemMeta = skullMeta
+
+        return this
+    }
+
     fun setAttributesHidden(bool: Boolean): ItemFactory {
         if (bool) itemMeta!!.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         else itemMeta!!.removeItemFlags(ItemFlag.HIDE_ATTRIBUTES)
@@ -154,7 +169,7 @@ class ItemFactory {
     }
 
     fun setSkullTexture(texture: String): ItemFactory {
-        require(itemStack.type == Material.PLAYER_HEAD) { "You can not apply a skull texture to a Item that is not a skull" }
+        require(itemStack.type == Material.PLAYER_HEAD) { "You can not apply a skull texture to an item that is not a skull" }
         val skullMeta = itemMeta as SkullMeta
 
         val profile = GameProfile(UUID.randomUUID(), null)

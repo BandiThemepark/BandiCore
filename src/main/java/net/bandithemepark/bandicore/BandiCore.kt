@@ -34,8 +34,12 @@ import okhttp3.OkHttpClient
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import me.m56738.smoothcoasters.api.SmoothCoastersAPI
+import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.LogFlumeAttraction
 import net.bandithemepark.bandicore.network.mqtt.MQTTConnector
 import net.bandithemepark.bandicore.network.queue.QueueCommand
+import net.bandithemepark.bandicore.park.attractions.mode.*
+import net.bandithemepark.bandicore.park.attractions.rideop.RideOP
+import net.bandithemepark.bandicore.park.attractions.rideop.RideOPTest
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.SeatAttachment
 import net.bandithemepark.bandicore.server.custom.blocks.CustomBlock
 import net.bandithemepark.bandicore.server.custom.blocks.CustomBlockMenu
@@ -50,7 +54,15 @@ import net.bandithemepark.bandicore.server.essentials.worlds.WorldManager
 import net.bandithemepark.bandicore.server.essentials.teleport.BackCommand
 import net.bandithemepark.bandicore.server.essentials.teleport.SelfCommand
 import net.bandithemepark.bandicore.server.essentials.teleport.TeleportCommand
+import net.bandithemepark.bandicore.server.regions.BandiRegionManager
+import net.bandithemepark.bandicore.util.ItemFactory
+import net.bandithemepark.bandicore.util.entity.HoverableEntity
 import net.bandithemepark.bandicore.util.entity.PacketEntitySeat
+import net.bandithemepark.bandicore.util.entity.armorstand.HoverableArmorStand
+import net.minecraft.world.entity.decoration.ArmorStand
+import org.bukkit.Location
+import org.bukkit.Material
+import org.bukkit.entity.Player
 
 class BandiCore: JavaPlugin() {
     companion object {
@@ -65,6 +77,7 @@ class BandiCore: JavaPlugin() {
     lateinit var customBlockManager: CustomBlock.Manager
     lateinit var worldManager: WorldManager
     lateinit var coinManager: CoinManager
+    lateinit var regionManager: BandiRegionManager
 
     var okHttpClient = OkHttpClient()
     var restarter = Restart()
@@ -94,11 +107,15 @@ class BandiCore: JavaPlugin() {
         prepareSettings()
         coinManager = CoinManager()
 
+        regionManager = BandiRegionManager()
+        regionManager.loadAll()
+
         // Connecting to the MQTT server and registering listeners
         CoinsListener().register()
         mqttConnector = MQTTConnector()
 
         afkManager = AfkManager()
+        HoverableEntity.setup()
 
         // Setting up the track manager
         trackManager = TrackManager(BezierSpline(), 25, 0.02)
@@ -126,6 +143,12 @@ class BandiCore: JavaPlugin() {
         customBlockManager = CustomBlock.Manager()
         customBlockManager.loadPlaced()
 
+        // Setting up the rest related to attractions
+        registerAttractionModes()
+        RideOP.Timer()
+        registerRideOPs()
+        registerAttractions()
+
         // Things that need to be done for players who are already online (Like when a reload happens)
         forOnlinePlayers()
 
@@ -135,9 +158,24 @@ class BandiCore: JavaPlugin() {
 
         // Registering the messaging channel for sending players
         Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord")
+
+        // TODO Test for hoverable entities
+        val entity = object: HoverableArmorStand("temp", "bt.vip") {
+            override fun onInteract(player: Player) {
+                Bukkit.dispatchCommand(player, "rideoptest")
+            }
+        }
+        entity.spawn(Location(Bukkit.getWorld("world"), 63.0, -0.4, -164.5, -90.0F, -90.0F))
+        entity.handle!!.isInvisible = true
+        (entity.handle!! as ArmorStand).isMarker = true
+        entity.helmet = ItemFactory(Material.DIAMOND_SHOVEL).setCustomModelData(8).build()
+        entity.updateMetadata()
     }
 
     override fun onDisable() {
+        // Resetting all attractions
+        RideOP.rideOPs.forEach { it.onServerStop() }
+
         smoothCoastersAPI.unregister()
 
         // Deleting/removing entities
@@ -176,6 +214,7 @@ class BandiCore: JavaPlugin() {
         getCommand("worldtp")!!.setExecutor(WorldCommands())
         getCommand("teleport")!!.setExecutor(TeleportCommand())
         getCommand("back")!!.setExecutor(BackCommand())
+        getCommand("rideoptest")!!.setExecutor(RideOPTest())
         getCommand("self")!!.setExecutor(SelfCommand())
         getCommand("day")!!.setExecutor(TimeManagement())
         getCommand("night")!!.setExecutor(TimeManagement())
@@ -216,6 +255,23 @@ class BandiCore: JavaPlugin() {
             server.rankManager.loadRank(player)
             server.scoreboard.showFor(player)
         }
+    }
+
+    private fun registerAttractionModes() {
+        AttractionModeOpen().register()
+        AttractionModeClosed().register()
+        AttractionModeNew().register()
+        AttractionModeVIP().register()
+        AttractionModeCrew().register()
+        AttractionModeClosedShown().register()
+    }
+
+    private fun registerRideOPs() {
+
+    }
+
+    private fun registerAttractions() {
+        LogFlumeAttraction().register()
     }
 
 //    private fun runAngleInterpolationTest(formula: (Double, Double, Double) -> Double) {
