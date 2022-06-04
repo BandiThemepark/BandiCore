@@ -5,6 +5,8 @@ import net.bandithemepark.bandicore.park.attractions.tracks.splines.BezierSpline
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.TrackVehicle
 import net.bandithemepark.bandicore.util.TrackUtil
 import net.bandithemepark.bandicore.util.math.Quaternion
+import net.kyori.adventure.text.Component
+import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.util.Vector
 import kotlin.math.cos
@@ -12,6 +14,7 @@ import kotlin.math.sin
 
 class TrackVehicleUpdater {
     fun onTick() {
+        // Normal moving
         for(vehicle in BandiCore.instance.trackManager.vehicleManager.vehicles) {
             // Saving the position before moving to use later
             val oldPosition = vehicle.position.clone()
@@ -42,8 +45,35 @@ class TrackVehicleUpdater {
                 front.move(vehicle.ridingOn, totalLength / 2.0)
             }
 
+            // Updating the collisions
+            vehicle.isCollidingThisTick = false
+            if(vehicle.ridingOn.getVehicles().size > 1 && vehicle.speed != 0.0) {
+                if(vehicle.speed > 0) {
+                    val nextVehicle = vehicle.getNextVehicle()
+
+                    if(nextVehicle != null && vehicle.overlaps(nextVehicle)) {
+                        vehicle.isCollidingThisTick = true
+
+                        if(nextVehicle.physicsType == TrackVehicle.PhysicsType.NONE) {
+                            vehicle.speed = nextVehicle.speed
+                        } else {
+                            vehicle.speed = vehicle.speed/10.0
+                            nextVehicle.speed += vehicle.speed
+                        }
+
+                        val backSecond = nextVehicle.getBack()
+                        val frontFirst = vehicle.getFront()
+                        val distance = backSecond.getDistanceTo(frontFirst)
+
+                        vehicle.position.move(vehicle.ridingOn, -(distance + 0))
+                    }
+                } else {
+
+                }
+            }
+
             // Physics calculations
-            if(vehicle.physicsType != TrackVehicle.PhysicsType.NONE) {
+            if(vehicle.physicsType != TrackVehicle.PhysicsType.NONE && vehicle.physicsType != TrackVehicle.PhysicsType.COLLISION_ONLY) {
                 // Getting the train pitch
                 val directionLocation = Location(vehicle.ridingOn.world, 0.0, 0.0, 0.0)
                 directionLocation.direction = back.getPathPoint().asVector().subtract(front.getPathPoint().asVector())
@@ -173,5 +203,39 @@ class TrackVehicleUpdater {
                 }
             }
         }
+
+//        // Everything before for the collisions
+//        for(track in BandiCore.instance.trackManager.loadedTracks) {
+//            if(track.getVehicles().size <= 1) continue
+//
+//            for(vehicle in track.getVehicles()) {
+//                if(vehicle.speed == 0.0) continue
+//
+//                if(vehicle.speed > 0) {
+//                    val nextVehicle = vehicle.getNextVehicle() ?: continue
+//
+//                    if(vehicle.overlaps(nextVehicle)) {
+//                        if(nextVehicle.physicsType == TrackVehicle.PhysicsType.NONE) {
+//                            vehicle.speed = nextVehicle.speed
+//                        } else {
+//                            vehicle.speed = vehicle.speed/10.0
+//                            nextVehicle.speed += vehicle.speed
+//                        }
+//
+//                        val backSecond = nextVehicle.getBack()
+//                        val frontFirst = vehicle.getFront()
+//                        val distance = backSecond.getDistanceTo(frontFirst)
+//
+//                        Bukkit.broadcast(Component.text("backSecond: ${backSecond.nodePosition.id} at ${backSecond.position}"))
+//                        Bukkit.broadcast(Component.text("frontFirst: ${frontFirst.nodePosition.id} at ${frontFirst.position}"))
+//                        Bukkit.broadcast(Component.text("Position before: " + vehicle.position.nodePosition.id + " at " + vehicle.position.position + ", moving ${-(distance + 2)}"))
+//                        vehicle.position.move(vehicle.ridingOn, -(distance + 2))
+//                        Bukkit.broadcast(Component.text("Position after: " + vehicle.position.nodePosition.id + " at " + vehicle.position.position))
+//                    }
+//                } else {
+//
+//                }
+//            }
+//        }
     }
 }
