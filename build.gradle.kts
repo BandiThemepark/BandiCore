@@ -22,6 +22,10 @@ repositories {
     }
 
     maven {
+        url = uri("https://maven.enginehub.org/repo/")
+    }
+
+    maven {
         url = uri("https://ci.mg-dev.eu/plugin/repository/everything/")
     }
 
@@ -38,6 +42,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.6.10")
     compileOnly("com.comphenix.protocol", "ProtocolLib", "4.8.0")
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
+    compileOnly("com.sk89q.worldedit:worldedit-bukkit:7.2.10-SNAPSHOT")
     implementation("me.m56738:SmoothCoastersAPI:1.6")
     implementation("org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5")
 }
