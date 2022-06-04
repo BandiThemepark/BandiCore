@@ -14,9 +14,6 @@ import net.bandithemepark.bandicore.server.Server
 import net.bandithemepark.bandicore.server.tools.armorstandtools.ArmorStandEditorCommand
 import net.bandithemepark.bandicore.server.tools.armorstandtools.ArmorStandEditorEvents
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayer
-import net.bandithemepark.bandicore.server.essentials.GamemodeCommand
-import net.bandithemepark.bandicore.server.essentials.JoinMessages
-import net.bandithemepark.bandicore.server.essentials.VanishCommand
 import net.bandithemepark.bandicore.server.essentials.afk.AfkManager
 import net.bandithemepark.bandicore.server.essentials.ranks.RankManager
 import net.bandithemepark.bandicore.server.essentials.ranks.SetRankCommand
@@ -43,7 +40,7 @@ import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments
 import net.bandithemepark.bandicore.server.custom.blocks.CustomBlock
 import net.bandithemepark.bandicore.server.custom.blocks.CustomBlockMenu
 import net.bandithemepark.bandicore.server.custom.player.editor.CustomPlayerEditor
-import net.bandithemepark.bandicore.server.essentials.ColoredSigns
+import net.bandithemepark.bandicore.server.essentials.*
 import net.bandithemepark.bandicore.server.essentials.coins.CoinManager
 import net.bandithemepark.bandicore.server.essentials.coins.CoinsListener
 import net.bandithemepark.bandicore.server.essentials.coins.PlayerBossBar
@@ -51,6 +48,7 @@ import net.bandithemepark.bandicore.server.essentials.coins.PlayerBossBar.Compan
 import net.bandithemepark.bandicore.server.essentials.worlds.WorldCommands
 import net.bandithemepark.bandicore.server.essentials.worlds.WorldManager
 import net.bandithemepark.bandicore.server.essentials.teleport.BackCommand
+import net.bandithemepark.bandicore.server.essentials.teleport.SelfCommand
 import net.bandithemepark.bandicore.server.essentials.teleport.TeleportCommand
 import net.bandithemepark.bandicore.util.entity.PacketEntitySeat
 
@@ -178,6 +176,9 @@ class BandiCore: JavaPlugin() {
         getCommand("worldtp")!!.setExecutor(WorldCommands())
         getCommand("teleport")!!.setExecutor(TeleportCommand())
         getCommand("back")!!.setExecutor(BackCommand())
+        getCommand("self")!!.setExecutor(SelfCommand())
+        getCommand("day")!!.setExecutor(TimeManagement())
+        getCommand("night")!!.setExecutor(TimeManagement())
     }
 
     private fun registerEvents() {

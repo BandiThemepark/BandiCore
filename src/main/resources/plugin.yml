@@ -75,3 +75,13 @@ commands:
       - tp
   back:
     description: Travel back to your latest location from your last teleport
+  self:
+    description: Teleport someone else to yourself
+    aliases:
+      - s
+  night:
+    description: Change time of world you are in to night
+  day:
+    description: Change time of world you are in to day
+    aliases:
+      - sun

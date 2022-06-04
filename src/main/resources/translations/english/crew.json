@@ -135,5 +135,9 @@
   "unload-world-usage": "Usage: /unloadworld <worldId>",
   "unload-world-success": "Successfully unloaded the selected world",
   "world-teleport-usage": "Usage: /worldtp <worldId>",
-  "world-teleport-success": "Successfully teleported to the selected world"
+  "world-teleport-success": "Successfully teleported to the selected world",
+  "teleport-self": "You teleported %target% to yourself",
+  "teleport-self-multiple": "You teleported %target_count% players to yourself",
+  "teleport-self-usage": "Invalid arguments! Usage: /self <players>",
+  "time-change": "Time hase been set to %time%"
 }
