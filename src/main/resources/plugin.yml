@@ -75,6 +75,8 @@ commands:
       - tp
   back:
     description: Travel back to your latest location from your last teleport
+  rideoptest:
+    description: Testing the rideop menu
   self:
     description: Teleport someone else to yourself
     aliases:

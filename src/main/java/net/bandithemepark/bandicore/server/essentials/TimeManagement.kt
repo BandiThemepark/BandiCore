@@ -20,12 +20,12 @@ class TimeManagement: CommandExecutor {
         if (sender !is Player) return false
         if (command.name.equals("day", true) || command.name.equals("sun", true)) {
             sender.world.time = 6000
-            sender.sendTranslatedMessage("teleport-self-multiple", BandiColors.YELLOW.toString(),
+            sender.sendTranslatedMessage("time-change", BandiColors.YELLOW.toString(),
                 MessageReplacement("time", "DAY"))
         }
         if (command.name.equals("night", true)) {
             sender.world.time = 18000
-            sender.sendTranslatedMessage("teleport-self-multiple", BandiColors.YELLOW.toString(),
+            sender.sendTranslatedMessage("time-change", BandiColors.YELLOW.toString(),
                 MessageReplacement("time", "NIGHT"))
         }
         return true

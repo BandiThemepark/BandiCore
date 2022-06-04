@@ -139,5 +139,5 @@
   "teleport-self": "You teleported %target% to yourself",
   "teleport-self-multiple": "You teleported %target_count% players to yourself",
   "teleport-self-usage": "Invalid arguments! Usage: /self <players>",
-  "time-change": "Time hase been set to %time%"
+  "time-change": "Time has been set to %time%"
 }
