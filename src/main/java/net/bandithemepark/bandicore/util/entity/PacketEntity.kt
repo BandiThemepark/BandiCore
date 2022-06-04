@@ -412,14 +412,22 @@ abstract class PacketEntity {
     class Events: Listener {
         @EventHandler
         fun onJoin(event: PlayerJoinEvent) {
+            val toUpdateRotationFor = mutableListOf<PacketEntity>()
             for(entity in active) {
                 if(entity.isVisibleFor(event.player)) {
+                    toUpdateRotationFor.add(entity)
                     entity.spawnFor(event.player)
                     entity.updateMetadataFor(event.player)
                     entity.updateEquipmentFor(event.player)
                     entity.updatePassengersFor(event.player)
                 }
             }
+
+            Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
+                toUpdateRotationFor.forEach {
+                    it.updateLocation()
+                }
+            })
         }
     }
 
