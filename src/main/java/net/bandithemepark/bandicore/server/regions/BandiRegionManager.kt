@@ -1,6 +1,8 @@
 package net.bandithemepark.bandicore.server.regions
 
 import net.bandithemepark.bandicore.network.backend.BackendRegion
+import net.bandithemepark.bandicore.park.attractions.rideop.RideOP
+import org.bukkit.Bukkit
 import org.bukkit.Location
 
 class BandiRegionManager {
@@ -64,12 +66,17 @@ class BandiRegionManager {
                 val name = region.asJsonObject.get("name").asString
                 val displayName = region.asJsonObject.get("displayName").asString
                 val priority = region.asJsonObject.get("priority").asInt
-                val areasJson = region.asJsonObject.getAsJsonArray("areas").asJsonObject
+                val areasJson = region.asJsonObject.getAsJsonObject("areas")
                 val areas = BandiRegion.loadAreasFromJson(areasJson)
                 regions.add(BandiRegion(name, displayName, priority, areas))
             }
 
             this.regions = regions
+
+            Bukkit.getLogger().info("Loaded ${regions.size} regions")
+
+            // Doing everything that needs to happen after loading the regions
+            for(rideOP in RideOP.rideOPs) rideOP.region = regions.find { it.name == rideOP.regionId }!!
         }
     }
 }

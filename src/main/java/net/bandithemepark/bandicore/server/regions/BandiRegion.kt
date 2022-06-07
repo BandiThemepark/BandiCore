@@ -6,7 +6,6 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter
 import com.sk89q.worldedit.math.BlockVector2
 import com.sk89q.worldedit.math.BlockVector3
 import com.sk89q.worldedit.regions.Polygonal2DRegion
-import net.bandithemepark.bandicore.network.backend.BackendRegion
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.entity.Player
@@ -76,9 +75,8 @@ class BandiRegion(val name: String, var displayName: String, var priority: Int, 
     companion object {
         fun loadAreasFromJson(json: JsonObject): MutableList<Polygonal2DRegion> {
             val areas = mutableListOf<Polygonal2DRegion>()
-            val array = json.getAsJsonArray("areas")
 
-            array.forEach {
+            json.getAsJsonArray("areas")?.forEach {
                 val minY = it.asJsonObject.get("minY").asInt
                 val maxY = it.asJsonObject.get("maxY").asInt
                 val worldId = it.asJsonObject.get("world").asString
