@@ -129,4 +129,22 @@ object MathUtil {
             return BezierSpline().linear(a1, a2, t)
         }
     }
+
+    /**
+     * Gets a point on a circle
+     * @param radius The radius of the circle
+     * @param rotation The rotation of the point you want to use. In degrees
+     * @return The point on the circle as a vector
+     */
+    fun getPointOnCircleXZ(radius: Double, rotation: Double): Vector {
+        return Vector(sin(Math.toRadians(rotation)) * radius, 0.0, cos(Math.toRadians(rotation)) * radius)
+    }
+
+    /**
+     * Elias wants this really badly
+     */
+    fun cosineInterpolation(t: Double, from: Double, to: Double): Double {
+        val t2 = (1 - cos(t * Math.PI)) / 2
+        return from * (1 - t2) + to * t2
+    }
 }
