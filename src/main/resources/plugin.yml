@@ -4,6 +4,7 @@ main: net.bandithemepark.bandicore.BandiCore
 api-version: 1.18
 depend:
   - ProtocolLib
+  - WorldEdit
 commands:
   servermode:
     description: Change the server mode
@@ -87,3 +88,10 @@ commands:
     description: Change time of world you are in to day
     aliases:
       - sun
+  region:
+    description: Everything related to managing regions
+    aliases: rg
+  rideop:
+    description: Operate attractions around the park
+  attraction:
+    description: Command used for managing and viewing attractions
