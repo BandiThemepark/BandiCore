@@ -5,7 +5,7 @@ import org.bukkit.inventory.ItemStack
 
 abstract class RideOPButton(val slot: Int) {
     abstract fun onClick(player: Player)
-    abstract fun getItemStack(): ItemStack
+    abstract fun getItemStack(player: Player): ItemStack
 
     lateinit var rideOP: RideOP
 }

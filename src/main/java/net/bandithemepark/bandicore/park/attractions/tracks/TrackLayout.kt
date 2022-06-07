@@ -262,6 +262,15 @@ class TrackLayout(val id: String, var origin: Vector, var world: World, var node
     }
 
     /**
+     * Finds the node with the same ID
+     * @param id The ID to find
+     * @return The node with the same ID, null if not found
+     */
+    fun getNode(id: String): TrackNode? {
+        return nodes.find { it.id == id }
+    }
+
+    /**
      * Saves a track to it's file
      */
     fun save() {
