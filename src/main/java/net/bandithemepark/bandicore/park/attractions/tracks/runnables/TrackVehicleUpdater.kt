@@ -189,6 +189,9 @@ class TrackVehicleUpdater {
 
                 val pitch = directionLoc.pitch.toDouble()
                 var yaw = directionLoc.yaw.toDouble()
+
+                // Adjusting yaw to avoid the lock
+                if(yaw > 180.0) yaw -= 360.0
                 if(yaw == 90.0) yaw = 90.1
                 if(yaw == -90.0) yaw = -90.1
 
