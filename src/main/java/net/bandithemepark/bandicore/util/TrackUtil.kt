@@ -8,6 +8,7 @@ import net.bandithemepark.bandicore.park.attractions.tracks.TrackPosition
 import net.bandithemepark.bandicore.park.attractions.tracks.segments.SegmentSeparator
 import net.bandithemepark.bandicore.park.attractions.tracks.triggers.TrackTrigger
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.TrackVehicle
+import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.SeatAttachment
 import net.bandithemepark.bandicore.util.math.MathUtil
 import org.bukkit.Location
 
@@ -62,7 +63,12 @@ object TrackUtil {
         }
     }
 
-    private fun updateNodePath(layout: TrackLayout, node: TrackNode) {
+    /**
+     * Updates a node's path
+     * @param layout The layout that the node is on
+     * @param node The node to update
+     */
+    fun updateNodePath(layout: TrackLayout, node: TrackNode) {
         node.curve.clear()
 
         if(node.connectedTo != null) node.curve = BandiCore.instance.trackManager.splineType.interpolate(
@@ -86,7 +92,7 @@ object TrackUtil {
 
         from.connectedTo = to
         updateMovedNode(layout, from)
-        updateMovedNode(layout, to)
+        if(!to.strict) updateMovedNode(layout, to)
     }
 
     /**
@@ -290,5 +296,18 @@ object TrackUtil {
         val middleIndex = (segment.curve.size * t).toInt()
         val vehicleIndex = segment.curve.indexOf(vehicleCurvePoint)
         return vehicleIndex <= middleIndex
+    }
+
+    /**
+     * Opens or closes the harnesses of a vehicle
+     * @param trackVehicle The vehicle to open or close the harnesses of
+     * @param open Whether to open or close the harnesses
+     */
+    fun setHarnessOpen(trackVehicle: TrackVehicle, open: Boolean) {
+        trackVehicle.getAllAttachments().forEach {
+            if(it.type is SeatAttachment) {
+                (it.type as SeatAttachment).seat?.harnessesOpen = open
+            }
+        }
     }
 }
