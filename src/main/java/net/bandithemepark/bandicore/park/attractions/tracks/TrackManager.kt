@@ -1,10 +1,11 @@
 package net.bandithemepark.bandicore.park.attractions.tracks
 
 import net.bandithemepark.bandicore.BandiCore
-import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.segments.LogflumeDropSegment
-import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.segments.LogflumeLiftSegment
-import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.segments.LogflumeStationSegment
-import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.segments.WaterSegment
+import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.segments.*
+import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.switch.LogFlumePreSwitchSegment
+import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.switch.LogFlumeSwitchSegment
+import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.transferone.LogFlumePreTransferSegment
+import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.transferone.LogFlumeTransferSegment
 import net.bandithemepark.bandicore.park.attractions.tracks.commands.*
 import net.bandithemepark.bandicore.park.attractions.tracks.editing.TrackEditor
 import net.bandithemepark.bandicore.park.attractions.tracks.editing.editors.TrackEditorNode
@@ -52,6 +53,11 @@ class TrackManager(val splineType: SplineType, val pointsPerMeter: Int, val fric
         LogflumeLiftSegment().register()
         LogflumeDropSegment().register()
         LogflumeStationSegment().register()
+        LogFlumeTransferSegment().register()
+        LogFlumePreTransferSegment().register()
+        LogflumeBackwardsLiftSegment().register()
+        LogFlumeSwitchSegment().register()
+        LogFlumePreSwitchSegment().register()
     }
 
     private fun registerTriggers() {
