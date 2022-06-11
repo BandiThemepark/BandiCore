@@ -161,5 +161,7 @@
   "region-command-area-selected": "Successfully selected the area with index %index% of the region with ID %region%",
   "attraction-not-found": "The attraction you specified was not found",
   "attraction-mode-not-found": "The attraction mode you specified was not found",
-  "attraction-mode-set": "Successfully set the attraction mode of attraction %attraction% to %mode%"
+  "attraction-mode-set": "Successfully set the attraction mode of attraction %attraction% to %mode%",
+  "chunk-renderer-started": "Started rendering the chunk you are currently in...",
+  "chunk-renderer-finished": "The chunk you are in has been rendered. The result has been saved."
 }

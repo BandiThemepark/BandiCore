@@ -95,3 +95,5 @@ commands:
     description: Operate attractions around the park
   attraction:
     description: Command used for managing and viewing attractions
+  chunkrenderer:
+    description: Renders the chunk you are currently in
