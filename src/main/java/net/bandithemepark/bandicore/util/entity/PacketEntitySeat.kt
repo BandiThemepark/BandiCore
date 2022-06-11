@@ -21,7 +21,7 @@ import org.bukkit.event.Listener
 import org.bukkit.util.Vector
 
 class PacketEntitySeat: PacketEntity() {
-    var harnessesOpen = true
+    var harnessesOpen = false
     var exitingLocation: Location? = null
 
     override fun getInstance(world: ServerLevel, x: Double, y: Double, z: Double): LivingEntity {

@@ -54,14 +54,18 @@ class LogFlumeRideOP: RideOP(
     val stationSegment = layout.segmentSeparators.find { it.type is LogflumeStationSegment }!!
     val station = stationSegment.type as LogflumeStationSegment
     var dispatchDelay = 0
+    val automaticRideOP = LogFlumeAutomaticRideOP(this)
 
+    val gatesButton = LogFlumeGatesButton()
+    val harnessButton = LogFlumeHarnessButton()
+    val dispatchButton = LogFlumeDispatchButton()
     override fun getPages(): List<RideOPPage> {
         return mutableListOf(
             RideOPHomePage(listOf(
-                LogFlumeGatesButton(),
-                LogFlumeHarnessButton(),
+                gatesButton,
+                harnessButton,
                 LogFlumeIndicator(),
-                LogFlumeDispatchButton(),
+                dispatchButton,
                 LogFlumeEStop()
             )),
             RideOPCameraPage(listOf(
@@ -128,6 +132,8 @@ class LogFlumeRideOP: RideOP(
             dispatchDelay--
             if(dispatchDelay == 0) updateMenu()
         }
+
+        automaticRideOP.second()
     }
 
     override fun onServerStart() {
@@ -171,5 +177,19 @@ class LogFlumeRideOP: RideOP(
         switch.prepareBackwards()
         switchMovingForward = false
         switchTimeLeft = 100
+    }
+
+    fun dispatch() {
+        automaticRideOP.dispatchesLeft--
+        if(station.currentStopped != null) {
+            if (station.currentStopped?.getPlayerPassengers()!!.isNotEmpty()) {
+                automaticRideOP.dispatchesLeft = 4
+            }
+        }
+
+        automaticRideOP.countdown = false
+
+        station.dispatch()
+        dispatchDelay = 20
     }
 }

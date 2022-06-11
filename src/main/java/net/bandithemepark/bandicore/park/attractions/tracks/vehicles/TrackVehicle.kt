@@ -5,10 +5,12 @@ import net.bandithemepark.bandicore.park.attractions.tracks.TrackLayout
 import net.bandithemepark.bandicore.park.attractions.tracks.TrackPosition
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.actions.TrackVehicleAction
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.Attachment
+import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.SeatAttachment
 import net.bandithemepark.bandicore.util.FileManager
 import net.bandithemepark.bandicore.util.TrackUtil
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
+import org.bukkit.entity.Player
 import java.io.File
 
 class TrackVehicle(val ridingOn: TrackLayout, var position: TrackPosition, val id: String) {
@@ -171,6 +173,19 @@ class TrackVehicle(val ridingOn: TrackLayout, var position: TrackPosition, val i
 
         back.move(ridingOn, -totalLength / 2.0)
         return back
+    }
+
+    /**
+     * Gets all passengers on this vehicle that are players (so excluding NPCs)
+     */
+    fun getPlayerPassengers(): List<Player> {
+        val list = mutableListOf<Player>()
+        getAllAttachments().filter { it.type is SeatAttachment }.forEach {
+            (it.type as SeatAttachment).seat?.getPassengers()?.filterIsInstance<Player>()?.forEach {
+                    entity -> list.add(entity)
+            }
+        }
+        return list
     }
 
     enum class PhysicsType {

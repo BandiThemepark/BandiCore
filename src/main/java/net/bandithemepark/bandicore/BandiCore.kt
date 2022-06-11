@@ -4,7 +4,6 @@ import net.bandithemepark.bandicore.util.entity.PacketEntity
 import net.bandithemepark.bandicore.bandithemepark.kaliba.KalibaEffects
 import net.bandithemepark.bandicore.network.backend.BackendSetting
 import net.bandithemepark.bandicore.park.attractions.tracks.TrackManager
-import net.bandithemepark.bandicore.park.attractions.tracks.TrackPosition
 import net.bandithemepark.bandicore.park.attractions.tracks.commands.TrackCommand
 import net.bandithemepark.bandicore.park.attractions.tracks.splines.BezierSpline
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.commands.TrackVehicleCommand
@@ -36,6 +35,7 @@ import org.bukkit.plugin.java.JavaPlugin
 import me.m56738.smoothcoasters.api.SmoothCoastersAPI
 import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.LogFlumeAttraction
 import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.rideop.LogFlumeRideOP
+import net.bandithemepark.bandicore.network.audioserver.map.ChunkRendererCommand
 import net.bandithemepark.bandicore.network.mqtt.MQTTConnector
 import net.bandithemepark.bandicore.network.queue.QueueCommand
 import net.bandithemepark.bandicore.park.attractions.AttractionCommand
@@ -61,14 +61,8 @@ import net.bandithemepark.bandicore.server.essentials.teleport.TeleportCommand
 import net.bandithemepark.bandicore.server.regions.BandiRegionCommand
 import net.bandithemepark.bandicore.server.regions.BandiRegionManager
 import net.bandithemepark.bandicore.server.regions.events.BandiRegionEvents
-import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.entity.HoverableEntity
 import net.bandithemepark.bandicore.util.entity.PacketEntitySeat
-import net.bandithemepark.bandicore.util.entity.armorstand.HoverableArmorStand
-import net.minecraft.world.entity.decoration.ArmorStand
-import org.bukkit.Location
-import org.bukkit.Material
-import org.bukkit.entity.Player
 
 class BandiCore: JavaPlugin() {
     companion object {
@@ -159,18 +153,6 @@ class BandiCore: JavaPlugin() {
 
         // Registering the messaging channel for sending players
         Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord")
-
-        // TODO Test for hoverable entities
-//        val entity = object: HoverableArmorStand("temp", "bt.vip") {
-//            override fun onInteract(player: Player) {
-//                Bukkit.dispatchCommand(player, "rideoptest")
-//            }
-//        }
-//        entity.spawn(Location(Bukkit.getWorld("world"), 63.0, -0.4, -164.5, -90.0F, -90.0F))
-//        entity.handle!!.isInvisible = true
-//        (entity.handle!! as ArmorStand).isMarker = true
-//        entity.helmet = ItemFactory(Material.DIAMOND_SHOVEL).setCustomModelData(8).build()
-//        entity.updateMetadata()
     }
 
     override fun onDisable() {
@@ -190,7 +172,7 @@ class BandiCore: JavaPlugin() {
             player.getBossBar().hideBossBar()
         }
 
-        // Disconnect the MQTT Client
+        // Disconnect any clients
         mqttConnector.disconnect()
     }
 
@@ -222,6 +204,7 @@ class BandiCore: JavaPlugin() {
         getCommand("region")!!.setExecutor(BandiRegionCommand())
         getCommand("rideop")!!.setExecutor(RideOPCommand())
         getCommand("attraction")!!.setExecutor(AttractionCommand())
+        getCommand("chunkrenderer")!!.setExecutor(ChunkRendererCommand())
     }
 
     private fun registerEvents() {

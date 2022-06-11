@@ -7,8 +7,7 @@ import org.bukkit.entity.Player
 class LogFlumeDispatchButton: DispatchButton(4) {
     override fun onDispatch(player: Player) {
         val rideOP = RideOP.get("logflume") as LogFlumeRideOP
-        rideOP.station.dispatch()
-        rideOP.dispatchDelay = 20
+        rideOP.dispatch()
     }
 
     override fun isAvailable(): Boolean {
