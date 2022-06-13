@@ -3,23 +3,21 @@ package net.bandithemepark.bandicore.util.npc
 import com.mojang.authlib.GameProfile
 import com.mojang.datafixers.util.Pair
 import net.bandithemepark.bandicore.BandiCore
-import net.kyori.adventure.text.Component
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.*
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EquipmentSlot
-import net.minecraft.world.scores.PlayerTeam
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.block.data.type.TrapDoor
-import org.bukkit.craftbukkit.v1_18_R2.CraftWorld
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer
-import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack
+import org.bukkit.craftbukkit.v1_19_R1.CraftWorld
+import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer
+import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -48,7 +46,7 @@ class NPC(val name: String, val skinOwner: Player, var visibilityType: NPCVisibi
         profile!!.properties.put("textures", (skinOwner as CraftPlayer).handle.gameProfile.properties.get("textures").iterator().next())
 
         // Creating the actual NPC instance and moving it to the spawn location
-        npc = ServerPlayer(server, (location.world as CraftWorld).handle, profile!!)
+        npc = ServerPlayer(server, (location.world as CraftWorld).handle, profile!!, null) // TODO Fix public key (or not, but at least check)
         npc!!.setPos(location.x, location.y, location.z)
 
         // Sending packets for spawning the NPC
