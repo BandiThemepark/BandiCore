@@ -95,5 +95,11 @@ commands:
     description: Operate attractions around the park
   attraction:
     description: Command used for managing and viewing attractions
+    aliases:
+      - attr
+      - attractions
+      - att
+      - ride
+      - rides
   chunkrenderer:
     description: Renders the chunk you are currently in
