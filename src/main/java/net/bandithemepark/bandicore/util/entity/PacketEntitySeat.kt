@@ -2,12 +2,14 @@ package net.bandithemepark.bandicore.util.entity
 
 import me.m56738.smoothcoasters.api.RotationMode
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.park.attractions.Attraction
 import net.bandithemepark.bandicore.server.essentials.afk.AfkManager.Companion.setAfkProtection
 import net.bandithemepark.bandicore.util.entity.event.PacketEntityDismountEvent
 import net.bandithemepark.bandicore.util.entity.event.PacketEntityInteractEvent
 import net.bandithemepark.bandicore.util.entity.event.SeatEnterEvent
 import net.bandithemepark.bandicore.util.entity.event.SeatExitEvent
 import net.bandithemepark.bandicore.util.math.Quaternion
+import net.kyori.adventure.text.Component
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.decoration.ArmorStand
@@ -20,7 +22,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.util.Vector
 
-class PacketEntitySeat: PacketEntity() {
+class PacketEntitySeat(val attraction: Attraction?): PacketEntity() {
     var harnessesOpen = false
     var exitingLocation: Location? = null
 
@@ -29,11 +31,10 @@ class PacketEntitySeat: PacketEntity() {
     }
 
     fun moveEntity(position: Vector, rotation: Quaternion, rotationDegrees: Vector) {
-        val angles = rotation.getYawPitchRoll()
         super.moveEntity(position.x, position.y, position.z, rotationDegrees.y.toFloat(), rotationDegrees.y.toFloat())
 
         Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
-            for(passenger in getPassengers().filter { it is Player }) {
+            for(passenger in getPassengers().filterIsInstance<Player>()) {
                 (passenger as CraftPlayer).handle.setPosRaw(position.x, position.y+1.5, position.z)
                 BandiCore.instance.smoothCoastersAPI.setRotation(null, passenger as Player, rotation.x.toFloat(), rotation.y.toFloat(), rotation.z.toFloat(), rotation.w.toFloat(), 3.toByte())
             }
@@ -56,11 +57,7 @@ class PacketEntitySeat: PacketEntity() {
      * @return Whether the player was successfully seated
      */
     fun sit(player: Player): Boolean {
-        // TODO Using attraction system, check if a player can actually sit on it
-        if(!harnessesOpen) return false
-        if(getPassengers().isNotEmpty()) return false
-        if(isRiding(player)) return false
-        // TODO Check if player isn't operating this attraction
+        if(!canSit(player)) return false
 
         addPassenger(player)
         updatePassengers()
@@ -76,11 +73,11 @@ class PacketEntitySeat: PacketEntity() {
      * @return Whether the player can be seated
      */
     fun canSit(player: Player): Boolean {
-        // TODO Using attraction system, check if a player can actually sit on it
+        if(attraction != null && !attraction.mode.canRide(player)) return false
         if(!harnessesOpen) return false
         if(getPassengers().isNotEmpty()) return false
         if(isRiding(player)) return false
-        // TODO Check if player isn't operating this attraction
+        if(attraction != null && attraction.rideOP?.operator == player) return false
 
         return true
     }
@@ -111,8 +108,12 @@ class PacketEntitySeat: PacketEntity() {
                     if(!(event.dismounted as PacketEntitySeat).harnessesOpen) {
                         event.isCancelled = true
                         event.player.setAfkProtection(false)
-                        event.dismounted.ejectPassenger(event.player)
-                        //event.dismounted.ejectPassengerAt(event.player, ) // TODO Retrieve exiting location
+
+                        if((event.dismounted as PacketEntitySeat).exitingLocation == null) {
+                            event.dismounted.ejectPassenger(event.player)
+                        } else {
+                            event.dismounted.ejectPassengerAt(event.player, (event.dismounted as PacketEntitySeat).exitingLocation!!)
+                        }
                     }
                 } else {
                     event.isCancelled = true
