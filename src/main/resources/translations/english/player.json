@@ -32,5 +32,6 @@
   "rideop-button-harness-title": "Open and close harnesses",
   "rideop-button-harness-description": "Open or close the harnesses, so that people can enter",
   "rideop-button-block-clear-title": "Is next block clear",
-  "rideop-button-block-clear-description": "Whether the next block section is clear (required for dispatch)"
+  "rideop-button-block-clear-description": "Whether the next block section is clear (required for dispatch)",
+  "rideop-unavailable": "You can currently not operate this ride because of the mode it is in. Please try again later"
 }
