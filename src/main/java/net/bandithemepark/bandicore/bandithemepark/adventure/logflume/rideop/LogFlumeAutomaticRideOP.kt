@@ -26,6 +26,7 @@ class LogFlumeAutomaticRideOP(val rideOP: LogFlumeRideOP) {
 
                     if(!rideOP.harnessButton.open) {
                         rideOP.harnessButton.setOpen()
+                        rideOP.harnessButton.open = true
                         rideOP.updateMenu()
                     }
 
@@ -65,6 +66,7 @@ class LogFlumeAutomaticRideOP(val rideOP: LogFlumeRideOP) {
 
                                     if(rideOP.harnessButton.open) {
                                         rideOP.harnessButton.setClosed()
+                                        rideOP.harnessButton.open = false
                                         rideOP.updateMenu()
                                     }
 
@@ -72,6 +74,7 @@ class LogFlumeAutomaticRideOP(val rideOP: LogFlumeRideOP) {
                                         rideOP.gatesButton.open = false
                                         Bukkit.getScheduler().runTask(BandiCore.instance, Runnable { rideOP.gatesButton.updateGates() })
                                         rideOP.harnessButton.setClosed()
+                                        rideOP.harnessButton.open = false
                                         rideOP.dispatch()
                                         rideOP.updateMenu()
                                     } else {
