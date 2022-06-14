@@ -140,15 +140,13 @@ class LogFlumeRideOP: RideOP(
         transfer.setToStart()
         switch.setToStart()
 
-        BandiCore.instance.trackManager.vehicleManager.loadTrain("logflume", layout, TrackPosition(layout.nodes.find { it.id == "117" }!!, 0), 0.0)
-        BandiCore.instance.trackManager.vehicleManager.loadTrain("logflume", layout, TrackPosition(layout.nodes.find { it.id == "118" }!!, 0), 0.0)
-        BandiCore.instance.trackManager.vehicleManager.loadTrain("logflume", layout, TrackPosition(layout.nodes.find { it.id == "119" }!!, 0), 0.0)
-        BandiCore.instance.trackManager.vehicleManager.loadTrain("logflume", layout, TrackPosition(layout.nodes.find { it.id == "120" }!!, 0), 0.0)
-        BandiCore.instance.trackManager.vehicleManager.loadTrain("logflume", layout, TrackPosition(layout.nodes.find { it.id == "121" }!!, 0), 0.0)
-//        BandiCore.instance.trackManager.vehicleManager.loadTrain("logflume", layout, TrackPosition(layout.nodes.find { it.id == "122" }!!, 0), 0.0)
-//        BandiCore.instance.trackManager.vehicleManager.loadTrain("logflume", layout, TrackPosition(layout.nodes.find { it.id == "123" }!!, 0), 0.0)
-//        BandiCore.instance.trackManager.vehicleManager.loadTrain("logflume", layout, TrackPosition(layout.nodes.find { it.id == "124" }!!, 0), 0.0)
-//        BandiCore.instance.trackManager.vehicleManager.loadTrain("logflume", layout, TrackPosition(layout.nodes.find { it.id == "125" }!!, 0), 0.0)
+        Bukkit.getScheduler().scheduleSyncDelayedTask(BandiCore.instance, {
+            BandiCore.instance.trackManager.vehicleManager.loadTrain("logflume", layout, TrackPosition(layout.nodes.find { it.id == "117" }!!, 0), 0.0)
+            BandiCore.instance.trackManager.vehicleManager.loadTrain("logflume", layout, TrackPosition(layout.nodes.find { it.id == "118" }!!, 0), 0.0)
+            BandiCore.instance.trackManager.vehicleManager.loadTrain("logflume", layout, TrackPosition(layout.nodes.find { it.id == "119" }!!, 0), 0.0)
+            BandiCore.instance.trackManager.vehicleManager.loadTrain("logflume", layout, TrackPosition(layout.nodes.find { it.id == "120" }!!, 0), 0.0)
+            BandiCore.instance.trackManager.vehicleManager.loadTrain("logflume", layout, TrackPosition(layout.nodes.find { it.id == "121" }!!, 0), 0.0)
+        }, 10)
     }
 
     override fun onServerStop() {
