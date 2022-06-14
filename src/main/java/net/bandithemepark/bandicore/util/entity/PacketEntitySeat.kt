@@ -8,12 +8,12 @@ import net.bandithemepark.bandicore.util.entity.event.PacketEntityInteractEvent
 import net.bandithemepark.bandicore.util.entity.event.SeatEnterEvent
 import net.bandithemepark.bandicore.util.entity.event.SeatExitEvent
 import net.bandithemepark.bandicore.util.math.Quaternion
-import net.kyori.adventure.text.Component
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.decoration.ArmorStand
 import org.bukkit.Bukkit
 import org.bukkit.Location
+import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -32,9 +32,12 @@ class PacketEntitySeat: PacketEntity() {
         val angles = rotation.getYawPitchRoll()
         super.moveEntity(position.x, position.y, position.z, rotationDegrees.y.toFloat(), rotationDegrees.y.toFloat())
 
-        for(passenger in getPassengers().filter { it is Player }) {
-            BandiCore.instance.smoothCoastersAPI.setRotation(null, passenger as Player, rotation.x.toFloat(), rotation.y.toFloat(), rotation.z.toFloat(), rotation.w.toFloat(), 3.toByte())
-        }
+        Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
+            for(passenger in getPassengers().filter { it is Player }) {
+                (passenger as CraftPlayer).handle.setPosRaw(position.x, position.y+1.5, position.z)
+                BandiCore.instance.smoothCoastersAPI.setRotation(null, passenger as Player, rotation.x.toFloat(), rotation.y.toFloat(), rotation.z.toFloat(), rotation.w.toFloat(), 3.toByte())
+            }
+        })
     }
 
     override fun spawn(location: Location) {

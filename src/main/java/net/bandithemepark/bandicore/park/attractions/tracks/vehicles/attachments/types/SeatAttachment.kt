@@ -6,6 +6,7 @@ import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.AttachmentType
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayer
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin
+import net.bandithemepark.bandicore.server.essentials.VanishCommand
 import net.bandithemepark.bandicore.util.Util.isAlexSkin
 import net.bandithemepark.bandicore.util.entity.PacketEntity
 import net.bandithemepark.bandicore.util.entity.PacketEntitySeat
@@ -21,6 +22,8 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.potion.PotionEffect
+import org.bukkit.potion.PotionEffectType
 import org.bukkit.util.Vector
 
 class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
@@ -138,12 +141,16 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
         private val hiddenPlayers = mutableListOf<Player>()
 
         fun updateForJoining(joining: Player) {
-            hiddenPlayers.forEach { joining.hidePlayer(BandiCore.instance, it) }
+            hiddenPlayers.forEach {
+                joining.hidePlayer(BandiCore.instance, it)
+                VanishCommand.showTabList(it, listOf(joining))
+            }
         }
 
         fun hide(player: Player) {
             hiddenPlayers.add(player)
             for(player2 in Bukkit.getOnlinePlayers()) player2.hidePlayer(BandiCore.instance, player)
+            VanishCommand.showTabList(player, Bukkit.getOnlinePlayers().toList())
         }
 
         fun show(player: Player) {
