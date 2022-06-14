@@ -1,5 +1,6 @@
 package net.bandithemepark.bandicore.park.attractions
 
+import net.bandithemepark.bandicore.park.attractions.menu.AttractionMenu
 import net.bandithemepark.bandicore.park.attractions.mode.AttractionMode
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedMessage
 import net.bandithemepark.bandicore.server.translations.MessageReplacement
@@ -9,16 +10,17 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
+import org.bukkit.entity.Player
 
 class AttractionCommand: CommandExecutor, TabCompleter {
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (!command.name.equals("attraction", true)) return false
 
         if (!sender.hasPermission("bandithemepark.crew")) {
-            // TODO Open menu
+            if(sender is Player) AttractionMenu(sender)
         } else {
             if(args.isEmpty()) {
-                // TODO Open menu
+                if(sender is Player) AttractionMenu(sender)
             } else {
                 if(args.size == 3) {
                     if(args[0].equals("setmode", true)) {

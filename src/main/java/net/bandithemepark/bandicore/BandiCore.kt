@@ -39,6 +39,7 @@ import net.bandithemepark.bandicore.network.audioserver.map.ChunkRendererCommand
 import net.bandithemepark.bandicore.network.mqtt.MQTTConnector
 import net.bandithemepark.bandicore.network.queue.QueueCommand
 import net.bandithemepark.bandicore.park.attractions.AttractionCommand
+import net.bandithemepark.bandicore.park.attractions.menu.AttractionMenu
 import net.bandithemepark.bandicore.park.attractions.mode.*
 import net.bandithemepark.bandicore.park.attractions.rideop.RideOP
 import net.bandithemepark.bandicore.park.attractions.rideop.RideOPCommand
@@ -230,6 +231,7 @@ class BandiCore: JavaPlugin() {
         getServer().pluginManager.registerEvents(ColoredSigns(), this)
         getServer().pluginManager.registerEvents(BandiRegionEvents(), this)
         getServer().pluginManager.registerEvents(RideOPEvents(), this)
+        getServer().pluginManager.registerEvents(AttractionMenu.Events(), this)
     }
 
     private fun prepareSettings() {

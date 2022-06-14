@@ -46,7 +46,7 @@ class NPC(val name: String, val skinOwner: Player, var visibilityType: NPCVisibi
         profile!!.properties.put("textures", (skinOwner as CraftPlayer).handle.gameProfile.properties.get("textures").iterator().next())
 
         // Creating the actual NPC instance and moving it to the spawn location
-        npc = ServerPlayer(server, (location.world as CraftWorld).handle, profile!!, null) // TODO Fix public key (or not, but at least check)
+        npc = ServerPlayer(server, (location.world as CraftWorld).handle, profile!!, null)
         npc!!.setPos(location.x, location.y, location.z)
 
         // Sending packets for spawning the NPC
