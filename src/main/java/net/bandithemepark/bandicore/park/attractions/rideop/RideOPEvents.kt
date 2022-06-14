@@ -36,12 +36,12 @@ class RideOPEvents: Listener {
             // Check if the clicked slot is for the operator
             if(event.slot == 48) {
                 if(rideOP.operator == null) {
-                    if(canOperate(player)) startOperating(player, rideOP)
+                    if(canOperate(player, rideOP)) startOperating(player, rideOP)
                 } else {
                     if(rideOP.operator == player) {
                         stopOperating(player, rideOP)
                     } else {
-                        if(canOperate(player) && player.hasPermission("bandithemepark.crew")) startOperating(player, rideOP)
+                        if(canOperate(player, rideOP) && player.hasPermission("bandithemepark.crew")) startOperating(player, rideOP)
                     }
                 }
             }
@@ -61,8 +61,13 @@ class RideOPEvents: Listener {
         }
     }
 
-    fun canOperate(player: Player): Boolean {
-        return RideOP.getOperating(player) == null && !player.isInsideVehicle && !PacketEntitySeat.isRiding(player)
+    fun canOperate(player: Player, rideOP: RideOP): Boolean {
+        if(RideOP.isOperating(player)) return false
+        if(player.isInsideVehicle) return false
+        if(PacketEntitySeat.isRiding(player)) return false
+        if(!rideOP.getParentAttraction()!!.mode.canOperate(player)) return false
+
+        return true
     }
 
     fun startOperating(player: Player, rideOP: RideOP) {
