@@ -1,5 +1,6 @@
 package net.bandithemepark.bandicore.park.attractions.mode
 
+import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedMessage
 import net.bandithemepark.bandicore.util.chat.BandiColors
 import org.bukkit.entity.Player
 
@@ -9,6 +10,10 @@ class AttractionModeOpen: AttractionMode("open", "Open", BandiColors.GREEN, fals
     }
 
     override fun canWarp(player: Player): Boolean {
+        return true
+    }
+
+    override fun canOperate(player: Player): Boolean {
         return true
     }
 }
