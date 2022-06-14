@@ -14,7 +14,6 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
-import java.lang.reflect.Field
 
 class VanishCommand: CommandExecutor {
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
@@ -37,7 +36,6 @@ class VanishCommand: CommandExecutor {
     }
 
     companion object {
-        private var pingField: Field? = null
         val currentlyHidden = mutableListOf<Player>()
 
         fun vanish(player: Player) {
