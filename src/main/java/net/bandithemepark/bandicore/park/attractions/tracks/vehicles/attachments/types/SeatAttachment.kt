@@ -1,12 +1,12 @@
 package net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types
 
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.park.attractions.Attraction
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.Attachment
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.AttachmentPosition
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.AttachmentType
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayer
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin
-import net.bandithemepark.bandicore.server.essentials.VanishCommand
 import net.bandithemepark.bandicore.util.Util.isAlexSkin
 import net.bandithemepark.bandicore.util.entity.PacketEntity
 import net.bandithemepark.bandicore.util.entity.PacketEntitySeat
@@ -22,23 +22,20 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
-import org.bukkit.potion.PotionEffect
-import org.bukkit.potion.PotionEffectType
 import org.bukkit.util.Vector
 
 class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
-    val BODY_HEIGHT = 1.1
-    val ARMOR_STAND_HEIGHT = 1.675
-
     lateinit var parent: Attachment
     var seat: PacketEntitySeat? = null
-    lateinit var marker: PacketEntityMarker
+    private lateinit var marker: PacketEntityMarker
+    var attraction: Attraction? = null
 
     override fun onSpawn(location: Location, parent: Attachment) {
         this.parent = parent
         marker = PacketEntityMarker(location.world)
 
-        seat = PacketEntitySeat()
+        seat = PacketEntitySeat(attraction)
+        seat!!.exitingLocation = attraction?.exitingLocation
         seat!!.spawn(location)
         seat!!.handle!!.isInvisible = true
         seat!!.handle!!.isNoGravity = true
@@ -48,14 +45,14 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
         connections[seat!!] = this
     }
 
-    var lastPosition = Vector(0.0, 0.0, 0.0)
+    private var lastPosition = Vector(0.0, 0.0, 0.0)
     override fun onUpdate(mainPosition: Vector, mainRotation: Quaternion, secondaryPositions: HashMap<Vector, Quaternion>, rotationDegrees: Vector) {
         marker.moveEntity(mainPosition)
 
         val seatPosition = secondaryPositions.keys.toList()[0]
         val seatRotation = secondaryPositions[seatPosition]!!
         val editedPosition = seatPosition.clone()
-        editedPosition.y = editedPosition.y - (BODY_HEIGHT+ARMOR_STAND_HEIGHT)
+        editedPosition.y = editedPosition.y - (BODY_HEIGHT + ARMOR_STAND_HEIGHT)
         seat!!.moveEntity(editedPosition, seatRotation, rotationDegrees)
 
         customPlayer?.location = mainPosition.clone().toLocation(seat!!.location!!.world)
@@ -76,7 +73,7 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
     }
 
     override fun onMetadataLoad(metadata: List<String>) {
-        // TODO Load attraction and it's exiting location and apply it to the seat
+        attraction = Attraction.get(metadata[0])
     }
 
     override fun markFor(player: Player) {
@@ -143,20 +140,21 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
         fun updateForJoining(joining: Player) {
             hiddenPlayers.forEach {
                 joining.hidePlayer(BandiCore.instance, it)
-                VanishCommand.showTabList(it, listOf(joining))
             }
         }
 
         fun hide(player: Player) {
             hiddenPlayers.add(player)
             for(player2 in Bukkit.getOnlinePlayers()) player2.hidePlayer(BandiCore.instance, player)
-            VanishCommand.showTabList(player, Bukkit.getOnlinePlayers().toList())
         }
 
         fun show(player: Player) {
             hiddenPlayers.remove(player)
             for(player2 in Bukkit.getOnlinePlayers()) player2.showPlayer(BandiCore.instance, player)
         }
+
+        const val BODY_HEIGHT = 1.1
+        const val ARMOR_STAND_HEIGHT = 1.675
     }
 
     // TODO Create class for coaster rider. To add support for NPCs

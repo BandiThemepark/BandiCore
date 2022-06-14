@@ -3,9 +3,10 @@ package net.bandithemepark.bandicore.park.attractions
 import net.bandithemepark.bandicore.park.attractions.mode.AttractionMode
 import net.bandithemepark.bandicore.park.attractions.rideop.RideOP
 import net.bandithemepark.bandicore.util.FileManager
+import org.bukkit.Location
 import org.bukkit.entity.Player
 
-abstract class Attraction(val id: String, val appearance: AttractionAppearance) {
+abstract class Attraction(val id: String, val appearance: AttractionAppearance, val exitingLocation: Location) {
     var mode: AttractionMode
     val rideOP = RideOP.get(id)
 
