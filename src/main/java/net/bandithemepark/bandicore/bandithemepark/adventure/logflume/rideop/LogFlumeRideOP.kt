@@ -137,7 +137,9 @@ class LogFlumeRideOP: RideOP(
     }
 
     override fun onServerStart() {
+        transfer.spawnModel()
         transfer.setToStart()
+        switch.spawnModel()
         switch.setToStart()
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(BandiCore.instance, {

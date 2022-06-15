@@ -3,11 +3,26 @@ package net.bandithemepark.bandicore.bandithemepark.adventure.logflume.transfero
 import net.bandithemepark.bandicore.park.attractions.tracks.TrackLayout
 import net.bandithemepark.bandicore.park.attractions.tracks.TrackNode
 import net.bandithemepark.bandicore.park.attractions.tracks.splines.BezierSpline
+import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.TrackUtil
+import net.bandithemepark.bandicore.util.entity.armorstand.PacketEntityArmorStand
 import net.bandithemepark.bandicore.util.math.MathUtil
+import org.bukkit.Material
 import org.bukkit.util.Vector
 
 class LogFlumeTransfer(val layout: TrackLayout, val connector1: TrackNode, val connector2: TrackNode, val part1: TrackNode, val part2: TrackNode, val part1Start: Vector, val part1End: Vector, val part2Start: Vector, val part2End: Vector) {
+    val armorStand: PacketEntityArmorStand = PacketEntityArmorStand()
+    val armorStandYOffset = -1.0 - (11.0 / 16.0)
+
+    fun spawnModel() {
+        val position = part1Start.clone().add(part2Start).multiply(0.5).add(Vector(0.0, armorStandYOffset, 0.0)).add(layout.origin)
+
+        armorStand.spawn(position.toLocation(layout.world, -90.0F, 0.0F))
+        armorStand.handle!!.isInvisible = true
+        armorStand.updateMetadata()
+        armorStand.helmet = ItemFactory(Material.DIAMOND_SHOVEL).setCustomModelData(11).build()
+    }
+
     fun setToStart() {
         if(connector2.connectedTo != null) connector2.disconnect(layout)
 
@@ -63,6 +78,12 @@ class LogFlumeTransfer(val layout: TrackLayout, val connector1: TrackNode, val c
         part2.x = BezierSpline().linear(part2Start.x, part2End.x, t)
         part2.y = BezierSpline().linear(part2Start.y, part2End.y, t)
         part2.z = BezierSpline().linear(part2Start.z, part2End.z, t)
+
+        val averageX = (part1.x + part2.x) / 2.0
+        val averageY = (part1.y + part2.y) / 2.0
+        val averageZ = (part1.z + part2.z) / 2.0
+        val position = Vector(averageX, averageY+armorStandYOffset, averageZ).add(layout.origin)
+        armorStand.teleport(position.toLocation(layout.world, -90.0F, 0.0F))
 
         updatePath()
         updateBetter(BezierSpline().linear(part1Start.z, part1End.z, t))
