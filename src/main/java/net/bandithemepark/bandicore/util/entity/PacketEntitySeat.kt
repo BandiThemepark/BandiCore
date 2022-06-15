@@ -35,7 +35,7 @@ class PacketEntitySeat(val attraction: Attraction?): PacketEntity() {
 
         Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
             for(passenger in getPassengers().filterIsInstance<Player>()) {
-                (passenger as CraftPlayer).handle.setPosRaw(position.x, position.y+1.5, position.z)
+                (passenger as CraftPlayer).handle.setPosRaw(position.x, position.y+1.25, position.z)
                 BandiCore.instance.smoothCoastersAPI.setRotation(null, passenger as Player, rotation.x.toFloat(), rotation.y.toFloat(), rotation.z.toFloat(), rotation.w.toFloat(), 3.toByte())
             }
         })
