@@ -4,10 +4,13 @@ import net.bandithemepark.bandicore.park.attractions.tracks.TrackLayout
 import net.bandithemepark.bandicore.park.attractions.tracks.TrackNode
 import net.bandithemepark.bandicore.park.attractions.tracks.segments.SegmentSeparator
 import net.bandithemepark.bandicore.park.attractions.tracks.splines.BezierSpline
+import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.TrackUtil
+import net.bandithemepark.bandicore.util.entity.armorstand.PacketEntityArmorStand
 import net.bandithemepark.bandicore.util.math.MathUtil
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
+import org.bukkit.Material
 import org.bukkit.util.Vector
 
 class LogFlumeSwitch(val layout: TrackLayout, val segment: SegmentSeparator, val storageConnector: TrackNode, val switchPart1: TrackNode, val switchPart2: TrackNode, val switchConnector1: TrackNode, val switchConnector2: TrackNode, val part1Start: Vector, val part1End: Vector, val part2Start: Vector, val part2End: Vector) {
@@ -26,6 +29,18 @@ class LogFlumeSwitch(val layout: TrackLayout, val segment: SegmentSeparator, val
         secondNodeEndRotation = 180.0
         firstNodeStartRotation = -90.0
         firstNodeEndRotation = 0.0
+    }
+
+    val armorStand: PacketEntityArmorStand = PacketEntityArmorStand()
+    val armorStandYOffset = -1.0 - (11.0 / 16.0)
+
+    fun spawnModel() {
+        val position = part1Start.clone().add(part2Start).multiply(0.5).add(Vector(0.0, armorStandYOffset, 0.0)).add(layout.origin)
+
+        armorStand.spawn(position.toLocation(layout.world, 90.0F, 0.0F))
+        armorStand.handle!!.isInvisible = true
+        armorStand.updateMetadata()
+        armorStand.helmet = ItemFactory(Material.DIAMOND_SHOVEL).setCustomModelData(11).build()
     }
 
     fun setToStart() {
@@ -84,6 +99,9 @@ class LogFlumeSwitch(val layout: TrackLayout, val segment: SegmentSeparator, val
         switchPart2.z = secondNodeLocation.z
 
         updatePathAndSegment()
+
+        val position = center.clone().add(Vector(0.0, armorStandYOffset, 0.0)).add(layout.origin)
+        armorStand.teleport(position.toLocation(layout.world, (-firstNodeRotation + 0.0).toFloat(), 0.0F))
     }
 
     fun updatePathAndSegment() {
