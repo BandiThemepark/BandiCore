@@ -10,6 +10,7 @@ import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin
 import net.bandithemepark.bandicore.util.Util.isAlexSkin
 import net.bandithemepark.bandicore.util.entity.PacketEntity
 import net.bandithemepark.bandicore.util.entity.PacketEntitySeat
+import net.bandithemepark.bandicore.util.entity.event.PacketEntityInputEvent
 import net.bandithemepark.bandicore.util.entity.event.SeatEnterEvent
 import net.bandithemepark.bandicore.util.entity.event.SeatExitEvent
 import net.bandithemepark.bandicore.util.entity.marker.PacketEntityMarker
@@ -29,6 +30,7 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
     var seat: PacketEntitySeat? = null
     private lateinit var marker: PacketEntityMarker
     var attraction: Attraction? = null
+    var tickMovementDirection = null as MovementDirection?
 
     override fun onSpawn(location: Location, parent: Attachment) {
         this.parent = parent
@@ -47,14 +49,32 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
 
     private var lastPosition = Vector(0.0, 0.0, 0.0)
     override fun onUpdate(mainPosition: Vector, mainRotation: Quaternion, secondaryPositions: HashMap<Vector, Quaternion>, rotationDegrees: Vector) {
+        // Updating the pose of the player rig
+        // TODO Make these poses configurable
+        // TODO Load these poses on metadata load
+        if(tickMovementDirection != null) {
+            if(tickMovementDirection == MovementDirection.UP) {
+                customPlayer?.loadFrom("scream")
+            }
+            if(tickMovementDirection == MovementDirection.DOWN) {
+                customPlayer?.loadFrom("shield")
+            }
+        } else {
+            customPlayer?.loadFrom("sit")
+        }
+        tickMovementDirection = null
+
+        // Updating the position of the marker
         marker.moveEntity(mainPosition)
 
+        // Updating hte position of the seat
         val seatPosition = secondaryPositions.keys.toList()[0]
         val seatRotation = secondaryPositions[seatPosition]!!
         val editedPosition = seatPosition.clone()
         editedPosition.y = editedPosition.y - (BODY_HEIGHT + ARMOR_STAND_HEIGHT)
         seat!!.moveEntity(editedPosition, seatRotation, rotationDegrees)
 
+        // Updating the position of the player rig
         customPlayer?.location = mainPosition.clone().toLocation(seat!!.location!!.world)
         customPlayer?.completeRotation = mainRotation.clone()
         customPlayer?.updatePosition()
@@ -131,6 +151,25 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
         fun onJoin(event: PlayerJoinEvent) {
             updateForJoining(event.player)
         }
+
+        @EventHandler
+        fun onInput(event: PacketEntityInputEvent) {
+            if(event.entity is PacketEntitySeat) {
+                if(connections.keys.contains(event.entity)) {
+                    val seat = connections[event.entity]!!
+
+                    if(event.z > 0) {
+                        seat.tickMovementDirection = MovementDirection.UP
+                    } else if(event.z < 0) {
+                        seat.tickMovementDirection = MovementDirection.DOWN
+                    } else if(event.x > 0) {
+                        seat.tickMovementDirection = MovementDirection.LEFT
+                    } else if(event.x < 0) {
+                        seat.tickMovementDirection = MovementDirection.RIGHT
+                    }
+                }
+            }
+        }
     }
 
     companion object {
@@ -155,6 +194,10 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
 
         const val BODY_HEIGHT = 1.1
         const val ARMOR_STAND_HEIGHT = 1.675
+    }
+
+    enum class MovementDirection {
+        UP, DOWN, LEFT, RIGHT
     }
 
     // TODO Create class for coaster rider. To add support for NPCs
