@@ -170,10 +170,84 @@ class CustomPlayer(val skin: CustomPlayerSkin) {
     // Position stuff
     var completeRotation = Quaternion()
 
+    val armRotationPointOffset = 0.063
+    val staticHeadOffset = Vector(0.3125, -1.35, 0.0)
+    val staticBodyOffset = Vector(0.3125, -1.31, 0.0)
+    val staticArmOffset = Vector(0.38-armRotationPointOffset, -1.38, 0.0) // 0.38, -1.38, 0.0 // 0.43
+    val staticLegOffset = Vector(0.3625-armRotationPointOffset, -1.26, 0.0) // 0.3625, -1.26, 0.0 // 0.4125
+
+    val movingOffset = Vector(armRotationPointOffset, 0.0, 0.0)
+
+    fun updatePosition() {
+        // Updating the head
+        val headRotationPointPosition = location!!.clone().add(MathUtil.rotateAroundPoint(completeRotation, headRotationPoint.x, headRotationPoint.y, headRotationPoint.z))
+        val newHeadRotation = Quaternion.multiply(completeRotation.clone(), headRotation)
+
+        val headPosition = headRotationPointPosition.clone().add(staticHeadOffset)
+        head.teleport(Location(head.location!!.world, headPosition.x, headPosition.y, headPosition.z))
+
+        val headPose = MathUtil.getArmorStandPose(newHeadRotation)
+        head.setRightArmPose(Math.toDegrees(headPose.x), Math.toDegrees(headPose.y), Math.toDegrees(headPose.z))
+
+        // Updating the body
+        val bodyRotationPointPosition = location!!.clone().add(MathUtil.rotateAroundPoint(completeRotation, bodyRotationPoint.x, bodyRotationPoint.y, bodyRotationPoint.z))
+        val newBodyRotation = Quaternion.multiply(completeRotation.clone(), bodyRotation)
+
+        val bodyPosition = bodyRotationPointPosition.clone().add(staticBodyOffset)
+        body.teleport(Location(body.location!!.world, bodyPosition.x, bodyPosition.y, bodyPosition.z))
+
+        val bodyPose = MathUtil.getArmorStandPose(newBodyRotation)
+        body.setRightArmPose(Math.toDegrees(bodyPose.x), Math.toDegrees(bodyPose.y), Math.toDegrees(bodyPose.z))
+
+        // Also moving the temp head to the same position as the body to hide it
+        tempHead.teleport(Location(body.location!!.world, bodyPosition.x, bodyPosition.y, bodyPosition.z))
+        tempHead.setHeadPose(Math.toDegrees(bodyPose.x), Math.toDegrees(bodyPose.y), Math.toDegrees(bodyPose.z))
+
+        // Updating the right arm
+        val rightArmRotationPointPosition = location!!.clone().add(MathUtil.rotateAroundPoint(completeRotation, rightArmRotationPoint.x, rightArmRotationPoint.y, rightArmRotationPoint.z))
+        val newRightArmRotation = Quaternion.multiply(completeRotation.clone(), rightArmRotation)
+
+        val rightArmPosition = rightArmRotationPointPosition.clone().add(staticArmOffset).add(MathUtil.rotateAroundPoint(newRightArmRotation, this.movingOffset.x, this.movingOffset.y, this.movingOffset.z))
+        rightArm.teleport(Location(rightArm.location!!.world, rightArmPosition.x, rightArmPosition.y, rightArmPosition.z))
+
+        val rightArmPose = MathUtil.getArmorStandPose(newRightArmRotation)
+        rightArm.setRightArmPose(Math.toDegrees(rightArmPose.x), Math.toDegrees(rightArmPose.y), Math.toDegrees(rightArmPose.z))
+
+        // Updating the left arm
+        val leftArmRotationPointPosition = location!!.clone().add(MathUtil.rotateAroundPoint(completeRotation, leftArmRotationPoint.x, leftArmRotationPoint.y, leftArmRotationPoint.z))
+        val newLeftArmRotation = Quaternion.multiply(completeRotation.clone(), leftArmRotation)
+
+        val leftArmPosition = leftArmRotationPointPosition.clone().add(staticArmOffset).add(MathUtil.rotateAroundPoint(newLeftArmRotation, this.movingOffset.x, this.movingOffset.y, this.movingOffset.z))
+        leftArm.teleport(Location(leftArm.location!!.world, leftArmPosition.x, leftArmPosition.y, leftArmPosition.z))
+
+        val leftArmPose = MathUtil.getArmorStandPose(newLeftArmRotation)
+        leftArm.setRightArmPose(Math.toDegrees(leftArmPose.x), Math.toDegrees(leftArmPose.y), Math.toDegrees(leftArmPose.z))
+
+        // Updating the right leg
+        val rightLegRotationPointPosition = location!!.clone().add(MathUtil.rotateAroundPoint(completeRotation, rightLegRotationPoint.x, rightLegRotationPoint.y, rightLegRotationPoint.z))
+        val newRightLegRotation = Quaternion.multiply(completeRotation.clone(), rightLegRotation)
+
+        val rightLegPosition = rightLegRotationPointPosition.clone().add(staticLegOffset).add(MathUtil.rotateAroundPoint(newRightLegRotation, this.movingOffset.x, this.movingOffset.y, this.movingOffset.z))
+        rightLeg.teleport(Location(rightLeg.location!!.world, rightLegPosition.x, rightLegPosition.y, rightLegPosition.z))
+
+        val rightLegPose = MathUtil.getArmorStandPose(newRightLegRotation)
+        rightLeg.setRightArmPose(Math.toDegrees(rightLegPose.x), Math.toDegrees(rightLegPose.y), Math.toDegrees(rightLegPose.z))
+
+        // Updating the left leg
+        val leftLegRotationPointPosition = location!!.clone().add(MathUtil.rotateAroundPoint(completeRotation, leftLegRotationPoint.x, leftLegRotationPoint.y, leftLegRotationPoint.z))
+        val newLeftLegRotation = Quaternion.multiply(completeRotation.clone(), leftLegRotation)
+
+        val leftLegPosition = leftLegRotationPointPosition.clone().add(staticLegOffset).add(MathUtil.rotateAroundPoint(newLeftLegRotation, this.movingOffset.x, this.movingOffset.y, this.movingOffset.z))
+        leftLeg.teleport(Location(leftLeg.location!!.world, leftLegPosition.x, leftLegPosition.y, leftLegPosition.z))
+
+        val leftLegPose = MathUtil.getArmorStandPose(newLeftLegRotation)
+        leftLeg.setRightArmPose(Math.toDegrees(leftLegPose.x), Math.toDegrees(leftLegPose.y), Math.toDegrees(leftLegPose.z))
+    }
+
     /**
      * Updates the position of the custom player and all of its limbs
      */
-    fun updatePosition() {
+    fun updatedPosition() {
         // Updating the head
         val headRotationPointPosition = location!!.clone().add(MathUtil.rotateAroundPoint(completeRotation, headRotationPoint.x, headRotationPoint.y, headRotationPoint.z))
         val newHeadRotation = completeRotation.clone()
