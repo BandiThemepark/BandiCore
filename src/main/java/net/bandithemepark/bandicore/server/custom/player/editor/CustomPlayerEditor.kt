@@ -51,6 +51,7 @@ class CustomPlayerEditor(val player: Player) {
 
         Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
             customPlayer.loadFrom("default")
+            customPlayer.updatePosition()
         })
     }
 
