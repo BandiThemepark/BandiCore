@@ -3,6 +3,7 @@ package net.bandithemepark.bandicore.server.custom.player.editor
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayer
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin
+import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin.Companion.getCustomPlayerSkin
 import net.bandithemepark.bandicore.server.custom.player.editor.types.PlayerEditor
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedMessage
 import net.bandithemepark.bandicore.util.ItemFactory
@@ -26,7 +27,7 @@ import org.bukkit.inventory.EquipmentSlot
 class CustomPlayerEditor(val player: Player) {
     val beforeInventory = player.inventory.contents
     var mode = Mode.ROTATION_POINT
-    var customPlayer = CustomPlayer(CustomPlayerSkin(player.uniqueId, (player as CraftPlayer).handle.gameProfile.properties.get("textures").iterator().next().value))
+    var customPlayer = CustomPlayer(player.getCustomPlayerSkin())
 
     lateinit var currentEditor: CustomPlayerEditorType
         private set
