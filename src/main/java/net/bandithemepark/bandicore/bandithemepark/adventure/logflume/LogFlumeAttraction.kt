@@ -1,7 +1,9 @@
 package net.bandithemepark.bandicore.bandithemepark.adventure.logflume
 
+import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.rideop.LogFlumeRideOP
 import net.bandithemepark.bandicore.park.attractions.Attraction
 import net.bandithemepark.bandicore.park.attractions.AttractionAppearance
+import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.SeatAttachment
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
@@ -12,7 +14,15 @@ class LogFlumeAttraction: Attraction("logflume",
     Location(Bukkit.getWorld("world"), 63.5, 1.0, -171.5, -45.0F, 0.0F)
     ) {
     override fun getPlayerPassengers(): List<Player> {
-        return emptyList()
+        val passengers = mutableListOf<Player>()
+
+        for(vehicle in (rideOP as LogFlumeRideOP).layout.getVehicles()) {
+            for(attachment in vehicle.getAllAttachments().filter { it.type is SeatAttachment }) {
+                passengers.addAll((attachment.type as SeatAttachment).seat!!.getPassengers().filterIsInstance<Player>())
+            }
+        }
+
+        return passengers
     }
 
     override fun onAttractionStart() {
