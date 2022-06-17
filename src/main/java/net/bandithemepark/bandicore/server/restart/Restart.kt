@@ -2,6 +2,8 @@ package net.bandithemepark.bandicore.server.restart
 
 import com.google.common.io.ByteStreams
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.park.attractions.Attraction
+import net.bandithemepark.bandicore.park.attractions.mode.AttractionMode
 import net.bandithemepark.bandicore.server.mode.ServerMode
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.getTranslatedMessage
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedActionBar
@@ -10,20 +12,21 @@ import net.bandithemepark.bandicore.server.translations.MessageReplacement
 import net.bandithemepark.bandicore.util.FileManager
 import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.chat.BandiColors
-import net.kyori.adventure.text.Component
 import net.kyori.adventure.title.Title
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.time.Duration
 
 class Restart {
-    var countdownLeft = 200 // Ticks, so 10 seconds
-    var countdownStarted = false
-    var toSend = mutableListOf<Player>()
-    var restartSent = false
+    private var countdownLeft = 200 // Ticks, so 10 seconds
+    private var countdownStarted = false
+    private var toSend = mutableListOf<Player>()
+    private var restartSent = false
 
     fun start() {
-        // TODO Close all attractions
+        for(attraction in Attraction.attractions) {
+            attraction.mode = AttractionMode.getMode("closedshown")!!
+        }
 
         for(player in Bukkit.getOnlinePlayers()) {
             player.showTitle(Title.title(
@@ -77,12 +80,19 @@ class Restart {
             Bukkit.getOnlinePlayers().forEach { it.sendTranslatedActionBar("restarting-soon-message", BandiColors.RED.toString()) }
 
             var arePlayersRiding = false
-            // TODO Actually check if any players are still on attractions
+
+            for(attraction in Attraction.attractions) {
+                if(attraction.getPlayerPassengers().isNotEmpty()) {
+                    arePlayersRiding = true
+                    break
+                }
+            }
+
             if(!arePlayersRiding) countdownStarted = true
         }
     }
 
-    fun sendToQueue(player: Player) {
+    private fun sendToQueue(player: Player) {
         val out = ByteStreams.newDataOutput()
         out.writeUTF("Connect")
         out.writeUTF(BandiCore.instance.server.queueServer)
