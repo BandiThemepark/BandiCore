@@ -1,9 +1,12 @@
 package net.bandithemepark.bandicore.park.attractions.tracks.triggers.types
 
+import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.park.attractions.Attraction
 import net.bandithemepark.bandicore.park.attractions.tracks.triggers.TrackTriggerType
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.TrackVehicle
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.SeatAttachment
+import org.bukkit.Bukkit
+import org.bukkit.entity.Player
 
 class EjectTrigger: TrackTriggerType("eject", "ATTRACTION_ID, EJECT_AT_EXIT_LOCATION") {
     override fun onActivation(vehicle: TrackVehicle) {
@@ -22,7 +25,15 @@ class EjectTrigger: TrackTriggerType("eject", "ATTRACTION_ID, EJECT_AT_EXIT_LOCA
 
             if(!ejectAtExitLocation) {
                 vehicle.getAllAttachments().filter { it.type is SeatAttachment }.forEach {
+                    val passengers = (it.type as SeatAttachment).seat!!.getPassengers().filterIsInstance<Player>()
                     (it.type as SeatAttachment).seat!!.ejectPassengers()
+
+                    Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
+                        passengers.forEach { player ->
+                            (it.type as SeatAttachment).deSpawnCustomPlayer(player)
+                            SeatAttachment.show(player)
+                        }
+                    })
                 }
             }
         }
