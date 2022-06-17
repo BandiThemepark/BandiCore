@@ -37,7 +37,8 @@ interface HoverableEntity {
 
     companion object {
         fun getHoverableEntities(): List<PacketEntity> {
-            return PacketEntity.active.filter { it is HoverableEntity }
+            val clonedActive = PacketEntity.active.toList()
+            return clonedActive.filter { it is HoverableEntity }
         }
 
         lateinit var timer: Timer
