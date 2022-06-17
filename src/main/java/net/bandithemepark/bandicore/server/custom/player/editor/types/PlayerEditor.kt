@@ -64,7 +64,6 @@ class PlayerEditor(customPlayer: CustomPlayer, session: CustomPlayerEditor): Cus
                     player.getTranslatedMessage("custom-player-editor-load-cancelled"),
                 ) { player: Player, message: String ->
                     loadFrom(message)
-                    customPlayer.debugPositions(player)
                     player.sendTranslatedMessage("custom-player-editor-load-success", BandiColors.YELLOW.toString())
                 }
             }
@@ -144,37 +143,31 @@ class PlayerEditor(customPlayer: CustomPlayer, session: CustomPlayerEditor): Cus
         val headRotation = loadVector(fm, "customplayerposes/$id.yml", "head.rotation")
         customPlayer.headRotation = Quaternion.fromYawPitchRoll(headRotation.x, headRotation.y, headRotation.z)
         customPlayer.headRotationPoint = loadVector(fm, "customplayerposes/$id.yml", "head.rotationPoint")
-        customPlayer.headOffset = loadVector(fm, "customplayerposes/$id.yml", "head.offset")
 
         // Loading the body pose
         val bodyRotation = loadVector(fm, "customplayerposes/$id.yml", "body.rotation")
         customPlayer.bodyRotation = Quaternion.fromYawPitchRoll(bodyRotation.x, bodyRotation.y, bodyRotation.z)
         customPlayer.bodyRotationPoint = loadVector(fm, "customplayerposes/$id.yml", "body.rotationPoint")
-        customPlayer.bodyOffset = loadVector(fm, "customplayerposes/$id.yml", "body.offset")
 
         // Loading the left arm pose
         val leftArmRotation = loadVector(fm, "customplayerposes/$id.yml", "leftArm.rotation")
         customPlayer.leftArmRotation = Quaternion.fromYawPitchRoll(leftArmRotation.x, leftArmRotation.y, leftArmRotation.z)
         customPlayer.leftArmRotationPoint = loadVector(fm, "customplayerposes/$id.yml", "leftArm.rotationPoint")
-        customPlayer.leftArmOffset = loadVector(fm, "customplayerposes/$id.yml", "leftArm.offset")
 
         // Loading the right arm pose
         val rightArmRotation = loadVector(fm, "customplayerposes/$id.yml", "rightArm.rotation")
         customPlayer.rightArmRotation = Quaternion.fromYawPitchRoll(rightArmRotation.x, rightArmRotation.y, rightArmRotation.z)
         customPlayer.rightArmRotationPoint = loadVector(fm, "customplayerposes/$id.yml", "rightArm.rotationPoint")
-        customPlayer.rightArmOffset = loadVector(fm, "customplayerposes/$id.yml", "rightArm.offset")
 
         // Loading the left leg pose
         val leftLegRotation = loadVector(fm, "customplayerposes/$id.yml", "leftLeg.rotation")
         customPlayer.leftLegRotation = Quaternion.fromYawPitchRoll(leftLegRotation.x, leftLegRotation.y, leftLegRotation.z)
         customPlayer.leftLegRotationPoint = loadVector(fm, "customplayerposes/$id.yml", "leftLeg.rotationPoint")
-        customPlayer.leftLegOffset = loadVector(fm, "customplayerposes/$id.yml", "leftLeg.offset")
 
         // Loading the right leg pose
         val rightLegRotation = loadVector(fm, "customplayerposes/$id.yml", "rightLeg.rotation")
         customPlayer.rightLegRotation = Quaternion.fromYawPitchRoll(rightLegRotation.x, rightLegRotation.y, rightLegRotation.z)
         customPlayer.rightLegRotationPoint = loadVector(fm, "customplayerposes/$id.yml", "rightLeg.rotationPoint")
-        customPlayer.rightLegOffset = loadVector(fm, "customplayerposes/$id.yml", "rightLeg.offset")
 
         customPlayer.updatePosition()
     }
@@ -191,32 +184,26 @@ class PlayerEditor(customPlayer: CustomPlayer, session: CustomPlayerEditor): Cus
         // Saving the head
         saveVector(customPlayer.headRotation.getYawPitchRoll(), fm, "customplayerposes/$id.yml", "head.rotation")
         saveVector(customPlayer.headRotationPoint, fm, "customplayerposes/$id.yml", "head.rotationPoint")
-        saveVector(customPlayer.headOffset, fm, "customplayerposes/$id.yml", "head.offset")
 
         // Saving the body
         saveVector(customPlayer.bodyRotation.getYawPitchRoll(), fm, "customplayerposes/$id.yml", "body.rotation")
         saveVector(customPlayer.bodyRotationPoint, fm, "customplayerposes/$id.yml", "body.rotationPoint")
-        saveVector(customPlayer.bodyOffset, fm, "customplayerposes/$id.yml", "body.offset")
 
         // Saving the left arm
         saveVector(customPlayer.leftArmRotation.getYawPitchRoll(), fm, "customplayerposes/$id.yml", "leftArm.rotation")
         saveVector(customPlayer.leftArmRotationPoint, fm, "customplayerposes/$id.yml", "leftArm.rotationPoint")
-        saveVector(customPlayer.leftArmOffset, fm, "customplayerposes/$id.yml", "leftArm.offset")
 
         // Saving the right arm
         saveVector(customPlayer.rightArmRotation.getYawPitchRoll(), fm, "customplayerposes/$id.yml", "rightArm.rotation")
         saveVector(customPlayer.rightArmRotationPoint, fm, "customplayerposes/$id.yml", "rightArm.rotationPoint")
-        saveVector(customPlayer.rightArmOffset, fm, "customplayerposes/$id.yml", "rightArm.offset")
 
         // Saving the left leg
         saveVector(customPlayer.leftLegRotation.getYawPitchRoll(), fm, "customplayerposes/$id.yml", "leftLeg.rotation")
         saveVector(customPlayer.leftLegRotationPoint, fm, "customplayerposes/$id.yml", "leftLeg.rotationPoint")
-        saveVector(customPlayer.leftLegOffset, fm, "customplayerposes/$id.yml", "leftLeg.offset")
 
         // Saving the right leg
         saveVector(customPlayer.rightLegRotation.getYawPitchRoll(), fm, "customplayerposes/$id.yml", "rightLeg.rotation")
         saveVector(customPlayer.rightLegRotationPoint, fm, "customplayerposes/$id.yml", "rightLeg.rotationPoint")
-        saveVector(customPlayer.rightLegOffset, fm, "customplayerposes/$id.yml", "rightLeg.offset")
     }
 
     fun saveVector(vector: Vector, fm: FileManager, file: String, path: String) {

@@ -76,7 +76,7 @@ class LimbSelector(customPlayer: CustomPlayer, session: CustomPlayerEditor): Cus
             }
 
             override fun addPositionRotation(customPlayer: CustomPlayer, position: Vector) {
-                customPlayer.headOffset.add(position)
+                //customPlayer.headOffset.add(position)
             }
         }, BODY {
             override fun getArmorStand(customPlayer: CustomPlayer): PacketEntityArmorStand {
@@ -84,7 +84,7 @@ class LimbSelector(customPlayer: CustomPlayer, session: CustomPlayerEditor): Cus
             }
 
             override fun addPositionRotation(customPlayer: CustomPlayer, position: Vector) {
-                customPlayer.bodyOffset.add(position)
+                //customPlayer.bodyOffset.add(position)
             }
         }, LEFT_LEG {
             override fun getArmorStand(customPlayer: CustomPlayer): PacketEntityArmorStand {
@@ -92,7 +92,7 @@ class LimbSelector(customPlayer: CustomPlayer, session: CustomPlayerEditor): Cus
             }
 
             override fun addPositionRotation(customPlayer: CustomPlayer, position: Vector) {
-                customPlayer.leftLegOffset.add(position)
+                //customPlayer.leftLegOffset.add(position)
             }
         }, RIGHT_LEG {
             override fun getArmorStand(customPlayer: CustomPlayer): PacketEntityArmorStand {
@@ -100,7 +100,7 @@ class LimbSelector(customPlayer: CustomPlayer, session: CustomPlayerEditor): Cus
             }
 
             override fun addPositionRotation(customPlayer: CustomPlayer, position: Vector) {
-                customPlayer.rightLegOffset.add(position)
+                //customPlayer.rightLegOffset.add(position)
             }
         }, LEFT_ARM {
             override fun getArmorStand(customPlayer: CustomPlayer): PacketEntityArmorStand {
@@ -108,7 +108,7 @@ class LimbSelector(customPlayer: CustomPlayer, session: CustomPlayerEditor): Cus
             }
 
             override fun addPositionRotation(customPlayer: CustomPlayer, position: Vector) {
-                customPlayer.leftArmOffset.add(position)
+                //customPlayer.leftArmOffset.add(position)
             }
         }, RIGHT_ARM {
             override fun getArmorStand(customPlayer: CustomPlayer): PacketEntityArmorStand {
@@ -116,7 +116,7 @@ class LimbSelector(customPlayer: CustomPlayer, session: CustomPlayerEditor): Cus
             }
 
             override fun addPositionRotation(customPlayer: CustomPlayer, position: Vector) {
-                customPlayer.rightArmOffset.add(position)
+                //customPlayer.rightArmOffset.add(position)
             }
         };
 
