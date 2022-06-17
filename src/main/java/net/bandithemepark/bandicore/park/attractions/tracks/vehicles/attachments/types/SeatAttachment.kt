@@ -122,8 +122,6 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
     var customPlayer: CustomPlayer? = null
 
     fun spawnCustomPlayer(player: Player) {
-        Bukkit.broadcast(Component.text("Player is slim? " + player.isAlexSkin()))
-
         customPlayer = CustomPlayer(player.getCustomPlayerSkin())
         customPlayer!!.setVisibilityType(PacketEntity.VisibilityType.BLACKLIST)
         customPlayer!!.setVisibilityList(mutableListOf(player))
