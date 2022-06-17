@@ -7,6 +7,7 @@ import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.AttachmentType
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayer
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin
+import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin.Companion.getCustomPlayerSkin
 import net.bandithemepark.bandicore.util.Util.isAlexSkin
 import net.bandithemepark.bandicore.util.entity.PacketEntity
 import net.bandithemepark.bandicore.util.entity.PacketEntitySeat
@@ -48,21 +49,28 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
     }
 
     private var lastPosition = Vector(0.0, 0.0, 0.0)
+    val poseDebuff = 2
+    var poseDebuffCounter = 0
     override fun onUpdate(mainPosition: Vector, mainRotation: Quaternion, secondaryPositions: HashMap<Vector, Quaternion>, rotationDegrees: Vector) {
         // Updating the pose of the player rig
         // TODO Make these poses configurable
         // TODO Load these poses on metadata load
-        if(tickMovementDirection != null) {
-            if(tickMovementDirection == MovementDirection.UP) {
-                customPlayer?.loadFrom("scream")
+        poseDebuffCounter++
+        if(poseDebuffCounter >= poseDebuff) {
+            poseDebuffCounter = 0
+
+            if (tickMovementDirection != null) {
+                if (tickMovementDirection == MovementDirection.UP) {
+                    customPlayer?.loadFrom("scream")
+                }
+                if (tickMovementDirection == MovementDirection.DOWN) {
+                    customPlayer?.loadFrom("shield")
+                }
+            } else {
+                customPlayer?.loadFrom("sit")
             }
-            if(tickMovementDirection == MovementDirection.DOWN) {
-                customPlayer?.loadFrom("shield")
-            }
-        } else {
-            customPlayer?.loadFrom("sit")
+            tickMovementDirection = null
         }
-        tickMovementDirection = null
 
         // Updating the position of the marker
         marker.moveEntity(mainPosition)
@@ -116,14 +124,14 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
     fun spawnCustomPlayer(player: Player) {
         Bukkit.broadcast(Component.text("Player is slim? " + player.isAlexSkin()))
 
-        customPlayer = CustomPlayer(CustomPlayerSkin(player.uniqueId, (player as CraftPlayer).handle.gameProfile.properties.get("textures").iterator().next().value))
+        customPlayer = CustomPlayer(player.getCustomPlayerSkin())
         customPlayer!!.setVisibilityType(PacketEntity.VisibilityType.BLACKLIST)
         customPlayer!!.setVisibilityList(mutableListOf(player))
         customPlayer!!.spawn(lastPosition.clone().add(Vector(0.0, 0.63, 0.0)).toLocation(seat!!.location!!.world))
         customPlayer!!.loadFrom("sit")
     }
 
-    fun deSpawnCustomPlayer(player: Player) {
+    fun deSpawnCustomPlayer(player: Player?) {
         customPlayer?.deSpawn()
         customPlayer = null
     }
