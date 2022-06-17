@@ -39,6 +39,7 @@ class LogFlumeAutomaticRideOP(val rideOP: LogFlumeRideOP) {
                                     rideOP.gatesButton.open = false
                                     Bukkit.getScheduler().runTask(BandiCore.instance, Runnable { rideOP.gatesButton.updateGates() })
                                     rideOP.harnessButton.setClosed()
+                                    rideOP.harnessButton.open = false
                                     rideOP.dispatch()
                                     rideOP.updateMenu()
                                 } else {
