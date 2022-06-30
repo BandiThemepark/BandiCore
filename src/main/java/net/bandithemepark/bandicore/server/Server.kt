@@ -1,5 +1,6 @@
 package net.bandithemepark.bandicore.server
 
+import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.network.backend.BackendSetting
 import net.bandithemepark.bandicore.server.essentials.ranks.RankManager
 import net.bandithemepark.bandicore.server.essentials.ranks.scoreboard.BandiScoreboard
@@ -79,5 +80,7 @@ class Server {
 
         BackendSetting("serverMode").setValue(mode.id)
         BackendSetting("motd").setValue(mode.motd)
+
+        BandiCore.instance.mqttConnector.sendMessage("/proxy/mode/trigger", "update")
     }
 }
