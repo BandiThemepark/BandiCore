@@ -7,6 +7,7 @@ import net.bandithemepark.bandicore.server.essentials.ranks.scoreboard.BandiScor
 import net.bandithemepark.bandicore.server.mode.ServerMode
 import net.bandithemepark.bandicore.server.translations.Language
 import net.bandithemepark.bandicore.util.FileManager
+import org.bukkit.Bukkit
 
 class Server {
     var serverMode: ServerMode
@@ -34,6 +35,11 @@ class Server {
             fm.getConfig("config.yml").get().set("preRestartMode", null)
             fm.getConfig("config.yml").get().set("serverMode", serverMode.id)
             fm.saveConfig("config.yml")
+
+            Bukkit.getScheduler().runTaskLater(BandiCore.instance, Runnable {
+                BandiCore.instance.mqttConnector.sendMessage("/proxy/mode/trigger", "update")
+            }, 40)
+
             serverMode
         } else {
             ServerMode.getFromId(fm.getConfig("config.yml").get().getString("serverMode")!!)!!
