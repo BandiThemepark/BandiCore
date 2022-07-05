@@ -33,5 +33,14 @@
   "rideop-button-harness-description": "Open or close the harnesses, so that people can enter",
   "rideop-button-block-clear-title": "Is next block clear",
   "rideop-button-block-clear-description": "Whether the next block section is clear (required for dispatch)",
-  "rideop-unavailable": "You can currently not operate this ride because of the mode it is in. Please try again later"
+  "rideop-unavailable": "You can currently not operate this ride because of the mode it is in. Please try again later",
+  "rideop-rupsbaan-status-title": "Ride status",
+  "rideop-rupsbaan-status-description": "This button will flash if the ride is active",
+  "rideop-rupsbaan-harness-title": "Lock/release harnesses",
+  "rideop-rupsbaan-harness-description": "Will lock the harnesses (allow them to be pushed down) or open them",
+  "rideop-rupsbaan-push-title": "Push down all harnesses",
+  "rideop-rupsbaan-push-description": "Pushes down all open harnesses",
+  "rupsbaan-hold-to-close": "Hold %key% to close your cart's harness",
+  "automatic-rideop-dispatch-in": "%ride% will dispatch in %seconds% seconds",
+  "automatic-rideop-dispatch-soon": "%ride% is expected to dispatch soon"
 }

@@ -35,6 +35,9 @@ import org.bukkit.plugin.java.JavaPlugin
 import me.m56738.smoothcoasters.api.SmoothCoastersAPI
 import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.LogFlumeAttraction
 import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.rideop.LogFlumeRideOP
+import net.bandithemepark.bandicore.bandithemepark.adventure.rupsbaan.RupsbaanAttraction
+import net.bandithemepark.bandicore.bandithemepark.adventure.rupsbaan.RupsbaanCart
+import net.bandithemepark.bandicore.bandithemepark.adventure.rupsbaan.rideop.RupsbaanRideOP
 import net.bandithemepark.bandicore.network.audioserver.map.ChunkRendererCommand
 import net.bandithemepark.bandicore.network.mqtt.MQTTConnector
 import net.bandithemepark.bandicore.network.queue.QueueCommand
@@ -232,6 +235,7 @@ class BandiCore: JavaPlugin() {
         getServer().pluginManager.registerEvents(BandiRegionEvents(), this)
         getServer().pluginManager.registerEvents(RideOPEvents(), this)
         getServer().pluginManager.registerEvents(AttractionMenu.Events(), this)
+        getServer().pluginManager.registerEvents(RupsbaanCart.Events(), this)
     }
 
     private fun prepareSettings() {
@@ -259,10 +263,12 @@ class BandiCore: JavaPlugin() {
 
     private fun registerRideOPs() {
         LogFlumeRideOP().register()
+        RupsbaanRideOP().register()
     }
 
     private fun registerAttractions() {
         LogFlumeAttraction().register()
+        RupsbaanAttraction().register()
     }
 
 //    private fun runAngleInterpolationTest(formula: (Double, Double, Double) -> Double) {
