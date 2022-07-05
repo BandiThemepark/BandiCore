@@ -148,7 +148,7 @@ abstract class PacketEntity {
     var helmet: ItemStack? = null
         set(value) {
             field = value
-            sendPacket(ClientboundSetEquipmentPacket(handle!!.id, listOf(Pair(EquipmentSlot.HEAD, CraftItemStack.asNMSCopy(helmet)))))
+            if(handle != null) sendPacket(ClientboundSetEquipmentPacket(handle!!.id, listOf(Pair(EquipmentSlot.HEAD, CraftItemStack.asNMSCopy(helmet)))))
         }
 
     var chestPlate: ItemStack? = null
@@ -200,7 +200,7 @@ abstract class PacketEntity {
     /**
      * Updates entity metadata for all players that can see the armor stand
      */
-    fun updateMetadata() {
+    open fun updateMetadata() {
         val packet = ClientboundSetEntityDataPacket(handle!!.id, handle!!.entityData, true)
         sendPacket(packet)
     }
@@ -209,7 +209,7 @@ abstract class PacketEntity {
      * Updates the entity metadata for one single player
      * @param player The player to update the metadata for
      */
-    fun updateMetadataFor(player: Player) {
+    open fun updateMetadataFor(player: Player) {
         val packet = ClientboundSetEntityDataPacket(handle!!.id, handle!!.entityData, true)
         (player as CraftPlayer).handle.connection.send(packet)
     }
@@ -221,6 +221,16 @@ abstract class PacketEntity {
 
         if(visibilityType == VisibilityType.BLACKLIST) {
             for(player in Bukkit.getOnlinePlayers().filter { !visibilityList.contains(it) }) (player as CraftPlayer).handle.connection.send(packet)
+        }
+    }
+
+    /**
+     * Returns the players that can see this entity
+     */
+    fun getPlayersVisibleFor(): List<Player> {
+        return when(visibilityType) {
+            VisibilityType.WHITELIST -> visibilityList
+            VisibilityType.BLACKLIST -> Bukkit.getOnlinePlayers().filter { !visibilityList.contains(it) }
         }
     }
 
