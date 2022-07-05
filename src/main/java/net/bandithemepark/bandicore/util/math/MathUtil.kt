@@ -147,4 +147,41 @@ object MathUtil {
         val t2 = (1 - cos(t * Math.PI)) / 2
         return from * (1 - t2) + to * t2
     }
+
+    /**
+     * Interpolates between two numbers linearly
+     * @param from The first number
+     * @param to The second number
+     * @param t The interpolation value (ranging from 0 to 1)
+     */
+    fun lerp(from: Double, to: Double, t: Double): Double {
+        return from + (to - from) * t
+    }
+
+    /**
+     * Interpolates between two numbers using easeOutBounce interpolation.
+     * Interpolation formula is from https://easings.net/
+     * @param from The first number
+     * @param to The second number
+     * @param t The interpolation value (ranging from 0 to 1)
+     * @return The interpolated number
+     */
+    fun easeOutBounceInterpolation(from: Double, to: Double, t: Double): Double {
+        return lerp(from, to, easeOutBounce(t))
+    }
+
+    private fun easeOutBounce(t: Double): Double {
+        val n1 = 7.5625
+        val d1 = 2.75
+
+        return if (t < 1 / d1) {
+            n1 * t * t
+        } else if (t < 2 / d1) {
+            n1 * (t - 1.5 / d1) * (t - 1.5 / d1 + 0.75) + 0.75
+        } else if (t < 2.5 / d1) {
+            n1 * (t - 2.25 / d1) * (t - 2.25 / d1 + 0.9375) + 0.9375
+        } else {
+            n1 * (t - 2.625 / d1) * (t - 2.625 / d1 + 0.984375) + 0.984375
+        }
+    }
 }
