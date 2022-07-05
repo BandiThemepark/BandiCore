@@ -59,7 +59,7 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
         if(poseDebuffCounter >= poseDebuff) {
             poseDebuffCounter = 0
 
-            if (tickMovementDirection != null) {
+            if (tickMovementDirection != null && !seat!!.harnessesOpen) {
                 if (tickMovementDirection == MovementDirection.UP) {
                     customPlayer?.loadFrom("scream")
                 }
@@ -75,7 +75,7 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
         // Updating the position of the marker
         marker.moveEntity(mainPosition)
 
-        // Updating hte position of the seat
+        // Updating the position of the seat
         val seatPosition = secondaryPositions.keys.toList()[0]
         val seatRotation = secondaryPositions[seatPosition]!!
         val editedPosition = seatPosition.clone()
@@ -85,7 +85,10 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
         // Updating the position of the player rig
         customPlayer?.location = mainPosition.clone().toLocation(seat!!.location!!.world)
         customPlayer?.completeRotation = mainRotation.clone()
-        customPlayer?.updatePosition()
+        try {
+            customPlayer?.updatePosition()
+        } catch (_: java.lang.NullPointerException) {}
+
         lastPosition = mainPosition.clone()
 //        val editedPosition = mainPosition.clone()
 //        editedPosition.y = editedPosition.y - ARMOR_STAND_HEIGHT
