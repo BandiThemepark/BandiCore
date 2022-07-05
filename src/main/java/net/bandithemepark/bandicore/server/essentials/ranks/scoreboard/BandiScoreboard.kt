@@ -7,8 +7,11 @@ import net.bandithemepark.bandicore.server.statistics.Playtime.Companion.getPlay
 import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.chat.BandiColors
 import net.bandithemepark.bandicore.util.npc.NPC
+import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextColor
 import org.bukkit.Bukkit
+import org.bukkit.ChatColor
+import org.bukkit.Color
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -37,6 +40,19 @@ class BandiScoreboard {
             }
         }
 
+        for(color in ChatColor.values()) {
+            val team = mainScoreboard.registerNewTeam(color.name)
+            team.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER)
+            team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER)
+            team.color(paperColors[color])
+
+            for((key, value) in selectedColors.entries.toSet()) {
+                if(value == color) {
+                    team.addEntry(key)
+                }
+            }
+        }
+
         val npcTeam = mainScoreboard.registerNewTeam("npc")
         npcTeam.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER)
 
@@ -59,6 +75,31 @@ class BandiScoreboard {
     fun showFor(player: Player) {
         player.scoreboard = mainScoreboard
     }
+
+    private val selectedColors = hashMapOf<String, ChatColor>()
+    fun setGlowColor(entityUUID: String, color: ChatColor) {
+        selectedColors[entityUUID] = color
+    }
+
+    val paperColors = hashMapOf<ChatColor, NamedTextColor>(
+        ChatColor.RED to NamedTextColor.RED,
+        ChatColor.DARK_RED to NamedTextColor.DARK_RED,
+        ChatColor.BLUE to NamedTextColor.BLUE,
+        ChatColor.DARK_BLUE to NamedTextColor.DARK_BLUE,
+        ChatColor.GREEN to NamedTextColor.GREEN,
+        ChatColor.DARK_GREEN to NamedTextColor.DARK_GREEN,
+        ChatColor.YELLOW to NamedTextColor.YELLOW,
+        ChatColor.GOLD to NamedTextColor.GOLD,
+        ChatColor.AQUA to NamedTextColor.AQUA,
+        ChatColor.DARK_AQUA to NamedTextColor.DARK_AQUA,
+        ChatColor.LIGHT_PURPLE to NamedTextColor.LIGHT_PURPLE,
+        ChatColor.DARK_PURPLE to NamedTextColor.DARK_PURPLE,
+        ChatColor.GOLD to NamedTextColor.GOLD,
+        ChatColor.GRAY to NamedTextColor.GRAY,
+        ChatColor.DARK_GRAY to NamedTextColor.DARK_GRAY,
+        ChatColor.BLACK to NamedTextColor.BLACK,
+        ChatColor.WHITE to NamedTextColor.WHITE
+    )
 
     companion object {
         fun Player.updatePlayerList() {
