@@ -1,6 +1,8 @@
 package net.bandithemepark.bandicore.park.attractions.rideop
 
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.park.attractions.rideop.events.RideOperateEvent
+import net.bandithemepark.bandicore.park.attractions.rideop.events.RideStopOperatingEvent
 import net.bandithemepark.bandicore.server.regions.events.PlayerPriorityRegionLeaveEvent
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedMessage
 import net.bandithemepark.bandicore.server.translations.MessageReplacement
@@ -41,7 +43,10 @@ class RideOPEvents: Listener {
                     if(rideOP.operator == player) {
                         stopOperating(player, rideOP)
                     } else {
-                        if(canOperate(player, rideOP) && player.hasPermission("bandithemepark.crew")) startOperating(player, rideOP)
+                        if(canOperate(player, rideOP) && player.hasPermission("bandithemepark.crew")) {
+                            stopOperating(rideOP.operator!!, rideOP)
+                            startOperating(player, rideOP)
+                        }
                     }
                 }
             }
@@ -71,15 +76,25 @@ class RideOPEvents: Listener {
     }
 
     fun startOperating(player: Player, rideOP: RideOP) {
-        rideOP.operator = player
-        rideOP.updateMenu()
-        player.sendTranslatedMessage("rideop-started", BandiColors.YELLOW.toString(), MessageReplacement("ride", rideOP.getParentAttraction()!!.appearance.displayName))
+        val event = RideOperateEvent(rideOP, player)
+        Bukkit.getPluginManager().callEvent(event)
+
+        if(!event.isCancelled) {
+            rideOP.operator = player
+            rideOP.updateMenu()
+            player.sendTranslatedMessage("rideop-started", BandiColors.YELLOW.toString(), MessageReplacement("ride", rideOP.getParentAttraction()!!.appearance.displayName))
+        }
     }
 
     fun stopOperating(player: Player, rideOP: RideOP) {
-        rideOP.operator = null
-        rideOP.updateMenu()
-        player.sendTranslatedMessage("rideop-stopped", BandiColors.YELLOW.toString(), MessageReplacement("ride", rideOP.getParentAttraction()!!.appearance.displayName))
+        val event = RideStopOperatingEvent(rideOP, player)
+        Bukkit.getPluginManager().callEvent(event)
+
+        if(!event.isCancelled) {
+            rideOP.operator = null
+            rideOP.updateMenu()
+            player.sendTranslatedMessage("rideop-stopped", BandiColors.YELLOW.toString(), MessageReplacement("ride", rideOP.getParentAttraction()!!.appearance.displayName))
+        }
     }
 
     @EventHandler
