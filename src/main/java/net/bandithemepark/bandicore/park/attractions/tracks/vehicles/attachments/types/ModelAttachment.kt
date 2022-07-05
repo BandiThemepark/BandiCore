@@ -15,12 +15,12 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
 
 class ModelAttachment: AttachmentType("model", "MATERIAL, CUSTOM_MODEL_DATA") {
-    private var armorStand: PacketEntityArmorStand? = null
-    var debug = false
+    var armorStand: PacketEntityArmorStand? = null
+    private var debug = false
     var model: ItemStack? = null
 
-    var lastRotation: Quaternion? = null
-    var lastRotationDegrees: Vector? = null
+    private var lastRotation: Quaternion? = null
+    private var lastRotationDegrees: Vector? = null
 
     override fun onSpawn(location: Location, parent: Attachment) {
         armorStand = PacketEntityArmorStand()
@@ -42,10 +42,10 @@ class ModelAttachment: AttachmentType("model", "MATERIAL, CUSTOM_MODEL_DATA") {
         if(lastRotation == null) lastRotation = mainRotation
 
         if(lastRotationDegrees!!.x.toInt() == 0 && lastRotationDegrees!!.z.toInt() == 0) {
-            armorStand!!.moveEntity(newPosition.x, newPosition.y, newPosition.z)
-            armorStand!!.setHeadPose(0.0, lastRotationDegrees!!.y, 0.0)
+            armorStand?.moveEntity(newPosition.x, newPosition.y, newPosition.z)
+            armorStand?.setHeadPose(0.0, lastRotationDegrees!!.y, 0.0)
         } else {
-            armorStand!!.moveWithHead(newPosition, lastRotation!!)
+            armorStand?.moveWithHead(newPosition, lastRotation!!)
         }
 
         lastRotationDegrees = rotationDegrees
@@ -58,20 +58,15 @@ class ModelAttachment: AttachmentType("model", "MATERIAL, CUSTOM_MODEL_DATA") {
     }
 
     override fun onMetadataLoad(metadata: List<String>) {
-        model = ItemFactory.create(Material.matchMaterial(metadata[0].uppercase())!!, 1, metadata[1].toInt(), Component.text(""))
+        model = ItemFactory(Material.matchMaterial(metadata[0].uppercase())!!).setCustomModelData(metadata[1].toInt()).build()
+        if(armorStand != null) armorStand!!.helmet = model
     }
 
     override fun markFor(player: Player) {
-        //val before = armorStand!!.handle!!.hasGlowingTag()
-        armorStand!!.handle!!.setGlowingTag(true)
-        armorStand!!.updateMetadataFor(player)
-        //armorStand!!.handle!!.setGlowingTag(before)
+        armorStand!!.startGlowFor(player)
     }
 
     override fun unMarkFor(player: Player) {
-        //val before = armorStand!!.handle!!.hasGlowingTag()
-        armorStand!!.handle!!.setGlowingTag(false)
-        armorStand!!.updateMetadataFor(player)
-        //armorStand!!.handle!!.setGlowingTag(before)
+        armorStand!!.endGlowFor(player)
     }
 }
