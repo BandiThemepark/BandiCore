@@ -49,6 +49,7 @@ import net.bandithemepark.bandicore.park.attractions.rideop.RideOPCommand
 import net.bandithemepark.bandicore.park.attractions.rideop.RideOPEvents
 import net.bandithemepark.bandicore.park.attractions.rideop.RideOPTest
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.SeatAttachment
+import net.bandithemepark.bandicore.park.modsupport.SmoothCoastersChecker
 import net.bandithemepark.bandicore.server.custom.blocks.CustomBlock
 import net.bandithemepark.bandicore.server.custom.blocks.CustomBlockMenu
 import net.bandithemepark.bandicore.server.custom.player.editor.CustomPlayerEditor
@@ -236,6 +237,7 @@ class BandiCore: JavaPlugin() {
         getServer().pluginManager.registerEvents(RideOPEvents(), this)
         getServer().pluginManager.registerEvents(AttractionMenu.Events(), this)
         getServer().pluginManager.registerEvents(RupsbaanCart.Events(), this)
+        getServer().pluginManager.registerEvents(SmoothCoastersChecker(), this)
     }
 
     private fun prepareSettings() {

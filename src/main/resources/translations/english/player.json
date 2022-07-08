@@ -42,5 +42,7 @@
   "rideop-rupsbaan-push-description": "Pushes down all open harnesses",
   "rupsbaan-hold-to-close": "Hold %key% to close your cart's harness",
   "automatic-rideop-dispatch-in": "%ride% will dispatch in %seconds% seconds",
-  "automatic-rideop-dispatch-soon": "%ride% is expected to dispatch soon"
+  "automatic-rideop-dispatch-soon": "%ride% is expected to dispatch soon",
+  "smoothcoasters-using": "Hey there! It looks like you are using SmoothCoasters. We love you doing so, so you'll receive a small coin bonus for using it. Enjoy!",
+  "smoothcoasters-not-using": "Hey there! It looks like you are not using SmoothCoasters. By using SmoothCoasters, you improve your experience and will also receive a small bonus. Click %linkstart%here%linkend% for more info"
 }
