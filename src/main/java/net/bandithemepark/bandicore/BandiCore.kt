@@ -46,6 +46,7 @@ import net.bandithemepark.bandicore.network.mqtt.MQTTConnector
 import net.bandithemepark.bandicore.network.queue.QueueCommand
 import net.bandithemepark.bandicore.park.ThemePark
 import net.bandithemepark.bandicore.park.attractions.AttractionCommand
+import net.bandithemepark.bandicore.park.attractions.info.AttractionInfoBoard
 import net.bandithemepark.bandicore.park.attractions.menu.AttractionMenu
 import net.bandithemepark.bandicore.park.attractions.mode.*
 import net.bandithemepark.bandicore.park.attractions.rideop.RideOP
@@ -255,6 +256,7 @@ class BandiCore: JavaPlugin() {
         getServer().pluginManager.registerEvents(PathPointEditorEvents(), this)
         getServer().pluginManager.registerEvents(ThemeParkNPCSkin.Caching.Events(), this)
         getServer().pluginManager.registerEvents(AudioServerEventListeners.BukkitEventListeners(), this)
+        getServer().pluginManager.registerEvents(AttractionInfoBoard.Events(), this)
     }
 
     private fun prepareSettings() {
