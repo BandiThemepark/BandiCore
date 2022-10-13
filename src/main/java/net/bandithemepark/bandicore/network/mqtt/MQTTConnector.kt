@@ -109,8 +109,8 @@ class MQTTConnector {
      * @param listener The listener to use
      */
     fun registerListener(listener: MQTTListener) {
-        client?.subscribe(listener.topic, 0) { _, message ->
-            listener.onMessage(message.toString())
+        client?.subscribe(listener.topic, 0) { topic, message ->
+            listener.onMessage(topic, message.toString())
         }
     }
 }
