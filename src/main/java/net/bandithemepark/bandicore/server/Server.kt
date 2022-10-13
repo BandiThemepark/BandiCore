@@ -2,6 +2,7 @@ package net.bandithemepark.bandicore.server
 
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.network.backend.BackendSetting
+import net.bandithemepark.bandicore.park.ThemePark
 import net.bandithemepark.bandicore.server.essentials.ranks.RankManager
 import net.bandithemepark.bandicore.server.essentials.ranks.scoreboard.BandiScoreboard
 import net.bandithemepark.bandicore.server.mode.ServerMode
@@ -20,6 +21,8 @@ class Server {
 
     val rankManager = RankManager()
     val scoreboard = BandiScoreboard()
+
+    val themePark = ThemePark(Bukkit.getWorld("world")!!)
 
     init {
         ServerMode("open", "§6§lBandiThemepark §7- §aOpen||§7Come and visit us right now!", true, true).register()
