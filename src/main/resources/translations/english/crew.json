@@ -163,5 +163,17 @@
   "attraction-mode-not-found": "The attraction mode you specified was not found",
   "attraction-mode-set": "Successfully set the attraction mode of attraction %attraction% to %mode%",
   "chunk-renderer-started": "Started rendering the chunk you are currently in...",
-  "chunk-renderer-finished": "The chunk you are in has been rendered. The result has been saved."
+  "chunk-renderer-finished": "The chunk you are in has been rendered. The result has been saved.",
+  "path-editor-started": "You have started the Path Editor. Run /patheditor again to stop editing and get your items back",
+  "path-editor-stopped": "You have stopped the Path Editor",
+  "path-editor-selected": "You have selected a new path point",
+  "path-editor-none-selected": "You have not selected a path point yet!",
+  "path-editor-cannot-connect-self": "You cannot connect or disconnect a path point to or with itself!",
+  "path-editor-point-connected": "You have connected two nodes to each other",
+  "path-editor-point-disconnected": "You have disconnected two nodes from each other",
+  "path-editor-point-created": "You have created and selected a new path point",
+  "path-editor-point-deleted": "You have deleted the selected path point",
+  "path-editor-saving": "Saving all path points...",
+  "path-editor-saved": "Successfully saved all path points",
+  "path-editor-uuid": "The UUID of the path point is %uuid% (Click to copy)"
 }

@@ -44,5 +44,12 @@
   "automatic-rideop-dispatch-in": "%ride% will dispatch in %seconds% seconds",
   "automatic-rideop-dispatch-soon": "%ride% is expected to dispatch soon",
   "smoothcoasters-using": "Hey there! It looks like you are using SmoothCoasters. We love you doing so, so you'll receive a small coin bonus for using it. Enjoy!",
-  "smoothcoasters-not-using": "Hey there! It looks like you are not using SmoothCoasters. By using SmoothCoasters, you improve your experience and will also receive a small bonus. Click %linkstart%here%linkend% for more info"
+  "smoothcoasters-not-using": "Hey there! It looks like you are not using SmoothCoasters. By using SmoothCoasters, you improve your experience and will also receive a small bonus. Click %linkstart%here%linkend% for more info",
+  "audioserver-not-connected": "You need to be connected to our AudioClient to use this feature! Connect by using /audio",
+  "audioserver-volume-invalid-args": "Invalid arguments! Usage: /volume <1-100>",
+  "audioserver-incorrect-volume": "The volume must a number be between 1 and 100",
+  "audioserver-volume-changed": "Your volume has been changed to %volume%%",
+  "audioserver-connected": "You are now connected to our AudioClient",
+  "audioserver-disconnected": "You are now disconnected from our AudioClient",
+  "audioserver-volume-changed-client": "Volume set to %volume%%"
 }

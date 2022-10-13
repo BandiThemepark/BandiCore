@@ -103,3 +103,9 @@ commands:
       - rides
   chunkrenderer:
     description: Renders the chunk you are currently in
+  patheditor:
+    description: Used to edit the paths for the NPCs
+  volume:
+    description: Change your AudioClient volume
+    aliases:
+      - vol
