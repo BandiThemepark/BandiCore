@@ -39,7 +39,7 @@ class CustomBlockMenu(val player: Player) {
             toGetEnd = types.size
         }
 
-        val availableSlots = mutableListOf(1, 2, 3, 4, 5, 10, 11, 12, 13, 14, 19, 20, 21, 22, 23, 32, 33, 34, 35, 36)
+        val availableSlots = mutableListOf(1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 32, 33, 34, 35, 36, 37, 38)
         for((i2, i) in (toGetStart until toGetEnd).withIndex()) {
             val type = types[i]
             val slot = availableSlots[i2]
