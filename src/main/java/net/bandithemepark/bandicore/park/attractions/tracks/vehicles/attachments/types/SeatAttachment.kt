@@ -6,9 +6,7 @@ import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.AttachmentPosition
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.AttachmentType
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayer
-import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin.Companion.getCustomPlayerSkin
-import net.bandithemepark.bandicore.util.Util.isAlexSkin
 import net.bandithemepark.bandicore.util.entity.PacketEntity
 import net.bandithemepark.bandicore.util.entity.PacketEntitySeat
 import net.bandithemepark.bandicore.util.entity.event.PacketEntityInputEvent
@@ -16,10 +14,8 @@ import net.bandithemepark.bandicore.util.entity.event.SeatEnterEvent
 import net.bandithemepark.bandicore.util.entity.event.SeatExitEvent
 import net.bandithemepark.bandicore.util.entity.marker.PacketEntityMarker
 import net.bandithemepark.bandicore.util.math.Quaternion
-import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Location
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
