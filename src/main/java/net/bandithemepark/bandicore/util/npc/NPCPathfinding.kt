@@ -2,6 +2,7 @@ package net.bandithemepark.bandicore.util.npc
 
 import com.destroystokyo.paper.entity.Pathfinder
 import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent
+import net.bandithemepark.bandicore.park.npc.ThemeParkNPCSkin
 import net.bandithemepark.bandicore.util.Util
 import net.kyori.adventure.text.Component
 import org.bukkit.*
@@ -19,13 +20,6 @@ import org.bukkit.util.Vector
 class NPCPathfinding(val npc: NPC, var speed: Double) {
     var path: NPCPath? = null
     var goal: Location? = null
-
-    // Function to convert a PaperSpigot Path to our own Path class
-    private fun toPath(paperPath: Pathfinder.PathResult, world: World): NPCPath {
-        val newPoints = mutableListOf<Vector>()
-        paperPath.points.forEach { newPoints.add(Vector(it.x+0.5, it.y, it.z+0.5)) }
-        return NPCPath(world, newPoints)
-    }
 
     // Function that makes the NPC calculate a path and then follow it to a location
     /**
@@ -113,6 +107,13 @@ class NPCPathfinding(val npc: NPC, var speed: Double) {
             testEntity.teleport(holdingLocation)
             return path
         }
+
+        // Function to convert a PaperSpigot Path to our own Path class
+        fun toPath(paperPath: Pathfinder.PathResult, world: World): NPCPath {
+            val newPoints = mutableListOf<Vector>()
+            paperPath.points.forEach { newPoints.add(Vector(it.x+0.5, it.y, it.z+0.5)) }
+            return NPCPath(world, newPoints)
+        }
     }
 
     class TestCommand: CommandExecutor {
@@ -124,7 +125,7 @@ class NPCPathfinding(val npc: NPC, var speed: Double) {
             if(command.name.equals("npctest", true)) {
                 if(sender is Player) {
                     if(!activeNPCs.containsKey(sender)) {
-                        val npc = NPC("Test", sender, NPC.NPCVisibilityType.BLACKLIST, NPC.getMinecraftServer(sender)!!)
+                        val npc = NPC("Test", ThemeParkNPCSkin.getFromPlayer(sender).textureProperty, NPC.NPCVisibilityType.BLACKLIST, NPC.getMinecraftServer(sender)!!)
                         npc.spawn(sender.location)
                         npc.moveHead(sender.location.pitch, sender.location.yaw)
                         npc.walkSpeed = 3.0

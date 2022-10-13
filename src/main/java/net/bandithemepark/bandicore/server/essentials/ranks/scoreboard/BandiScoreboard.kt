@@ -28,7 +28,13 @@ class BandiScoreboard {
      * Updates the main scoreboard, and applies it to everyone
      */
     fun updateScoreboard() {
-        mainScoreboard.teams.toList().forEach { it.unregister() }
+        mainScoreboard.teams.toList().forEach {
+            try {
+                it.unregister()
+            } catch(_: IllegalArgumentException) {
+
+            }
+        }
 
         for(rank in BandiCore.instance.server.rankManager.loadedRanks) {
             val team = mainScoreboard.registerNewTeam(rank.scoreboardName)

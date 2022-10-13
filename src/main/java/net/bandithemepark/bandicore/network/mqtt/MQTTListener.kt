@@ -1,7 +1,7 @@
 package net.bandithemepark.bandicore.network.mqtt
 
 abstract class MQTTListener(val topic: String) {
-    abstract fun onMessage(message: String)
+    abstract fun onMessage(topic: String, message: String)
 
     /**
      * Registers this listener, making the client subscribe to the topic.

@@ -38,9 +38,13 @@ import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.rideop.Log
 import net.bandithemepark.bandicore.bandithemepark.adventure.rupsbaan.RupsbaanAttraction
 import net.bandithemepark.bandicore.bandithemepark.adventure.rupsbaan.RupsbaanCart
 import net.bandithemepark.bandicore.bandithemepark.adventure.rupsbaan.rideop.RupsbaanRideOP
+import net.bandithemepark.bandicore.network.audioserver.AudioServerTimer
+import net.bandithemepark.bandicore.network.audioserver.VolumeCommand
+import net.bandithemepark.bandicore.network.audioserver.events.AudioServerEventListeners
 import net.bandithemepark.bandicore.network.audioserver.map.ChunkRendererCommand
 import net.bandithemepark.bandicore.network.mqtt.MQTTConnector
 import net.bandithemepark.bandicore.network.queue.QueueCommand
+import net.bandithemepark.bandicore.park.ThemePark
 import net.bandithemepark.bandicore.park.attractions.AttractionCommand
 import net.bandithemepark.bandicore.park.attractions.menu.AttractionMenu
 import net.bandithemepark.bandicore.park.attractions.mode.*
@@ -50,6 +54,9 @@ import net.bandithemepark.bandicore.park.attractions.rideop.RideOPEvents
 import net.bandithemepark.bandicore.park.attractions.rideop.RideOPTest
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.SeatAttachment
 import net.bandithemepark.bandicore.park.modsupport.SmoothCoastersChecker
+import net.bandithemepark.bandicore.park.npc.ThemeParkNPCSkin
+import net.bandithemepark.bandicore.park.npc.path.editor.PathPointEditorCommand
+import net.bandithemepark.bandicore.park.npc.path.editor.PathPointEditorEvents
 import net.bandithemepark.bandicore.server.custom.blocks.CustomBlock
 import net.bandithemepark.bandicore.server.custom.blocks.CustomBlockMenu
 import net.bandithemepark.bandicore.server.custom.player.editor.CustomPlayerEditor
@@ -74,6 +81,7 @@ class BandiCore: JavaPlugin() {
         lateinit var instance: BandiCore
     }
 
+    var startTime = 0L
     lateinit var server: Server
     lateinit var trackManager: TrackManager
     lateinit var afkManager: AfkManager
@@ -89,6 +97,7 @@ class BandiCore: JavaPlugin() {
 
     override fun onEnable() {
         instance = this
+        startTime = System.currentTimeMillis()
         smoothCoastersAPI = SmoothCoastersAPI(this)
 
         // Saving the default settings
@@ -109,12 +118,15 @@ class BandiCore: JavaPlugin() {
 
         // Setting up the server
         server = Server()
+        server.themePark.setup()
         prepareSettings()
         coinManager = CoinManager()
 
         // Connecting to the MQTT server and registering listeners
         CoinsListener().register()
+        AudioServerEventListeners.ListenerMQTT().register()
         mqttConnector = MQTTConnector()
+        AudioServerTimer().runTaskTimer(this, 20, 1)
 
         afkManager = AfkManager()
         HoverableEntity.setup()
@@ -210,6 +222,8 @@ class BandiCore: JavaPlugin() {
         getCommand("rideop")!!.setExecutor(RideOPCommand())
         getCommand("attraction")!!.setExecutor(AttractionCommand())
         getCommand("chunkrenderer")!!.setExecutor(ChunkRendererCommand())
+        getCommand("patheditor")!!.setExecutor(PathPointEditorCommand())
+        getCommand("volume")!!.setExecutor(VolumeCommand())
     }
 
     private fun registerEvents() {
@@ -238,6 +252,9 @@ class BandiCore: JavaPlugin() {
         getServer().pluginManager.registerEvents(AttractionMenu.Events(), this)
         getServer().pluginManager.registerEvents(RupsbaanCart.Events(), this)
         getServer().pluginManager.registerEvents(SmoothCoastersChecker(), this)
+        getServer().pluginManager.registerEvents(PathPointEditorEvents(), this)
+        getServer().pluginManager.registerEvents(ThemeParkNPCSkin.Caching.Events(), this)
+        getServer().pluginManager.registerEvents(AudioServerEventListeners.BukkitEventListeners(), this)
     }
 
     private fun prepareSettings() {
