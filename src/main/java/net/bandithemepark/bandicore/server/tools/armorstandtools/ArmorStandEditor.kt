@@ -32,7 +32,7 @@ class ArmorStandEditor(val player: Player): InventoryHolder {
     }
 
     fun finishSession() {
-        player.inventory.contents = previousInventory
+        player.inventory.contents = previousInventory!!
         player.updateInventory()
 
         activeSessions.remove(this)

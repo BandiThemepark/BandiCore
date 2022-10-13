@@ -12,7 +12,6 @@ import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.util.entity.event.PacketEntityDismountEvent
 import net.bandithemepark.bandicore.util.entity.event.PacketEntityInteractEvent
 import net.bandithemepark.bandicore.util.entity.event.PacketEntityInputEvent
-import net.kyori.adventure.text.Component
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket
 import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket
