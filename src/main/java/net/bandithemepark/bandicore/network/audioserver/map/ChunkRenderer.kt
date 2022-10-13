@@ -52,9 +52,11 @@ class ChunkRenderer(val chunk: Chunk, val maxY: Int = 319) {
         }
 
         // Saving/exporting the image
-        val saveLocation = File("${BandiCore.instance.dataFolder.path}/map/${chunk.world.name}_${chunk.x}_${chunk.z}.png")
-        if(!saveLocation.parentFile.exists()) saveLocation.parentFile.mkdirs()
-        ImageIO.write(image, "png", saveLocation)
+//        val saveLocation = File("${BandiCore.instance.dataFolder.path}/map/${chunk.world.name}_${chunk.x}_${chunk.z}.png")
+//        if(!saveLocation.parentFile.exists()) saveLocation.parentFile.mkdirs()
+//        ImageIO.write(image, "png", saveLocation)
+
+        ZoomLevel.values().forEach { it.renderAndSaveResizedImage(image, chunk.world.name, "${chunk.x}_${chunk.z}") }
 
         callback.invoke()
     }
