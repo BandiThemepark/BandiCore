@@ -1,6 +1,7 @@
 package net.bandithemepark.bandicore.util.npc
 
 import com.mojang.authlib.GameProfile
+import com.mojang.authlib.properties.Property
 import com.mojang.datafixers.util.Pair
 import net.bandithemepark.bandicore.BandiCore
 import net.minecraft.network.protocol.Packet
@@ -26,7 +27,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.scheduler.BukkitRunnable
 import java.util.*
 
-class NPC(val name: String, val skinOwner: Player, var visibilityType: NPCVisibilityType, val server: MinecraftServer) {
+class NPC(val name: String, val textureProperty: Property, var visibilityType: NPCVisibilityType, val server: MinecraftServer) {
     private var npc: ServerPlayer? = null
     private var profile: GameProfile? = null
     var spawned = false
@@ -43,7 +44,7 @@ class NPC(val name: String, val skinOwner: Player, var visibilityType: NPCVisibi
         this.location = location
 
         profile = GameProfile(UUID.randomUUID(), name)
-        profile!!.properties.put("textures", (skinOwner as CraftPlayer).handle.gameProfile.properties.get("textures").iterator().next())
+        profile!!.properties.put("textures", textureProperty)
 
         // Creating the actual NPC instance and moving it to the spawn location
         npc = ServerPlayer(server, (location.world as CraftWorld).handle, profile!!, null)
@@ -140,7 +141,7 @@ class NPC(val name: String, val skinOwner: Player, var visibilityType: NPCVisibi
     // Everything related to moving/teleporting
     // Utility function to check if a certain block is a trapdoor
     private fun isOpenTrapdoor(block: Block): Boolean {
-        if(block.type.toString().endsWith("TRAPDOOR")) {
+        if(block.type.toString().endsWith("TRAPDOOR") && location!!.block.blockData is TrapDoor) {
             val trapdoor = location!!.block.blockData as TrapDoor
             if(trapdoor.isOpen) return true
         }
@@ -231,7 +232,7 @@ class NPC(val name: String, val skinOwner: Player, var visibilityType: NPCVisibi
     }
 
     // Pathfinding
-    private var pathfinder = NPCPathfinding(this, 2.0)
+    var pathfinder = NPCPathfinding(this, 2.0)
     var walkSpeed: Double
     get() { return pathfinder.speed }
     set(value) {
@@ -281,7 +282,7 @@ class NPC(val name: String, val skinOwner: Player, var visibilityType: NPCVisibi
         }
 
         fun startTimer() {
-            NPCPathfinding.setup(Location(Bukkit.getWorld("world"), 17.5, 0.0, -144.5))
+            NPCPathfinding.setup(Location(Bukkit.getWorld("world"), -25.5, 21.0, -177.5))
 
             val runnable = object: BukkitRunnable() {
                 override fun run() {
