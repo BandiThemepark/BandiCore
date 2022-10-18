@@ -76,8 +76,6 @@ commands:
       - tp
   back:
     description: Travel back to your latest location from your last teleport
-  rideoptest:
-    description: Testing the rideop menu
   self:
     description: Teleport someone else to yourself
     aliases:
@@ -109,3 +107,10 @@ commands:
     description: Change your AudioClient volume
     aliases:
       - vol
+  warp:
+    description: Warp to a certain warp
+  deletewarp:
+    description: Delete a warp
+    aliases: delwarp
+  setwarp:
+    description: Create or update a warp

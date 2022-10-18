@@ -51,5 +51,7 @@
   "audioserver-volume-changed": "Your volume has been changed to %volume%%",
   "audioserver-connected": "You are now connected to our AudioClient",
   "audioserver-disconnected": "You are now disconnected from our AudioClient",
-  "audioserver-volume-changed-client": "Volume set to %volume%%"
+  "audioserver-volume-changed-client": "Volume set to %volume%%",
+  "warp-command-incorrect-usage": "Incorrect usage! Usage: /warp <warp name>",
+  "warp-command-warp-not-found": "The entered warp was not found"
 }

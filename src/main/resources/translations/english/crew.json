@@ -175,5 +175,10 @@
   "path-editor-point-deleted": "You have deleted the selected path point",
   "path-editor-saving": "Saving all path points...",
   "path-editor-saved": "Successfully saved all path points",
-  "path-editor-uuid": "The UUID of the path point is %uuid% (Click to copy)"
+  "path-editor-uuid": "The UUID of the path point is %uuid% (Click to copy)",
+  "delete-warp-command-incorrect-usage": "Incorrect usage! Usage: /deletewarp <warp name>",
+  "delete-warp-command-warp-deleted": "The selected warp was successfully deleted",
+  "set-warp-command-incorrect-usage": "Incorrect usage! Usage: /setwarp <warp name> [<permission>]",
+  "set-warp-command-warp-created": "A new warp was successfully created",
+  "set-warp-command-warp-updated": "The selected warp was successfully updated"
 }

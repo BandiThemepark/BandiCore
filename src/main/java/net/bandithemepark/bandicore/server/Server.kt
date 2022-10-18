@@ -5,6 +5,7 @@ import net.bandithemepark.bandicore.network.backend.BackendSetting
 import net.bandithemepark.bandicore.park.ThemePark
 import net.bandithemepark.bandicore.server.essentials.ranks.RankManager
 import net.bandithemepark.bandicore.server.essentials.ranks.scoreboard.BandiScoreboard
+import net.bandithemepark.bandicore.server.essentials.warps.WarpManager
 import net.bandithemepark.bandicore.server.mode.ServerMode
 import net.bandithemepark.bandicore.server.translations.Language
 import net.bandithemepark.bandicore.util.FileManager
@@ -21,6 +22,7 @@ class Server {
 
     val rankManager = RankManager()
     val scoreboard = BandiScoreboard()
+    val warpManager = WarpManager()
 
     val themePark = ThemePark(Bukkit.getWorld("world")!!)
 

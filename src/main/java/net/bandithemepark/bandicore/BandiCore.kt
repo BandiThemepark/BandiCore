@@ -44,15 +44,14 @@ import net.bandithemepark.bandicore.network.audioserver.events.AudioServerEventL
 import net.bandithemepark.bandicore.network.audioserver.map.ChunkRendererCommand
 import net.bandithemepark.bandicore.network.mqtt.MQTTConnector
 import net.bandithemepark.bandicore.network.queue.QueueCommand
-import net.bandithemepark.bandicore.park.ThemePark
 import net.bandithemepark.bandicore.park.attractions.AttractionCommand
 import net.bandithemepark.bandicore.park.attractions.info.AttractionInfoBoard
 import net.bandithemepark.bandicore.park.attractions.menu.AttractionMenu
 import net.bandithemepark.bandicore.park.attractions.mode.*
+import net.bandithemepark.bandicore.park.attractions.ridecounter.RideCounterMenu
 import net.bandithemepark.bandicore.park.attractions.rideop.RideOP
 import net.bandithemepark.bandicore.park.attractions.rideop.RideOPCommand
 import net.bandithemepark.bandicore.park.attractions.rideop.RideOPEvents
-import net.bandithemepark.bandicore.park.attractions.rideop.RideOPTest
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.SeatAttachment
 import net.bandithemepark.bandicore.park.modsupport.SmoothCoastersChecker
 import net.bandithemepark.bandicore.park.npc.ThemeParkNPCSkin
@@ -71,6 +70,9 @@ import net.bandithemepark.bandicore.server.essentials.worlds.WorldManager
 import net.bandithemepark.bandicore.server.essentials.teleport.BackCommand
 import net.bandithemepark.bandicore.server.essentials.teleport.SelfCommand
 import net.bandithemepark.bandicore.server.essentials.teleport.TeleportCommand
+import net.bandithemepark.bandicore.server.essentials.warps.DeleteWarpCommand
+import net.bandithemepark.bandicore.server.essentials.warps.SetWarpCommand
+import net.bandithemepark.bandicore.server.essentials.warps.WarpCommand
 import net.bandithemepark.bandicore.server.regions.BandiRegionCommand
 import net.bandithemepark.bandicore.server.regions.BandiRegionManager
 import net.bandithemepark.bandicore.server.regions.events.BandiRegionEvents
@@ -120,6 +122,7 @@ class BandiCore: JavaPlugin() {
         // Setting up the server
         server = Server()
         server.themePark.setup()
+        server.warpManager.loadWarps()
         prepareSettings()
         coinManager = CoinManager()
 
@@ -215,7 +218,6 @@ class BandiCore: JavaPlugin() {
         getCommand("worldtp")!!.setExecutor(WorldCommands())
         getCommand("teleport")!!.setExecutor(TeleportCommand())
         getCommand("back")!!.setExecutor(BackCommand())
-        getCommand("rideoptest")!!.setExecutor(RideOPTest())
         getCommand("self")!!.setExecutor(SelfCommand())
         getCommand("day")!!.setExecutor(TimeManagement())
         getCommand("night")!!.setExecutor(TimeManagement())
@@ -225,6 +227,9 @@ class BandiCore: JavaPlugin() {
         getCommand("chunkrenderer")!!.setExecutor(ChunkRendererCommand())
         getCommand("patheditor")!!.setExecutor(PathPointEditorCommand())
         getCommand("volume")!!.setExecutor(VolumeCommand())
+        getCommand("warp")!!.setExecutor(WarpCommand())
+        getCommand("deletewarp")!!.setExecutor(DeleteWarpCommand())
+        getCommand("setwarp")!!.setExecutor(SetWarpCommand())
     }
 
     private fun registerEvents() {
@@ -257,6 +262,7 @@ class BandiCore: JavaPlugin() {
         getServer().pluginManager.registerEvents(ThemeParkNPCSkin.Caching.Events(), this)
         getServer().pluginManager.registerEvents(AudioServerEventListeners.BukkitEventListeners(), this)
         getServer().pluginManager.registerEvents(AttractionInfoBoard.Events(), this)
+        getServer().pluginManager.registerEvents(RideCounterMenu.Events(), this)
     }
 
     private fun prepareSettings() {
