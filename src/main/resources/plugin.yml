@@ -114,3 +114,5 @@ commands:
     aliases: delwarp
   setwarp:
     description: Create or update a warp
+  nearestwarp:
+    description: Teleport to the nearest warp

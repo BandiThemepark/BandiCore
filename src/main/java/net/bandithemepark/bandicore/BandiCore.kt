@@ -71,6 +71,7 @@ import net.bandithemepark.bandicore.server.essentials.teleport.BackCommand
 import net.bandithemepark.bandicore.server.essentials.teleport.SelfCommand
 import net.bandithemepark.bandicore.server.essentials.teleport.TeleportCommand
 import net.bandithemepark.bandicore.server.essentials.warps.DeleteWarpCommand
+import net.bandithemepark.bandicore.server.essentials.warps.NearestWarpCommand
 import net.bandithemepark.bandicore.server.essentials.warps.SetWarpCommand
 import net.bandithemepark.bandicore.server.essentials.warps.WarpCommand
 import net.bandithemepark.bandicore.server.regions.BandiRegionCommand
@@ -230,6 +231,7 @@ class BandiCore: JavaPlugin() {
         getCommand("warp")!!.setExecutor(WarpCommand())
         getCommand("deletewarp")!!.setExecutor(DeleteWarpCommand())
         getCommand("setwarp")!!.setExecutor(SetWarpCommand())
+        getCommand("nearestwarp")!!.setExecutor(NearestWarpCommand())
     }
 
     private fun registerEvents() {
