@@ -110,9 +110,11 @@ class AttractionMenu(val player: Player) {
 
                     val attractionId = event.clickedInventory!!.getItem(event.slot)!!.getPersistentData("attraction") ?: return
                     val attraction = Attraction.attractions.find { it.id == attractionId } ?: return
-                    // TODO Warp to attraction
+
                     Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
                         event.whoClicked.closeInventory()
+                        val warp = BandiCore.instance.server.warpManager.warps.find { it.name == attractionId }!!
+                        event.whoClicked.teleport(warp.location)
                     })
                 }
             }
