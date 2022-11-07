@@ -32,10 +32,16 @@ repositories {
     maven {
         url = uri("https://repo.eclipse.org/content/repositories/paho-releases/")
     }
+
+    maven {
+        url = uri("https://repo.inventivetalent.org/repository/public/")
+    }
+
     mavenCentral()
 }
 
 dependencies {
+    implementation("org.mineskin:java-client:1.2.2-SNAPSHOT")
     paperDevBundle("1.19.1-R0.1-SNAPSHOT")
     compileOnly("javax.annotation:javax.annotation-api:1.3.2")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10")

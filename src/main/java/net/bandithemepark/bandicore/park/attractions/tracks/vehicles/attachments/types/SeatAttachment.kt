@@ -6,7 +6,9 @@ import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.AttachmentPosition
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.AttachmentType
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayer
+import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin.Companion.getAdaptedSkin
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin.Companion.getCustomPlayerSkin
+import net.bandithemepark.bandicore.server.custom.player.NewCustomPlayer
 import net.bandithemepark.bandicore.util.entity.PacketEntity
 import net.bandithemepark.bandicore.util.entity.PacketEntitySeat
 import net.bandithemepark.bandicore.util.entity.event.PacketEntityInputEvent
@@ -14,6 +16,7 @@ import net.bandithemepark.bandicore.util.entity.event.SeatEnterEvent
 import net.bandithemepark.bandicore.util.entity.event.SeatExitEvent
 import net.bandithemepark.bandicore.util.entity.marker.PacketEntityMarker
 import net.bandithemepark.bandicore.util.math.Quaternion
+import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.entity.Player
@@ -57,13 +60,13 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
 
             if (tickMovementDirection != null && !seat!!.harnessesOpen) {
                 if (tickMovementDirection == MovementDirection.UP) {
-                    customPlayer?.loadFrom("scream")
+                    customPlayer?.loadFrom("customplayer/rideposition/scream")
                 }
                 if (tickMovementDirection == MovementDirection.DOWN) {
-                    customPlayer?.loadFrom("shield")
+                    customPlayer?.loadFrom("customplayer/rideposition/shield")
                 }
             } else {
-                customPlayer?.loadFrom("sit")
+                customPlayer?.loadFrom("customplayer/rideposition/sit")
             }
             tickMovementDirection = null
         }
@@ -79,11 +82,12 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
         seat!!.moveEntity(editedPosition, seatRotation, rotationDegrees)
 
         // Updating the position of the player rig
-        customPlayer?.location = mainPosition.clone().toLocation(seat!!.location!!.world)
-        customPlayer?.completeRotation = mainRotation.clone()
-        try {
-            customPlayer?.updatePosition()
-        } catch (_: java.lang.NullPointerException) {}
+        customPlayer?.moveTo(mainPosition.clone(), rotationDegrees)
+//        customPlayer?.location = mainPosition.clone().toLocation(seat!!.location!!.world)
+//        customPlayer?.completeRotation = mainRotation.clone()
+//        try {
+//            customPlayer?.update()
+//        } catch (_: java.lang.NullPointerException) {}
 
         lastPosition = mainPosition.clone()
 //        val editedPosition = mainPosition.clone()
@@ -118,14 +122,14 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
     }
 
     // Stuff related to custom player models
-    var customPlayer: CustomPlayer? = null
+    var customPlayer: NewCustomPlayer? = null
 
     fun spawnCustomPlayer(player: Player) {
-        customPlayer = CustomPlayer(player.getCustomPlayerSkin())
+        customPlayer = NewCustomPlayer(player.getAdaptedSkin(), Vector(0.0, 0.63, 0.0).toLocation(seat!!.location.world), Vector())
         customPlayer!!.setVisibilityType(PacketEntity.VisibilityType.BLACKLIST)
-        customPlayer!!.setVisibilityList(mutableListOf(player))
-        customPlayer!!.spawn(lastPosition.clone().add(Vector(0.0, 0.63, 0.0)).toLocation(seat!!.location!!.world))
-        customPlayer!!.loadFrom("sit")
+        //customPlayer!!.setVisibilityList(mutableListOf(player))
+        customPlayer!!.spawn()
+        customPlayer!!.loadFrom("customplayer/rideposition/sit")
     }
 
     fun deSpawnCustomPlayer(player: Player?) {

@@ -1,5 +1,6 @@
 package net.bandithemepark.bandicore.util
 
+import com.google.gson.JsonElement
 import com.google.gson.JsonParser
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.MiniMessage
@@ -93,7 +94,7 @@ object Util {
         val encodedValue = (this as CraftPlayer).handle.gameProfile.properties.get("textures").iterator().next().value
         val decodedValue = String(Base64.getDecoder().decode(encodedValue))
 
-        val json = JsonParser.parseString(decodedValue).asJsonObject
+        val json = JsonParser().parse(decodedValue).asJsonObject
         val skinObject = json.getAsJsonObject("textures").getAsJsonObject("SKIN")
 
         if(!skinObject.has("metadata")) return false

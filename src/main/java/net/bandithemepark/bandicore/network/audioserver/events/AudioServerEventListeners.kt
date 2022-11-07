@@ -109,7 +109,7 @@ class AudioServerEventListeners {
         override fun onMessage(topic: String, message: String) {
             if(topic.endsWith("/connection/connect")) {
                 // Call event
-                val json = JsonParser.parseString(message).asJsonObject
+                val json = JsonParser().parse(message).asJsonObject
                 val player = Bukkit.getPlayer(UUID.fromString(json.get("uuid").asString))!!
 
                 val event = AudioServerConnectEvent(player)
@@ -137,7 +137,7 @@ class AudioServerEventListeners {
 
             if(topic.endsWith("/connection/disconnect")) {
                 // Call event
-                val json = JsonParser.parseString(message).asJsonObject
+                val json = JsonParser().parse(message).asJsonObject
                 val player = Bukkit.getPlayer(UUID.fromString(json.get("uuid").asString))!!
 
                 val event = AudioServerDisconnectEvent(player)
@@ -148,7 +148,7 @@ class AudioServerEventListeners {
 
             if(topic.endsWith("/volume/client")) {
                 // Call event
-                val json = JsonParser.parseString(message).asJsonObject
+                val json = JsonParser().parse(message).asJsonObject
                 val player = Bukkit.getPlayer(UUID.fromString(json.get("uuid").asString))!!
                 val volume = json.get("volume").asInt
 

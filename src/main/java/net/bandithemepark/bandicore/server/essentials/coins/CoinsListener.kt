@@ -9,7 +9,7 @@ import java.util.*
 
 class CoinsListener: MQTTListener("/core/coins/trigger") {
     override fun onMessage(topic: String, message: String) {
-        val json = JsonParser.parseString(message).asJsonObject
+        val json = JsonParser().parse(message).asJsonObject
         val player = Bukkit.getPlayer(UUID.fromString(json.get("uuid").asString))!!
         CoinManager.reloadBalance(player)
     }

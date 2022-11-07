@@ -38,13 +38,16 @@ import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.rideop.Log
 import net.bandithemepark.bandicore.bandithemepark.adventure.rupsbaan.RupsbaanAttraction
 import net.bandithemepark.bandicore.bandithemepark.adventure.rupsbaan.RupsbaanCart
 import net.bandithemepark.bandicore.bandithemepark.adventure.rupsbaan.rideop.RupsbaanRideOP
+import net.bandithemepark.bandicore.network.audioserver.AudioCommand
 import net.bandithemepark.bandicore.network.audioserver.AudioServerTimer
 import net.bandithemepark.bandicore.network.audioserver.VolumeCommand
 import net.bandithemepark.bandicore.network.audioserver.events.AudioServerEventListeners
 import net.bandithemepark.bandicore.network.audioserver.map.ChunkRendererCommand
+import net.bandithemepark.bandicore.network.backend.audioserver.BackendAudioServerCredentials
 import net.bandithemepark.bandicore.network.mqtt.MQTTConnector
 import net.bandithemepark.bandicore.network.queue.QueueCommand
 import net.bandithemepark.bandicore.park.attractions.AttractionCommand
+import net.bandithemepark.bandicore.park.attractions.RidecounterManager
 import net.bandithemepark.bandicore.park.attractions.info.AttractionInfoBoard
 import net.bandithemepark.bandicore.park.attractions.menu.AttractionMenu
 import net.bandithemepark.bandicore.park.attractions.mode.*
@@ -57,8 +60,11 @@ import net.bandithemepark.bandicore.park.modsupport.SmoothCoastersChecker
 import net.bandithemepark.bandicore.park.npc.ThemeParkNPCSkin
 import net.bandithemepark.bandicore.park.npc.path.editor.PathPointEditorCommand
 import net.bandithemepark.bandicore.park.npc.path.editor.PathPointEditorEvents
+import net.bandithemepark.bandicore.server.animation.rig.RigTest
 import net.bandithemepark.bandicore.server.custom.blocks.CustomBlock
 import net.bandithemepark.bandicore.server.custom.blocks.CustomBlockMenu
+import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin
+import net.bandithemepark.bandicore.server.custom.player.animation.CustomPlayerAnimation
 import net.bandithemepark.bandicore.server.custom.player.editor.CustomPlayerEditor
 import net.bandithemepark.bandicore.server.essentials.*
 import net.bandithemepark.bandicore.server.essentials.coins.CoinManager
@@ -232,6 +238,9 @@ class BandiCore: JavaPlugin() {
         getCommand("deletewarp")!!.setExecutor(DeleteWarpCommand())
         getCommand("setwarp")!!.setExecutor(SetWarpCommand())
         getCommand("nearestwarp")!!.setExecutor(NearestWarpCommand())
+        getCommand("rigtest")!!.setExecutor(RigTest())
+        getCommand("getskin")!!.setExecutor(CustomPlayerSkin.Command())
+        getCommand("audio")!!.setExecutor(AudioCommand())
     }
 
     private fun registerEvents() {
@@ -265,6 +274,10 @@ class BandiCore: JavaPlugin() {
         getServer().pluginManager.registerEvents(AudioServerEventListeners.BukkitEventListeners(), this)
         getServer().pluginManager.registerEvents(AttractionInfoBoard.Events(), this)
         getServer().pluginManager.registerEvents(RideCounterMenu.Events(), this)
+        getServer().pluginManager.registerEvents(CustomPlayerSkin.Events(), this)
+        getServer().pluginManager.registerEvents(BackendAudioServerCredentials.Events(), this)
+        getServer().pluginManager.registerEvents(AudioCommand.Events(), this)
+        getServer().pluginManager.registerEvents(RidecounterManager.Events(), this)
     }
 
     private fun prepareSettings() {
@@ -278,6 +291,8 @@ class BandiCore: JavaPlugin() {
             LanguageUtil.loadLanguage(player)
             server.rankManager.loadRank(player)
             server.scoreboard.showFor(player)
+            CustomPlayerSkin.generateSkin(player)
+            server.ridecounterManager.loadOf(player)
         }
     }
 

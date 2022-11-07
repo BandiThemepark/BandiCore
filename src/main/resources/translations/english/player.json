@@ -53,5 +53,7 @@
   "audioserver-disconnected": "You are now disconnected from our AudioClient",
   "audioserver-volume-changed-client": "Volume set to %volume%%",
   "warp-command-incorrect-usage": "Incorrect usage! Usage: /warp <warp name>",
-  "warp-command-warp-not-found": "The entered warp was not found"
+  "warp-command-warp-not-found": "The entered warp was not found",
+  "audio-server-message": "Click this message to connect to our AudioServer",
+  "ridecounter-increased": "Your ridecounter for %attraction% is now at %count%"
 }

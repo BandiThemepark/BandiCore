@@ -116,3 +116,15 @@ commands:
     description: Create or update a warp
   nearestwarp:
     description: Teleport to the nearest warp
+  rigtest:
+    description: Test command for rigs
+  getskin:
+    description: Get the adapted texture value of your current skin
+  audio:
+    description: Connect with our AudioServver
+    aliases:
+      - music
+      - audioserver
+      - audioclient
+      - client
+      - sound

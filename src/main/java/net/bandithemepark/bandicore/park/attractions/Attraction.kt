@@ -1,5 +1,6 @@
 package net.bandithemepark.bandicore.park.attractions
 
+import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.park.attractions.mode.AttractionMode
 import net.bandithemepark.bandicore.park.attractions.rideop.RideOP
 import net.bandithemepark.bandicore.util.FileManager
@@ -30,6 +31,7 @@ abstract class Attraction(val id: String, val appearance: AttractionAppearance, 
 
     fun register() {
         attractions.add(this)
+        BandiCore.instance.server.ridecounterManager.setupOfRide(id)
     }
 
     companion object {
