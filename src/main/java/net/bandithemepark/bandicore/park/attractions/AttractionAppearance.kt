@@ -24,7 +24,7 @@ class AttractionAppearance(val displayName: String, val description: List<String
         lore.add(Util.color("<!i><${attraction.mode.textColor}>${attraction.mode.text}"))
         description.forEach { lore.add(Util.color("<!i><${BandiColors.LIGHT_GRAY}>$it")) }
         lore.add(Component.text(" "))
-        lore.add(Util.color("<!i><${BandiColors.YELLOW}>You have ridden this attraction 0 times")) // TODO Ridecount and translatable
+        lore.add(Util.color("<!i><${BandiColors.YELLOW}>You have ridden this attraction ${BandiCore.instance.server.ridecounterManager.getRidecountOnOf(player, attraction.id)} times")) // TODO translatable
         lore.add(Util.color("<!i><${BandiColors.YELLOW}>Click here to warp to this attraction")) // TODO Translatable
         meta.lore(lore)
 
