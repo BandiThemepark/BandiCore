@@ -2,9 +2,13 @@ package net.bandithemepark.bandicore.bandithemepark.adventure.rupsbaan
 
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.bandithemepark.adventure.rupsbaan.rideop.RupsbaanRideOP
+import net.bandithemepark.bandicore.park.attractions.Attraction
 import net.bandithemepark.bandicore.park.attractions.rideop.RideOP
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.SeatAttachment
 import net.bandithemepark.bandicore.server.essentials.ranks.nametag.PlayerNameTag.Companion.getNameTag
+import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedMessage
+import net.bandithemepark.bandicore.server.translations.MessageReplacement
+import net.bandithemepark.bandicore.util.chat.BandiColors
 import net.bandithemepark.bandicore.util.math.MathUtil
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
@@ -50,6 +54,14 @@ class RupsbaanRideSchedule(val ride: Rupsbaan, val keyframes: HashMap<Int, Doubl
                     val passengers = (cart.seat1Attachment.type as SeatAttachment).seat!!.getPassengers().filterIsInstance<Player>()
                     (cart.seat1Attachment.type as SeatAttachment).seat!!.ejectPassengers()
 
+                    // Increasing the ridecounter
+                    passengers.forEach { passenger ->
+                        BandiCore.instance.server.ridecounterManager.increase(passenger, "rupsbaan") {
+                            val newCount = BandiCore.instance.server.ridecounterManager.getRidecountOnOf(passenger, "rupsbaan")
+                            passenger.sendTranslatedMessage("ridecounter-increased", BandiColors.YELLOW.toString(), MessageReplacement("attraction", Attraction.get("rupsbaan")!!.appearance.displayName), MessageReplacement("count", newCount.toString()))
+                        }
+                    }
+
                     Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
                         passengers.forEach { player ->
                             (cart.seat1Attachment.type as SeatAttachment).deSpawnCustomPlayer(player)
@@ -62,6 +74,14 @@ class RupsbaanRideSchedule(val ride: Rupsbaan, val keyframes: HashMap<Int, Doubl
                 if((cart.seat2Attachment.type as SeatAttachment).seat!!.getPassengers().isNotEmpty()) {
                     val passengers = (cart.seat2Attachment.type as SeatAttachment).seat!!.getPassengers().filterIsInstance<Player>()
                     (cart.seat2Attachment.type as SeatAttachment).seat!!.ejectPassengers()
+
+                    // Increasing the ridecounter
+                    passengers.forEach { passenger ->
+                        BandiCore.instance.server.ridecounterManager.increase(passenger, "rupsbaan") {
+                            val newCount = BandiCore.instance.server.ridecounterManager.getRidecountOnOf(passenger, "rupsbaan")
+                            passenger.sendTranslatedMessage("ridecounter-increased", BandiColors.YELLOW.toString(), MessageReplacement("attraction", Attraction.get("rupsbaan")!!.appearance.displayName), MessageReplacement("count", newCount.toString()))
+                        }
+                    }
 
                     Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
                         passengers.forEach { player ->
