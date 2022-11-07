@@ -23,7 +23,7 @@ class RidecounterManager {
             val firstRide = json.get("firstRide").asString
 
             // Updating player ride counter
-            val playerRidecounter = getPlayerRidecounter(player)!!
+            val playerRidecounter = getPlayerRidecounter(player)
             val oldRidecount = playerRidecounter.counters.find { it.ride == rideId }
 
             if(oldRidecount != null) {
@@ -36,7 +36,7 @@ class RidecounterManager {
 
             // Updating ride ride counter
             val rideRidecounter = getRideRidecounter(rideId)
-            val oldPlayerCount = rideRidecounter.counters.find { it.player == player }
+            val oldPlayerCount = rideRidecounter.counters.find { it.player.uniqueId == player.uniqueId }
 
             if(oldPlayerCount != null) {
                 oldPlayerCount.count = count
