@@ -55,5 +55,8 @@
   "warp-command-incorrect-usage": "Incorrect usage! Usage: /warp <warp name>",
   "warp-command-warp-not-found": "The entered warp was not found",
   "audio-server-message": "Click this message to connect to our AudioServer",
-  "ridecounter-increased": "Your ridecounter for %attraction% is now at %count%"
+  "ridecounter-increased": "Your ridecounter for %attraction% is now at %count%",
+  "audio-server-already-connected": "You are already connected to our AudioServer!",
+  "audio-server-connected": "You are now connected to our AudioServer",
+    "audio-server-disconnected": "You are now disconnected from our AudioServer"
 }
