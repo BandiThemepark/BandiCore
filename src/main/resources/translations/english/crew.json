@@ -126,7 +126,7 @@
   "teleport-to-player": "You have been teleported to %target%",
   "teleport-player-to-player": "You have teleported %target1% to %target2%",
   "teleport-usage": "Invalid arguments! Usage: /teleport <player> [<player>]",
-  "teleport-back": "You have been teleported to you previous position",
+  "teleport-back": "You have been teleported to your previous position",
   "load-world-usage": "Usage: /loadworld <worldId>",
   "load-world-success": "Successfully loaded a new world",
   "load-world-failure": "Failed to load the world. Please check the console for the error",
