@@ -103,4 +103,10 @@ object Util {
         val model = skinObject.getAsJsonObject("metadata").get("model").asString
         return model == "slim"
     }
+
+    fun getNegativeText(amount: Int): String {
+        var text = ""
+        for(i in 0 until amount) { text += "\uE019" }
+        return text
+    }
 }
