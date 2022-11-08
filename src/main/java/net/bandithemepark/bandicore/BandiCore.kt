@@ -47,7 +47,7 @@ import net.bandithemepark.bandicore.network.backend.audioserver.BackendAudioServ
 import net.bandithemepark.bandicore.network.mqtt.MQTTConnector
 import net.bandithemepark.bandicore.network.queue.QueueCommand
 import net.bandithemepark.bandicore.park.attractions.AttractionCommand
-import net.bandithemepark.bandicore.park.attractions.RidecounterManager
+import net.bandithemepark.bandicore.park.attractions.ridecounter.RidecounterManager
 import net.bandithemepark.bandicore.park.attractions.info.AttractionInfoBoard
 import net.bandithemepark.bandicore.park.attractions.menu.AttractionMenu
 import net.bandithemepark.bandicore.park.attractions.mode.*
@@ -60,11 +60,19 @@ import net.bandithemepark.bandicore.park.modsupport.SmoothCoastersChecker
 import net.bandithemepark.bandicore.park.npc.ThemeParkNPCSkin
 import net.bandithemepark.bandicore.park.npc.path.editor.PathPointEditorCommand
 import net.bandithemepark.bandicore.park.npc.path.editor.PathPointEditorEvents
+import net.bandithemepark.bandicore.server.achievements.AchievementManager
+import net.bandithemepark.bandicore.server.achievements.menu.AchievementCategoriesMenu
+import net.bandithemepark.bandicore.server.achievements.menu.AchievementMenu
+import net.bandithemepark.bandicore.server.achievements.menu.AchievementMenuCommand
+import net.bandithemepark.bandicore.server.achievements.rewards.AchievementRewardCoins
+import net.bandithemepark.bandicore.server.achievements.rewards.AchievementRewardItem
+import net.bandithemepark.bandicore.server.achievements.triggers.AchievementTriggerRegionEnter
+import net.bandithemepark.bandicore.server.achievements.triggers.AchievementTriggerRidecounterIncrease
+import net.bandithemepark.bandicore.server.achievements.triggers.AchievementTriggerSpecial
 import net.bandithemepark.bandicore.server.animation.rig.RigTest
 import net.bandithemepark.bandicore.server.custom.blocks.CustomBlock
 import net.bandithemepark.bandicore.server.custom.blocks.CustomBlockMenu
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin
-import net.bandithemepark.bandicore.server.custom.player.animation.CustomPlayerAnimation
 import net.bandithemepark.bandicore.server.custom.player.editor.CustomPlayerEditor
 import net.bandithemepark.bandicore.server.essentials.*
 import net.bandithemepark.bandicore.server.essentials.coins.CoinManager
@@ -125,9 +133,11 @@ class BandiCore: JavaPlugin() {
         }
 
         worldManager = WorldManager()
+        registerAchievementRewardTypes()
 
         // Setting up the server
         server = Server()
+        server.achievementManager.setup()
         server.themePark.setup()
         server.warpManager.loadWarps()
         prepareSettings()
@@ -241,6 +251,7 @@ class BandiCore: JavaPlugin() {
         getCommand("rigtest")!!.setExecutor(RigTest())
         getCommand("getskin")!!.setExecutor(CustomPlayerSkin.Command())
         getCommand("audio")!!.setExecutor(AudioCommand())
+        getCommand("achievements")!!.setExecutor(AchievementMenuCommand())
     }
 
     private fun registerEvents() {
@@ -278,6 +289,12 @@ class BandiCore: JavaPlugin() {
         getServer().pluginManager.registerEvents(BackendAudioServerCredentials.Events(), this)
         getServer().pluginManager.registerEvents(AudioCommand.Events(), this)
         getServer().pluginManager.registerEvents(RidecounterManager.Events(), this)
+        getServer().pluginManager.registerEvents(AchievementManager.Events(), this)
+        getServer().pluginManager.registerEvents(AchievementTriggerRegionEnter(), this)
+        getServer().pluginManager.registerEvents(AchievementTriggerRidecounterIncrease(), this)
+        getServer().pluginManager.registerEvents(AchievementTriggerSpecial(), this)
+        getServer().pluginManager.registerEvents(AchievementCategoriesMenu.Events(), this)
+        getServer().pluginManager.registerEvents(AchievementMenu.Events(), this)
     }
 
     private fun prepareSettings() {
@@ -293,6 +310,7 @@ class BandiCore: JavaPlugin() {
             server.scoreboard.showFor(player)
             CustomPlayerSkin.generateSkin(player)
             server.ridecounterManager.loadOf(player)
+            server.achievementManager.loadOf(player)
         }
     }
 
@@ -313,6 +331,11 @@ class BandiCore: JavaPlugin() {
     private fun registerAttractions() {
         LogFlumeAttraction().register()
         RupsbaanAttraction().register()
+    }
+
+    private fun registerAchievementRewardTypes() {
+        AchievementRewardCoins().register()
+        AchievementRewardItem().register()
     }
 
 //    private fun runAngleInterpolationTest(formula: (Double, Double, Double) -> Double) {

@@ -128,3 +128,9 @@ commands:
       - audioclient
       - client
       - sound
+  achievements:
+    description: View your achievements
+    aliases:
+      - ach
+      - achs
+      - achievement

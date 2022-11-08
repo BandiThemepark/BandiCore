@@ -58,5 +58,14 @@
   "ridecounter-increased": "Your ridecounter for %attraction% is now at %count%",
   "audio-server-already-connected": "You are already connected to our AudioServer!",
   "audio-server-connected": "You are now connected to our AudioServer",
-    "audio-server-disconnected": "You are now disconnected from our AudioServer"
+  "audio-server-disconnected": "You are now disconnected from our AudioServer",
+  "achievement-category-historical": "Historical",
+  "achievement-category-event": "Event",
+  "achievement-type-secret": "Secret achievement",
+  "achievement-type-historical": "Historical achievement",
+  "achievement-type-event": "Event achievement",
+  "achievement-type-unlocked-amount-normal": "achievements unlocked",
+  "achievement-type-unlocked-amount-secret": "secrets found",
+  "achievement-type-unlocked-amount-event": "event achievements unlocked",
+  "achievement-type-unlocked-amount-historical": "historical achievements unlocked"
 }
