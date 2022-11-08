@@ -52,11 +52,23 @@ class RideCounterMenu(val attraction: Attraction): InventoryHolder {
             val item = ItemFactory(Material.PLAYER_HEAD)
                 .setDisplayName(Util.color("<!i><${BandiColors.YELLOW}>#${counter+1} ${rideCounter.player.name}"))
                 .setCustomModelData(customModelData)
-                .setLore(mutableListOf(Util.color("<!i><${BandiColors.LIGHT_GRAY}>With ${rideCounter.count} rides")))
+                .setLore(mutableListOf(Util.color("<!i><${BandiColors.LIGHT_GRAY}>With ${rideCounter.count} ride${if(rideCounter.count == 1) "" else "s"}")))
                 .setSkullOwner(rideCounter.player)
                 .build()
 
             inv.setItem(slot, item)
+
+            if(slot == 19) {
+                val dataItem = ItemFactory(Material.PAPER)
+                    .setDisplayName(Util.color("<!i><${BandiColors.YELLOW}>#${counter+1} ${rideCounter.player.name}"))
+                    .setCustomModelData(1020)
+                    .setLore(mutableListOf(Util.color("<!i><${BandiColors.LIGHT_GRAY}>With ${rideCounter.count} ride${if(rideCounter.count == 1) "" else "s"}")))
+                    .build()
+
+                inv.setItem(20, dataItem)
+                inv.setItem(28, dataItem)
+                inv.setItem(29, dataItem)
+            }
         }
 
         player.openInventory(inv)
