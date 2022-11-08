@@ -1,8 +1,7 @@
-package net.bandithemepark.bandicore.park.attractions
+package net.bandithemepark.bandicore.park.attractions.ridecounter
 
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.network.backend.BackendRidecounter
-import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
@@ -45,6 +44,11 @@ class RidecounterManager {
                 val newPlayerCount = RideRidecount(player, count, lastRide, firstRide)
                 rideRidecounter.counters.add(newPlayerCount)
             }
+
+            val event = RidecounterIncreaseEvent(player, playerRidecounter.counters.find { it.ride == rideId }!!)
+            Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
+                Bukkit.getPluginManager().callEvent(event)
+            })
 
             callback.invoke()
         }
