@@ -56,15 +56,18 @@ class AudioCommand: CommandExecutor {
 
             if(BackendAudioServerCredentials.getLink(player) == null) {
                 BackendAudioServerCredentials.generateNew(player) {
-                    player.sendMessage(Util.color(
-                        "<#dbc835>♫ <click:open_url:${BackendAudioServerCredentials.getLink(player)!!}>${player.getTranslatedMessage("audio-server-message")}</click>"
-                    ))
+                    sendLink(player)
                 }
             } else {
-                player.sendMessage(Util.color(
-                    "<#dbc835>♫ <click:open_url:${BackendAudioServerCredentials.getLink(player)!!}>${player.getTranslatedMessage("audio-server-message")}</click>"
-                ))
+                sendLink(player)
             }
+        }
+
+        private fun sendLink(player: Player) {
+            val link = BackendAudioServerCredentials.getLink(player)!!
+            player.sendMessage(Util.color(
+                "<#dbc835>♫ <click:open_url:$link><hover:show_text:'<#dbc835>$link'>${player.getTranslatedMessage("audio-server-message")}</hover></click>"
+            ))
         }
 
         val connectedPlayers = mutableListOf<Player>()

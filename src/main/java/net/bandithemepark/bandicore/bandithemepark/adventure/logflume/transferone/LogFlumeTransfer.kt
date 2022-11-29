@@ -1,5 +1,6 @@
 package net.bandithemepark.bandicore.bandithemepark.adventure.logflume.transferone
 
+import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.effects.MonkeyBlowEffect
 import net.bandithemepark.bandicore.park.attractions.tracks.TrackLayout
 import net.bandithemepark.bandicore.park.attractions.tracks.TrackNode
 import net.bandithemepark.bandicore.park.attractions.tracks.splines.BezierSpline
@@ -7,12 +8,16 @@ import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.TrackUtil
 import net.bandithemepark.bandicore.util.entity.armorstand.PacketEntityArmorStand
 import net.bandithemepark.bandicore.util.math.MathUtil
+import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.util.Vector
 
 class LogFlumeTransfer(val layout: TrackLayout, val connector1: TrackNode, val connector2: TrackNode, val part1: TrackNode, val part2: TrackNode, val part1Start: Vector, val part1End: Vector, val part2Start: Vector, val part2End: Vector) {
     val armorStand: PacketEntityArmorStand = PacketEntityArmorStand()
     val armorStandYOffset = -1.0 - (11.0 / 16.0)
+
+    var currentBlowEffect = null as MonkeyBlowEffect?
+    var blowTicksLeft = 0
 
     fun spawnModel() {
         val position = part1Start.clone().add(part2Start).multiply(0.5).add(Vector(0.0, armorStandYOffset, 0.0)).add(layout.origin)
@@ -45,6 +50,14 @@ class LogFlumeTransfer(val layout: TrackLayout, val connector1: TrackNode, val c
         connector1.disconnect(layout)
         updatePath()
         layout.updateSegments()
+
+        // Updating the effect
+        currentBlowEffect = MonkeyBlowEffect(
+            Location(layout.world, 18.5, 3.9, -105.5),
+            MonkeyBlowEffect.Direction.POS_Z,
+            5,
+        )
+        blowTicksLeft = 30
     }
 
     fun setToEnd() {
@@ -67,6 +80,14 @@ class LogFlumeTransfer(val layout: TrackLayout, val connector1: TrackNode, val c
         connector2.disconnect(layout)
         updatePath()
         layout.updateSegments()
+
+        // Updating the effect
+        currentBlowEffect = MonkeyBlowEffect(
+            Location(layout.world, 18.5, 3.9, -95.5),
+            MonkeyBlowEffect.Direction.NEG_Z,
+            5,
+        )
+        blowTicksLeft = 30
     }
 
     fun moveTo(progress: Double) {
@@ -87,6 +108,11 @@ class LogFlumeTransfer(val layout: TrackLayout, val connector1: TrackNode, val c
 
         updatePath()
         updateBetter(BezierSpline().linear(part1Start.z, part1End.z, t))
+
+        if(blowTicksLeft > 0) {
+            blowTicksLeft -= 1
+            currentBlowEffect?.update()
+        }
     }
 
     private fun updateBetter(z: Double) {
