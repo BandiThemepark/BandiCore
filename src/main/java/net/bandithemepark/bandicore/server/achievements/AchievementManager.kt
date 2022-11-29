@@ -30,7 +30,7 @@ class AchievementManager {
             player.playSound(player.location, "custom.achievement", 1f, 1f)
 
             player.sendMessage(Util.color(" "))
-            player.sendMessage(Util.color(" \uE017${Util.getNegativeText(46)}\uE018"))
+            player.sendMessage(Util.color(" \uE017${Util.getNegativeText(47)}\uE018"))
             player.sendMessage(Util.color("               <${BandiColors.YELLOW}>Achievement unlocked: ${achievement.displayName}"))
             player.sendMessage(Util.color("               <${BandiColors.LIGHT_GRAY}>${if(achievement.description.isNotEmpty()) achievement.description[0] else "Good job!"}"))
             player.sendMessage(Util.color("               <${BandiColors.LIGHT_GRAY}>${if(achievement.description.size > 1) achievement.description[1] else ""}${if(achievement.description.size > 2) "..." else ""}"))

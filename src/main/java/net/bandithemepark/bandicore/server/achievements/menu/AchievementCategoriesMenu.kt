@@ -16,12 +16,14 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
 
-class AchievementCategoriesMenu(val player: Player) {
+class AchievementCategoriesMenu(val player: Player, muteOnce: Boolean = false) {
     var currentPage = 0
     var canNextPage = false
     var canPreviousPage = false
+    var muteSoundOnce = false
 
     init {
+        muteSoundOnce = muteOnce
         sessions[player] = this
         open(0)
     }
@@ -45,7 +47,7 @@ class AchievementCategoriesMenu(val player: Player) {
         }
 
         newCategories.sortBy { it.displayName }
-        val availableSlots = mutableListOf(1, 2, 3, 4, 5, 10, 11, 12, 13, 14, 19, 20, 21, 22, 23, 32, 33, 34, 35, 36)
+        val availableSlots = mutableListOf(1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 32, 33, 34, 35, 36, 37, 38)
 
         val toGetStart = page * availableSlots.size
         var toGetEnd = toGetStart + availableSlots.size
@@ -109,6 +111,11 @@ class AchievementCategoriesMenu(val player: Player) {
                             )
                         )
                     } else {
+                        if(session.muteSoundOnce) {
+                            session.muteSoundOnce = false
+                            return
+                        }
+
                         session.player.playSound(
                             Sound.sound(
                                 Key.key("entity.villager.no"),

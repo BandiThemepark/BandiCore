@@ -52,7 +52,7 @@ class AchievementMenu(val player: Player, category: AchievementCategory) {
         }
 
         newAchievements.sortBy { it.displayName }
-        val availableSlots = mutableListOf(1, 2, 3, 4, 5, 10, 11, 12, 13, 14, 19, 20, 21, 22, 23, 32, 33, 34, 35, 36)
+        val availableSlots = mutableListOf(1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 32, 33, 34, 35, 36, 37, 38)
 
         val toGetStart = page * availableSlots.size
         var toGetEnd = toGetStart + availableSlots.size
@@ -104,7 +104,7 @@ class AchievementMenu(val player: Player, category: AchievementCategory) {
                 37 -> {
                     val session = sessions[event.whoClicked as Player]!!
                     if(session.currentPage == 0) {
-                        AchievementCategoriesMenu(event.whoClicked as Player)
+                        Bukkit.getScheduler().runTask(BandiCore.instance, Runnable { AchievementCategoriesMenu(event.whoClicked as Player, true) })
                         return
                     }
 

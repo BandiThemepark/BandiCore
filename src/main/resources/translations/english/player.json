@@ -61,6 +61,7 @@
   "audio-server-disconnected": "You are now disconnected from our AudioServer",
   "achievement-category-historical": "Historical",
   "achievement-category-event": "Event",
+  "achievement-category-hidden": "Hidden",
   "achievement-type-secret": "Secret achievement",
   "achievement-type-historical": "Historical achievement",
   "achievement-type-event": "Event achievement",
