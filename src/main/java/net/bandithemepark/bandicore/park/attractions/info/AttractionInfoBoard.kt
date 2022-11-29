@@ -1,6 +1,7 @@
 package net.bandithemepark.bandicore.park.attractions.info
 
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.network.audioserver.AudioCommand
 import net.bandithemepark.bandicore.park.attractions.Attraction
 import net.bandithemepark.bandicore.park.attractions.ridecounter.RideCounterMenu
 import net.bandithemepark.bandicore.park.modsupport.SmoothCoastersChecker.Companion.usingSmoothCoasters
@@ -56,7 +57,7 @@ class AttractionInfoBoard(val attraction: Attraction): InventoryHolder {
             when(event.slot) {
                 10 -> {
                     Bukkit.getScheduler().runTask(BandiCore.instance, Runnable { event.whoClicked.closeInventory() })
-                    // TODO Send player AudioServer connect message
+                    AudioCommand.sendMessage(event.whoClicked as Player)
                 }
                 12 -> {
                     Bukkit.getScheduler().runTask(BandiCore.instance, Runnable { event.whoClicked.closeInventory() })
