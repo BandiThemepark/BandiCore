@@ -26,6 +26,8 @@ class AudioServerTimer: BukkitRunnable() {
         for(player in Bukkit.getOnlinePlayers()) {
             val playerJson = JsonObject()
 
+            playerJson.addProperty("uuid", player.uniqueId.toString())
+            playerJson.addProperty("name", player.name)
             playerJson.addProperty("world", player.location.world.name)
             playerJson.addProperty("x", player.location.x)
             playerJson.addProperty("y", player.location.y)

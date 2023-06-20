@@ -96,6 +96,11 @@ class MQTTConnector {
         } else {
             if(!client!!.isConnected) {
                 Bukkit.getLogger().severe("There was an attempt at sending a message to the MQTT server, but the client was not connected. The client will now reconnect...")
+                try {
+                    throw Exception("test for stacktrace")
+                } catch (e: Exception) {
+                     e.printStackTrace()
+                }
                 if(!reconnecting) {
                     reconnecting = true
                     reconnect()
