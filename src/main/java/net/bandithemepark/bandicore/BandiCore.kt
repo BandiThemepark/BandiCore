@@ -73,6 +73,7 @@ import net.bandithemepark.bandicore.server.animation.rig.RigTest
 import net.bandithemepark.bandicore.server.custom.blocks.CustomBlock
 import net.bandithemepark.bandicore.server.custom.blocks.CustomBlockMenu
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin
+import net.bandithemepark.bandicore.server.custom.player.NewCustomPlayer
 import net.bandithemepark.bandicore.server.custom.player.editor.CustomPlayerEditor
 import net.bandithemepark.bandicore.server.essentials.*
 import net.bandithemepark.bandicore.server.essentials.coins.CoinManager

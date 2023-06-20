@@ -3,12 +3,16 @@ package net.bandithemepark.bandicore.server.custom.player
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.server.animation.rig.Rig
 import net.bandithemepark.bandicore.server.animation.rig.RigManager
+import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin.Companion.getAdaptedSkin
 import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.entity.PacketEntity
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.command.Command
+import org.bukkit.command.CommandExecutor
+import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.util.Vector
 

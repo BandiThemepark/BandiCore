@@ -6,12 +6,14 @@ import com.google.gson.JsonParser
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.server.animation.Animation
 import net.bandithemepark.bandicore.server.animation.Channel
+import net.bandithemepark.bandicore.server.animation.rig.RigPart.Companion.clone
 import net.bandithemepark.bandicore.util.entity.PacketEntity
 import net.bandithemepark.bandicore.util.math.Quaternion
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.entity.Player
+import org.bukkit.util.EulerAngle
 import org.bukkit.util.Vector
 import java.io.File
 
@@ -48,7 +50,8 @@ class Rig(val parts: MutableList<RigPart>, val basePosition: Location, val baseR
         val rotation = baseRotation.clone().add(this.rotation)
         val rotationQuaternion = Quaternion.fromYawPitchRoll(rotation.x, rotation.y, rotation.z)
 
-        parts.forEach { it.update(position, rotation, rotationQuaternion) }
+        val eulerRotation = EulerAngle(Math.toRadians(this.rotation.x), Math.toRadians(this.rotation.y), Math.toRadians(this.rotation.z))
+        parts.forEach { it.update(position, eulerRotation.clone(), rotationQuaternion) }
     }
 
     fun setToAnimationAt(animation: Animation, time: Int) {

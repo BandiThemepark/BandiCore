@@ -17,6 +17,7 @@ import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.Particle
 import org.bukkit.inventory.ItemStack
+import org.bukkit.util.EulerAngle
 import org.bukkit.util.Vector
 
 class RigPart(val name: String, val children: MutableList<RigPart>, var itemStack: ItemStack?, val baseOffset: Vector, val baseRotation: Vector, var hasModel: Boolean = true) {
@@ -47,26 +48,46 @@ class RigPart(val name: String, val children: MutableList<RigPart>, var itemStac
         armorStand.deSpawn()
     }
 
-    fun update(position: Vector, rotation: Vector, rotationQuaternion: Quaternion) {
+    fun update(position: Vector, rotation: EulerAngle, rotationQuaternion: Quaternion) {
         val newPosition = position.clone().add(getPosition(baseOffset.clone().add(offset), rotationQuaternion))
-        val newRotation = rotationQuaternion.clone()
-        newRotation.multiply(Quaternion.fromYawPitchRoll(baseRotation.x, baseRotation.y, baseRotation.z))
-        newRotation.multiply(Quaternion.fromYawPitchRoll(this.rotation.x, this.rotation.y, this.rotation.z))
 
-        if(hasModel) updateArmorStand(newPosition.clone(), rotation.clone(), newRotation.clone())
+        var newRotation = EulerAngle(rotation.x, rotation.y, rotation.z)
+        newRotation = newRotation.add(Math.toRadians(baseRotation.x + this.rotation.x), Math.toRadians(baseRotation.y + this.rotation.y), Math.toRadians(baseRotation.z + this.rotation.z))
+
+        if(hasModel) updateArmorStand(newPosition.clone(), newRotation.clone(), rotationQuaternion.clone())
 
         for(child in children) {
-            child.update(newPosition.clone(), rotation.clone(), newRotation.clone())
+            child.update(newPosition.clone(), newRotation.clone(), rotationQuaternion.clone())
         }
     }
 
-    private fun updateArmorStand(position: Vector, rotation: Vector, rotationQuaternion: Quaternion) {
+    private fun updateArmorStand(position: Vector, rotation: EulerAngle, rotationQuaternion: Quaternion) {
         val newPosition = position.clone().add(type.staticOffset)
         armorStand.moveEntity(newPosition.x, newPosition.y, newPosition.z)
-
-        val armorStandPose = MathUtil.getArmorStandPose(rotationQuaternion)
-        type.applyPose(armorStand, Math.toDegrees(armorStandPose.x), Math.toDegrees(armorStandPose.y), Math.toDegrees(armorStandPose.z))
+        type.applyPose(armorStand, Math.toDegrees(rotation.x), Math.toDegrees(rotation.y), Math.toDegrees(rotation.z))
     }
+
+
+//    fun update(position: Vector, rotation: Vector, rotationQuaternion: Quaternion) {
+//        val newPosition = position.clone().add(getPosition(baseOffset.clone().add(offset), rotationQuaternion))
+//        val newRotation = rotationQuaternion.clone()
+//        newRotation.multiply(Quaternion.fromYawPitchRoll(baseRotation.x, baseRotation.y, baseRotation.z))
+//        newRotation.multiply(Quaternion.fromYawPitchRoll(this.rotation.x, this.rotation.y, this.rotation.z))
+//
+//        if(hasModel) updateArmorStand(newPosition.clone(), rotation.clone(), newRotation.clone())
+//
+//        for(child in children) {
+//            child.update(newPosition.clone(), rotation.clone(), newRotation.clone())
+//        }
+//    }
+//
+//    private fun updateArmorStand(position: Vector, rotation: Vector, rotationQuaternion: Quaternion) {
+//        val newPosition = position.clone().add(type.staticOffset)
+//        armorStand.moveEntity(newPosition.x, newPosition.y, newPosition.z)
+//
+//        val armorStandPose = MathUtil.getArmorStandPose(rotationQuaternion)
+//        type.applyPose(armorStand, Math.toDegrees(armorStandPose.x), Math.toDegrees(armorStandPose.y), Math.toDegrees(armorStandPose.z))
+//    }
 
     enum class Type(val staticOffset: Vector) {
         HEAD(Vector(0.0, -1.4375, 0.0)) {
@@ -139,6 +160,10 @@ class RigPart(val name: String, val children: MutableList<RigPart>, var itemStac
     }
 
     companion object {
+        fun EulerAngle.clone(): EulerAngle {
+            return EulerAngle(this.x, this.y, this.z)
+        }
+
         fun getFromJson(json: JsonObject): RigPart {
             val name = json.get("name").asString
 
