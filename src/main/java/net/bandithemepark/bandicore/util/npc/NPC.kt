@@ -16,9 +16,9 @@ import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.block.data.type.TrapDoor
-import org.bukkit.craftbukkit.v1_19_R1.CraftWorld
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer
-import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack
+import org.bukkit.craftbukkit.v1_20_R1.CraftWorld
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer
+import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -47,11 +47,11 @@ class NPC(val name: String, val textureProperty: Property, var visibilityType: N
         profile!!.properties.put("textures", textureProperty)
 
         // Creating the actual NPC instance and moving it to the spawn location
-        npc = ServerPlayer(server, (location.world as CraftWorld).handle, profile!!, null)
+        npc = ServerPlayer(server, (location.world as CraftWorld).handle, profile!!)
         npc!!.setPos(location.x, location.y, location.z)
 
         // Sending packets for spawning the NPC
-        sendPacket(ClientboundPlayerInfoPacket(ClientboundPlayerInfoPacket.Action.ADD_PLAYER, npc))
+        sendPacket(ClientboundPlayerInfoUpdatePacket(ClientboundPlayerInfoUpdatePacket.Action.ADD_PLAYER, npc!!))
         sendPacket(ClientboundAddPlayerPacket(npc!!))
         showSecondLayer()
 
@@ -71,15 +71,16 @@ class NPC(val name: String, val textureProperty: Property, var visibilityType: N
      * @param player The player to spawn the NPC for
      */
     fun spawnFor(player: Player) {
-        (player as CraftPlayer).handle.connection.send(ClientboundPlayerInfoPacket(ClientboundPlayerInfoPacket.Action.ADD_PLAYER, npc))
+        (player as CraftPlayer).handle.connection.send(ClientboundPlayerInfoUpdatePacket(ClientboundPlayerInfoUpdatePacket.Action.ADD_PLAYER, npc!!))
         player.handle.connection.send(ClientboundAddPlayerPacket(npc!!))
 
         val data = npc!!.entityData
         data.set(net.minecraft.world.entity.player.Player.DATA_PLAYER_MODE_CUSTOMISATION, 127.toByte())
-        player.handle.connection.send(ClientboundSetEntityDataPacket(npc!!.id, data, true))
+        //player.handle.connection.send(ClientboundSetEntityDataPacket(npc!!.id, data, true))
+        player.handle.connection.send(ClientboundSetEntityDataPacket(npc!!.id, data.nonDefaultValues!!))
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(BandiCore.instance, {
-            player.handle.connection.send(ClientboundPlayerInfoPacket(ClientboundPlayerInfoPacket.Action.REMOVE_PLAYER, npc))
+            player.handle.connection.send(ClientboundPlayerInfoRemovePacket(mutableListOf(npc!!.uuid)))
             showSecondLayer()
             moveHead(location!!.pitch, location!!.yaw)
             updatePosition(true)
@@ -98,13 +99,14 @@ class NPC(val name: String, val textureProperty: Property, var visibilityType: N
     }
 
     private fun hideFromTabList() {
-        sendPacket(ClientboundPlayerInfoPacket(ClientboundPlayerInfoPacket.Action.REMOVE_PLAYER, npc))
+        sendPacket(ClientboundPlayerInfoRemovePacket(mutableListOf(npc!!.uuid)))
     }
 
     private fun showSecondLayer() {
         val data = npc!!.entityData
         data.set(net.minecraft.world.entity.player.Player.DATA_PLAYER_MODE_CUSTOMISATION, 0x7E.toByte())
-        sendPacket(ClientboundSetEntityDataPacket(npc!!.id, data, true))
+        //sendPacket(ClientboundSetEntityDataPacket(npc!!.id, data, true))
+        sendPacket(ClientboundSetEntityDataPacket(npc!!.id, data.nonDefaultValues!!))
     }
 
     // All items to hold

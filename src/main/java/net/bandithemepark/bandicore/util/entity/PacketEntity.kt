@@ -18,15 +18,18 @@ import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket
 import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket
 import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket
 import net.minecraft.network.protocol.game.ServerboundPlayerInputPacket
+import net.minecraft.network.syncher.EntityDataAccessor
+import net.minecraft.network.syncher.EntityDataSerializer
+import net.minecraft.network.syncher.SynchedEntityData
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
 import org.bukkit.Bukkit
 import org.bukkit.Location
-import org.bukkit.craftbukkit.v1_19_R1.CraftWorld
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer
-import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack
+import org.bukkit.craftbukkit.v1_20_R1.CraftWorld
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer
+import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -199,7 +202,8 @@ abstract class PacketEntity {
      * Updates entity metadata for all players that can see the armor stand
      */
     open fun updateMetadata() {
-        val packet = ClientboundSetEntityDataPacket(handle!!.id, handle!!.entityData, true)
+        //val packet = ClientboundSetEntityDataPacket(handle!!.id, handle!!.entityData, true)
+        val packet = ClientboundSetEntityDataPacket(handle!!.id, handle!!.entityData.nonDefaultValues!!)
         sendPacket(packet)
     }
 
@@ -208,7 +212,8 @@ abstract class PacketEntity {
      * @param player The player to update the metadata for
      */
     open fun updateMetadataFor(player: Player) {
-        val packet = ClientboundSetEntityDataPacket(handle!!.id, handle!!.entityData, true)
+        //val packet = ClientboundSetEntityDataPacket(handle!!.id, handle!!.entityData, true)
+        val packet = ClientboundSetEntityDataPacket(handle!!.id, handle!!.entityData.nonDefaultValues!!)
         (player as CraftPlayer).handle.connection.send(packet)
     }
 

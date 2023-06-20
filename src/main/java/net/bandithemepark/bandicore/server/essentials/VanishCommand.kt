@@ -4,12 +4,13 @@ import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.server.essentials.ranks.nametag.PlayerNameTag.Companion.getNameTag
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedMessage
 import net.bandithemepark.bandicore.util.chat.BandiColors
-import net.minecraft.network.protocol.game.ClientboundPlayerInfoPacket
+import net.minecraft.network.protocol.game.ClientboundPlayerInfoRemovePacket
+import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -53,12 +54,12 @@ class VanishCommand: CommandExecutor {
         }
 
         fun hideTabList(player: Player, forPlayers: List<Player>) {
-            val packet = ClientboundPlayerInfoPacket(ClientboundPlayerInfoPacket.Action.REMOVE_PLAYER, (player as CraftPlayer).handle)
+            val packet = ClientboundPlayerInfoRemovePacket(mutableListOf((player as CraftPlayer).handle.uuid))
             for(player2 in forPlayers) (player2 as CraftPlayer).handle.connection.send(packet)
         }
 
         fun showTabList(player: Player, forPlayers: List<Player>) {
-            val packet = ClientboundPlayerInfoPacket(ClientboundPlayerInfoPacket.Action.ADD_PLAYER, (player as CraftPlayer).handle)
+            val packet = ClientboundPlayerInfoUpdatePacket(ClientboundPlayerInfoUpdatePacket.Action.ADD_PLAYER, (player as CraftPlayer).handle)
             for(player2 in forPlayers) (player2 as CraftPlayer).handle.connection.send(packet)
         }
     }

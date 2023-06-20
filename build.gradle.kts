@@ -42,14 +42,14 @@ repositories {
 
 dependencies {
     implementation("org.mineskin:java-client:1.2.2-SNAPSHOT")
-    paperDevBundle("1.19.1-R0.1-SNAPSHOT")
+    paperDevBundle("1.20-R0.1-SNAPSHOT")
     compileOnly("javax.annotation:javax.annotation-api:1.3.2")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.6.10")
-    compileOnly("com.comphenix.protocol", "ProtocolLib", "4.8.0")
+    compileOnly("com.comphenix.protocol", "ProtocolLib", "5.0.0")
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
-    compileOnly("com.sk89q.worldedit:worldedit-bukkit:7.2.11-SNAPSHOT")
+    compileOnly("com.sk89q.worldedit:worldedit-bukkit:7.2.15")
     implementation("me.m56738:SmoothCoastersAPI:1.7")
     implementation("org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5")
 }

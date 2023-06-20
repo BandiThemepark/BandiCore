@@ -10,7 +10,7 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.decoration.ArmorStand
 import org.bukkit.Bukkit
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer
 import org.bukkit.entity.Player
 import org.bukkit.util.Vector
 
@@ -76,11 +76,13 @@ open class PacketEntityArmorStand: PacketEntity() {
             if(glowingFor.contains(player)) {
                 val before = (this as PacketEntity).handle!!.hasGlowingTag()
                 (this as PacketEntity).handle!!.setGlowingTag(true)
-                val packet = ClientboundSetEntityDataPacket(handle!!.id, handle!!.entityData, true)
+                //val packet = ClientboundSetEntityDataPacket(handle!!.id, handle!!.entityData, true)
+                val packet = ClientboundSetEntityDataPacket(handle!!.id, handle!!.entityData.nonDefaultValues!!)
                 (player as CraftPlayer).handle.connection.send(packet)
                 (this as PacketEntity).handle!!.setGlowingTag(before)
             } else {
-                val packet = ClientboundSetEntityDataPacket(handle!!.id, handle!!.entityData, true)
+                //val packet = ClientboundSetEntityDataPacket(handle!!.id, handle!!.entityData, true)
+                val packet = ClientboundSetEntityDataPacket(handle!!.id, handle!!.entityData.nonDefaultValues!!)
                 (player as CraftPlayer).handle.connection.send(packet)
             }
         }
