@@ -14,6 +14,7 @@ import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTransla
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedMessage
 import net.bandithemepark.bandicore.server.translations.MessageReplacement
 import net.bandithemepark.bandicore.util.chat.BandiColors
+import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -84,9 +85,6 @@ class AudioServerEventListeners {
             currentRegion.remove(event.player)
         }
 
-
-
-
         // ALL EXTERNAL EVENT HANDLING
 
         @EventHandler
@@ -105,18 +103,20 @@ class AudioServerEventListeners {
         }
     }
 
-    class ListenerMQTT: MQTTListener("/audioclient/*") {
+    class ListenerMQTT: MQTTListener("/audioclient/#") {
         override fun onMessage(topic: String, message: String) {
             if(topic.endsWith("/connection/connect")) {
                 // Call event
-                val json = JsonParser.parseString(message).asJsonObject
+                val json = JsonParser().parse(message).asJsonObject
                 val player = Bukkit.getPlayer(UUID.fromString(json.get("uuid").asString))!!
 
                 val event = AudioServerConnectEvent(player)
-                Bukkit.getPluginManager().callEvent(event)
+                Bukkit.getScheduler().runTask(BandiCore.instance, Runnable { Bukkit.getPluginManager().callEvent(event) })
 
                 // Send return info
                 val messageJson = JsonObject()
+                messageJson.addProperty("uuid", player.uniqueId.toString())
+                messageJson.addProperty("name", player.name)
 
                 val spatialAudioSourceArray = JsonArray()
                 SpatialAudioSource.updatedSources.forEach {
@@ -131,29 +131,31 @@ class AudioServerEventListeners {
                     messageJson.add("currentRegion", currentRegion[player]!!.convertToAudioClientJson())
                 }
 
-                BandiCore.instance.mqttConnector.sendMessage("/audioclient/player/${player.uniqueId}/connection/connectserver", messageJson.toString())
-                connectedPlayers.add(event.player)
+                Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
+                    BandiCore.instance.mqttConnector.sendMessage("/audioclient/player/${player.uniqueId}/connection/connectserver", messageJson.toString())
+                })
+                if(!connectedPlayers.contains(event.player)) connectedPlayers.add(event.player)
             }
 
             if(topic.endsWith("/connection/disconnect")) {
                 // Call event
-                val json = JsonParser.parseString(message).asJsonObject
+                val json = JsonParser().parse(message).asJsonObject
                 val player = Bukkit.getPlayer(UUID.fromString(json.get("uuid").asString))!!
 
-                val event = AudioServerDisconnectEvent(player)
-                Bukkit.getPluginManager().callEvent(event)
+                connectedPlayers.remove(player)
 
-                connectedPlayers.remove(event.player)
+                val event = AudioServerDisconnectEvent(player)
+                Bukkit.getScheduler().runTask(BandiCore.instance, Runnable { Bukkit.getPluginManager().callEvent(event) })
             }
 
             if(topic.endsWith("/volume/client")) {
                 // Call event
-                val json = JsonParser.parseString(message).asJsonObject
+                val json = JsonParser().parse(message).asJsonObject
                 val player = Bukkit.getPlayer(UUID.fromString(json.get("uuid").asString))!!
                 val volume = json.get("volume").asInt
 
                 val event = AudioServerVolumeChangeEvent(player, volume)
-                Bukkit.getPluginManager().callEvent(event)
+                Bukkit.getScheduler().runTask(BandiCore.instance, Runnable { Bukkit.getPluginManager().callEvent(event) })
             }
         }
     }

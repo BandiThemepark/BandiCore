@@ -38,7 +38,7 @@ class Language(val id: String, val shortenedId: String) {
         for(fileName in filesToTranslate) {
             val file = File(BandiCore.instance.dataFolder, "/translations/$id/$fileName.json")
             val data = FileUtils.readFileToString(file, Charset.defaultCharset())
-            val json = JsonParser.parseString(data).asJsonObject
+            val json = JsonParser().parse(data).asJsonObject
 
             for (key in json.keySet()) {
                 translations[key] = json.get(key).asString

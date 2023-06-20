@@ -5,7 +5,6 @@ import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin.Compan
 import net.bandithemepark.bandicore.util.FileManager
 import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.entity.armorstand.PacketEntityArmorStand
-import net.bandithemepark.bandicore.util.ItemUtils
 import net.bandithemepark.bandicore.util.entity.PacketEntity
 import net.bandithemepark.bandicore.util.entity.marker.PacketEntityMarker
 import net.bandithemepark.bandicore.util.math.MathUtil
@@ -104,36 +103,6 @@ class CustomPlayer(val skin: CustomPlayerSkin) {
         this.location = spawnLocation.clone().add(0.0, 0.63, 0.0)
         this.location!!.yaw = 0.0f
 
-        head.spawn(location!!.clone().add(staticHeadOffset))
-        head.handle!!.isInvisible = true
-        (head.handle!! as ArmorStand).isMarker = true
-        head.itemInMainHand = ItemFactory(Material.PLAYER_HEAD).setSkullTexture(skin.texture).setCustomModelData(8).build()
-        head.setArmsVisible()
-        head.setRightArmPose(0.0, 0.0, 0.0)
-
-        tempHead.spawn(location!!.clone().add(0.0, -2.1-0.63, 0.0))
-        tempHead.handle!!.isInvisible = true
-        (tempHead.handle!! as ArmorStand).isMarker = true
-        (tempHead.handle!! as ArmorStand).isSmall = true
-        tempHead.helmet = ItemFactory(Material.PLAYER_HEAD).setSkullTexture(skin.texture).setCustomModelData(8).build()
-        tempHead.setHeadPose(0.0, 0.0, 0.0)
-
-        rightArm.spawn(location!!.clone().add(staticArmOffset))
-        rightArm.handle!!.isInvisible = true
-        (rightArm.handle!! as ArmorStand).isMarker = true
-        val rightArmCustomModelData = if(skin.slim) 6 else 4
-        rightArm.itemInMainHand = ItemFactory(Material.PLAYER_HEAD).setSkullTexture(skin.texture).setCustomModelData(rightArmCustomModelData).build()
-        rightArm.setArmsVisible()
-        rightArm.setRightArmPose(0.0, 0.0, 0.0)
-
-        leftArm.spawn(location!!.clone().add(staticArmOffset))
-        leftArm.handle!!.isInvisible = true
-        (leftArm.handle!! as ArmorStand).isMarker = true
-        val leftArmCustomModelData = if(skin.slim) 5 else 3
-        leftArm.itemInMainHand = ItemFactory(Material.PLAYER_HEAD).setSkullTexture(skin.texture).setCustomModelData(leftArmCustomModelData).build()
-        leftArm.setArmsVisible()
-        leftArm.setRightArmPose(0.0, 0.0, 0.0)
-
         body.spawn(location!!.clone().add(staticBodyOffset))
         body.handle!!.isInvisible = true
         (body.handle!! as ArmorStand).isMarker = true
@@ -141,19 +110,50 @@ class CustomPlayer(val skin: CustomPlayerSkin) {
         body.setArmsVisible()
         body.setRightArmPose(0.0, 0.0, 0.0)
 
-        rightLeg.spawn(location!!.clone().add(staticLegOffset))
+        head.spawn(location!!.clone().add(staticHeadOffset))
+        head.handle!!.isInvisible = true
+        (head.handle!! as ArmorStand).isMarker = true
+        head.itemInMainHand = ItemFactory(Material.PLAYER_HEAD).setSkullTexture(skin.texture).setCustomModelData(8).build()
+        head.setArmsVisible()
+        head.setRightArmPose(0.0, 0.0, 0.0)
+
+        // TODO
+//        tempHead.spawn(location!!.clone().add(0.0, -2.1-0.63, 0.0))
+//        tempHead.handle!!.isInvisible = true
+//        (tempHead.handle!! as ArmorStand).isMarker = true
+//        (tempHead.handle!! as ArmorStand).isSmall = true
+//        tempHead.helmet = ItemFactory(Material.PLAYER_HEAD).setSkullTexture(skin.texture).setCustomModelData(8).build()
+//        tempHead.setHeadPose(0.0, 0.0, 0.0)
+
+        leftArm.spawn(location!!.clone().add(staticRightArmOffset))
+        leftArm.handle!!.isInvisible = true
+        (leftArm.handle!! as ArmorStand).isMarker = true
+        val leftArmCustomModelData = if(skin.slim) 5 else 3
+        leftArm.itemInOffHand = ItemFactory(Material.PLAYER_HEAD).setSkullTexture(skin.texture).setCustomModelData(leftArmCustomModelData).build()
+        leftArm.setArmsVisible()
+        leftArm.setLeftArmPose(0.0, 0.0, 0.0)
+
+        rightArm.spawn(location!!.clone().add(staticRightArmOffset))
+        rightArm.handle!!.isInvisible = true
+        (rightArm.handle!! as ArmorStand).isMarker = true
+        val rightArmCustomModelData = if(skin.slim) 6 else 4
+        rightArm.itemInMainHand = ItemFactory(Material.PLAYER_HEAD).setSkullTexture(skin.texture).setCustomModelData(rightArmCustomModelData).build()
+        rightArm.setArmsVisible()
+        rightArm.setRightArmPose(0.0, 0.0, 0.0)
+
+        leftLeg.spawn(location!!.clone().add(staticRightLegOffset))
+        leftLeg.handle!!.isInvisible = true
+        (leftLeg.handle!! as ArmorStand).isMarker = true
+        leftLeg.itemInOffHand = ItemFactory(Material.PLAYER_HEAD).setSkullTexture(skin.texture).setCustomModelData(1).build()
+        leftLeg.setArmsVisible()
+        leftLeg.setLeftArmPose(0.0, 0.0, 0.0)
+
+        rightLeg.spawn(location!!.clone().add(staticRightLegOffset))
         rightLeg.handle!!.isInvisible = true
         (rightLeg.handle!! as ArmorStand).isMarker = true
         rightLeg.itemInMainHand = ItemFactory(Material.PLAYER_HEAD).setSkullTexture(skin.texture).setCustomModelData(2).build()
         rightLeg.setArmsVisible()
         rightLeg.setRightArmPose(0.0, 0.0, 0.0)
-
-        leftLeg.spawn(location!!.clone().add(staticLegOffset))
-        leftLeg.handle!!.isInvisible = true
-        (leftLeg.handle!! as ArmorStand).isMarker = true
-        leftLeg.itemInMainHand = ItemFactory(Material.PLAYER_HEAD).setSkullTexture(skin.texture).setCustomModelData(1).build()
-        leftLeg.setArmsVisible()
-        leftLeg.setRightArmPose(0.0, 0.0, 0.0)
 
         //tempHead.deSpawn()
     }
@@ -165,10 +165,20 @@ class CustomPlayer(val skin: CustomPlayerSkin) {
     val staticHeadOffset = Vector(0.3125, -1.35, 0.0)
     val staticTempHeadOffset = Vector(0.0, -0.675, 0.0)
     val staticBodyOffset = Vector(0.3125, -1.31, 0.0)
-    val staticArmOffset = Vector(0.38-armRotationPointOffset, -1.38, 0.0) // 0.38, -1.38, 0.0 // 0.43
-    val staticLegOffset = Vector(0.3625-armRotationPointOffset, -1.26, 0.0) // 0.3625, -1.26, 0.0 // 0.4125
+    val staticRightArmOffset = Vector(0.38-armRotationPointOffset, -1.38, 0.0) // 0.38, -1.38, 0.0 // 0.43
+    val staticLeftArmOffset = Vector(-0.38+armRotationPointOffset, -1.38, 0.0) // 0.38, -1.38, 0.0 // 0.43
+    val staticRightLegOffset = Vector(0.3625-armRotationPointOffset, -1.26, 0.0) // 0.3625, -1.26, 0.0 // 0.4125
+    val staticLeftLegOffset = Vector(-0.3625+armRotationPointOffset, -1.26, 0.0) // 0.3625, -1.26, 0.0 // 0.4125
 
     val movingOffset = Vector(armRotationPointOffset, 0.0, 0.0)
+
+    // Animation related stuff
+    var dynamicHeadOffset = Vector(0.0, 0.0, 0.0)
+    var dynamicBodyOffset = Vector(0.0, 0.0, 0.0)
+    var dynamicLeftArmOffset = Vector(0.0, 0.0, 0.0)
+    var dynamicRightArmOffset = Vector(0.0, 0.0, 0.0)
+    var dynamicLeftLegOffset = Vector(0.0, 0.0, 0.0)
+    var dynamicRightLegOffset = Vector(0.0, 0.0, 0.0)
 
     /**
      * Updates the position of the custom player and all of its limbs
@@ -197,17 +207,18 @@ class CustomPlayer(val skin: CustomPlayerSkin) {
         body.setRightArmPose(Math.toDegrees(bodyPose.x), Math.toDegrees(bodyPose.y), Math.toDegrees(bodyPose.z))
 
         // Also moving the temp head to the same position as the body to hide it
-        val tempHeadRotationPointPosition = location!!.clone().add(MathUtil.rotateAroundPoint(completeRotation, bodyRotationPoint.x, bodyRotationPoint.y, bodyRotationPoint.z))
-
-        val tempHeadPosition = tempHeadRotationPointPosition.clone().add(staticTempHeadOffset)
-        tempHead.teleport(Location(body.location!!.world, tempHeadPosition.x, tempHeadPosition.y, tempHeadPosition.z-0.0))
-        tempHead.setHeadPose(Math.toDegrees(bodyPose.x), Math.toDegrees(bodyPose.y), Math.toDegrees(bodyPose.z))
+        // TODO
+//        val tempHeadRotationPointPosition = location!!.clone().add(MathUtil.rotateAroundPoint(completeRotation, bodyRotationPoint.x, bodyRotationPoint.y, bodyRotationPoint.z))
+//
+//        val tempHeadPosition = tempHeadRotationPointPosition.clone().add(staticTempHeadOffset)
+//        tempHead.teleport(Location(body.location!!.world, tempHeadPosition.x, tempHeadPosition.y, tempHeadPosition.z-0.0))
+//        tempHead.setHeadPose(Math.toDegrees(bodyPose.x), Math.toDegrees(bodyPose.y), Math.toDegrees(bodyPose.z))
 
         // Updating the right arm
         val rightArmRotationPointPosition = location!!.clone().add(MathUtil.rotateAroundPoint(completeRotation, rightArmRotationPoint.x, rightArmRotationPoint.y, rightArmRotationPoint.z))
         val newRightArmRotation = Quaternion.multiply(completeRotation.clone(), rightArmRotation)
 
-        val rightArmPosition = rightArmRotationPointPosition.clone().add(staticArmOffset).add(MathUtil.rotateAroundPoint(newRightArmRotation, this.movingOffset.x, this.movingOffset.y, this.movingOffset.z))
+        val rightArmPosition = rightArmRotationPointPosition.clone().add(staticRightArmOffset).add(MathUtil.rotateAroundPoint(newRightArmRotation, this.movingOffset.x, this.movingOffset.y, this.movingOffset.z))
         rightArm.teleport(Location(rightArm.location!!.world, rightArmPosition.x, rightArmPosition.y, rightArmPosition.z))
 
         val rightArmPose = MathUtil.getArmorStandPose(newRightArmRotation)
@@ -217,17 +228,17 @@ class CustomPlayer(val skin: CustomPlayerSkin) {
         val leftArmRotationPointPosition = location!!.clone().add(MathUtil.rotateAroundPoint(completeRotation, leftArmRotationPoint.x, leftArmRotationPoint.y, leftArmRotationPoint.z))
         val newLeftArmRotation = Quaternion.multiply(completeRotation.clone(), leftArmRotation)
 
-        val leftArmPosition = leftArmRotationPointPosition.clone().add(staticArmOffset).add(MathUtil.rotateAroundPoint(newLeftArmRotation, this.movingOffset.x, this.movingOffset.y, this.movingOffset.z))
+        val leftArmPosition = leftArmRotationPointPosition.clone().add(staticLeftArmOffset).add(MathUtil.rotateAroundPoint(newLeftArmRotation, this.movingOffset.x, this.movingOffset.y, this.movingOffset.z))
         leftArm.teleport(Location(leftArm.location!!.world, leftArmPosition.x, leftArmPosition.y, leftArmPosition.z))
 
         val leftArmPose = MathUtil.getArmorStandPose(newLeftArmRotation)
-        leftArm.setRightArmPose(Math.toDegrees(leftArmPose.x), Math.toDegrees(leftArmPose.y), Math.toDegrees(leftArmPose.z))
+        leftArm.setLeftArmPose(Math.toDegrees(leftArmPose.x), Math.toDegrees(leftArmPose.y), Math.toDegrees(leftArmPose.z))
 
         // Updating the right leg
         val rightLegRotationPointPosition = location!!.clone().add(MathUtil.rotateAroundPoint(completeRotation, rightLegRotationPoint.x, rightLegRotationPoint.y, rightLegRotationPoint.z))
         val newRightLegRotation = Quaternion.multiply(completeRotation.clone(), rightLegRotation)
 
-        val rightLegPosition = rightLegRotationPointPosition.clone().add(staticLegOffset).add(MathUtil.rotateAroundPoint(newRightLegRotation, this.movingOffset.x, this.movingOffset.y, this.movingOffset.z))
+        val rightLegPosition = rightLegRotationPointPosition.clone().add(staticRightLegOffset).add(MathUtil.rotateAroundPoint(newRightLegRotation, this.movingOffset.x, this.movingOffset.y, this.movingOffset.z))
         rightLeg.teleport(Location(rightLeg.location!!.world, rightLegPosition.x, rightLegPosition.y, rightLegPosition.z))
 
         val rightLegPose = MathUtil.getArmorStandPose(newRightLegRotation)
@@ -237,11 +248,11 @@ class CustomPlayer(val skin: CustomPlayerSkin) {
         val leftLegRotationPointPosition = location!!.clone().add(MathUtil.rotateAroundPoint(completeRotation, leftLegRotationPoint.x, leftLegRotationPoint.y, leftLegRotationPoint.z))
         val newLeftLegRotation = Quaternion.multiply(completeRotation.clone(), leftLegRotation)
 
-        val leftLegPosition = leftLegRotationPointPosition.clone().add(staticLegOffset).add(MathUtil.rotateAroundPoint(newLeftLegRotation, this.movingOffset.x, this.movingOffset.y, this.movingOffset.z))
+        val leftLegPosition = leftLegRotationPointPosition.clone().add(staticLeftLegOffset).add(MathUtil.rotateAroundPoint(newLeftLegRotation, this.movingOffset.x, this.movingOffset.y, this.movingOffset.z))
         leftLeg.teleport(Location(leftLeg.location!!.world, leftLegPosition.x, leftLegPosition.y, leftLegPosition.z))
 
         val leftLegPose = MathUtil.getArmorStandPose(newLeftLegRotation)
-        leftLeg.setRightArmPose(Math.toDegrees(leftLegPose.x), Math.toDegrees(leftLegPose.y), Math.toDegrees(leftLegPose.z))
+        leftLeg.setLeftArmPose(Math.toDegrees(leftLegPose.x), Math.toDegrees(leftLegPose.y), Math.toDegrees(leftLegPose.z))
     }
 
     fun markerAt(vector: Location, player: Player) {
@@ -263,7 +274,7 @@ class CustomPlayer(val skin: CustomPlayerSkin) {
         leftLeg.deSpawn()
         rightLeg.deSpawn()
 
-        tempHead.deSpawn()
+        //tempHead.deSpawn() TODO
     }
 
     /**

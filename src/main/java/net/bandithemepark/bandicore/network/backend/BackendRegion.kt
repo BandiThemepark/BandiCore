@@ -28,7 +28,7 @@ class BackendRegion() {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val responseJson = JsonParser.parseString(response.body!!.string()).asJsonObject
+                val responseJson = JsonParser().parse(response.body!!.string()).asJsonObject
                 if (responseJson.has("data") && !responseJson.get("data").isJsonNull) {
                     val returnData = responseJson.getAsJsonObject("data")
                     callback.invoke(returnData)
@@ -54,7 +54,7 @@ class BackendRegion() {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val responseJson = JsonParser.parseString(response.body!!.string()).asJsonObject
+                val responseJson = JsonParser().parse(response.body!!.string()).asJsonObject
                 if (responseJson.has("data") && !responseJson.get("data").isJsonNull) {
                     val returnData = responseJson.getAsJsonObject("data")
                     callback.invoke(returnData)
@@ -86,7 +86,7 @@ class BackendRegion() {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val responseJson = JsonParser.parseString(response.body!!.string()).asJsonObject
+                val responseJson = JsonParser().parse(response.body!!.string()).asJsonObject
                 if (responseJson.has("data") && !responseJson.get("data").isJsonNull) {
                     val returnData = responseJson.getAsJsonObject("data")
                     callback.invoke(returnData)
@@ -152,7 +152,7 @@ class BackendRegion() {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val responseJson = JsonParser.parseString(response.body!!.string()).asJsonObject
+                val responseJson = JsonParser().parse(response.body!!.string()).asJsonObject
                 if (responseJson.has("data") && !responseJson.get("data").isJsonNull) {
                     val returnData = responseJson.getAsJsonArray("data")
                     callback.invoke(returnData)
@@ -184,7 +184,7 @@ class BackendRegion() {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val responseJson = JsonParser.parseString(response.body!!.string()).asJsonObject
+                val responseJson = JsonParser().parse(response.body!!.string()).asJsonObject
                 if (responseJson.has("data") && !responseJson.get("data").isJsonNull) {
                     val returnData = responseJson.getAsJsonObject("data")
                     callback.invoke(returnData)

@@ -48,16 +48,15 @@ abstract class PacketEntity {
 
     /**
      * Spawns the entity at a certain location
-     * @param location The location to spawn the entity at
+     * @param spawnLocation The location to spawn the entity at
      */
-    open fun spawn(location: Location) {
-        handle = getInstance((location.world as CraftWorld).handle, location.x, location.y, location.z)
+    open fun spawn(spawnLocation: Location) {
+        handle = getInstance((spawnLocation.world as CraftWorld).handle, spawnLocation.x, spawnLocation.y, spawnLocation.z)
 
         val packet = ClientboundAddEntityPacket(handle!!)
         sendPacket(packet)
-        //for(player in Bukkit.getOnlinePlayers()) (player as CraftPlayer).handle.connection.send(packet)
 
-        this.location = location
+        this.location = spawnLocation
         updateLocation()
 
         spawned = true
@@ -94,17 +93,17 @@ abstract class PacketEntity {
     }
 
     // Position
-    var location: Location? = null
+    lateinit var location: Location
         private set
 
     private fun updateLocation() {
         val packet = WrapperPlayServerEntityTeleport()
         packet.entityID = handle!!.id
-        packet.x = location!!.x
-        packet.y = location!!.y
-        packet.z = location!!.z
-        packet.pitch = location!!.pitch
-        packet.yaw = location!!.yaw
+        packet.x = location.x
+        packet.y = location.y
+        packet.z = location.z
+        packet.pitch = location.pitch
+        packet.yaw = location.yaw
 
         if(visibilityType == VisibilityType.WHITELIST) {
             for(player in visibilityList) packet.sendPacket(player)
@@ -131,7 +130,7 @@ abstract class PacketEntity {
      * Moves the entity to a given location. Basically the same as teleport()
      */
     fun moveEntity(x: Double, y: Double, z: Double) {
-        this.location = Location(location!!.world, x, y, z)
+        this.location = Location(location.world, x, y, z)
         updateLocation()
     }
 
@@ -139,7 +138,7 @@ abstract class PacketEntity {
      * Other move entity but with pitch and yaw
      */
     fun moveEntity(x: Double, y: Double, z: Double, pitch: Float, yaw: Float) {
-        this.location = Location(location!!.world, x, y, z, pitch, yaw)
+        this.location = Location(location.world, x, y, z, pitch, yaw)
         updateLocation()
     }
 
@@ -318,7 +317,7 @@ abstract class PacketEntity {
         if(entity is Player) BandiCore.instance.smoothCoastersAPI.resetRotation(null, entity)
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(BandiCore.instance, {
-            val location = location!!.clone()
+            val location = location.clone()
             location.pitch = entity.location.pitch
             location.yaw = entity.location.yaw
             entity.teleport(location.add(0.0, 0.5+1.4375, 0.0))
@@ -354,7 +353,7 @@ abstract class PacketEntity {
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(BandiCore.instance, {
             passengersCopy.forEach {
-                val location = location!!.clone()
+                val location = location.clone()
                 location.pitch = it.location.pitch
                 location.yaw = it.location.yaw
                 it.teleport(location.add(0.0, 0.5+1.4375, 0.0))

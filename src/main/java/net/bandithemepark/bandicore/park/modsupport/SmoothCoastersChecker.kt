@@ -39,13 +39,17 @@ class SmoothCoastersChecker: Listener {
 
         fun setUsing(player: Player) {
             supportedPlayers.add(player)
+            player.sendMessage(" ")
             player.sendTranslatedMessage("smoothcoasters-using", BandiColors.YELLOW.toString())
+            player.sendMessage(" ")
         }
 
         fun setNotUsing(player: Player) {
+            player.sendMessage(" ")
             player.sendTranslatedMessage("smoothcoasters-not-using", BandiColors.YELLOW.toString(),
                 MessageReplacement("linkstart", "<u><click:open_url:'https://www.bandithemepark.net/smoothcoasters/'>"),
                 MessageReplacement("linkend", "</click></u>"))
+            player.sendMessage(" ")
         }
     }
 }

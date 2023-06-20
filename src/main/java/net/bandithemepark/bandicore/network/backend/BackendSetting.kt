@@ -44,7 +44,7 @@ class BackendSetting(val name: String) {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val responseJson = JsonParser.parseString(response.body!!.string()).asJsonObject
+                val responseJson = JsonParser().parse(response.body!!.string()).asJsonObject
                 if(responseJson.has("data") && !responseJson.get("data").isJsonNull) {
                     Bukkit.getLogger().info("Created a new setting called $name with value $defaultValue because it did not exist yet.")
                 } else {
@@ -73,7 +73,7 @@ class BackendSetting(val name: String) {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val responseJson = JsonParser.parseString(response.body!!.string()).asJsonObject
+                val responseJson = JsonParser().parse(response.body!!.string()).asJsonObject
                 if(responseJson.has("data") && !responseJson.get("data").isJsonNull) {
                     val value = responseJson.getAsJsonObject("data").get("value").asString
                     callback.invoke(value)
@@ -99,7 +99,7 @@ class BackendSetting(val name: String) {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val responseJson = JsonParser.parseString(response.body!!.string()).asJsonObject
+                val responseJson = JsonParser().parse(response.body!!.string()).asJsonObject
 
 
                 if(responseJson.has("data") && !responseJson.get("data").isJsonNull) {
@@ -135,7 +135,7 @@ class BackendSetting(val name: String) {
                 }
 
                 override fun onResponse(call: Call, response: Response) {
-                    val responseJson = JsonParser.parseString(response.body!!.string()).asJsonObject
+                    val responseJson = JsonParser().parse(response.body!!.string()).asJsonObject
                     if(!responseJson.has("data") || responseJson.get("data").isJsonNull) {
                         BandiCore.instance.logger.severe("An attempt was made at setting value of setting $name, but no return data was found. The following message was given: ${responseJson.get("message")}")
                     }

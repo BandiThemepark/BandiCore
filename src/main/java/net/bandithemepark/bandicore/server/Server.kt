@@ -3,6 +3,10 @@ package net.bandithemepark.bandicore.server
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.network.backend.BackendSetting
 import net.bandithemepark.bandicore.park.ThemePark
+import net.bandithemepark.bandicore.park.attractions.ridecounter.RidecounterManager
+import net.bandithemepark.bandicore.server.achievements.AchievementManager
+import net.bandithemepark.bandicore.server.animation.rig.RigManager
+import net.bandithemepark.bandicore.server.custom.player.animation.CustomPlayerAnimationManager
 import net.bandithemepark.bandicore.server.essentials.ranks.RankManager
 import net.bandithemepark.bandicore.server.essentials.ranks.scoreboard.BandiScoreboard
 import net.bandithemepark.bandicore.server.essentials.warps.WarpManager
@@ -23,6 +27,10 @@ class Server {
     val rankManager = RankManager()
     val scoreboard = BandiScoreboard()
     val warpManager = WarpManager()
+    val customPlayerAnimationManager = CustomPlayerAnimationManager()
+    val rigManager = RigManager()
+    val ridecounterManager = RidecounterManager()
+    val achievementManager = AchievementManager()
 
     val themePark = ThemePark(Bukkit.getWorld("world")!!)
 

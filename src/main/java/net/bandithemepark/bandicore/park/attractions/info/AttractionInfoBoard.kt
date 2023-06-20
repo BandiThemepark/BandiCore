@@ -1,6 +1,7 @@
 package net.bandithemepark.bandicore.park.attractions.info
 
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.network.audioserver.AudioCommand
 import net.bandithemepark.bandicore.park.attractions.Attraction
 import net.bandithemepark.bandicore.park.attractions.ridecounter.RideCounterMenu
 import net.bandithemepark.bandicore.park.modsupport.SmoothCoastersChecker.Companion.usingSmoothCoasters
@@ -15,6 +16,7 @@ import org.bukkit.Material
 import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerInteractAtEntityEvent
@@ -36,7 +38,7 @@ class AttractionInfoBoard(val attraction: Attraction): InventoryHolder {
     }
 
     class Events: Listener {
-        @EventHandler
+        @EventHandler (priority = EventPriority.LOW)
         fun onArmorStandInteract(event: PlayerInteractAtEntityEvent) {
             if(event.rightClicked is ArmorStand && event.rightClicked.customName()?.getText()!!.startsWith("attraction_info_")) {
                 val attractionId = event.rightClicked.customName()?.getText()!!.replace("attraction_info_", "")
@@ -55,7 +57,7 @@ class AttractionInfoBoard(val attraction: Attraction): InventoryHolder {
             when(event.slot) {
                 10 -> {
                     Bukkit.getScheduler().runTask(BandiCore.instance, Runnable { event.whoClicked.closeInventory() })
-                    // TODO Send player AudioServer connect message
+                    AudioCommand.sendMessage(event.whoClicked as Player)
                 }
                 12 -> {
                     Bukkit.getScheduler().runTask(BandiCore.instance, Runnable { event.whoClicked.closeInventory() })
