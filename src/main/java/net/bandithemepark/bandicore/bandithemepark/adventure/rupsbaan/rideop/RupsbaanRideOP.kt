@@ -15,7 +15,7 @@ import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.entity.Player
 
-class RupsbaanRideOP: RideOP("rupsbaan", "rupsbaan",
+class RupsbaanRideOP: RideOP("rupsbaan", "rupsbaanstation",
     Location(Bukkit.getWorld("world"), -43.0, 1.7, -195.5, 90.0F, 90.0F)
 ) {
     override fun getPages(): List<RideOPPage> {
@@ -39,7 +39,7 @@ class RupsbaanRideOP: RideOP("rupsbaan", "rupsbaan",
 
     companion object {
         var superMode = false
-        var topSpeed = 6.5
+        var topSpeed = 7.5
     }
 
     fun getSuperMode(): Boolean {
@@ -51,7 +51,7 @@ class RupsbaanRideOP: RideOP("rupsbaan", "rupsbaan",
         topSpeed = if(superMode) {
             10.0
         } else {
-            6.5
+            7.5
         }
     }
 
