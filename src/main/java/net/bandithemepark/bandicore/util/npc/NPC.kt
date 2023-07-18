@@ -105,7 +105,7 @@ class NPC(val name: String, val textureProperty: Property, var visibilityType: N
     private fun showSecondLayer() {
         val data = npc!!.entityData
         data.set(net.minecraft.world.entity.player.Player.DATA_PLAYER_MODE_CUSTOMISATION, 0x7E.toByte())
-        //sendPacket(ClientboundSetEntityDataPacket(npc!!.id, data, true))
+        //sendPacket(ClientboundSetEntityDataPacket(npc!!.id, data, true)) Pre 1.20 packet
         sendPacket(ClientboundSetEntityDataPacket(npc!!.id, data.nonDefaultValues!!))
     }
 
