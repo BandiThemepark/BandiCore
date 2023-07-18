@@ -43,6 +43,7 @@ import net.bandithemepark.bandicore.network.audioserver.AudioServerTimer
 import net.bandithemepark.bandicore.network.audioserver.VolumeCommand
 import net.bandithemepark.bandicore.network.audioserver.events.AudioServerEventListeners
 import net.bandithemepark.bandicore.network.audioserver.map.ChunkRendererCommand
+import net.bandithemepark.bandicore.network.audioserver.ride.SpecialAudioManagement
 import net.bandithemepark.bandicore.network.backend.audioserver.BackendAudioServerCredentials
 import net.bandithemepark.bandicore.network.mqtt.MQTTConnector
 import net.bandithemepark.bandicore.network.queue.QueueCommand
@@ -296,6 +297,7 @@ class BandiCore: JavaPlugin() {
         getServer().pluginManager.registerEvents(AchievementTriggerSpecial(), this)
         getServer().pluginManager.registerEvents(AchievementCategoriesMenu.Events(), this)
         getServer().pluginManager.registerEvents(AchievementMenu.Events(), this)
+        getServer().pluginManager.registerEvents(SpecialAudioManagement(), this)
     }
 
     private fun prepareSettings() {

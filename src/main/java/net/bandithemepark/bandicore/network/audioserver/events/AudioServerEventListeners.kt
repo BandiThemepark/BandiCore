@@ -28,6 +28,7 @@ class AudioServerEventListeners {
 
         fun BandiRegion.convertToAudioClientJson(): JsonObject {
             val json = JsonObject()
+            json.addProperty("id", this.uuid.toString())
             json.addProperty("name", this.name)
             json.addProperty("displayName", this.displayName)
             json.addProperty("priority", this.priority)
@@ -86,16 +87,6 @@ class AudioServerEventListeners {
         }
 
         // ALL EXTERNAL EVENT HANDLING
-
-        @EventHandler
-        fun onAudioServerConnect(event: AudioServerConnectEvent) {
-            event.player.sendTranslatedMessage("audioserver-connected", BandiColors.YELLOW.toString())
-        }
-
-        @EventHandler
-        fun onAudioServerDisconnect(event: AudioServerDisconnectEvent) {
-            event.player.sendTranslatedMessage("audioserver-disconnected", BandiColors.RED.toString())
-        }
 
         @EventHandler
         fun onAudioServerVolumeChange(event: AudioServerVolumeChangeEvent) {

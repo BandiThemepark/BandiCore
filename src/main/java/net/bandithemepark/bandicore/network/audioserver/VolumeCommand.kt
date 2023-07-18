@@ -38,6 +38,7 @@ class VolumeCommand: CommandExecutor {
         }
 
         val messageJson = JsonObject()
+        messageJson.addProperty("uuid", sender.uniqueId.toString())
         messageJson.addProperty("volume", volume)
         BandiCore.instance.mqttConnector.sendMessage("/audioclient/player/${sender.uniqueId}/volume/server", messageJson.toString())
 

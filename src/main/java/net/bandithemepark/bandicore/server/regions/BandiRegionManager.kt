@@ -4,6 +4,7 @@ import net.bandithemepark.bandicore.network.backend.BackendRegion
 import net.bandithemepark.bandicore.park.attractions.rideop.RideOP
 import org.bukkit.Bukkit
 import org.bukkit.Location
+import java.util.*
 
 class BandiRegionManager {
     var regions = mutableListOf<BandiRegion>()
@@ -25,7 +26,7 @@ class BandiRegionManager {
     }
 
     fun createNew(name: String, callback: () -> Unit): BandiRegion {
-        val region = BandiRegion(name, name, 0, mutableListOf())
+        val region = BandiRegion(UUID.randomUUID(), name, name, 0, mutableListOf())
         regions.add(region)
 
         BackendRegion().create(name) { callback.invoke() }
@@ -63,12 +64,13 @@ class BandiRegionManager {
             val regions = mutableListOf<BandiRegion>()
 
             for(region in data) {
+                val uuid = UUID.fromString(region.asJsonObject.get("id").asString)
                 val name = region.asJsonObject.get("name").asString
                 val displayName = region.asJsonObject.get("displayName").asString
                 val priority = region.asJsonObject.get("priority").asInt
                 val areasJson = region.asJsonObject.getAsJsonObject("areas")
                 val areas = BandiRegion.loadAreasFromJson(areasJson)
-                regions.add(BandiRegion(name, displayName, priority, areas))
+                regions.add(BandiRegion(uuid, name, displayName, priority, areas))
             }
 
             this.regions = regions

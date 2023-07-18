@@ -3,6 +3,7 @@ package net.bandithemepark.bandicore.network.audioserver
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.network.audioserver.events.AudioServerConnectEvent
 import net.bandithemepark.bandicore.network.audioserver.events.AudioServerDisconnectEvent
+import net.bandithemepark.bandicore.network.audioserver.events.AudioServerEventListeners
 import net.bandithemepark.bandicore.network.backend.audioserver.BackendAudioServerCredentials
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.getTranslatedMessage
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedActionBar
@@ -33,7 +34,7 @@ class AudioCommand: CommandExecutor {
         fun onPlayerJoin(event: PlayerJoinEvent) {
             Bukkit.getScheduler().scheduleSyncDelayedTask(BandiCore.instance, Runnable {
                 sendMessage(event.player)
-            }, 20)
+            }, 40)
         }
 
         @EventHandler
@@ -49,7 +50,7 @@ class AudioCommand: CommandExecutor {
 
     companion object {
         fun sendMessage(player: Player) {
-            if(connectedPlayers.contains(player)) {
+            if(AudioServerEventListeners.connectedPlayers.contains(player)) {
                 player.sendTranslatedMessage("audio-server-already-connected", BandiColors.RED.toString())
                 return
             }
@@ -69,7 +70,5 @@ class AudioCommand: CommandExecutor {
                 "<#dbc835>♫ <click:open_url:$link><hover:show_text:'<#dbc835>$link'>${player.getTranslatedMessage("audio-server-message")}</hover></click>"
             ))
         }
-
-        val connectedPlayers = mutableListOf<Player>()
     }
 }
