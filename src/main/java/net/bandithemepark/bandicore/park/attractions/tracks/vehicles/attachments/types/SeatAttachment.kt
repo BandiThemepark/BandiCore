@@ -1,6 +1,7 @@
 package net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types
 
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.network.audioserver.ride.SpecialAudioManagement
 import net.bandithemepark.bandicore.park.attractions.Attraction
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.Attachment
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.AttachmentPosition
@@ -149,6 +150,8 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
 
         @EventHandler
         fun onSeatExit(event: SeatExitEvent) {
+            SpecialAudioManagement.stopOnrideAudio(event.player)
+
             if(connections.keys.contains(event.exiting)) {
                 show(event.player)
                 val seat = connections[event.exiting]!!
