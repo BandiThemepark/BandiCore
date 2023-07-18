@@ -26,6 +26,7 @@ class RupsbaanRideOP: RideOP("rupsbaan", "rupsbaan",
                 RupsbaanPushDownAllButton(),
                 RupsbaanDispatchButton(),
                 RupsbaanStatusButton(),
+                RupsbaanSuperModeButton(),
                 RupsbaanEStopButton()
             )),
             RideOPCameraPage(listOf(
@@ -35,19 +36,55 @@ class RupsbaanRideOP: RideOP("rupsbaan", "rupsbaan",
     }
 
     val ride = Rupsbaan(Location(Bukkit.getWorld("world"), -30.5, 3.0, -195.5))
+
+    companion object {
+        var superMode = false
+        var topSpeed = 6.5
+    }
+
+    fun getSuperMode(): Boolean {
+        return superMode
+    }
+    fun setSuperMode(newSuperMode: Boolean) {
+        superMode = newSuperMode
+
+        topSpeed = if(superMode) {
+            10.0
+        } else {
+            6.5
+        }
+    }
+
     val rideSchedule = RupsbaanRideSchedule(ride, hashMapOf(
         0 to 0.0,
-        20 to 0.5,
-        200 to 0.5,
-        260 to 2.5,
-        500 to 2.5,
-        600 to 4.0,
-        750 to 4.0,
-        800 to 3.0,
-        1100 to 3.0,
-        1150 to 4.5,
-        1300 to 4.5,
-        1450 to 0.0
+        20 to 1.0,
+        240 to 1.0,
+        280 to 3.0,
+        560 to 3.0,
+        600 to 5.0,
+        740 to 5.0,
+        760 to 6.0,
+        900 to 6.0,
+        920 to 6.0,
+        940 to 4.0,
+        1080 to 4.0,
+        1100 to 5.0,
+        1240 to 5.0,
+        1280 to 6.0,
+        1380 to 6.0,
+        1460 to 7.0,
+        1620 to 7.0,
+        1700 to 7.0,
+        1800 to 6.0,
+        1880 to 10.0,
+        2000 to 10.0,
+        2020 to 9.0,
+        2200 to 9.0,
+        2360 to 9.0,
+        2440 to 4.0,
+        2500 to 2.0,
+        2680 to 2.0,
+        2720 to 0.0,
     ))
     override fun onTick() {
         ride.update()

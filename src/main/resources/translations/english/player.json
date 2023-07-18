@@ -68,5 +68,7 @@
   "achievement-type-unlocked-amount-normal": "achievements unlocked",
   "achievement-type-unlocked-amount-secret": "secrets found",
   "achievement-type-unlocked-amount-event": "event achievements unlocked",
-  "achievement-type-unlocked-amount-historical": "historical achievements unlocked"
+  "achievement-type-unlocked-amount-historical": "historical achievements unlocked",
+  "rideop-rupsbaan-supermode-title": "Turbo mode",
+  "rideop-rupsbaan-supermode-description": "Activate turbo mode (Crew-only)"
 }
