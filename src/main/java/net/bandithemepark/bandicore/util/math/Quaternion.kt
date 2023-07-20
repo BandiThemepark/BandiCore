@@ -1,6 +1,8 @@
 package net.bandithemepark.bandicore.util.math
 
 import org.bukkit.util.Vector
+import org.joml.Quaternionf
+import org.joml.Quaternionfc
 import kotlin.math.abs
 import kotlin.math.asin
 import kotlin.math.atan2
@@ -206,6 +208,10 @@ class Quaternion(var x: Double, var y: Double, var z: Double, var w: Double): Cl
 
     public override fun clone(): Quaternion {
         return super.clone() as Quaternion
+    }
+
+    fun toBukkitQuaternion(): Quaternionf {
+        return Quaternionf(x.toFloat(), y.toFloat(), z.toFloat(), w.toFloat())
     }
 
     companion object {
