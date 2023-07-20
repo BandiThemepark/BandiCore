@@ -47,7 +47,7 @@ abstract class PacketEntity {
     private val passengerIds = mutableListOf<Int>()
 
     // Spawning and despawning
-    abstract fun getInstance(world: ServerLevel, x: Double, y: Double, z: Double): LivingEntity
+    abstract fun getInstance(world: ServerLevel, x: Double, y: Double, z: Double): Entity
 
     /**
      * Spawns the entity at a certain location
