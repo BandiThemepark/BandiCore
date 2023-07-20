@@ -124,7 +124,8 @@ class RupsbaanCart {
         set(value) {
             if(field == 0.0 && value != 0.0) {
                 harnessAttachment.type.onSpawn(lastLocation.clone().add(Vector(0.0, -3.0, 0.0)), harnessAttachment)
-                BandiCore.instance.server.scoreboard.setGlowColor((harnessAttachment.type as ModelAttachment).armorStand!!.handle!!.uuid.toString(), ChatColor.RED)
+                //BandiCore.instance.server.scoreboard.setGlowColor((harnessAttachment.type as ModelAttachment).armorStand!!.handle!!.uuid.toString(), ChatColor.RED)
+                //BandiCore.instance.server.scoreboard.setGlowColor((harnessAttachment.type as ModelAttachment).displayEntity!!.uniqueId.toString(), ChatColor.RED)
                 BandiCore.instance.server.scoreboard.updateScoreboard()
                 modelAttachment.children.add(harnessAttachment)
 
