@@ -64,7 +64,7 @@ class Restart {
                         restartSent = true
                         Bukkit.getScheduler().scheduleSyncDelayedTask(BandiCore.instance, {
                             Bukkit.getServer().spigot().restart()
-                        }, 20)
+                        }, 40)
                     }
                 }
             } else {
@@ -73,11 +73,13 @@ class Restart {
                 for(player in Bukkit.getOnlinePlayers()) player.sendTranslatedActionBar("restarting-in-seconds", BandiColors.RED.toString(), MessageReplacement("seconds", (countdownLeft/20).toString()))
 
                 if(countdownLeft == 0) {
+                    Bukkit.getConsoleSender().sendMessage("BANDITHEMEPARK | Restarting after all players have been sent out")
                     toSend = Bukkit.getOnlinePlayers().toMutableList()
                 }
             }
         } else {
             Bukkit.getOnlinePlayers().forEach { it.sendTranslatedActionBar("restarting-soon-message", BandiColors.RED.toString()) }
+            Bukkit.getConsoleSender().sendMessage("BANDITHEMEPARK | Restarting soon")
 
             var arePlayersRiding = false
 
