@@ -71,10 +71,10 @@ import net.bandithemepark.bandicore.server.achievements.triggers.AchievementTrig
 import net.bandithemepark.bandicore.server.achievements.triggers.AchievementTriggerRidecounterIncrease
 import net.bandithemepark.bandicore.server.achievements.triggers.AchievementTriggerSpecial
 import net.bandithemepark.bandicore.server.animation.rig.RigTest
+import net.bandithemepark.bandicore.server.animatronics.AnimatronicManager
 import net.bandithemepark.bandicore.server.custom.blocks.CustomBlock
 import net.bandithemepark.bandicore.server.custom.blocks.CustomBlockMenu
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin
-import net.bandithemepark.bandicore.server.custom.player.NewCustomPlayer
 import net.bandithemepark.bandicore.server.custom.player.editor.CustomPlayerEditor
 import net.bandithemepark.bandicore.server.essentials.*
 import net.bandithemepark.bandicore.server.essentials.coins.CoinManager
@@ -111,6 +111,7 @@ class BandiCore: JavaPlugin() {
     lateinit var worldManager: WorldManager
     lateinit var coinManager: CoinManager
     lateinit var regionManager: BandiRegionManager
+    lateinit var animatronicManager: AnimatronicManager
 
     var okHttpClient = OkHttpClient()
     var restarter = Restart()
@@ -183,6 +184,8 @@ class BandiCore: JavaPlugin() {
 
         regionManager = BandiRegionManager()
         regionManager.loadAll()
+
+        animatronicManager = AnimatronicManager()
 
         // Things that need to be done for players who are already online (Like when a reload happens)
         forOnlinePlayers()
