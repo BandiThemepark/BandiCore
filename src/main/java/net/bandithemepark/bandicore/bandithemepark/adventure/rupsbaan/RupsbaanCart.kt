@@ -16,8 +16,6 @@ import net.bandithemepark.bandicore.util.entity.event.SeatEnterEvent
 import net.bandithemepark.bandicore.util.entity.event.SeatExitEvent
 import net.bandithemepark.bandicore.util.math.MathUtil
 import net.bandithemepark.bandicore.util.math.Quaternion
-import net.kyori.adventure.text.Component
-import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Location
 import org.bukkit.entity.Player
@@ -47,14 +45,14 @@ class RupsbaanCart {
         mutableListOf()
     )
 
-    val modelAttachment = Attachment("model",
+    private val modelAttachment = Attachment("model",
         AttachmentPosition(0.0, 0.0, 0.875, 0.0, 0.0, 0.0),
         mutableListOf(),
         AttachmentType.get("model", listOf("DIAMOND_HOE", "2"))!!,
         mutableListOf(seat1Attachment, seat2Attachment)
     )
 
-    lateinit var lastLocation: Location
+    private lateinit var lastLocation: Location
     fun spawnAt(location: Location) {
         lastLocation = location
         seat1Attachment.type.onSpawn(location, seat1Attachment)
@@ -82,8 +80,8 @@ class RupsbaanCart {
         (seat2Attachment.type as SeatAttachment).seat!!.harnessesOpen = harnessesOpen
     }
 
-    var startPosition = 0.0
-    var currentProgress = 0
+    private var startPosition = 0.0
+    private var currentProgress = 0
     fun startUpwardsInterpolation() {
         startPosition = harnessPosition
         currentProgress = 0
@@ -102,7 +100,7 @@ class RupsbaanCart {
         }
     }
 
-    var startDownwardsPosition = 0.0
+    private var startDownwardsPosition = 0.0
     var currentProgressDown = 30
     fun startDownwardsInterpolation() {
         startDownwardsPosition = harnessPosition
@@ -130,8 +128,7 @@ class RupsbaanCart {
                 spawnLocation.yaw = 0.0f
 
                 harnessAttachment.type.onSpawn(spawnLocation, harnessAttachment)
-                //BandiCore.instance.server.scoreboard.setGlowColor((harnessAttachment.type as ModelAttachment).armorStand!!.handle!!.uuid.toString(), ChatColor.RED)
-                //BandiCore.instance.server.scoreboard.setGlowColor((harnessAttachment.type as ModelAttachment).displayEntity!!.handle!!.uuid.toString(), ChatColor.RED)
+                BandiCore.instance.server.scoreboard.setGlowColor((harnessAttachment.type as ModelAttachment).displayEntity!!.handle!!.uuid.toString(), ChatColor.RED)
                 try { BandiCore.instance.server.scoreboard.updateScoreboard() } catch(_: Exception) {}
                 modelAttachment.children.add(harnessAttachment)
 
@@ -157,7 +154,7 @@ class RupsbaanCart {
     }
 
     class Events: Listener {
-        fun getCart(packetEntitySeat: PacketEntitySeat): RupsbaanCart? {
+        private fun getCart(packetEntitySeat: PacketEntitySeat): RupsbaanCart? {
             val rupsbaanRideOP = RideOP.get("rupsbaan") as RupsbaanRideOP
             val rideSeats = hashMapOf<PacketEntitySeat, RupsbaanCart>()
             rupsbaanRideOP.ride.carts.forEach { cart ->
@@ -170,7 +167,7 @@ class RupsbaanCart {
 
         @EventHandler
         fun onSeatEnter(event: SeatEnterEvent) {
-            val cart = getCart(event.entering as PacketEntitySeat)
+            val cart = getCart(event.entering)
 
             if(cart != null) {
                 if(!(RideOP.get("rupsbaan") as RupsbaanRideOP).ride.harnessesLocked) return

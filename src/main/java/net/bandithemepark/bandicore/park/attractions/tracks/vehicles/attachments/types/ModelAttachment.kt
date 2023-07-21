@@ -144,10 +144,10 @@ class ModelAttachment: AttachmentType("model", "MATERIAL, CUSTOM_MODEL_DATA") {
     }
 
     override fun markFor(player: Player) {
-
+        displayEntity!!.startGlowFor(player)
     }
 
     override fun unMarkFor(player: Player) {
-
+        displayEntity!!.endGlowFor(player)
     }
 }
