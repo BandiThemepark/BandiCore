@@ -64,7 +64,7 @@ class Restart {
                         restartSent = true
                         Bukkit.getScheduler().scheduleSyncDelayedTask(BandiCore.instance, {
                             Bukkit.getServer().spigot().restart()
-                        }, 40)
+                        }, 10)
                     }
                 }
             } else {
