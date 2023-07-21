@@ -37,6 +37,9 @@ class RigTest: CommandExecutor {
         animatronic.spawn(sender.location, Quaternion.fromYawPitchRoll(20.0, 90.0, 45.0))
         animatronic.playAnimation("wave", true)
 
+        Bukkit.getScheduler().runTaskLater(BandiCore.instance, Runnable {
+            animatronic.setBasePosition(animatronic.basePosition.clone().add(Vector(0.0, 2.0, 0.0)))
+        }, 20 * 5)
 
 //        val itemDisplay = PacketItemDisplay()
 //        itemDisplay.spawn(sender.location)

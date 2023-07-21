@@ -12,6 +12,7 @@ import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.craftbukkit.v1_20_R1.entity.CraftItemDisplay
 import org.bukkit.entity.ItemDisplay
+import org.bukkit.util.Vector
 import org.joml.Matrix4f
 import org.joml.Quaternionf
 import org.joml.Vector3f
@@ -69,6 +70,8 @@ class Animatronic(fileName: String) {
 
     var spawned = false
     private val displayEntities = hashMapOf<UUID, PacketItemDisplay>()
+
+    lateinit var basePosition: Vector private set
     lateinit var baseRotation: Quaternion
 
     /**
@@ -99,9 +102,24 @@ class Animatronic(fileName: String) {
         }
 
         this.baseRotation = baseRotation
+        basePosition = baseLocation.toVector()
+
         spawned = true
         BandiCore.instance.animatronicManager.spawnedAnimatronics.add(this)
         applyPose(defaultPose)
+    }
+
+    /**
+     * Changes the base position of the animatronic to the given position. Automatically teleports the animatronic to the new position. Do not use before spawn
+     * @param basePosition The new base position
+     */
+    fun setBasePosition(basePosition: Vector) {
+        Preconditions.checkArgument(spawned, "Animatronic is not spawned")
+        this.basePosition = basePosition
+
+        displayEntities.values.forEach {
+            it.moveEntity(basePosition.x, basePosition.y, basePosition.z)
+        }
     }
 
     /**
