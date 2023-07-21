@@ -33,10 +33,10 @@ class RigTest: CommandExecutor {
         if(!command.name.equals("rigtest", true)) return false
         if(sender !is Player) return false
 
-        val effect = Effect("test_effect")
-        effect.play()
-
-        return false
+//        val effect = Effect("test_effect")
+//        effect.play()
+//
+//        return false
 
         val animatronic = Animatronic("animation_test")
         animatronic.spawn(sender.location, Quaternion.fromYawPitchRoll(20.0, 90.0, 45.0))

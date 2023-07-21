@@ -196,7 +196,7 @@ class Animatronic(fileName: String) {
      */
     private fun applyCurrentAnimationFrame() {
         Preconditions.checkArgument(spawned, "Animatronic is not spawned")
-        Preconditions.checkArgument(currentAnimation != null, "No animation is currently playing")
+        if(currentAnimation == null) return
 
         applyPose(currentAnimation!!.frames.find { it.time == currentAnimationTime }!!.pose)
     }

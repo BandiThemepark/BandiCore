@@ -21,6 +21,7 @@ import net.bandithemepark.bandicore.park.attractions.tracks.segments.types.TestS
 import net.bandithemepark.bandicore.park.attractions.tracks.splines.SplineType
 import net.bandithemepark.bandicore.park.attractions.tracks.triggers.TrackTrigger
 import net.bandithemepark.bandicore.park.attractions.tracks.triggers.TrackTriggerType
+import net.bandithemepark.bandicore.park.attractions.tracks.triggers.types.EffectTrigger
 import net.bandithemepark.bandicore.park.attractions.tracks.triggers.types.EjectTrigger
 import net.bandithemepark.bandicore.park.attractions.tracks.triggers.types.TestTrigger
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.TrackVehicleManager
@@ -64,6 +65,7 @@ class TrackManager(val splineType: SplineType, val pointsPerMeter: Int, val fric
     private fun registerTriggers() {
         TestTrigger().register()
         EjectTrigger().register()
+        EffectTrigger().register()
     }
 
     private fun registerCommands() {
