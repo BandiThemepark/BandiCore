@@ -34,7 +34,7 @@ class RigTest: CommandExecutor {
 
 
         val animatronic = Animatronic("animation_test")
-        animatronic.spawn(sender.location)
+        animatronic.spawn(sender.location, Quaternion.fromYawPitchRoll(20.0, 90.0, 45.0))
         animatronic.playAnimation("wave", true)
 
 

@@ -6,11 +6,15 @@ import com.google.gson.JsonParser
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.entity.itemdisplay.PacketItemDisplay
+import net.bandithemepark.bandicore.util.math.Quaternion
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.craftbukkit.v1_20_R1.entity.CraftItemDisplay
 import org.bukkit.entity.ItemDisplay
+import org.joml.Matrix4f
+import org.joml.Quaternionf
+import org.joml.Vector3f
 import java.io.File
 import java.util.*
 
@@ -65,18 +69,24 @@ class Animatronic(fileName: String) {
 
     var spawned = false
     private val displayEntities = hashMapOf<UUID, PacketItemDisplay>()
+    lateinit var baseRotation: Quaternion
 
     /**
      * Spawns the animatronic at the given location so that it can be animated afterwards.
      * Automatically applies the default pose
-     * @param baseLocation The location to spawn the animatronic at. Used as the base for animations. Rotation is used as well
+     * @param baseLocation The location to spawn the animatronic at. Used as the base for animations.
+     * @param baseRotation The rotation to spawn the animatronic with. Used as the base for animations.
      */
-    fun spawn(baseLocation: Location) {
+    fun spawn(baseLocation: Location, baseRotation: Quaternion) {
         Preconditions.checkArgument(!spawned, "Animatronic is already spawned")
+
+        val spawnLocation = baseLocation.clone()
+        spawnLocation.pitch = 0.0f
+        spawnLocation.yaw = 0.0f
 
         for(node in nodes) {
             val displayEntity = PacketItemDisplay()
-            displayEntity.spawn(baseLocation.clone())
+            displayEntity.spawn(spawnLocation.clone())
 
             displayEntity.setItemStack(ItemFactory(itemMaterial).setCustomModelData(node.customModelData).build())
             displayEntity.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.HEAD)
@@ -88,6 +98,7 @@ class Animatronic(fileName: String) {
             displayEntities[node.uuid] = displayEntity
         }
 
+        this.baseRotation = baseRotation
         spawned = true
         BandiCore.instance.animatronicManager.spawnedAnimatronics.add(this)
         applyPose(defaultPose)
@@ -103,9 +114,18 @@ class Animatronic(fileName: String) {
 
         for(node in pose.nodes) {
             val displayEntity = displayEntities[node.uuid]!!
-
             displayEntity.setInterpolationDelay(-1)
-            displayEntity.setTransformationMatrix(node.matrix)
+
+            val oldMatrix = node.matrix.clone() as Matrix4f
+            val beforeTranslation = oldMatrix.getTranslation(Vector3f())
+            val beforeRotation = oldMatrix.getUnnormalizedRotation(Quaternionf())
+
+            val matrix = Matrix4f()
+                .rotate(baseRotation.toBukkitQuaternion())
+                .translate(beforeTranslation)
+                .rotate(beforeRotation)
+
+            displayEntity.setTransformationMatrix(matrix)
 
             displayEntity.updateMetadata()
         }
