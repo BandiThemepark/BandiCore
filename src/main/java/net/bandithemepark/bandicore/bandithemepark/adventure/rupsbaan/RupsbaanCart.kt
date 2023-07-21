@@ -16,6 +16,8 @@ import net.bandithemepark.bandicore.util.entity.event.SeatEnterEvent
 import net.bandithemepark.bandicore.util.entity.event.SeatExitEvent
 import net.bandithemepark.bandicore.util.math.MathUtil
 import net.bandithemepark.bandicore.util.math.Quaternion
+import net.kyori.adventure.text.Component
+import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Location
 import org.bukkit.entity.Player
@@ -123,10 +125,14 @@ class RupsbaanCart {
     var harnessPosition: Double = 0.0
         set(value) {
             if(field == 0.0 && value != 0.0) {
-                harnessAttachment.type.onSpawn(lastLocation.clone().add(Vector(0.0, -3.0, 0.0)), harnessAttachment)
+                val spawnLocation = lastLocation.clone().add(Vector(0.0, -3.0, 0.0))
+                spawnLocation.pitch = 0.0f
+                spawnLocation.yaw = 0.0f
+
+                harnessAttachment.type.onSpawn(spawnLocation, harnessAttachment)
                 //BandiCore.instance.server.scoreboard.setGlowColor((harnessAttachment.type as ModelAttachment).armorStand!!.handle!!.uuid.toString(), ChatColor.RED)
-                //BandiCore.instance.server.scoreboard.setGlowColor((harnessAttachment.type as ModelAttachment).displayEntity!!.uniqueId.toString(), ChatColor.RED)
-                BandiCore.instance.server.scoreboard.updateScoreboard()
+                //BandiCore.instance.server.scoreboard.setGlowColor((harnessAttachment.type as ModelAttachment).displayEntity!!.handle!!.uuid.toString(), ChatColor.RED)
+                try { BandiCore.instance.server.scoreboard.updateScoreboard() } catch(_: Exception) {}
                 modelAttachment.children.add(harnessAttachment)
 
                 modelAttachment.type.onMetadataLoad(listOf("DIAMOND_HOE", "3"))

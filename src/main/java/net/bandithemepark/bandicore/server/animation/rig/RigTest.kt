@@ -6,8 +6,10 @@ import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin.Compan
 import net.bandithemepark.bandicore.server.custom.player.NewCustomPlayer
 import net.bandithemepark.bandicore.server.effects.Effect
 import net.bandithemepark.bandicore.util.ItemFactory
+import net.bandithemepark.bandicore.util.entity.armorstand.PacketEntityArmorStand
 import net.bandithemepark.bandicore.util.entity.itemdisplay.PacketItemDisplay
 import net.bandithemepark.bandicore.util.math.Quaternion
+import net.minecraft.world.entity.decoration.ArmorStand
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
@@ -33,18 +35,39 @@ class RigTest: CommandExecutor {
         if(!command.name.equals("rigtest", true)) return false
         if(sender !is Player) return false
 
-//        val effect = Effect("test_effect")
-//        effect.play()
-//
-//        return false
+        val armorStand = PacketEntityArmorStand()
+        armorStand.spawn(sender.location)
+        armorStand.handle!!.isInvisible = true
+        armorStand.handle!!.isNoGravity = true
+        (armorStand.handle!! as ArmorStand).isMarker = true
+        armorStand.updateMetadata()
 
-        val animatronic = Animatronic("animation_test")
-        animatronic.spawn(sender.location, Quaternion.fromYawPitchRoll(20.0, 90.0, 45.0))
-        animatronic.playAnimation("wave", true)
+        val testPositionDisplay = PacketItemDisplay()
+        testPositionDisplay.spawn(sender.location)
+        testPositionDisplay.setItemStack(ItemFactory(Material.DIAMOND_HOE).setCustomModelData(6).build())
+        testPositionDisplay.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.HEAD)
+        testPositionDisplay.updateMetadata()
 
-        Bukkit.getScheduler().runTaskLater(BandiCore.instance, Runnable {
-            animatronic.setBasePosition(animatronic.basePosition.clone().add(Vector(0.0, 2.0, 0.0)))
-        }, 20 * 5)
+        val itemDisplay = PacketItemDisplay()
+        itemDisplay.spawn(sender.location)
+        itemDisplay.setItemStack(ItemFactory(Material.DIAMOND_HOE).setCustomModelData(6).build())
+        itemDisplay.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.HEAD)
+        itemDisplay.updateMetadata()
+
+        armorStand.addPassenger(itemDisplay.handle!!.id)
+        armorStand.updatePassengers()
+
+        val basePosition = sender.location.toVector()
+        var tick = 0
+        Bukkit.getScheduler().runTaskTimer(BandiCore.instance, Runnable {
+            tick++
+
+            if(tick < 100) {
+                armorStand.moveEntity(basePosition.x, basePosition.y, basePosition.z)
+            }
+        }, 0, 1)
+
+
 
 //        val itemDisplay = PacketItemDisplay()
 //        itemDisplay.spawn(sender.location)

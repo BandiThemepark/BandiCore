@@ -63,10 +63,7 @@ class Rupsbaan(val location: Location) {
             if(yaw == 0.0) yaw = 0.1
             if(yaw == 180.0) yaw = 179.1
 
-            var pitch = directionLocation.pitch.toDouble()
-//            if(pitch == 0.0) pitch = 10.1
-//            if(pitch == -0.0) pitch = 10.1
-            // TODO Fix attachment children not always updating properly
+            val pitch = directionLocation.pitch.toDouble()
 
             val average = positionBack.clone().add(positionFront).multiply(0.5).add(location.toVector())
             value.updateUpwardsInterpolation()

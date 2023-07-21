@@ -75,11 +75,25 @@ class ModelAttachment: AttachmentType("model", "MATERIAL, CUSTOM_MODEL_DATA") {
 //        armorStand!!.endGlowFor(player)
 //    }
 
+    var parentArmorStand: PacketEntityArmorStand? = null
     var displayEntity: PacketItemDisplay? = null
     var model: ItemStack? = null
     var spawnLocation: Location? = null
 
     override fun onSpawn(location: Location, parent: Attachment) {
+        val armorStandSpawnLocation = location.clone()
+        armorStandSpawnLocation.pitch = 0.0f
+        armorStandSpawnLocation.yaw = 0.0f
+
+        // Spawn an ArmorStand to hold the item display (used for smoothness)
+        parentArmorStand = PacketEntityArmorStand()
+        parentArmorStand!!.spawn(armorStandSpawnLocation)
+        parentArmorStand!!.handle!!.isInvisible = true
+        parentArmorStand!!.handle!!.isNoGravity = true
+        (parentArmorStand!!.handle!! as ArmorStand).isMarker = true
+        parentArmorStand!!.updateMetadata()
+
+        // Spawn the display entity
         displayEntity = PacketItemDisplay()
         displayEntity!!.spawn(location)
 
@@ -89,9 +103,14 @@ class ModelAttachment: AttachmentType("model", "MATERIAL, CUSTOM_MODEL_DATA") {
 
         displayEntity!!.updateMetadata()
 
+        // Attach the display entity to the ArmorStand
+        parentArmorStand!!.addPassenger(displayEntity!!.handle!!.id)
+        parentArmorStand!!.updatePassengers()
+
         spawnLocation = location
     }
 
+    var lastRotation: Quaternion? = null
     override fun onUpdate(
         mainPosition: Vector,
         mainRotation: Quaternion,
@@ -103,13 +122,15 @@ class ModelAttachment: AttachmentType("model", "MATERIAL, CUSTOM_MODEL_DATA") {
         }
         displayEntity!!.setInterpolationDelay(-1)
 
-        val matrix = Matrix4f().rotation(mainRotation.toBukkitQuaternion())
+        if(lastRotation == null) lastRotation = mainRotation
+        val matrix = Matrix4f().rotation(lastRotation!!.toBukkitQuaternion())
         displayEntity!!.setTransformationMatrix(matrix)
+        displayEntity!!.updateMetadata()
 
         val position = mainPosition.add(Vector(0.0, 0.45, 0.0))
-        displayEntity!!.moveEntity(position.x, position.y, position.z)
+        parentArmorStand!!.moveEntity(position.x, position.y, position.z)
 
-        displayEntity!!.updateMetadata()
+        lastRotation = mainRotation
     }
 
     override fun onDeSpawn() {
