@@ -17,7 +17,7 @@ class CoinManager {
 
         fun setLoadedBalance(offlinePlayer: OfflinePlayer, balance: Int) {
             BandiCore.instance.coinManager.loadedBalances[offlinePlayer.uniqueId] = balance
-            if(offlinePlayer.isOnline) (offlinePlayer as Player).getBossBar().update()
+            if(offlinePlayer.isOnline) (offlinePlayer as Player).getBossBar()?.update()
         }
 
         fun reloadBalance(player: OfflinePlayer) {

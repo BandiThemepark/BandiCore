@@ -24,15 +24,15 @@ class BandiRegionEvents: Listener {
 
     @EventHandler
     fun onPlayerPriorityRegionEnter(event: PlayerPriorityRegionEnterEvent) {
-        event.player.getBossBar().regionText = event.toRegion.displayName
-        event.player.getBossBar().update()
+        event.player.getBossBar()?.regionText = event.toRegion.displayName
+        event.player.getBossBar()?.update()
     }
 
     @EventHandler
     fun onPlayerPriorityRegionLeave(event: PlayerPriorityRegionLeaveEvent) {
         if (event.toRegion == null) {
-            event.player.getBossBar().regionText = null
-            event.player.getBossBar().update()
+            event.player.getBossBar()?.regionText = null
+            event.player.getBossBar()?.update()
         }
     }
 

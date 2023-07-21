@@ -217,7 +217,7 @@ class BandiCore: JavaPlugin() {
         // Removing player permissions and hiding boss bars
         for(player in Bukkit.getOnlinePlayers()) {
             server.rankManager.loadedPlayerRanks[player]?.removePermissions(player)
-            player.getBossBar().hideBossBar()
+            player.getBossBar()?.hideBossBar()
         }
 
         // Disconnect any clients

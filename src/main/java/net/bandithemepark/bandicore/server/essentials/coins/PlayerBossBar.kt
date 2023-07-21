@@ -36,13 +36,13 @@ class PlayerBossBar(val player: Player) {
     companion object {
         private val loadedBossBars = hashMapOf<Player, PlayerBossBar>()
 
-        fun Player.getBossBar(): PlayerBossBar {
-            return loadedBossBars[this]!!
+        fun Player.getBossBar(): PlayerBossBar? {
+            return loadedBossBars[this]
         }
 
         fun createFor(player: Player) {
             loadedBossBars[player] = PlayerBossBar(player)
-            player.getBossBar().update()
+            player.getBossBar()?.update()
         }
     }
 

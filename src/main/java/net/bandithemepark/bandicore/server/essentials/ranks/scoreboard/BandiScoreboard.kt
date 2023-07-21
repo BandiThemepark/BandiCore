@@ -28,12 +28,16 @@ class BandiScoreboard {
      * Updates the main scoreboard, and applies it to everyone
      */
     fun updateScoreboard() {
-        mainScoreboard.teams.toList().forEach {
-            try {
-                it.unregister()
-            } catch(_: IllegalArgumentException) {
+        try {
+            mainScoreboard.teams.toList().forEach {
+                try {
+                    it.unregister()
+                } catch (_: IllegalArgumentException) {
 
+                }
             }
+        } catch(_: ConcurrentModificationException) {
+
         }
 
         for(rank in BandiCore.instance.server.rankManager.loadedRanks) {
@@ -47,16 +51,18 @@ class BandiScoreboard {
         }
 
         for(color in ChatColor.values()) {
-            val team = mainScoreboard.registerNewTeam(color.name)
-            team.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER)
-            team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER)
-            team.color(paperColors[color])
+            try {
+                val team = mainScoreboard.registerNewTeam(color.name)
+                team.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER)
+                team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER)
+                team.color(paperColors[color])
 
-            for((key, value) in selectedColors.entries.toSet()) {
-                if(value == color) {
-                    team.addEntry(key)
+                for ((key, value) in selectedColors.entries.toSet()) {
+                    if (value == color) {
+                        team.addEntry(key)
+                    }
                 }
-            }
+            } catch(_: java.lang.IllegalArgumentException) {}
         }
 
         val npcTeam = mainScoreboard.registerNewTeam("npc")

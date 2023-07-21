@@ -266,16 +266,22 @@ abstract class PacketEntity {
      * Updates the passengers in this vehicle for everyone that can see this entity
      */
     fun updatePassengers() {
-        val ids = passengers.map { it.entityId }.toMutableList()
-        ids.addAll(passengerIds)
+        try {
+            val ids = passengers.map { it.entityId }.toMutableList()
+            ids.addAll(passengerIds)
 
-        val pm = ProtocolLibrary.getProtocolManager()
-        val packet = pm.createPacket(PacketType.Play.Server.MOUNT)
-        packet.modifier.writeDefaults()
-        packet.integers.write(0, handle!!.id)
-        packet.integerArrays.write(0, ids.toIntArray())
+            val pm = ProtocolLibrary.getProtocolManager()
+            val packet = pm.createPacket(PacketType.Play.Server.MOUNT)
+            packet.modifier.writeDefaults()
+            packet.integers.write(0, handle!!.id)
+            packet.integerArrays.write(0, ids.toIntArray())
 
-        sendPacket(packet)
+            sendPacket(packet)
+        } catch (e: NullPointerException) {
+            Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
+                updatePassengers()
+            })
+        }
     }
 
     /**
