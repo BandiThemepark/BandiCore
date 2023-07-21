@@ -76,6 +76,8 @@ import net.bandithemepark.bandicore.server.custom.blocks.CustomBlock
 import net.bandithemepark.bandicore.server.custom.blocks.CustomBlockMenu
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin
 import net.bandithemepark.bandicore.server.custom.player.editor.CustomPlayerEditor
+import net.bandithemepark.bandicore.server.effects.EffectManager
+import net.bandithemepark.bandicore.server.effects.types.AnimatronicEffect
 import net.bandithemepark.bandicore.server.essentials.*
 import net.bandithemepark.bandicore.server.essentials.coins.CoinManager
 import net.bandithemepark.bandicore.server.essentials.coins.CoinsListener
@@ -112,6 +114,7 @@ class BandiCore: JavaPlugin() {
     lateinit var coinManager: CoinManager
     lateinit var regionManager: BandiRegionManager
     lateinit var animatronicManager: AnimatronicManager
+    lateinit var effectManager: EffectManager
 
     var okHttpClient = OkHttpClient()
     var restarter = Restart()
@@ -186,6 +189,8 @@ class BandiCore: JavaPlugin() {
         regionManager.loadAll()
 
         animatronicManager = AnimatronicManager()
+        registerEffectTypes()
+        effectManager = EffectManager()
 
         // Things that need to be done for players who are already online (Like when a reload happens)
         forOnlinePlayers()
@@ -342,6 +347,10 @@ class BandiCore: JavaPlugin() {
     private fun registerAchievementRewardTypes() {
         AchievementRewardCoins().register()
         AchievementRewardItem().register()
+    }
+
+    private fun registerEffectTypes() {
+        AnimatronicEffect().register()
     }
 
 //    private fun runAngleInterpolationTest(formula: (Double, Double, Double) -> Double) {

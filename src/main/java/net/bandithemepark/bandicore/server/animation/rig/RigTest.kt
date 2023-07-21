@@ -4,6 +4,7 @@ import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.server.animatronics.Animatronic
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin.Companion.getAdaptedSkin
 import net.bandithemepark.bandicore.server.custom.player.NewCustomPlayer
+import net.bandithemepark.bandicore.server.effects.Effect
 import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.entity.itemdisplay.PacketItemDisplay
 import net.bandithemepark.bandicore.util.math.Quaternion
@@ -32,6 +33,10 @@ class RigTest: CommandExecutor {
         if(!command.name.equals("rigtest", true)) return false
         if(sender !is Player) return false
 
+        val effect = Effect("test_effect")
+        effect.play()
+
+        return false
 
         val animatronic = Animatronic("animation_test")
         animatronic.spawn(sender.location, Quaternion.fromYawPitchRoll(20.0, 90.0, 45.0))

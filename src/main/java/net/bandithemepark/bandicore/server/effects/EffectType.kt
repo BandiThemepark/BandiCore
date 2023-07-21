@@ -1,0 +1,26 @@
+package net.bandithemepark.bandicore.server.effects
+
+import com.google.gson.JsonObject
+
+abstract class EffectType(val id: String): Cloneable {
+
+    fun register() {
+        types.add(this)
+    }
+
+    public override fun clone(): EffectType {
+        return super.clone() as EffectType
+    }
+
+    abstract fun loadSettings(json: JsonObject)
+    abstract fun onPlay()
+    abstract fun onEffectEnd()
+
+    companion object {
+        val types = mutableListOf<EffectType>()
+
+        fun getType(id: String): EffectType? {
+            return types.find { it.id == id }
+        }
+    }
+}

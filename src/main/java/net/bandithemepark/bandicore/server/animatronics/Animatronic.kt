@@ -201,6 +201,8 @@ class Animatronic(fileName: String) {
         applyPose(currentAnimation!!.frames.find { it.time == currentAnimationTime }!!.pose)
     }
 
+    var onComplete: Runnable? = null
+
     /**
      * Updates the animatronic and its animations
      * Called every tick by the manager
@@ -216,6 +218,8 @@ class Animatronic(fileName: String) {
                 currentAnimationTime = 0
             } else {
                 stopAnimation()
+                if(onComplete != null) onComplete!!.run()
+
                 return
             }
         }
