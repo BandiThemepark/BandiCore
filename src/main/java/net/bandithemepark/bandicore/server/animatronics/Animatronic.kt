@@ -69,7 +69,7 @@ class Animatronic(fileName: String) {
     }
 
     var spawned = false
-    private val displayEntities = hashMapOf<UUID, PacketItemDisplay>()
+    val displayEntities = hashMapOf<UUID, PacketItemDisplay>()
 
     lateinit var basePosition: Vector private set
     lateinit var baseRotation: Quaternion

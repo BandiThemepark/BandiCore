@@ -7,6 +7,7 @@ import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.AttachmentPosition
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.AttachmentType
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayer
+import net.bandithemepark.bandicore.server.custom.player.CustomPlayerRig
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin.Companion.getAdaptedSkin
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin.Companion.getCustomPlayerSkin
 import net.bandithemepark.bandicore.server.custom.player.NewCustomPlayer
@@ -61,13 +62,13 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
 
             if (tickMovementDirection != null && !seat!!.harnessesOpen) {
                 if (tickMovementDirection == MovementDirection.UP) {
-                    customPlayer?.loadFrom("customplayer/rideposition/scream")
+                    //customPlayer?.loadFrom("customplayer/rideposition/scream")
                 }
                 if (tickMovementDirection == MovementDirection.DOWN) {
-                    customPlayer?.loadFrom("customplayer/rideposition/shield")
+                    //customPlayer?.loadFrom("customplayer/rideposition/shield")
                 }
             } else {
-                customPlayer?.loadFrom("customplayer/rideposition/sit")
+                //customPlayer?.loadFrom("customplayer/rideposition/sit")
             }
             tickMovementDirection = null
         }
@@ -83,7 +84,7 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
         seat!!.moveEntity(editedPosition, seatRotation, rotationDegrees)
 
         // Updating the position of the player rig
-        customPlayer?.moveTo(mainPosition.clone(), rotationDegrees)
+        customPlayer?.moveTo(mainPosition.clone(), mainRotation.clone())
 //        customPlayer?.location = mainPosition.clone().toLocation(seat!!.location!!.world)
 //        customPlayer?.completeRotation = mainRotation.clone()
 //        try {
@@ -123,14 +124,11 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
     }
 
     // Stuff related to custom player models
-    var customPlayer: NewCustomPlayer? = null
+    var customPlayer: CustomPlayerRig? = null
 
     fun spawnCustomPlayer(player: Player) {
-        customPlayer = NewCustomPlayer(player.getAdaptedSkin(), Vector(0.0, 0.63, 0.0).toLocation(seat!!.location.world), Vector())
-        customPlayer!!.setVisibilityType(PacketEntity.VisibilityType.BLACKLIST)
-        //customPlayer!!.setVisibilityList(mutableListOf(player))
-        customPlayer!!.spawn()
-        customPlayer!!.loadFrom("customplayer/rideposition/sit")
+        customPlayer = CustomPlayerRig(player.getAdaptedSkin())
+        customPlayer!!.spawn(seat!!.location.clone())
     }
 
     fun deSpawnCustomPlayer(player: Player?) {
