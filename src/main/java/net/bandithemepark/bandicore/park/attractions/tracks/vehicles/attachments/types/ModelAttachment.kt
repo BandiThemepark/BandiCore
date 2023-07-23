@@ -131,6 +131,10 @@ class ModelAttachment: AttachmentType("model", "MATERIAL, CUSTOM_MODEL_DATA") {
         parentArmorStand!!.moveEntity(position.x, position.y, position.z)
 
         lastRotation = mainRotation
+
+        // Attach the display entity to the ArmorStand
+        parentArmorStand!!.addPassenger(displayEntity!!.handle!!.id)
+        parentArmorStand!!.updatePassengers()
     }
 
     override fun onDeSpawn() {
