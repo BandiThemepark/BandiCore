@@ -58,6 +58,7 @@ class CustomPlayerRig(val skin: CustomPlayerSkin) {
     }
 
     fun playPose(poseName: String) {
+        if(!spawned) return
         animatronic.playAnimation(poseName, true)
     }
 
