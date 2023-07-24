@@ -62,13 +62,13 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
 
             if (tickMovementDirection != null && !seat!!.harnessesOpen) {
                 if (tickMovementDirection == MovementDirection.UP) {
-                    //customPlayer?.loadFrom("customplayer/rideposition/scream")
+                    customPlayer?.playPose("scream")
                 }
                 if (tickMovementDirection == MovementDirection.DOWN) {
-                    //customPlayer?.loadFrom("customplayer/rideposition/shield")
+                    customPlayer?.playPose("shield")
                 }
             } else {
-                //customPlayer?.loadFrom("customplayer/rideposition/sit")
+                customPlayer?.playPose("default")
             }
             tickMovementDirection = null
         }
