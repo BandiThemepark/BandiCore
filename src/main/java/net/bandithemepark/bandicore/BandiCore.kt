@@ -169,7 +169,7 @@ class BandiCore: JavaPlugin() {
         server.achievementManager.setup()
 
         // Starting the necessary timers
-        NPC.startTimer()
+        //NPC.startTimer()
         PlayerNameTag.Timer().runTaskTimerAsynchronously(this, 0, 1)
         Playtime.startTimer()
         KalibaEffects()

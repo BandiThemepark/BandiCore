@@ -47,7 +47,7 @@ class PathManager {
 
     private fun preCalculatePaths() {
         pathPoints.filter { it.type.precalculate }.forEach {
-            it.preCalculatePath()
+            //it.preCalculatePath()
         }
     }
 
