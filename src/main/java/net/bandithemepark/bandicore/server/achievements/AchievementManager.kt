@@ -4,12 +4,15 @@ import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.network.backend.BackendAchievement
 import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.chat.BandiColors
+import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
+import java.lang.Exception
+import java.lang.NullPointerException
 import java.util.*
 
 class AchievementManager {
@@ -81,9 +84,13 @@ class AchievementManager {
                     val achievementDisplayName = achievementJson.get("displayName").asString
                     val achievementDescription = achievementJson.get("description").asString.split("&&")
                     val achievementType = AchievementType.valueOf(achievementJson.get("type").asString)
-                    val achievementTriggerType = AchievementTriggerType.types.find { it.id == (achievementJson.get("triggerType").asString) } ?: continue
+                    val achievementTriggerType =
+                        AchievementTriggerType.types.find { it.id == (achievementJson.get("triggerType").asString) }
+                            ?: continue
                     val achievementTriggerValue = achievementJson.get("triggerValue").asString
-                    val achievementRewardType = AchievementRewardType.types.find { it.id == (achievementJson.get("rewardType").asString) } ?: continue
+                    val achievementRewardType =
+                        AchievementRewardType.types.find { it.id == (achievementJson.get("rewardType").asString) }
+                            ?: continue
                     val achievementRewardValue = achievementJson.get("rewardValue").asString
 
                     val achievement = Achievement(

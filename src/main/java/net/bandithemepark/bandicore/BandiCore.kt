@@ -143,7 +143,6 @@ class BandiCore: JavaPlugin() {
 
         // Setting up the server
         server = Server()
-        server.achievementManager.setup()
         server.themePark.setup()
         server.warpManager.loadWarps()
         prepareSettings()
@@ -165,6 +164,9 @@ class BandiCore: JavaPlugin() {
         // Registering everything
         registerCommands()
         registerEvents()
+
+        // Setup achievements after triggers have been registered
+        server.achievementManager.setup()
 
         // Starting the necessary timers
         NPC.startTimer()
