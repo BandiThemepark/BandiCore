@@ -12,6 +12,7 @@ import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.util.entity.event.PacketEntityDismountEvent
 import net.bandithemepark.bandicore.util.entity.event.PacketEntityInteractEvent
 import net.bandithemepark.bandicore.util.entity.event.PacketEntityInputEvent
+import net.kyori.adventure.text.Component
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket
 import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket
@@ -21,6 +22,7 @@ import net.minecraft.network.protocol.game.ServerboundPlayerInputPacket
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.network.syncher.EntityDataSerializer
 import net.minecraft.network.syncher.SynchedEntityData
+import net.minecraft.network.syncher.SynchedEntityData.DataValue
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EquipmentSlot
@@ -212,7 +214,13 @@ abstract class PacketEntity {
      * @param player The player to update the metadata for
      */
     open fun updateMetadataFor(player: Player) {
-        //val packet = ClientboundSetEntityDataPacket(handle!!.id, handle!!.entityData, true)
+        if(handle!!.entityData.nonDefaultValues == null) {
+            Bukkit.getScheduler().scheduleSyncDelayedTask(BandiCore.instance, Runnable {
+                updateMetadataFor(player)
+            }, 1)
+            return
+        }
+
         val packet = ClientboundSetEntityDataPacket(handle!!.id, handle!!.entityData.nonDefaultValues!!)
         (player as CraftPlayer).handle.connection.send(packet)
     }
