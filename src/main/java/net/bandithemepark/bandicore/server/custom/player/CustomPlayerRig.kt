@@ -3,6 +3,7 @@ package net.bandithemepark.bandicore.server.custom.player
 import net.bandithemepark.bandicore.server.animatronics.Animatronic
 import net.bandithemepark.bandicore.server.animatronics.AnimatronicNode
 import net.bandithemepark.bandicore.util.ItemFactory
+import net.bandithemepark.bandicore.util.entity.PacketEntity
 import net.bandithemepark.bandicore.util.entity.armorstand.PacketEntityArmorStand
 import net.bandithemepark.bandicore.util.entity.itemdisplay.PacketItemDisplay
 import net.bandithemepark.bandicore.util.math.Quaternion
@@ -11,19 +12,22 @@ import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.entity.ItemDisplay
+import org.bukkit.entity.Player
 import org.bukkit.util.Vector
 
 class CustomPlayerRig(val skin: CustomPlayerSkin) {
     lateinit var animatronic: Animatronic
     lateinit var parentArmorStand: PacketEntityArmorStand
 
-    fun spawn(spawnLocation: Location) {
+    fun spawn(spawnLocation: Location, hiddenFor: Player) {
         // Remove rotation here, because rotation is added later using transform
         spawnLocation.pitch = 0.0f
         spawnLocation.yaw = 0.0f
 
         // Spawn parent armorstand for smoothness
         parentArmorStand = PacketEntityArmorStand()
+        parentArmorStand.visibilityType = PacketEntity.VisibilityType.BLACKLIST
+        parentArmorStand.visibilityList = mutableListOf(hiddenFor)
         parentArmorStand.spawn(spawnLocation)
         parentArmorStand.handle!!.isInvisible = true
         parentArmorStand.handle!!.isNoGravity = true
@@ -32,6 +36,8 @@ class CustomPlayerRig(val skin: CustomPlayerSkin) {
 
         // Spawn animatronic
         animatronic = Animatronic("player_rig")
+        animatronic.visibilityType = PacketEntity.VisibilityType.BLACKLIST
+        animatronic.visibilityList = mutableListOf(hiddenFor)
 
         // Update spawn order to make sure textures are correct
         val newNodes = mutableListOf<AnimatronicNode>()

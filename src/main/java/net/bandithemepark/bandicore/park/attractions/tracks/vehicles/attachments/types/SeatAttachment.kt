@@ -128,7 +128,7 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
 
     fun spawnCustomPlayer(player: Player) {
         customPlayer = CustomPlayerRig(player.getAdaptedSkin())
-        customPlayer!!.spawn(seat!!.location.clone())
+        customPlayer!!.spawn(seat!!.location.clone(), player)
     }
 
     fun deSpawnCustomPlayer(player: Player?) {

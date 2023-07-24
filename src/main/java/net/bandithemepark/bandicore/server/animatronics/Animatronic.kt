@@ -5,6 +5,7 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.util.ItemFactory
+import net.bandithemepark.bandicore.util.entity.PacketEntity
 import net.bandithemepark.bandicore.util.entity.itemdisplay.PacketItemDisplay
 import net.bandithemepark.bandicore.util.math.Quaternion
 import org.bukkit.Bukkit
@@ -12,6 +13,7 @@ import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.craftbukkit.v1_20_R1.entity.CraftItemDisplay
 import org.bukkit.entity.ItemDisplay
+import org.bukkit.entity.Player
 import org.bukkit.util.Vector
 import org.joml.Matrix4f
 import org.joml.Quaternionf
@@ -30,6 +32,9 @@ class Animatronic(fileName: String) {
     var nodes = mutableListOf<AnimatronicNode>()
     lateinit var defaultPose: AnimatronicPose
     val animations = mutableListOf<AnimatronicAnimation>()
+
+    var visibilityType: PacketEntity.VisibilityType = PacketEntity.VisibilityType.BLACKLIST
+    var visibilityList = mutableListOf<Player>()
 
     init {
         val file = File("plugins/BandiCore/animatronics/$fileName.json")
@@ -89,6 +94,8 @@ class Animatronic(fileName: String) {
 
         for(node in nodes) {
             val displayEntity = PacketItemDisplay()
+            displayEntity.visibilityType = visibilityType
+            displayEntity.visibilityList = visibilityList
             displayEntity.spawn(spawnLocation.clone())
 
             displayEntity.setItemStack(ItemFactory(itemMaterial).setCustomModelData(node.customModelData).build())
@@ -226,5 +233,4 @@ class Animatronic(fileName: String) {
 
         applyCurrentAnimationFrame()
     }
-
 }
