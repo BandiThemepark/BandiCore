@@ -18,6 +18,7 @@ import org.bukkit.util.Vector
 class CustomPlayerRig(val skin: CustomPlayerSkin) {
     lateinit var animatronic: Animatronic
     lateinit var parentArmorStand: PacketEntityArmorStand
+    private var spawned = false
 
     fun spawn(spawnLocation: Location, hiddenFor: Player) {
         // Remove rotation here, because rotation is added later using transform
@@ -53,6 +54,7 @@ class CustomPlayerRig(val skin: CustomPlayerSkin) {
 
         updateDisplayEntities()
         playPose("default")
+        spawned = true
     }
 
     fun playPose(poseName: String) {
@@ -61,9 +63,13 @@ class CustomPlayerRig(val skin: CustomPlayerSkin) {
 
     fun deSpawn() {
         animatronic.deSpawn()
+        parentArmorStand.deSpawn()
+        spawned = false
     }
 
     fun moveTo(position: Vector, rotation: Quaternion) {
+        if(!spawned) return
+
         parentArmorStand.moveEntity(position.x, position.y, position.z)
         animatronic.baseRotation = rotation
     }
