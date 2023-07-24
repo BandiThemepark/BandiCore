@@ -27,7 +27,7 @@ class Animatronic(fileName: String) {
     lateinit var namespace: String
     lateinit var itemMaterial: Material
 
-    val nodes = mutableListOf<AnimatronicNode>()
+    var nodes = mutableListOf<AnimatronicNode>()
     lateinit var defaultPose: AnimatronicPose
     val animations = mutableListOf<AnimatronicAnimation>()
 

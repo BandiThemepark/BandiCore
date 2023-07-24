@@ -50,7 +50,7 @@ class Attachment(var id: String, val position: AttachmentPosition, val secondary
         type.onUpdate(newPosition.clone(), newRotation.clone(), secondPositions, originalRotation.clone())
 
         // Also updating children
-        for(child in children) {
+        for(child in children.toList()) {
             child.update(newPosition.clone(), newRotation.clone(), originalRotation.clone())
         }
     }

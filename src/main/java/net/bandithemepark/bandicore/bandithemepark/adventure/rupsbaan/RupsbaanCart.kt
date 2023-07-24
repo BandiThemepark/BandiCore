@@ -16,6 +16,7 @@ import net.bandithemepark.bandicore.util.entity.event.SeatEnterEvent
 import net.bandithemepark.bandicore.util.entity.event.SeatExitEvent
 import net.bandithemepark.bandicore.util.math.MathUtil
 import net.bandithemepark.bandicore.util.math.Quaternion
+import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Location
 import org.bukkit.entity.Player
@@ -81,7 +82,7 @@ class RupsbaanCart {
     }
 
     private var startPosition = 0.0
-    private var currentProgress = 0
+    private var currentProgress = 30
     fun startUpwardsInterpolation() {
         startPosition = harnessPosition
         currentProgress = 0
@@ -120,6 +121,24 @@ class RupsbaanCart {
         }
     }
 
+    private fun spawnHarness(spawnLocation: Location) {
+        if((harnessAttachment.type as ModelAttachment).displayEntity != null) return
+
+        harnessAttachment.type.onSpawn(spawnLocation, harnessAttachment)
+        BandiCore.instance.server.scoreboard.setGlowColor((harnessAttachment.type as ModelAttachment).displayEntity!!.handle!!.uuid.toString(), ChatColor.RED)
+        try { BandiCore.instance.server.scoreboard.updateScoreboard() } catch(_: Exception) {}
+        modelAttachment.children.add(harnessAttachment)
+
+        modelAttachment.type.onMetadataLoad(listOf("DIAMOND_HOE", "3"))
+    }
+
+    private fun deSpawnHarness() {
+        harnessAttachment.type.onDeSpawn()
+        modelAttachment.children.remove(harnessAttachment)
+
+        modelAttachment.type.onMetadataLoad(listOf("DIAMOND_HOE", "2"))
+    }
+
     var harnessPosition: Double = 0.0
         set(value) {
             if(field == 0.0 && value != 0.0) {
@@ -127,17 +146,9 @@ class RupsbaanCart {
                 spawnLocation.pitch = 0.0f
                 spawnLocation.yaw = 0.0f
 
-                harnessAttachment.type.onSpawn(spawnLocation, harnessAttachment)
-                BandiCore.instance.server.scoreboard.setGlowColor((harnessAttachment.type as ModelAttachment).displayEntity!!.handle!!.uuid.toString(), ChatColor.RED)
-                try { BandiCore.instance.server.scoreboard.updateScoreboard() } catch(_: Exception) {}
-                modelAttachment.children.add(harnessAttachment)
-
-                modelAttachment.type.onMetadataLoad(listOf("DIAMOND_HOE", "3"))
+                spawnHarness(spawnLocation)
             } else if(field != 0.0 && value == 0.0) {
-                harnessAttachment.type.onDeSpawn()
-                modelAttachment.children.remove(harnessAttachment)
-
-                modelAttachment.type.onMetadataLoad(listOf("DIAMOND_HOE", "2"))
+                deSpawnHarness()
             }
 
             field = value
