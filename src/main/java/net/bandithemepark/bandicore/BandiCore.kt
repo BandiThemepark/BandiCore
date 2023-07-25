@@ -40,6 +40,7 @@ import net.bandithemepark.bandicore.bandithemepark.adventure.rupsbaan.RupsbaanCa
 import net.bandithemepark.bandicore.bandithemepark.adventure.rupsbaan.rideop.RupsbaanRideOP
 import net.bandithemepark.bandicore.network.audioserver.AudioCommand
 import net.bandithemepark.bandicore.network.audioserver.AudioServerTimer
+import net.bandithemepark.bandicore.network.audioserver.SpatialAudioSource
 import net.bandithemepark.bandicore.network.audioserver.VolumeCommand
 import net.bandithemepark.bandicore.network.audioserver.events.AudioServerEventListeners
 import net.bandithemepark.bandicore.network.audioserver.map.ChunkRendererCommand
@@ -78,6 +79,7 @@ import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin
 import net.bandithemepark.bandicore.server.custom.player.editor.CustomPlayerEditor
 import net.bandithemepark.bandicore.server.effects.EffectManager
 import net.bandithemepark.bandicore.server.effects.types.AnimatronicEffect
+import net.bandithemepark.bandicore.server.effects.types.SpatialAudioEffect
 import net.bandithemepark.bandicore.server.essentials.*
 import net.bandithemepark.bandicore.server.essentials.coins.CoinManager
 import net.bandithemepark.bandicore.server.essentials.coins.CoinsListener
@@ -97,6 +99,8 @@ import net.bandithemepark.bandicore.server.regions.BandiRegionManager
 import net.bandithemepark.bandicore.server.regions.events.BandiRegionEvents
 import net.bandithemepark.bandicore.util.entity.HoverableEntity
 import net.bandithemepark.bandicore.util.entity.PacketEntitySeat
+import org.bukkit.Location
+import java.util.*
 
 class BandiCore: JavaPlugin() {
     companion object {
@@ -194,6 +198,15 @@ class BandiCore: JavaPlugin() {
         registerEffectTypes()
         effectManager = EffectManager()
 
+        val spatialAudio = SpatialAudioSource(
+            UUID.randomUUID(),
+            Location(Bukkit.getWorld("world")!!, 17.5, 0.0, -144.5),
+            "5439a750-25b0-11ee-a1ee-0242ac1d0002",
+            true,
+            5.0,
+            10.0
+        )
+
         // Things that need to be done for players who are already online (Like when a reload happens)
         forOnlinePlayers()
 
@@ -290,7 +303,7 @@ class BandiCore: JavaPlugin() {
         getServer().pluginManager.registerEvents(BandiRegionEvents(), this)
         getServer().pluginManager.registerEvents(RideOPEvents(), this)
         getServer().pluginManager.registerEvents(AttractionMenu.Events(), this)
-        getServer().pluginManager.registerEvents(RupsbaanCart.Events(), this)
+        //getServer().pluginManager.registerEvents(RupsbaanCart.Events(), this)
         getServer().pluginManager.registerEvents(SmoothCoastersChecker(), this)
         getServer().pluginManager.registerEvents(PathPointEditorEvents(), this)
         getServer().pluginManager.registerEvents(ThemeParkNPCSkin.Caching.Events(), this)
@@ -338,7 +351,7 @@ class BandiCore: JavaPlugin() {
 
     private fun registerRideOPs() {
         LogFlumeRideOP().register()
-        RupsbaanRideOP().register()
+        //RupsbaanRideOP().register()
     }
 
     private fun registerAttractions() {
@@ -353,6 +366,7 @@ class BandiCore: JavaPlugin() {
 
     private fun registerEffectTypes() {
         AnimatronicEffect().register()
+        SpatialAudioEffect().register()
     }
 
 //    private fun runAngleInterpolationTest(formula: (Double, Double, Double) -> Double) {

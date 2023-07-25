@@ -16,9 +16,11 @@ import net.bandithemepark.bandicore.server.translations.MessageReplacement
 import net.bandithemepark.bandicore.util.chat.BandiColors
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
+import org.bukkit.Location
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import java.util.*
 
@@ -97,6 +99,7 @@ class AudioServerEventListeners {
     class ListenerMQTT: MQTTListener("/audioclient/#") {
         override fun onMessage(topic: String, message: String) {
             if(topic.endsWith("/connection/connect")) {
+
                 // Call event
                 val json = JsonParser().parse(message).asJsonObject
                 val player = Bukkit.getPlayer(UUID.fromString(json.get("uuid").asString))!!
@@ -110,7 +113,7 @@ class AudioServerEventListeners {
                 messageJson.addProperty("name", player.name)
 
                 val spatialAudioSourceArray = JsonArray()
-                SpatialAudioSource.updatedSources.forEach {
+                SpatialAudioSource.active.forEach {
                     spatialAudioSourceArray.add(it.toJson())
                 }
 
