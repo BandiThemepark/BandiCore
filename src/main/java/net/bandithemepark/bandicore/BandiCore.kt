@@ -100,6 +100,7 @@ import net.bandithemepark.bandicore.server.regions.events.BandiRegionEvents
 import net.bandithemepark.bandicore.util.entity.HoverableEntity
 import net.bandithemepark.bandicore.util.entity.PacketEntitySeat
 import org.bukkit.Location
+import java.lang.Exception
 import java.util.*
 
 class BandiCore: JavaPlugin() {
@@ -124,6 +125,20 @@ class BandiCore: JavaPlugin() {
     var restarter = Restart()
 
     override fun onEnable() {
+        var sentOnce = false
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, Runnable {
+            if(!sentOnce) {
+                val totalMemory = Runtime.getRuntime().totalMemory()
+                val freeMemory = Runtime.getRuntime().freeMemory()
+                val usedMemory = (totalMemory - freeMemory) / 1048576
+                Bukkit.getConsoleSender().sendMessage("Used memory: $usedMemory MB")
+
+                if (usedMemory > 2000) {
+                    sentOnce = true
+                    getServer().dispatchCommand(Bukkit.getConsoleSender(), "spark heapdump")
+                }
+            }
+        }, 0, 20)
         instance = this
         startTime = System.currentTimeMillis()
         smoothCoastersAPI = SmoothCoastersAPI(this)
@@ -212,13 +227,6 @@ class BandiCore: JavaPlugin() {
 
         // Registering the messaging channel for sending players
         Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord")
-
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(BandiCore.instance, Runnable {
-            val totalMemory = Runtime.getRuntime().totalMemory()
-            val freeMemory = Runtime.getRuntime().freeMemory()
-            val usedMemory = (totalMemory - freeMemory) / 1048576
-            Bukkit.getConsoleSender().sendMessage("Used memory: $usedMemory MB")
-        }, 0, 20)
     }
 
     override fun onDisable() {
