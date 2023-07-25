@@ -173,7 +173,7 @@ class BandiCore: JavaPlugin() {
         server.achievementManager.setup()
 
         // Starting the necessary timers
-        //NPC.startTimer()
+        NPC.startTimer()
         PlayerNameTag.Timer().runTaskTimerAsynchronously(this, 0, 1)
         Playtime.startTimer()
         KalibaEffects()
@@ -198,7 +198,7 @@ class BandiCore: JavaPlugin() {
         registerEffectTypes()
         effectManager = EffectManager()
 
-        val spatialAudio = SpatialAudioSource(
+        SpatialAudioSource(
             UUID.randomUUID(),
             Location(Bukkit.getWorld("world")!!, 17.5, 0.0, -144.5),
             "5439a750-25b0-11ee-a1ee-0242ac1d0002",
@@ -210,12 +210,15 @@ class BandiCore: JavaPlugin() {
         // Things that need to be done for players who are already online (Like when a reload happens)
         forOnlinePlayers()
 
-//        runAngleInterpolationTest { a1, a2, t ->
-//            return@runAngleInterpolationTest MathUtil.interpolateAngles(a1, a2, t)
-//        }
-
         // Registering the messaging channel for sending players
         Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord")
+
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(BandiCore.instance, Runnable {
+            val totalMemory = Runtime.getRuntime().totalMemory()
+            val freeMemory = Runtime.getRuntime().freeMemory()
+            val usedMemory = (totalMemory - freeMemory) / 1048576
+            Bukkit.getConsoleSender().sendMessage("Used memory: $usedMemory MB")
+        }, 0, 20)
     }
 
     override fun onDisable() {
@@ -368,9 +371,4 @@ class BandiCore: JavaPlugin() {
         AnimatronicEffect().register()
         SpatialAudioEffect().register()
     }
-
-//    private fun runAngleInterpolationTest(formula: (Double, Double, Double) -> Double) {
-//        for (i in 0..20) Bukkit.broadcast(Component.text("Interpolating from -175 to 175, with T = ${i/10.0}: ${formula.invoke(-175.0, 175.0, i/20.0)}"))
-//        for (i in 0..20) Bukkit.broadcast(Component.text("Interpolating from 175 to -175, with T = ${i/10.0}: ${formula.invoke(175.0, -175.0, i/20.0)}"))
-//    }
 }

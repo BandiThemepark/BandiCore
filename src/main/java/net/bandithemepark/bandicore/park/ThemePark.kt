@@ -24,7 +24,7 @@ class ThemePark(val world: World) {
         )
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(BandiCore.instance, Runnable {
-            //themeParkNPCManager.spawnAmount(50) // TODO Change amount later
+            themeParkNPCManager.spawnAmount(50) // TODO Change amount later
         }, 40)
     }
 }
