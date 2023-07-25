@@ -138,7 +138,7 @@ class Animatronic(fileName: String) {
         Preconditions.checkArgument(spawned, "Animatronic is not spawned")
 
         for(node in pose.nodes) {
-            val displayEntity = displayEntities[node.uuid]!!
+            val displayEntity = displayEntities[node.uuid] ?: continue
             displayEntity.setInterpolationDelay(-1)
 
             val oldMatrix = node.matrix.clone() as Matrix4f
