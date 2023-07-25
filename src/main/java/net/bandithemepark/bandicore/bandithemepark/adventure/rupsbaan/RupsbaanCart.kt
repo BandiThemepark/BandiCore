@@ -146,7 +146,7 @@ class RupsbaanCart {
                 spawnLocation.pitch = 0.0f
                 spawnLocation.yaw = 0.0f
 
-                spawnHarness(spawnLocation)
+                //spawnHarness(spawnLocation)
             } else if(field != 0.0 && value == 0.0) {
                 deSpawnHarness()
             }

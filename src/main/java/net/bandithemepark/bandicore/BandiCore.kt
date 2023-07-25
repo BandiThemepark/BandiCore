@@ -303,7 +303,7 @@ class BandiCore: JavaPlugin() {
         getServer().pluginManager.registerEvents(BandiRegionEvents(), this)
         getServer().pluginManager.registerEvents(RideOPEvents(), this)
         getServer().pluginManager.registerEvents(AttractionMenu.Events(), this)
-        //getServer().pluginManager.registerEvents(RupsbaanCart.Events(), this)
+        getServer().pluginManager.registerEvents(RupsbaanCart.Events(), this)
         getServer().pluginManager.registerEvents(SmoothCoastersChecker(), this)
         getServer().pluginManager.registerEvents(PathPointEditorEvents(), this)
         getServer().pluginManager.registerEvents(ThemeParkNPCSkin.Caching.Events(), this)
@@ -351,7 +351,7 @@ class BandiCore: JavaPlugin() {
 
     private fun registerRideOPs() {
         LogFlumeRideOP().register()
-        //RupsbaanRideOP().register()
+        RupsbaanRideOP().register()
     }
 
     private fun registerAttractions() {
