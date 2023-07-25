@@ -6,7 +6,9 @@ import com.google.gson.JsonParser
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.network.audioserver.AudioServerTimer
 import net.bandithemepark.bandicore.network.audioserver.SpatialAudioSource
+import net.bandithemepark.bandicore.network.backend.audioserver.BackendAudioServerCredentials
 import net.bandithemepark.bandicore.network.mqtt.MQTTListener
+import net.bandithemepark.bandicore.park.attractions.rideop.RideOP
 import net.bandithemepark.bandicore.server.regions.BandiRegion
 import net.bandithemepark.bandicore.server.regions.events.PlayerPriorityRegionEnterEvent
 import net.bandithemepark.bandicore.server.regions.events.PlayerPriorityRegionLeaveEvent
@@ -111,6 +113,7 @@ class AudioServerEventListeners {
                 val messageJson = JsonObject()
                 messageJson.addProperty("uuid", player.uniqueId.toString())
                 messageJson.addProperty("name", player.name)
+                messageJson.addProperty("vip", player.hasPermission("bandithemepark.vip"))
 
                 val spatialAudioSourceArray = JsonArray()
                 SpatialAudioSource.active.forEach {
@@ -150,6 +153,21 @@ class AudioServerEventListeners {
 
                 val event = AudioServerVolumeChangeEvent(player, volume)
                 Bukkit.getScheduler().runTask(BandiCore.instance, Runnable { Bukkit.getPluginManager().callEvent(event) })
+            }
+
+            if(topic.startsWith("/audioclient/rideop") && topic.endsWith("/press")) {
+                val json = JsonParser().parse(message).asJsonObject
+                val player = Bukkit.getPlayer(UUID.fromString(json.get("uuid").asString))!!
+                val playerAuthCode = BackendAudioServerCredentials.getLink(player) ?: return
+
+                // Check auth code etc.
+
+                val id = json.get("rideop").asString
+                val rideOP = RideOP.rideOPs.find { it.id == id } ?: return
+                val page = json.get("page").asString
+                val button = json.get("button").asInt
+
+                rideOP.pressButton(player, page, button)
             }
         }
     }

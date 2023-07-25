@@ -3,6 +3,7 @@ package net.bandithemepark.bandicore.park.attractions.rideop
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.park.attractions.rideop.events.RideOperateEvent
 import net.bandithemepark.bandicore.park.attractions.rideop.events.RideStopOperatingEvent
+import net.bandithemepark.bandicore.server.regions.events.PlayerPriorityRegionEnterEvent
 import net.bandithemepark.bandicore.server.regions.events.PlayerPriorityRegionLeaveEvent
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedMessage
 import net.bandithemepark.bandicore.server.translations.MessageReplacement
@@ -107,9 +108,25 @@ class RideOPEvents: Listener {
     }
 
     @EventHandler
+    fun onRegionEnter(event: PlayerPriorityRegionEnterEvent) {
+        if(!event.player.hasPermission("bandithemepark.vip")) return
+        val rideOP = RideOP.rideOPs.find { it.region == event.toRegion } ?: return
+        if(rideOP.vipsInRegion.contains(event.player)) return
+
+        rideOP.vipsInRegion.add(event.player)
+        rideOP.sendInfoToNewPlayer(event.player)
+    }
+
+    @EventHandler
     fun onRegionExit(event: PlayerPriorityRegionLeaveEvent) {
+        if(!event.player.hasPermission("bandithemepark.vip")) return
+
         for(rideOP in RideOP.rideOPs) {
-            if(rideOP.region == event.fromRegion && rideOP.operator == event.player) {
+            if(rideOP.region != event.fromRegion) continue
+            rideOP.vipsInRegion.remove(event.player)
+            rideOP.sendRemove(event.player)
+
+            if(rideOP.operator == event.player) {
                 rideOP.operator = null
                 rideOP.updateMenu()
                 event.player.sendTranslatedMessage("rideop-area-left", BandiColors.RED.toString(), MessageReplacement("ride", rideOP.getParentAttraction()!!.appearance.displayName))

@@ -1,5 +1,7 @@
 package net.bandithemepark.bandicore.park.attractions.rideop.util.buttons
 
+import com.google.gson.JsonObject
+import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.park.attractions.rideop.RideOPButton
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.getTranslatedMessage
 import net.bandithemepark.bandicore.util.ItemFactory
@@ -27,4 +29,13 @@ abstract class NormalButton(slot: Int, val titleTranslationId: String, val descr
     }
 
     abstract fun isAvailable(): Boolean
+
+    override fun getJSON(): JsonObject {
+        val language = BandiCore.instance.server.getLanguage("english")!!
+        val json = JsonObject()
+        json.addProperty("type", "normal")
+        json.addProperty("title", language.translations[titleTranslationId])
+        json.addProperty("available", isAvailable())
+        return json
+    }
 }

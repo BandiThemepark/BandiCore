@@ -1,8 +1,11 @@
 package net.bandithemepark.bandicore.park.attractions.rideop
 
+import com.google.gson.JsonArray
+import com.google.gson.JsonObject
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.park.attractions.Attraction
 import net.bandithemepark.bandicore.server.regions.BandiRegion
+import net.bandithemepark.bandicore.server.translations.LanguageUtil
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.getTranslatedMessage
 import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.Util
@@ -20,6 +23,7 @@ import org.bukkit.inventory.InventoryHolder
 abstract class RideOP(val id: String, val regionId: String, private val panelLocation: Location): InventoryHolder {
     var loadedPages = listOf<RideOPPage>()
     lateinit var region: BandiRegion
+    val vipsInRegion = mutableListOf<Player>()
 
     abstract fun getPages(): List<RideOPPage>
     abstract fun onTick()
@@ -99,6 +103,8 @@ abstract class RideOP(val id: String, val regionId: String, private val panelLoc
     }
 
     fun updateMenu() {
+        updateInfoForPlayers()
+
         for(player in Bukkit.getOnlinePlayers()) {
             if(player.openInventory.topInventory.holder == this) {
                 Bukkit.getScheduler().runTask(BandiCore.instance, Runnable { openMenu(player) })
@@ -124,6 +130,70 @@ abstract class RideOP(val id: String, val regionId: String, private val panelLoc
 
     override fun getInventory(): Inventory {
         return lastInventory
+    }
+
+    fun pressButton(player: Player, pageId: String, slot: Int) {
+        if(operator != player) return
+        val page = loadedPages.find { it.id == pageId } ?: return
+        val button = page.loadedButtons.find { it.slot == slot } ?: return
+
+        button.onClick(player)
+    }
+
+    fun getStateJSON(): JsonObject {
+        val language = BandiCore.instance.server.getLanguage("english")!!
+
+        val json = JsonObject()
+
+        json.addProperty("id", id)
+        if(operator != null) json.addProperty("operator", operator!!.uniqueId.toString())
+
+        val parentAttraction = getParentAttraction()!!
+        json.addProperty("name", parentAttraction.appearance.displayName)
+
+        val pageArray = JsonArray()
+        for(page in loadedPages) {
+            val pageJson = JsonObject()
+
+            pageJson.addProperty("id", page.id)
+            pageJson.addProperty("name", language.translations[page.titleTranslationId])
+
+            val buttonArray = JsonArray()
+            for(button in page.loadedButtons) {
+                val buttonJson = JsonObject()
+
+                buttonJson.addProperty("slot", button.slot)
+                buttonJson.add("data", button.getJSON())
+
+                buttonArray.add(buttonJson)
+            }
+            pageJson.add("buttons", buttonArray)
+
+            pageArray.add(pageJson)
+        }
+        json.add("pages", pageArray)
+
+        return json
+    }
+
+    fun sendInfoToNewPlayer(player: Player) {
+        val json = getStateJSON()
+        BandiCore.instance.mqttConnector.sendMessage("/audioclient/rideop/${player.uniqueId}/enter", json.toString())
+    }
+
+    fun updateInfoForPlayers() {
+        if(vipsInRegion.isEmpty()) return
+
+        val json = getStateJSON()
+        for(player in vipsInRegion) {
+            BandiCore.instance.mqttConnector.sendMessage("/audioclient/rideop/${player.uniqueId}/update", json.toString())
+        }
+    }
+
+    fun sendRemove(player: Player) {
+        val json = JsonObject()
+        json.addProperty("id", id)
+        BandiCore.instance.mqttConnector.sendMessage("/audioclient/rideop/${player.uniqueId}/exit", json.toString())
     }
 
     companion object {
