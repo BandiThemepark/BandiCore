@@ -145,12 +145,14 @@ class TrackVehicleUpdater {
             }
 
             // Updating triggers
-            if (vehicle.ridingOn.triggers.isNotEmpty()) {
+            if (!vehicle.isCollidingThisTick && vehicle.ridingOn.triggers.isNotEmpty()) {
                 val travelledCurve = TrackUtil.getCurveBetweenPositions(oldPosition, vehicle.position)
 
                 for(trigger in vehicle.ridingOn.triggers.filter { it.type != null }) {
                     val curvePoint = trigger.position.getPathPoint()
-                    if(travelledCurve.contains(curvePoint)) trigger.type!!.onActivation(vehicle)
+                    if(travelledCurve.contains(curvePoint)) {
+                        trigger.type!!.onActivation(vehicle)
+                    }
                 }
             }
 

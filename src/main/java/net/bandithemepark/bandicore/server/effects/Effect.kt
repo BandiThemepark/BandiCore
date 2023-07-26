@@ -10,7 +10,7 @@ import java.io.File
  * Represents an effect, created using our own effect scripting system
  * @param fileName The name of the file, without the extension. For example, if the file is named "effect.json", the fileName would be "effect". The default directory (plugins/BandiCore/effects/) is automatically included
  */
-class Effect(fileName: String) {
+class Effect(val fileName: String) {
     var duration = 0
     var loop = false
     val keyframes = mutableListOf<EffectKeyframe>()

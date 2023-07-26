@@ -252,6 +252,16 @@ object TrackUtil {
     }
 
     /**
+     * Similar to getCurveBetweenPositions, but goes backwards. Use this when speed of vehicle is negative or when position1 comes after position2.
+     * @param position1 The first position
+     * @param position2 The second position
+     * @return List of path points between the two positions
+     */
+    fun getCurveBetweenPositionsBackwards(position1: TrackPosition, position2: TrackPosition): List<TrackNode> {
+        return listOf()
+    }
+
+    /**
      * Finds the track a segment separator is part of
      * @param segmentSeparator To find the track of
      * @return The track the segment separator is part of, null if not found

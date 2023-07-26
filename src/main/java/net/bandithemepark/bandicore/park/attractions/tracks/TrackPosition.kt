@@ -92,4 +92,8 @@ class TrackPosition(var nodePosition: TrackNode, position: Int): Cloneable {
     public override fun clone(): TrackPosition {
         return TrackPosition(nodePosition, position.toInt())
     }
+
+    override fun toString(): String {
+        return "TrackPosition(nodeId=${nodePosition.id}, position=$position)"
+    }
 }
