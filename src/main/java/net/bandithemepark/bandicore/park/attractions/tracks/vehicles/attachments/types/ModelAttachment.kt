@@ -82,7 +82,6 @@ class ModelAttachment: AttachmentType("model", "MATERIAL, CUSTOM_MODEL_DATA") {
         lastRotation = mainRotation
 
         // Attach the display entity to the ArmorStand
-        parentArmorStand!!.addPassenger(displayEntity!!.handle.id)
         parentArmorStand!!.updatePassengers()
     }
 
