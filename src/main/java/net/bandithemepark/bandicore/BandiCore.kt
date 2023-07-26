@@ -130,7 +130,7 @@ class BandiCore: JavaPlugin() {
             val totalMemory = Runtime.getRuntime().totalMemory()
             val freeMemory = Runtime.getRuntime().freeMemory()
             val usedMemory = (totalMemory - freeMemory) / 1048576
-            Bukkit.getConsoleSender().sendMessage("Used memory: $usedMemory MB")
+            //Bukkit.getConsoleSender().sendMessage("Used memory: $usedMemory MB")
 
             if (!sentOnce && usedMemory > 2000) {
                 sentOnce = true
@@ -186,7 +186,7 @@ class BandiCore: JavaPlugin() {
         server.achievementManager.setup()
 
         // Starting the necessary timers
-        NPC.startTimer()
+        //NPC.startTimer()
         PlayerNameTag.Timer().runTaskTimerAsynchronously(this, 0, 1)
         Playtime.startTimer()
         KalibaEffects()
