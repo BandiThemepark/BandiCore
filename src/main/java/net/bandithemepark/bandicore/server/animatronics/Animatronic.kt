@@ -195,8 +195,10 @@ class Animatronic(fileName: String) {
 
         displayEntities.clear()
         spawned = false
-        BandiCore.instance.animatronicManager.spawnedAnimatronics.remove(this)
+        queuedForDeSpawn = true
     }
+
+    var queuedForDeSpawn = false
 
     /**
      * Applies the current animation frame to the animatronic

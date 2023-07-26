@@ -128,7 +128,7 @@ class TrackVehicleUpdater {
                         if(lastSegment == segmentSeparator) {
                             if(lastSegment.type != null) lastSegment.type!!.onVehicleUpdate(vehicle)
                         } else {
-                            lastSegment.vehicles.remove(vehicle)
+                            if(lastSegment.vehicles.contains(vehicle)) lastSegment.vehicles.removeAt(lastSegment.vehicles.indexOf(vehicle))
                             segmentSeparator.vehicles.add(vehicle)
 
                             if(lastSegment.type != null) lastSegment.type!!.onVehicleLeave(vehicle)

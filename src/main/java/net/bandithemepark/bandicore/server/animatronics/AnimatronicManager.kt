@@ -12,7 +12,10 @@ class AnimatronicManager {
 
     private fun startTimer() {
         Bukkit.getScheduler().runTaskTimerAsynchronously(BandiCore.instance, Runnable {
-            spawnedAnimatronics.toList().forEach { it.tick() }
+            if(spawnedAnimatronics.isNotEmpty()) {
+                spawnedAnimatronics.forEach { it.tick() }
+                spawnedAnimatronics.removeIf { it.queuedForDeSpawn }
+            }
         }, 0, 1)
     }
 }

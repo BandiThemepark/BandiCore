@@ -12,21 +12,15 @@ import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.util.entity.event.PacketEntityDismountEvent
 import net.bandithemepark.bandicore.util.entity.event.PacketEntityInteractEvent
 import net.bandithemepark.bandicore.util.entity.event.PacketEntityInputEvent
-import net.kyori.adventure.text.Component
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket
 import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket
 import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket
 import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket
 import net.minecraft.network.protocol.game.ServerboundPlayerInputPacket
-import net.minecraft.network.syncher.EntityDataAccessor
-import net.minecraft.network.syncher.EntityDataSerializer
-import net.minecraft.network.syncher.SynchedEntityData
-import net.minecraft.network.syncher.SynchedEntityData.DataValue
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EquipmentSlot
-import net.minecraft.world.entity.LivingEntity
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.craftbukkit.v1_20_R1.CraftWorld
@@ -39,7 +33,7 @@ import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.inventory.ItemStack
 
 abstract class PacketEntity {
-    var handle: Entity? = null
+    lateinit var handle: Entity
     var spawned = false
 
     var visibilityType = VisibilityType.BLACKLIST
@@ -58,7 +52,7 @@ abstract class PacketEntity {
     open fun spawn(spawnLocation: Location) {
         handle = getInstance((spawnLocation.world as CraftWorld).handle, spawnLocation.x, spawnLocation.y, spawnLocation.z)
 
-        val packet = ClientboundAddEntityPacket(handle!!)
+        val packet = ClientboundAddEntityPacket(handle)
         sendPacket(packet)
 
         this.location = spawnLocation
@@ -73,7 +67,7 @@ abstract class PacketEntity {
      * @param player The player to spawn the entity for
      */
     fun spawnFor(player: Player) {
-        val packet = ClientboundAddEntityPacket(handle!!)
+        val packet = ClientboundAddEntityPacket(handle)
         (player as CraftPlayer).handle.connection.send(packet)
     }
 
@@ -81,7 +75,7 @@ abstract class PacketEntity {
      * Despawns the entity
      */
     open fun deSpawn() {
-        val packet = ClientboundRemoveEntitiesPacket(handle!!.id)
+        val packet = ClientboundRemoveEntitiesPacket(handle.id)
         sendPacket(packet)
 
         spawned = false
@@ -93,7 +87,7 @@ abstract class PacketEntity {
      * @param player The player to despawn the entity for
      */
     fun deSpawnFor(player: Player) {
-        val packet = ClientboundRemoveEntitiesPacket(handle!!.id)
+        val packet = ClientboundRemoveEntitiesPacket(handle.id)
         (player as CraftPlayer).handle.connection.send(packet)
     }
 
@@ -103,7 +97,7 @@ abstract class PacketEntity {
 
     private fun updateLocation() {
         val packet = WrapperPlayServerEntityTeleport()
-        packet.entityID = handle!!.id
+        packet.entityID = handle.id
         packet.x = location.x
         packet.y = location.y
         packet.z = location.z
@@ -151,37 +145,37 @@ abstract class PacketEntity {
     var helmet: ItemStack? = null
         set(value) {
             field = value
-            if(handle != null) sendPacket(ClientboundSetEquipmentPacket(handle!!.id, listOf(Pair(EquipmentSlot.HEAD, CraftItemStack.asNMSCopy(helmet)))))
+            if(spawned) sendPacket(ClientboundSetEquipmentPacket(handle.id, listOf(Pair(EquipmentSlot.HEAD, CraftItemStack.asNMSCopy(helmet)))))
         }
 
     var chestPlate: ItemStack? = null
         set(value) {
             field = value
-            sendPacket(ClientboundSetEquipmentPacket(handle!!.id, listOf(Pair(EquipmentSlot.CHEST, CraftItemStack.asNMSCopy(chestPlate)))))
+            sendPacket(ClientboundSetEquipmentPacket(handle.id, listOf(Pair(EquipmentSlot.CHEST, CraftItemStack.asNMSCopy(chestPlate)))))
         }
 
     var leggings: ItemStack? = null
         set(value) {
             field = value
-            sendPacket(ClientboundSetEquipmentPacket(handle!!.id, listOf(Pair(EquipmentSlot.LEGS, CraftItemStack.asNMSCopy(leggings)))))
+            sendPacket(ClientboundSetEquipmentPacket(handle.id, listOf(Pair(EquipmentSlot.LEGS, CraftItemStack.asNMSCopy(leggings)))))
         }
 
     var boots: ItemStack? = null
         set(value) {
             field = value
-            sendPacket(ClientboundSetEquipmentPacket(handle!!.id, listOf(Pair(EquipmentSlot.FEET, CraftItemStack.asNMSCopy(boots)))))
+            sendPacket(ClientboundSetEquipmentPacket(handle.id, listOf(Pair(EquipmentSlot.FEET, CraftItemStack.asNMSCopy(boots)))))
         }
 
     var itemInMainHand: ItemStack? = null
         set(value) {
             field = value
-            sendPacket(ClientboundSetEquipmentPacket(handle!!.id, listOf(Pair(EquipmentSlot.MAINHAND, CraftItemStack.asNMSCopy(itemInMainHand)))))
+            sendPacket(ClientboundSetEquipmentPacket(handle.id, listOf(Pair(EquipmentSlot.MAINHAND, CraftItemStack.asNMSCopy(itemInMainHand)))))
         }
 
     var itemInOffHand: ItemStack? = null
         set(value) {
             field = value
-            sendPacket(ClientboundSetEquipmentPacket(handle!!.id, listOf(Pair(EquipmentSlot.OFFHAND, CraftItemStack.asNMSCopy(itemInOffHand)))))
+            sendPacket(ClientboundSetEquipmentPacket(handle.id, listOf(Pair(EquipmentSlot.OFFHAND, CraftItemStack.asNMSCopy(itemInOffHand)))))
         }
 
     /**
@@ -189,7 +183,7 @@ abstract class PacketEntity {
      * @param player The player to send the packets to
      */
     fun updateEquipmentFor(player: Player) {
-        (player as CraftPlayer).handle.connection.send(ClientboundSetEquipmentPacket(handle!!.id, listOf(
+        (player as CraftPlayer).handle.connection.send(ClientboundSetEquipmentPacket(handle.id, listOf(
             Pair(EquipmentSlot.MAINHAND, CraftItemStack.asNMSCopy(itemInMainHand)),
             Pair(EquipmentSlot.OFFHAND, CraftItemStack.asNMSCopy(itemInOffHand)),
             Pair(EquipmentSlot.HEAD, CraftItemStack.asNMSCopy(helmet)),
@@ -204,8 +198,7 @@ abstract class PacketEntity {
      * Updates entity metadata for all players that can see the armor stand
      */
     open fun updateMetadata() {
-        //val packet = ClientboundSetEntityDataPacket(handle!!.id, handle!!.entityData, true)
-        val packet = ClientboundSetEntityDataPacket(handle!!.id, handle!!.entityData.nonDefaultValues!!)
+        val packet = ClientboundSetEntityDataPacket(handle.id, handle.entityData.nonDefaultValues!!)
         sendPacket(packet)
     }
 
@@ -214,14 +207,14 @@ abstract class PacketEntity {
      * @param player The player to update the metadata for
      */
     open fun updateMetadataFor(player: Player) {
-        if(handle!!.entityData.nonDefaultValues == null) {
-            Bukkit.getScheduler().scheduleSyncDelayedTask(BandiCore.instance, Runnable {
+        if(handle.entityData.nonDefaultValues == null) {
+            Bukkit.getScheduler().scheduleSyncDelayedTask(BandiCore.instance, {
                 updateMetadataFor(player)
             }, 1)
             return
         }
 
-        val packet = ClientboundSetEntityDataPacket(handle!!.id, handle!!.entityData.nonDefaultValues!!)
+        val packet = ClientboundSetEntityDataPacket(handle.id, handle.entityData.nonDefaultValues!!)
         (player as CraftPlayer).handle.connection.send(packet)
     }
 
@@ -281,7 +274,7 @@ abstract class PacketEntity {
             val pm = ProtocolLibrary.getProtocolManager()
             val packet = pm.createPacket(PacketType.Play.Server.MOUNT)
             packet.modifier.writeDefaults()
-            packet.integers.write(0, handle!!.id)
+            packet.integers.write(0, handle.id)
             packet.integerArrays.write(0, ids.toIntArray())
 
             sendPacket(packet)
@@ -303,7 +296,7 @@ abstract class PacketEntity {
         val pm = ProtocolLibrary.getProtocolManager()
         val packet = pm.createPacket(PacketType.Play.Server.MOUNT)
         packet.modifier.writeDefaults()
-        packet.integers.write(0, handle!!.id)
+        packet.integers.write(0, handle.id)
         packet.integerArrays.write(0, ids.toIntArray())
 
         pm.sendServerPacket(player, packet)
@@ -490,7 +483,7 @@ abstract class PacketEntity {
                     val entityId = packet.integers.read(0)
 
                     for(entity in active) {
-                        if(entity.handle!!.id == entityId) {
+                        if(entity.handle.id == entityId) {
                             Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
                                 val interactEvent = PacketEntityInteractEvent(entity, event.player)
                                 Bukkit.getPluginManager().callEvent(interactEvent)

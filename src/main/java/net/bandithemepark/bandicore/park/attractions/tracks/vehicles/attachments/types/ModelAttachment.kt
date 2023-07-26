@@ -1,23 +1,21 @@
 package net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types
 
-import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.Attachment
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.AttachmentType
 import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.entity.armorstand.PacketEntityArmorStand
 import net.bandithemepark.bandicore.util.entity.itemdisplay.PacketItemDisplay
 import net.bandithemepark.bandicore.util.math.Quaternion
-import net.kyori.adventure.text.Component
 import net.minecraft.world.entity.decoration.ArmorStand
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
-import org.bukkit.entity.EntityType
 import org.bukkit.entity.ItemDisplay
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
 import org.joml.Matrix4f
+import java.lang.Exception
 
 class ModelAttachment: AttachmentType("model", "MATERIAL, CUSTOM_MODEL_DATA") {
 
@@ -34,10 +32,15 @@ class ModelAttachment: AttachmentType("model", "MATERIAL, CUSTOM_MODEL_DATA") {
         // Spawn an ArmorStand to hold the item display (used for smoothness)
         parentArmorStand = PacketEntityArmorStand()
         parentArmorStand!!.spawn(armorStandSpawnLocation)
-        parentArmorStand!!.handle!!.isInvisible = true
-        parentArmorStand!!.handle!!.isNoGravity = true
-        (parentArmorStand!!.handle!! as ArmorStand).isMarker = true
-        parentArmorStand!!.updateMetadata()
+        try {
+            parentArmorStand!!.handle.isInvisible = true
+            parentArmorStand!!.handle.isNoGravity = true
+            (parentArmorStand!!.handle as ArmorStand).isMarker = true
+            parentArmorStand!!.updateMetadata()
+        } catch (e: Exception) {
+            Bukkit.getConsoleSender().sendMessage("PacketArmorStand handle is null? Spawn state: ${parentArmorStand!!.spawned}")
+            e.printStackTrace()
+        }
 
         // Spawn the display entity
         displayEntity = PacketItemDisplay()
@@ -50,7 +53,7 @@ class ModelAttachment: AttachmentType("model", "MATERIAL, CUSTOM_MODEL_DATA") {
         displayEntity!!.updateMetadata()
 
         // Attach the display entity to the ArmorStand
-        parentArmorStand!!.addPassenger(displayEntity!!.handle!!.id)
+        parentArmorStand!!.addPassenger(displayEntity!!.handle.id)
         parentArmorStand!!.updatePassengers()
 
         spawnLocation = location
@@ -79,7 +82,7 @@ class ModelAttachment: AttachmentType("model", "MATERIAL, CUSTOM_MODEL_DATA") {
         lastRotation = mainRotation
 
         // Attach the display entity to the ArmorStand
-        parentArmorStand!!.addPassenger(displayEntity!!.handle!!.id)
+        parentArmorStand!!.addPassenger(displayEntity!!.handle.id)
         parentArmorStand!!.updatePassengers()
     }
 
