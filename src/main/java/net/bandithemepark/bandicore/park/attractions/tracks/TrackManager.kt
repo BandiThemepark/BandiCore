@@ -28,6 +28,7 @@ import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.TrackVehicl
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.ModelAttachment
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.SeatAttachment
 import net.bandithemepark.bandicore.util.FileManager
+import net.bandithemepark.bandicore.util.entity.PacketEntitySeat
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.util.Vector
@@ -44,6 +45,7 @@ class TrackManager(val splineType: SplineType, val pointsPerMeter: Int, val fric
         registerCommands()
         registerEditors()
         registerAttachments()
+        PacketEntitySeat.startPositionTimer()
     }
 
     private fun registerSegments() {
