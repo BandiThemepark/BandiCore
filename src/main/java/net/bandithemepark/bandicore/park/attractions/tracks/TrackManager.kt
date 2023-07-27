@@ -45,7 +45,7 @@ class TrackManager(val splineType: SplineType, val pointsPerMeter: Int, val fric
         registerCommands()
         registerEditors()
         registerAttachments()
-        PacketEntitySeat.startPositionTimer()
+        //PacketEntitySeat.startPositionTimer()
     }
 
     private fun registerSegments() {
