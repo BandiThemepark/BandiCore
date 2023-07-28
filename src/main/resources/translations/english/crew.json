@@ -180,5 +180,12 @@
   "delete-warp-command-warp-deleted": "The selected warp was successfully deleted",
   "set-warp-command-incorrect-usage": "Incorrect usage! Usage: /setwarp <warp name> [<permission>]",
   "set-warp-command-warp-created": "A new warp was successfully created",
-  "set-warp-command-warp-updated": "The selected warp was successfully updated"
+  "set-warp-command-warp-updated": "The selected warp was successfully updated",
+  "effect-command-list": "The following effects are currently playing: %effects%",
+  "effect-command-reload-start": "Started reloading all effects...",
+  "effect-command-reload-finished": "Successfully reloaded all effects",
+  "effect-command-play": "Effect %id% is now playing",
+  "effect-command-play-error": "An error occurred playing effect %id%. Please check the console for the full error",
+  "effect-command-stop-not-found": "No effect with ID %id% was found to be currently playing",
+  "effect-command-stop": "Stopped playing effect %id%"
 }

@@ -72,12 +72,16 @@ class Effect(val fileName: String) {
         for(keyframe in keyframes.filter { it.time == currentTick }) {
             keyframe.type.onPlay()
         }
+
+        for(keyframe in keyframes.filter { it.time <= currentTick }) {
+            keyframe.type.onTick()
+        }
     }
 
     /**
      * Stops the effect
      */
-    private fun stop() {
+    fun stop() {
         for(keyframe in keyframes) keyframe.type.onEffectEnd()
         BandiCore.instance.effectManager.playingEffects.remove(this)
     }

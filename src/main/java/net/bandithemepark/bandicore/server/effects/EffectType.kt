@@ -14,6 +14,7 @@ abstract class EffectType(val id: String): Cloneable {
 
     abstract fun loadSettings(json: JsonObject)
     abstract fun onPlay()
+    abstract fun onTick()
     abstract fun onEffectEnd()
 
     companion object {

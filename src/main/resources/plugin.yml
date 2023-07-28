@@ -134,3 +134,10 @@ commands:
       - ach
       - achs
       - achievement
+  effect:
+    description: Manage BandiThemepark effects
+    aliases:
+      - eff
+      - effects
+      - bandieffect
+      - bandieffects
