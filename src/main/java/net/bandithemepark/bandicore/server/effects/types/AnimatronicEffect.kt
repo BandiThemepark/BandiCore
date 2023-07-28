@@ -50,6 +50,8 @@ class AnimatronicEffect: EffectType("animatronic") {
     }
 
     override fun onEffectEnd() {
+        if(!animatronic.spawned) return
+
         animatronic.stopAnimation()
         animatronic.deSpawn()
     }
