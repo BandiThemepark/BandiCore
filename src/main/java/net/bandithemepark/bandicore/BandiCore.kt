@@ -77,6 +77,7 @@ import net.bandithemepark.bandicore.server.custom.blocks.CustomBlock
 import net.bandithemepark.bandicore.server.custom.blocks.CustomBlockMenu
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin
 import net.bandithemepark.bandicore.server.custom.player.editor.CustomPlayerEditor
+import net.bandithemepark.bandicore.server.effects.EffectCommand
 import net.bandithemepark.bandicore.server.effects.EffectManager
 import net.bandithemepark.bandicore.server.effects.types.AnimatronicEffect
 import net.bandithemepark.bandicore.server.effects.types.SpatialAudioEffect
@@ -198,6 +199,7 @@ class BandiCore: JavaPlugin() {
         animatronicManager = AnimatronicManager()
         registerEffectTypes()
         effectManager = EffectManager()
+        effectManager.playServerStartEffects()
 
         SpatialAudioSource(
             UUID.randomUUID(),
@@ -274,6 +276,7 @@ class BandiCore: JavaPlugin() {
         getCommand("getskin")!!.setExecutor(CustomPlayerSkin.Command())
         getCommand("audio")!!.setExecutor(AudioCommand())
         getCommand("achievements")!!.setExecutor(AchievementMenuCommand())
+        getCommand("effect")!!.setExecutor(EffectCommand())
     }
 
     private fun registerEvents() {
