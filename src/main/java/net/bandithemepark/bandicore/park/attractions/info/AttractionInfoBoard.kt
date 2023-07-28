@@ -29,10 +29,25 @@ class AttractionInfoBoard(val attraction: Attraction): InventoryHolder {
         val inv = Bukkit.createInventory(this, 18, Util.color("<#FFFFFF>\uE002\uE013"))
         lastInventory = inv
 
-        inv.setItem(10, ItemFactory(Material.PAPER).setDisplayName(Util.color("<!i><${BandiColors.YELLOW}>AudioServer")).setCustomModelData(1020).build())
-        inv.setItem(12, ItemFactory(Material.PAPER).setDisplayName(Util.color("<!i><${BandiColors.YELLOW}>Teleport party")).setCustomModelData(1020).build())
-        inv.setItem(14, ItemFactory(Material.PAPER).setDisplayName(Util.color("<!i><${BandiColors.YELLOW}>View ridecounters")).setCustomModelData(1020).build())
-        inv.setItem(16, ItemFactory(Material.PAPER).setDisplayName(Util.color("<!i><${BandiColors.YELLOW}>SmoothCoasters")).setCustomModelData(1020).build())
+        val audioServerItem = ItemFactory(Material.PAPER).setDisplayName(Util.color("<!i><${BandiColors.YELLOW}>AudioClient")).setCustomModelData(1020).build()
+        inv.setItem(1, audioServerItem)
+        inv.setItem(2, audioServerItem)
+        inv.setItem(10, audioServerItem)
+        inv.setItem(11, audioServerItem)
+
+        val ridecounterItem = ItemFactory(Material.PAPER).setDisplayName(Util.color("<!i><${BandiColors.YELLOW}>View Ridecounters")).setCustomModelData(1020).build()
+        inv.setItem(3, ridecounterItem)
+        inv.setItem(4, ridecounterItem)
+        inv.setItem(5, ridecounterItem)
+        inv.setItem(12, ridecounterItem)
+        inv.setItem(13, ridecounterItem)
+        inv.setItem(14, ridecounterItem)
+
+        val smoothCoastersItem = ItemFactory(Material.PAPER).setDisplayName(Util.color("<!i><${BandiColors.YELLOW}>SmoothCoasters Mod")).setCustomModelData(1020).build()
+        inv.setItem(6, smoothCoastersItem)
+        inv.setItem(7, smoothCoastersItem)
+        inv.setItem(15, smoothCoastersItem)
+        inv.setItem(16, smoothCoastersItem)
 
         player.openInventory(inv)
     }
@@ -54,29 +69,25 @@ class AttractionInfoBoard(val attraction: Attraction): InventoryHolder {
             val attraction = event.clickedInventory!!.holder as AttractionInfoBoard
             event.isCancelled = true
 
-            when(event.slot) {
-                10 -> {
-                    Bukkit.getScheduler().runTask(BandiCore.instance, Runnable { event.whoClicked.closeInventory() })
-                    AudioCommand.sendMessage(event.whoClicked as Player)
-                }
-                12 -> {
-                    Bukkit.getScheduler().runTask(BandiCore.instance, Runnable { event.whoClicked.closeInventory() })
-                    // TODO Warp all friends when party system is added
-                }
-                14 -> {
-                    val rideCounterMenu = RideCounterMenu(attraction.attraction)
-                    Bukkit.getScheduler().runTask(BandiCore.instance, Runnable { rideCounterMenu.open(event.whoClicked as Player) })
-                }
-                16 -> {
-                    Bukkit.getScheduler().runTask(BandiCore.instance, Runnable { event.whoClicked.closeInventory() })
-                    if((event.whoClicked as Player).usingSmoothCoasters()) {
-                        (event.whoClicked as Player).sendTranslatedMessage("smoothcoasters-using", BandiColors.YELLOW.toString())
-                    } else {
-                        (event.whoClicked as Player).sendTranslatedMessage("smoothcoasters-not-using", BandiColors.YELLOW.toString(),
-                            MessageReplacement("linkstart", "<u><click:open_url:'https://www.bandithemepark.net/smoothcoasters/'>"),
-                            MessageReplacement("linkend", "</click></u>")
-                        )
-                    }
+            if(event.slot == 1 || event.slot == 2 || event.slot == 10 || event.slot == 11) {
+                Bukkit.getScheduler().runTask(BandiCore.instance, Runnable { event.whoClicked.closeInventory() })
+                AudioCommand.sendMessage(event.whoClicked as Player)
+            }
+
+            if(event.slot == 3 || event.slot == 4 || event.slot == 5 || event.slot == 12 || event.slot == 13 || event.slot == 14) {
+                val rideCounterMenu = RideCounterMenu(attraction.attraction)
+                Bukkit.getScheduler().runTask(BandiCore.instance, Runnable { rideCounterMenu.open(event.whoClicked as Player) })
+            }
+
+            if(event.slot == 6 || event.slot == 7 || event.slot == 15 || event.slot == 16) {
+                Bukkit.getScheduler().runTask(BandiCore.instance, Runnable { event.whoClicked.closeInventory() })
+                if((event.whoClicked as Player).usingSmoothCoasters()) {
+                    (event.whoClicked as Player).sendTranslatedMessage("smoothcoasters-using", BandiColors.YELLOW.toString())
+                } else {
+                    (event.whoClicked as Player).sendTranslatedMessage("smoothcoasters-not-using", BandiColors.YELLOW.toString(),
+                        MessageReplacement("linkstart", "<u><click:open_url:'https://www.bandithemepark.net/smoothcoasters/'>"),
+                        MessageReplacement("linkend", "</click></u>")
+                    )
                 }
             }
         }
