@@ -38,6 +38,10 @@ class SpatialAudioEffect: EffectType("spatial_audio") {
         )
     }
 
+    override fun onTick() {
+
+    }
+
     override fun onEffectEnd() {
         spatialAudio?.remove()
     }

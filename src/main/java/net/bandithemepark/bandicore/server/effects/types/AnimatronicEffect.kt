@@ -45,10 +45,12 @@ class AnimatronicEffect: EffectType("animatronic") {
         }
     }
 
+    override fun onTick() {
+
+    }
+
     override fun onEffectEnd() {
-        if(loop) {
-            animatronic.stopAnimation()
-            animatronic.deSpawn()
-        }
+        animatronic.stopAnimation()
+        animatronic.deSpawn()
     }
 }
