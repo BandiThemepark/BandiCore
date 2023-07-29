@@ -20,7 +20,7 @@ import org.bukkit.util.Vector
 class LogFlumeRideOP: RideOP(
     "logflume",
     "logflumestation",
-    Location(Bukkit.getWorld("world"), 63.0, -0.4, -164.5, -90.0F, -90.0F)
+    Location(Bukkit.getWorld("world"), 63.0, -0.2, -164.5, -90.0F, -90.0F)
 ) {
     val layout = BandiCore.instance.trackManager.loadedTracks.find { it.id == "logflume" }!!
     val transferSegment = layout.segmentSeparators.find { it.type is LogFlumeTransferSegment }!!
