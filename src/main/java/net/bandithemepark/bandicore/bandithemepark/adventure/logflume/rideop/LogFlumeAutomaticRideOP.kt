@@ -1,6 +1,9 @@
 package net.bandithemepark.bandicore.bandithemepark.adventure.logflume.rideop
 
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedActionBar
+import net.bandithemepark.bandicore.server.translations.MessageReplacement
+import net.bandithemepark.bandicore.util.chat.BandiColors
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -44,12 +47,10 @@ class LogFlumeAutomaticRideOP(val rideOP: LogFlumeRideOP) {
                                     rideOP.dispatch()
                                     rideOP.updateMenu()
                                 } else {
-                                    // TODO Actionbar starting soon
-                                    getPlayersInStation()?.forEach { it.sendActionBar(Component.text("Log flume is expected to dispatch soon")) }
+                                    getPlayersInStation()?.forEach { it.sendTranslatedActionBar("automatic-rideop-dispatch-soon", BandiColors.YELLOW.toString(), MessageReplacement("ride", rideOP.getParentAttraction()!!.appearance.displayName)) }
                                 }
                             } else {
-                                // TODO Actionbar dispatch in
-                                getPlayersInStation()?.forEach { it.sendActionBar(Component.text("Log flume will dispatch in $countdownLeft seconds")) }
+                                getPlayersInStation()?.forEach { it.sendTranslatedActionBar("automatic-rideop-dispatch-in", BandiColors.YELLOW.toString(), MessageReplacement("ride", rideOP.getParentAttraction()!!.appearance.displayName), MessageReplacement("seconds", countdownLeft.toString())) }
                             }
                         } else {
                             startCountdown()
@@ -80,12 +81,10 @@ class LogFlumeAutomaticRideOP(val rideOP: LogFlumeRideOP) {
                                         rideOP.dispatch()
                                         rideOP.updateMenu()
                                     } else {
-                                        // TODO Actionbar dispatch soon
-                                        getPlayersInStation()?.forEach { it.sendActionBar(Component.text("Log flume is expected to dispatch soon")) }
+                                        getPlayersInStation()?.forEach { it.sendTranslatedActionBar("automatic-rideop-dispatch-soon", BandiColors.YELLOW.toString(), MessageReplacement("ride", rideOP.getParentAttraction()!!.appearance.displayName)) }
                                     }
                                 } else {
-                                    // TODO Actionbar dispatch in
-                                    getPlayersInStation()?.forEach { it.sendActionBar(Component.text("Log flume will dispatch in $countdownLeft seconds")) }
+                                    getPlayersInStation()?.forEach { it.sendTranslatedActionBar("automatic-rideop-dispatch-in", BandiColors.YELLOW.toString(), MessageReplacement("ride", rideOP.getParentAttraction()!!.appearance.displayName), MessageReplacement("seconds", countdownLeft.toString())) }
                                 }
                             } else {
                                 countdown = false
@@ -109,8 +108,7 @@ class LogFlumeAutomaticRideOP(val rideOP: LogFlumeRideOP) {
             }
         } else {
             if(rideOP.station.currentStopped != null) {
-                // TODO Actionbar with waiting to dispatch
-                getPlayersInStation()?.forEach { it.sendActionBar(Component.text("Waiting for operator ${rideOP.operator!!.name} to dispatch")) }
+                getPlayersInStation()?.forEach { it.sendTranslatedActionBar("rideop-waiting-for-operator", BandiColors.YELLOW.toString(), MessageReplacement("ride", rideOP.getParentAttraction()!!.appearance.displayName), MessageReplacement("operator", rideOP.operator!!.name)) }
             }
         }
     }

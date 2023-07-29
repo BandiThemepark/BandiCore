@@ -70,5 +70,6 @@
   "achievement-type-unlocked-amount-event": "event achievements unlocked",
   "achievement-type-unlocked-amount-historical": "historical achievements unlocked",
   "rideop-rupsbaan-supermode-title": "Turbo mode",
-  "rideop-rupsbaan-supermode-description": "Activate turbo mode (Crew-only)"
+  "rideop-rupsbaan-supermode-description": "Activate turbo mode (Crew-only)",
+  "rideop-waiting-for-operator": "Waiting for operator %operator% to dispatch %ride%"
 }
