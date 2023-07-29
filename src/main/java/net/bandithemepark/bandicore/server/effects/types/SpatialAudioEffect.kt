@@ -28,11 +28,13 @@ class SpatialAudioEffect: EffectType("spatial_audio") {
 
     var spatialAudio: SpatialAudioSource? = null
     override fun onPlay() {
+        if(spatialAudio != null) return
+
         spatialAudio = SpatialAudioSource(
             UUID.randomUUID(),
             location,
             source,
-            false,
+            true,
             innerRange,
             outerRange
         )
@@ -44,5 +46,6 @@ class SpatialAudioEffect: EffectType("spatial_audio") {
 
     override fun onEffectEnd() {
         spatialAudio?.remove()
+        spatialAudio = null
     }
 }
