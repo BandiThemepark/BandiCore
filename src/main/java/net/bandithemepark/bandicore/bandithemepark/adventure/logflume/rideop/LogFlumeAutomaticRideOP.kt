@@ -9,6 +9,7 @@ class LogFlumeAutomaticRideOP(val rideOP: LogFlumeRideOP) {
     var dispatchesLeft = 0
     var countdown = false
     var countdownLeft = 0
+    var automaticDispatchTimeSeconds = 90
 
     fun second() {
         if(rideOP.operator == null) {
@@ -92,6 +93,15 @@ class LogFlumeAutomaticRideOP(val rideOP: LogFlumeRideOP) {
                         } else {
                             if(arePlayersInStation()) {
                                 startCountdown()
+                            } else {
+                                if(rideOP.lastDispatch + 1000L * automaticDispatchTimeSeconds < System.currentTimeMillis()) {
+                                    rideOP.gatesButton.open = false
+                                    Bukkit.getScheduler().runTask(BandiCore.instance, Runnable { rideOP.gatesButton.updateGates() })
+                                    rideOP.harnessButton.setClosed()
+                                    rideOP.harnessButton.open = false
+                                    rideOP.dispatch()
+                                    rideOP.updateMenu()
+                                }
                             }
                         }
                     }

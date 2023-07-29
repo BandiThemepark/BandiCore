@@ -55,6 +55,7 @@ class LogFlumeRideOP: RideOP(
     val station = stationSegment.type as LogflumeStationSegment
     var dispatchDelay = 0
     val automaticRideOP = LogFlumeAutomaticRideOP(this)
+    var lastDispatch = System.currentTimeMillis()
 
     val gatesButton = LogFlumeGatesButton()
     val harnessButton = LogFlumeHarnessButton()
@@ -191,5 +192,6 @@ class LogFlumeRideOP: RideOP(
 
         station.dispatch()
         dispatchDelay = 20
+        lastDispatch = System.currentTimeMillis()
     }
 }
