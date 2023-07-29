@@ -23,7 +23,7 @@ class AfkManager {
 
     init {
         BandiCore.instance.getServer().pluginManager.registerEvents(Events(this), BandiCore.instance)
-        Timer(this).runTaskTimerAsynchronously(BandiCore.instance, 0, 20)
+        Timer(this).runTaskTimer(BandiCore.instance, 0, 20)
         AfkTitle.load()
     }
 
@@ -36,6 +36,10 @@ class AfkManager {
     }
 
     fun startAfk(player: Player) {
+        val event = PlayerStartAfkEvent(player)
+        Bukkit.getServer().pluginManager.callEvent(event)
+        if(event.isCancelled) return
+
         val session = AfkSession(player)
         session.sendFadeInTitle()
         sessions.add(session)
@@ -44,6 +48,10 @@ class AfkManager {
 
     fun resetAfkTime(player: Player) {
         if(isAfk(player)) {
+            val event = PlayerStopAfkEvent(player)
+            Bukkit.getServer().pluginManager.callEvent(event)
+            if(event.isCancelled) return
+
             val session = getSession(player)!!
             session.sendFadeOutTitle()
             sessions.remove(session)
