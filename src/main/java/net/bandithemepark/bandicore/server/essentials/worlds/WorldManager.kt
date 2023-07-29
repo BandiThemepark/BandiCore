@@ -25,6 +25,8 @@ class WorldManager {
                 Bukkit.getServer().createWorld(worldCreator)
             }
         }
+
+        Bukkit.getLogger().info("Loaded ${loadedWorldNames.size} worlds")
     }
 
     fun loadNewWorld(id: String): Boolean {

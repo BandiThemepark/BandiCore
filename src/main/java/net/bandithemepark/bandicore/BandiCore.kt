@@ -95,7 +95,9 @@ import net.bandithemepark.bandicore.server.essentials.warps.DeleteWarpCommand
 import net.bandithemepark.bandicore.server.essentials.warps.NearestWarpCommand
 import net.bandithemepark.bandicore.server.essentials.warps.SetWarpCommand
 import net.bandithemepark.bandicore.server.essentials.warps.WarpCommand
+import net.bandithemepark.bandicore.server.placeables.PlaceableEvents
 import net.bandithemepark.bandicore.server.placeables.PlaceableManager
+import net.bandithemepark.bandicore.server.placeables.PlaceableRemoveCommand
 import net.bandithemepark.bandicore.server.regions.BandiRegionCommand
 import net.bandithemepark.bandicore.server.regions.BandiRegionManager
 import net.bandithemepark.bandicore.server.regions.events.BandiRegionEvents
@@ -130,6 +132,7 @@ class BandiCore: JavaPlugin() {
     override fun onEnable() {
         instance = this
         startTime = System.currentTimeMillis()
+        Bukkit.getLogger().info("Server start time set to $startTime")
         smoothCoastersAPI = SmoothCoastersAPI(this)
 
         // Saving the default settings
@@ -203,7 +206,8 @@ class BandiCore: JavaPlugin() {
         effectManager = EffectManager()
         effectManager.playServerStartEffects()
 
-        //placeableManager = PlaceableManager()
+        placeableManager = PlaceableManager()
+        placeableManager.loadPlaced()
 
         SpatialAudioSource(
             UUID.randomUUID(),
@@ -281,6 +285,7 @@ class BandiCore: JavaPlugin() {
         getCommand("audio")!!.setExecutor(AudioCommand())
         getCommand("achievements")!!.setExecutor(AchievementMenuCommand())
         getCommand("effect")!!.setExecutor(EffectCommand())
+        getCommand("removenearplaceables")!!.setExecutor(PlaceableRemoveCommand())
     }
 
     private fun registerEvents() {
@@ -325,6 +330,7 @@ class BandiCore: JavaPlugin() {
         getServer().pluginManager.registerEvents(AchievementCategoriesMenu.Events(), this)
         getServer().pluginManager.registerEvents(AchievementMenu.Events(), this)
         getServer().pluginManager.registerEvents(SpecialAudioManagement(), this)
+        getServer().pluginManager.registerEvents(PlaceableEvents(), this)
     }
 
     private fun prepareSettings() {

@@ -26,6 +26,8 @@ class EffectManager {
                 Bukkit.getLogger().warning("Could not load effect $effectName on server start. Please remove it from the config.yml if it has been deleted")
             }
         }
+
+        Bukkit.getLogger().info("Loaded ${playingEffects.size} server start effects")
     }
 
     /**

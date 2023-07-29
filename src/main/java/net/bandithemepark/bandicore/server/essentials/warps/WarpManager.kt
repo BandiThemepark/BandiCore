@@ -33,6 +33,8 @@ class WarpManager {
                 )
                 warps.add(warp)
             }
+
+            Bukkit.getLogger().info("Loaded ${warps.size} warps")
         }
     }
 

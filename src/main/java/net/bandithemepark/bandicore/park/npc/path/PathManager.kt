@@ -92,6 +92,7 @@ class PathManager {
 
         // Add all points to the list
         pathPoints.addAll(newPathPoints.keys)
+        Bukkit.getLogger().info("Loaded ${pathPoints.size} path points")
 
         // Precalculating the paths where needed
         Bukkit.getScheduler().scheduleSyncDelayedTask(BandiCore.instance, { preCalculatePaths() }, 20)

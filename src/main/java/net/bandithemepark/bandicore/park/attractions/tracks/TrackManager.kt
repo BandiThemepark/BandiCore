@@ -46,6 +46,7 @@ class TrackManager(val splineType: SplineType, val pointsPerMeter: Int, val fric
         registerEditors()
         registerAttachments()
         //PacketEntitySeat.startPositionTimer()
+        Bukkit.getLogger().info("Loaded ${loadedTracks.size} tracks")
     }
 
     private fun registerSegments() {

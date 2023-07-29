@@ -122,6 +122,9 @@ class AchievementManager {
 
                 categories.add(category)
             }
+
+            val totalAchievements = categories.sumOf { it.achievements.size }
+            Bukkit.getLogger().info("Loaded $totalAchievements achievements")
         }
     }
 
