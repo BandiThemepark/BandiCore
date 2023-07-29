@@ -2,6 +2,7 @@ package net.bandithemepark.bandicore.park.attractions.rideop.camera
 
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.park.attractions.rideop.RideOP
+import net.bandithemepark.bandicore.server.essentials.afk.AfkManager
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedActionBar
 import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.chat.BandiColors
@@ -133,6 +134,7 @@ class RideOPCamera(val location: Location, val rideOP: RideOP) {
 
             if(event.jumping) {
                 camera.rideOP.openMenu(event.player, camera.rideOP.lastPage[event.player])
+                BandiCore.instance.afkManager.resetAfkTime(event.player)
             }
         }
 
