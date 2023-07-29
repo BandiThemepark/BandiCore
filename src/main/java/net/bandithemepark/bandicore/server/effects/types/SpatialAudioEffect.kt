@@ -11,12 +11,14 @@ class SpatialAudioEffect: EffectType("spatial_audio") {
     lateinit var source: String
     var innerRange: Double = 0.0
     var outerRange: Double = 0.0
+    var looping = false
     lateinit var location: Location
 
     override fun loadSettings(json: JsonObject) {
         source = json.get("source").asString
         innerRange = json.get("innerRange").asDouble
         outerRange = json.get("outerRange").asDouble
+        looping = json.get("looping").asBoolean
 
         val locationJson = json.getAsJsonObject("location")
         val world = locationJson.get("world").asString
@@ -34,7 +36,7 @@ class SpatialAudioEffect: EffectType("spatial_audio") {
             UUID.randomUUID(),
             location,
             source,
-            true,
+            looping,
             innerRange,
             outerRange
         )
