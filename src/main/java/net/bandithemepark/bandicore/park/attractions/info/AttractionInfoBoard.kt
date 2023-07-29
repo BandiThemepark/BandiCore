@@ -55,12 +55,14 @@ class AttractionInfoBoard(val attraction: Attraction): InventoryHolder {
     class Events: Listener {
         @EventHandler (priority = EventPriority.LOW)
         fun onArmorStandInteract(event: PlayerInteractAtEntityEvent) {
-            if(event.rightClicked is ArmorStand && event.rightClicked.customName()?.getText()!!.startsWith("attraction_info_")) {
-                val attractionId = event.rightClicked.customName()?.getText()!!.replace("attraction_info_", "")
-                val attraction = Attraction.get(attractionId) ?: return
+            if(event.rightClicked !is ArmorStand) return
+            if(event.rightClicked.customName() == null) return
+            if(event.rightClicked.customName()?.getText() == null) return
+            if(!event.rightClicked.customName()?.getText()!!.startsWith("attraction_info_")) return
 
-                AttractionInfoBoard(attraction).open(event.player)
-            }
+            val attractionId = event.rightClicked.customName()?.getText()!!.replace("attraction_info_", "")
+            val attraction = Attraction.get(attractionId) ?: return
+            AttractionInfoBoard(attraction).open(event.player)
         }
 
         @EventHandler
