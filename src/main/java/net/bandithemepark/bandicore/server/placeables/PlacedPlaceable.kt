@@ -9,6 +9,7 @@ import org.bukkit.Color
 import org.bukkit.Location
 import org.bukkit.Material
 import org.joml.Matrix4f
+import kotlin.math.floor
 
 class PlacedPlaceable(val location: Location, val type: PlaceableType, val rotation: Double, val color: Color?) {
 
@@ -31,9 +32,15 @@ class PlacedPlaceable(val location: Location, val type: PlaceableType, val rotat
     }
 
     lateinit var displayEntity: PacketItemDisplay
+    private val HEIGHT_OFFSET = 0.5
     fun spawn() {
+        val spawnLocation = Location(location.world, location.x, location.y, location.z)
+        spawnLocation.x = floor(location.x) + 0.5
+        spawnLocation.y = floor(location.y) + HEIGHT_OFFSET
+        spawnLocation.z = floor(location.z) + 0.5
+
         displayEntity = PacketItemDisplay()
-        displayEntity.spawn(location)
+        displayEntity.spawn(spawnLocation)
 
         if(color != null) {
             displayEntity.setItemStack(type.getColoredItemStack(color))

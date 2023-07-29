@@ -141,3 +141,5 @@ commands:
       - effects
       - bandieffect
       - bandieffects
+  removenearplaceables:
+    description: Removes all placeables in a 2 block radius around you

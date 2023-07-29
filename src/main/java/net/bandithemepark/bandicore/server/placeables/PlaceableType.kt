@@ -10,8 +10,8 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
 
 class PlaceableType(
-    val id: String,
-    val name: String,
+    id: String,
+    name: String,
     val material: Material,
     val customModelData: Int,
     val colorable: Boolean,
@@ -20,7 +20,7 @@ class PlaceableType(
     val positionOffset: Vector,
     val rotationOffset: Vector,
     val renderSlot: ItemDisplay.ItemDisplayTransform
-) {
+): BandikeaEntry(id, name) {
 
     fun toJson(): JsonObject {
         val json = JsonObject()
@@ -87,6 +87,10 @@ class PlaceableType(
                 ItemDisplay.ItemDisplayTransform.valueOf(json.get("renderSlot").asString)
             )
         }
+    }
+
+    override fun getBandikeaItemStack(): ItemStack {
+        return getItemStack()
     }
 
 }

@@ -3,16 +3,19 @@ package net.bandithemepark.bandicore.server.placeables
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import org.bukkit.Bukkit
+import org.bukkit.Color
+import org.bukkit.Location
+import org.bukkit.entity.Player
 import java.io.File
 
 class PlaceableManager {
     val types = mutableListOf<PlaceableType>()
     private val placed = mutableListOf<PlacedPlaceable>()
+    val selectedColors = hashMapOf<Player, Color>()
 
     init {
         loadTypes()
-        loadPlaced()
-        spawnPlaced()
     }
 
     private fun loadTypes() {
@@ -22,15 +25,21 @@ class PlaceableManager {
         json.getAsJsonArray("types").forEach {
             types.add(PlaceableType.fromJson(it.asJsonObject))
         }
+
+        Bukkit.getLogger().info("Loaded ${types.size} placeable types")
     }
 
-    private fun loadPlaced() {
+    fun loadPlaced() {
         val file = File("plugins/BandiCore/placeables/placed.json")
         val json = JsonParser().parse(file.readText()).asJsonObject
 
         json.getAsJsonArray("placed").forEach {
             placed.add(PlacedPlaceable.fromJson(it.asJsonObject))
         }
+
+        Bukkit.getLogger().info("Loaded ${placed.size} placed placeables")
+
+        spawnPlaced()
     }
 
     private fun spawnPlaced() {
@@ -59,5 +68,17 @@ class PlaceableManager {
     fun removePlaced(placed: PlacedPlaceable) {
         this.placed.remove(placed)
         savePlaced()
+    }
+
+    fun getPlacedAt(location: Location): PlacedPlaceable? {
+        return placed.firstOrNull { it.location == location }
+    }
+
+    fun getPlacedNear(location: Location, radius: Double, filterNoBarrier: Boolean): List<PlacedPlaceable> {
+        var placedNear = placed.toList()
+        if(filterNoBarrier) placedNear = placedNear.filter { !it.type.barrierBlock }
+        placedNear = placedNear.filter { it.location.distance(location) <= radius }
+
+        return placedNear
     }
 }

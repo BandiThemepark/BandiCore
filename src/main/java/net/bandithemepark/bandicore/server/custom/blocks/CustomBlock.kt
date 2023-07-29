@@ -1,6 +1,7 @@
 package net.bandithemepark.bandicore.server.custom.blocks
 
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.server.placeables.BandikeaEntry
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedMessage
 import net.bandithemepark.bandicore.server.translations.MessageReplacement
 import net.bandithemepark.bandicore.util.FileManager
@@ -26,7 +27,7 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
 
-class CustomBlock(val id: String, val name: String, val customModelData: Int, val instrument: String, val note: Int, val powered: Boolean) {
+class CustomBlock(id: String, name: String, val customModelData: Int, val instrument: String, val note: Int, val powered: Boolean): BandikeaEntry(id, name) {
     /**
      * Places the block at the given location
      * @param location The location to place the block
@@ -184,6 +185,8 @@ class CustomBlock(val id: String, val name: String, val customModelData: Int, va
                 val powered = fm.getConfig("blocks.yml").get().getBoolean("$id.powered")
                 types.add(CustomBlock(id, name, customModelData, instrument, note, powered))
             }
+
+            Bukkit.getLogger().info("Loaded ${types.size} custom block types")
         }
 
         fun loadPlaced() {
@@ -222,5 +225,9 @@ class CustomBlock(val id: String, val name: String, val customModelData: Int, va
 
     class Placed(val location: Location, val type: CustomBlock) {
 
+    }
+
+    override fun getBandikeaItemStack(): ItemStack {
+        return getItemStack()
     }
 }

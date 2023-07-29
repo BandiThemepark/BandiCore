@@ -187,5 +187,7 @@
   "effect-command-play": "Effect %id% is now playing",
   "effect-command-play-error": "An error occurred playing effect %id%. Please check the console for the full error",
   "effect-command-stop-not-found": "No effect with ID %id% was found to be currently playing",
-  "effect-command-stop": "Stopped playing effect %id%"
+  "effect-command-stop": "Stopped playing effect %id%",
+  "placeable-remove-no-nearby": "No nearby placeables were found in a radius of 2 blocks",
+  "placeable-remove-success": "Successfully removed %amount% placeables"
 }

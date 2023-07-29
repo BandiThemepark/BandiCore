@@ -1,14 +1,17 @@
 package net.bandithemepark.bandicore.server.custom.blocks
 
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.server.placeables.BandikeaEntry
 import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.ItemFactory.Companion.getPersistentData
 import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.chat.BandiColors
+import net.bandithemepark.bandicore.util.chat.prompt.ChatPrompt
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.sound.Sound
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
+import org.bukkit.Color
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -30,8 +33,12 @@ class CustomBlockMenu(val player: Player) {
         currentPage = page
         val inv = Bukkit.createInventory(null, 54, Util.color("<#FFFFFF>\uE002\uE010"))
 
+        val allTypes = mutableListOf<BandikeaEntry>()
+        allTypes.addAll(BandiCore.instance.customBlockManager.types)
+        allTypes.addAll(BandiCore.instance.placeableManager.types)
+
         val sortType = sortTypes[player]!!
-        val types = sortType.sort(BandiCore.instance.customBlockManager.types.toList())
+        val types = sortType.sort(allTypes)
 
         val toGetStart = page * 20
         var toGetEnd = toGetStart + 20
@@ -43,7 +50,7 @@ class CustomBlockMenu(val player: Player) {
         for((i2, i) in (toGetStart until toGetEnd).withIndex()) {
             val type = types[i]
             val slot = availableSlots[i2]
-            val item = type.getItemStack()
+            val item = type.getBandikeaItemStack()
             inv.setItem(slot, item)
         }
 
@@ -76,22 +83,22 @@ class CustomBlockMenu(val player: Player) {
         val text: String
     ) {
         DEFAULT("Default") {
-            override fun sort(types: List<CustomBlock>): List<CustomBlock> {
+            override fun sort(types: List<BandikeaEntry>): List<BandikeaEntry> {
                 return types
             }
         },
         ALPHABETICALLY("A-Z") {
-            override fun sort(types: List<CustomBlock>): List<CustomBlock> {
+            override fun sort(types: List<BandikeaEntry>): List<BandikeaEntry> {
                 return types.sortedBy { it.name }
             }
         },
         ALPHABETICALLY_REVERSE("Z-A") {
-            override fun sort(types: List<CustomBlock>): List<CustomBlock> {
+            override fun sort(types: List<BandikeaEntry>): List<BandikeaEntry> {
                 return types.sortedByDescending { it.name }
             }
         };
 
-        abstract fun sort(types: List<CustomBlock>): List<CustomBlock>
+        abstract fun sort(types: List<BandikeaEntry>): List<BandikeaEntry>
     }
 
     class Events: Listener {
@@ -138,10 +145,35 @@ class CustomBlockMenu(val player: Player) {
                 else -> {
                     if(event.clickedInventory!!.getItem(event.slot) == null) return
 
-                    val blockType = event.clickedInventory!!.getItem(event.slot)!!.getPersistentData("customblock") ?: return
-                    event.whoClicked.inventory.addItem(CustomBlock.getType(blockType)!!.getItemStack())
+                    val blockType = event.clickedInventory!!.getItem(event.slot)!!.getPersistentData("customblock")
+                    if(blockType != null) event.whoClicked.inventory.addItem(CustomBlock.getType(blockType)!!.getItemStack())
+
+                    val placeableType = event.clickedInventory!!.getItem(event.slot)!!.getPersistentData("placeable")
+                    if(placeableType != null) {
+                        val type = BandiCore.instance.placeableManager.getType(placeableType)!!
+
+                        if(type.colorable) {
+                            Bukkit.getScheduler().runTask(BandiCore.instance, Runnable { event.whoClicked.closeInventory() })
+
+                            ChatPrompt(event.whoClicked as Player, "Enter a hex color code (#FFFFFF)", BandiColors.YELLOW.toString(), "Cancelled color selection. No item has been given") { player: Player, message: String ->
+                                val color = hexTextToColor(message)
+                                event.whoClicked.inventory.addItem(type.getColoredItemStack(color))
+                                BandiCore.instance.placeableManager.selectedColors[player] = color
+                            }
+                        } else {
+                            event.whoClicked.inventory.addItem(type.getItemStack())
+                        }
+                    }
                 }
             }
+        }
+
+        private fun hexTextToColor(text: String): Color {
+            val hex = text.replace("&", "").replace("#", "")
+            val r = Integer.valueOf(hex.substring(0, 2), 16)
+            val g = Integer.valueOf(hex.substring(2, 4), 16)
+            val b = Integer.valueOf(hex.substring(4, 6), 16)
+            return Color.fromRGB(r, g, b)
         }
     }
 }
