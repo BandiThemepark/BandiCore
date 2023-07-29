@@ -123,6 +123,8 @@ class RideOPEvents: Listener {
 
         for(rideOP in RideOP.rideOPs) {
             if(rideOP.region != event.fromRegion) continue
+            if(rideOP.cameraProtection) return
+
             rideOP.vipsInRegion.remove(event.player)
             rideOP.sendRemove(event.player)
 

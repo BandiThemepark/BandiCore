@@ -57,6 +57,7 @@ import net.bandithemepark.bandicore.park.attractions.ridecounter.RideCounterMenu
 import net.bandithemepark.bandicore.park.attractions.rideop.RideOP
 import net.bandithemepark.bandicore.park.attractions.rideop.RideOPCommand
 import net.bandithemepark.bandicore.park.attractions.rideop.RideOPEvents
+import net.bandithemepark.bandicore.park.attractions.rideop.camera.RideOPCamera
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.SeatAttachment
 import net.bandithemepark.bandicore.park.modsupport.SmoothCoastersChecker
 import net.bandithemepark.bandicore.park.npc.ThemeParkNPCSkin
@@ -104,7 +105,6 @@ import net.bandithemepark.bandicore.server.regions.events.BandiRegionEvents
 import net.bandithemepark.bandicore.util.entity.HoverableEntity
 import net.bandithemepark.bandicore.util.entity.PacketEntitySeat
 import org.bukkit.Location
-import java.lang.Exception
 import java.util.*
 
 class BandiCore: JavaPlugin() {
@@ -331,6 +331,7 @@ class BandiCore: JavaPlugin() {
         getServer().pluginManager.registerEvents(AchievementMenu.Events(), this)
         getServer().pluginManager.registerEvents(SpecialAudioManagement(), this)
         getServer().pluginManager.registerEvents(PlaceableEvents(), this)
+        getServer().pluginManager.registerEvents(RideOPCamera.Events(), this)
     }
 
     private fun prepareSettings() {

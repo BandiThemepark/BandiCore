@@ -71,5 +71,7 @@
   "achievement-type-unlocked-amount-historical": "historical achievements unlocked",
   "rideop-rupsbaan-supermode-title": "Turbo mode",
   "rideop-rupsbaan-supermode-description": "Activate turbo mode (Crew-only)",
-  "rideop-waiting-for-operator": "Waiting for operator %operator% to dispatch %ride%"
+  "rideop-waiting-for-operator": "Waiting for operator %operator% to dispatch %ride%",
+  "rideop-camera-actionbar": "Press JUMP to open RideOP | Press CROUCH to exit camera",
+  "rideop-camera-description": "Click to open"
 }

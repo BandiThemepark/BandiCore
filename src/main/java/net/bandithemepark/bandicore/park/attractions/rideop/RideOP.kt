@@ -4,6 +4,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.park.attractions.Attraction
+import net.bandithemepark.bandicore.park.attractions.rideop.camera.RideOPCamera
 import net.bandithemepark.bandicore.server.regions.BandiRegion
 import net.bandithemepark.bandicore.server.translations.LanguageUtil
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.getTranslatedMessage
@@ -24,6 +25,7 @@ abstract class RideOP(val id: String, val regionId: String, private val panelLoc
     var loadedPages = listOf<RideOPPage>()
     lateinit var region: BandiRegion
     val vipsInRegion = mutableListOf<Player>()
+    var cameraProtection = false
 
     abstract fun getPages(): List<RideOPPage>
     abstract fun onTick()
@@ -40,8 +42,8 @@ abstract class RideOP(val id: String, val regionId: String, private val panelLoc
             }
         }
         entity.spawn(panelLocation)
-        entity.handle!!.isInvisible = true
-        (entity.handle!! as ArmorStand).isMarker = true
+        entity.handle.isInvisible = true
+        (entity.handle as ArmorStand).isMarker = true
         entity.helmet = ItemFactory(Material.DIAMOND_SHOVEL).setCustomModelData(8).build()
         entity.updateMetadata()
     }
@@ -214,9 +216,11 @@ abstract class RideOP(val id: String, val regionId: String, private val panelLoc
 
     class Timer {
         var i = 0
+        private val cameraTimer = RideOPCamera.Timer()
 
         fun onTick() {
             rideOPs.forEach { it.onTick() }
+            cameraTimer.tick()
 
             i++
             if (i == 20) {
