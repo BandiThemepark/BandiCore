@@ -1,8 +1,10 @@
 package net.bandithemepark.bandicore.park.attractions.rideop
 
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.park.attractions.rideop.camera.RideOPCamera
 import net.bandithemepark.bandicore.park.attractions.rideop.events.RideOperateEvent
 import net.bandithemepark.bandicore.park.attractions.rideop.events.RideStopOperatingEvent
+import net.bandithemepark.bandicore.server.essentials.afk.PlayerStartAfkEvent
 import net.bandithemepark.bandicore.server.regions.events.PlayerPriorityRegionEnterEvent
 import net.bandithemepark.bandicore.server.regions.events.PlayerPriorityRegionLeaveEvent
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedMessage
@@ -134,5 +136,18 @@ class RideOPEvents: Listener {
                 event.player.sendTranslatedMessage("rideop-area-left", BandiColors.RED.toString(), MessageReplacement("ride", rideOP.getParentAttraction()!!.appearance.displayName))
             }
         }
+    }
+
+    @EventHandler
+    fun onAFK(event: PlayerStartAfkEvent) {
+        if (!event.player.hasPermission("bandithemepark.vip")) return
+
+        val rideOP = RideOP.rideOPs.find { it.operator == event.player } ?: return
+        RideOPCamera.activeCameras.find { it.currentPlayer == event.player }?.stopView(event.player)
+
+        rideOP.operator = null
+        rideOP.updateMenu()
+        event.player.sendTranslatedMessage("rideop-area-left", BandiColors.RED.toString(), MessageReplacement("ride", rideOP.getParentAttraction()!!.appearance.displayName)
+        )
     }
 }
