@@ -1,0 +1,94 @@
+package net.bandithemepark.bandicore.server.placeables
+
+import com.google.gson.JsonObject
+import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.util.entity.itemdisplay.PacketItemDisplay
+import net.bandithemepark.bandicore.util.math.Quaternion
+import org.bukkit.Bukkit
+import org.bukkit.Color
+import org.bukkit.Location
+import org.bukkit.Material
+import org.joml.Matrix4f
+
+class PlacedPlaceable(val location: Location, val type: PlaceableType, val rotation: Double, val color: Color?) {
+
+    fun toJson(): JsonObject {
+        val json = JsonObject()
+        json.addProperty("type", type.id)
+        json.addProperty("world", location.world.name)
+        json.addProperty("x", location.x)
+        json.addProperty("y", location.y)
+        json.addProperty("z", location.z)
+        json.addProperty("rotation", rotation)
+
+        if(color != null) {
+            json.addProperty("colorRed", color.red)
+            json.addProperty("colorGreen", color.green)
+            json.addProperty("colorBlue", color.blue)
+        }
+
+        return json
+    }
+
+    lateinit var displayEntity: PacketItemDisplay
+    fun spawn() {
+        displayEntity = PacketItemDisplay()
+        displayEntity.spawn(location)
+
+        if(color != null) {
+            displayEntity.setItemStack(type.getColoredItemStack(color))
+        } else {
+            displayEntity.setItemStack(type.getItemStack())
+        }
+
+        displayEntity.setItemDisplayTransform(type.renderSlot)
+
+        displayEntity.setTransformationMatrix(Matrix4f()
+            .translate(type.positionOffset.x.toFloat(), type.positionOffset.y.toFloat(), type.positionOffset.z.toFloat())
+            .rotate(Quaternion.fromYawPitchRoll(type.rotationOffset.x, type.rotationOffset.y + rotation, type.rotationOffset.z).toBukkitQuaternion()))
+
+        displayEntity.updateMetadata()
+
+        if(type.barrierBlock) {
+            location.block.type = Material.BARRIER
+        }
+    }
+
+    fun remove() {
+        displayEntity.deSpawn()
+
+        if(type.barrierBlock) {
+            location.block.type = Material.AIR
+        }
+    }
+
+    companion object {
+        fun fromJson(json: JsonObject): PlacedPlaceable {
+            val location = Location(
+                Bukkit.getWorld(json.get("world").asString)!!,
+                json.get("x").asDouble,
+                json.get("y").asDouble,
+                json.get("z").asDouble,
+            )
+            val type = BandiCore.instance.placeableManager.getType(json.get("type").asString)!!
+            val rotation = json.get("rotation").asDouble
+
+            var color: Color? = null
+            if(json.has("colorRed")) {
+                color = Color.fromRGB(
+                    json.get("colorRed").asInt,
+                    json.get("colorGreen").asInt,
+                    json.get("colorBlue").asInt
+                )
+            }
+
+            return PlacedPlaceable(
+                location,
+                type,
+                rotation,
+                color
+            )
+        }
+    }
+
+}

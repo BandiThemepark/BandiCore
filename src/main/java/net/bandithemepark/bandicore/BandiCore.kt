@@ -95,6 +95,7 @@ import net.bandithemepark.bandicore.server.essentials.warps.DeleteWarpCommand
 import net.bandithemepark.bandicore.server.essentials.warps.NearestWarpCommand
 import net.bandithemepark.bandicore.server.essentials.warps.SetWarpCommand
 import net.bandithemepark.bandicore.server.essentials.warps.WarpCommand
+import net.bandithemepark.bandicore.server.placeables.PlaceableManager
 import net.bandithemepark.bandicore.server.regions.BandiRegionCommand
 import net.bandithemepark.bandicore.server.regions.BandiRegionManager
 import net.bandithemepark.bandicore.server.regions.events.BandiRegionEvents
@@ -121,6 +122,7 @@ class BandiCore: JavaPlugin() {
     lateinit var regionManager: BandiRegionManager
     lateinit var animatronicManager: AnimatronicManager
     lateinit var effectManager: EffectManager
+    lateinit var placeableManager: PlaceableManager
 
     var okHttpClient = OkHttpClient()
     var restarter = Restart()
@@ -200,6 +202,8 @@ class BandiCore: JavaPlugin() {
         registerEffectTypes()
         effectManager = EffectManager()
         effectManager.playServerStartEffects()
+
+        //placeableManager = PlaceableManager()
 
         SpatialAudioSource(
             UUID.randomUUID(),
