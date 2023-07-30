@@ -104,7 +104,7 @@ class LogFlumeSwitch(val layout: TrackLayout, val segment: SegmentSeparator, val
         armorStand.teleport(position.toLocation(layout.world, (-firstNodeRotation + 0.0).toFloat(), 0.0F))
     }
 
-    fun updatePathAndSegment() {
+    private fun updatePathAndSegment() {
         TrackUtil.updateNodePath(layout, switchPart1)
         segment.curve = switchPart1.curve.toList()
     }

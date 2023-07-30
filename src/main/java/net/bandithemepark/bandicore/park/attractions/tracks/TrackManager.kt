@@ -3,6 +3,7 @@ package net.bandithemepark.bandicore.park.attractions.tracks
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.segments.*
 import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.switch.LogFlumePreSwitchSegment
+import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.switch.LogFlumeStorageSegment
 import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.switch.LogFlumeSwitchSegment
 import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.transferone.LogFlumePreTransferSegment
 import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.transferone.LogFlumeTransferSegment
@@ -63,6 +64,7 @@ class TrackManager(val splineType: SplineType, val pointsPerMeter: Int, val fric
         LogflumeBackwardsLiftSegment().register()
         LogFlumeSwitchSegment().register()
         LogFlumePreSwitchSegment().register()
+        LogFlumeStorageSegment().register()
     }
 
     private fun registerTriggers() {

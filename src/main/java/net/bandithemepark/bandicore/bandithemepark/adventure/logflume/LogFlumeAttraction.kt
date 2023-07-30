@@ -14,15 +14,7 @@ class LogFlumeAttraction: Attraction("logflume",
     Location(Bukkit.getWorld("world"), 63.5, 1.0, -171.5, -45.0F, 0.0F)
     ) {
     override fun getPlayerPassengers(): List<Player> {
-        val passengers = mutableListOf<Player>()
-
-        for(vehicle in (rideOP as LogFlumeRideOP).layout.getVehicles()) {
-            for(attachment in vehicle.getAllAttachments().filter { it.type is SeatAttachment }) {
-                passengers.addAll((attachment.type as SeatAttachment).seat!!.getPassengers().filterIsInstance<Player>())
-            }
-        }
-
-        return passengers
+        return (rideOP as LogFlumeRideOP).getPlayerPassengers()
     }
 
     override fun onAttractionStart() {

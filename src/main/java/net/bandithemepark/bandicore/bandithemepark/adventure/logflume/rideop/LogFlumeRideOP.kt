@@ -2,6 +2,7 @@ package net.bandithemepark.bandicore.bandithemepark.adventure.logflume.rideop
 
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.segments.LogflumeStationSegment
+import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.switch.LogFlumeStorageSegment
 import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.switch.LogFlumeSwitch
 import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.switch.LogFlumeSwitchSegment
 import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.transferone.LogFlumeTransfer
@@ -14,8 +15,10 @@ import net.bandithemepark.bandicore.park.attractions.rideop.util.pages.RideOPCam
 import net.bandithemepark.bandicore.park.attractions.rideop.util.pages.RideOPHomePage
 import net.bandithemepark.bandicore.park.attractions.rideop.util.pages.RideOPStoragePage
 import net.bandithemepark.bandicore.park.attractions.tracks.TrackPosition
+import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.SeatAttachment
 import org.bukkit.Bukkit
 import org.bukkit.Location
+import org.bukkit.entity.Player
 import org.bukkit.util.Vector
 
 class LogFlumeRideOP: RideOP(
@@ -61,6 +64,62 @@ class LogFlumeRideOP: RideOP(
     val gatesButton = LogFlumeGatesButton()
     val harnessButton = LogFlumeHarnessButton()
     val dispatchButton = LogFlumeDispatchButton()
+
+    var transferModeActive = false
+    var storageSegments = listOf<LogFlumeStorageSegment>()
+    var boatsInStorage = 0
+    var MAX_BOATS_IN_STORAGE = 3
+    var storageState = StorageState.NONE
+
+    enum class StorageState {
+        STORING, RETRIEVING, NONE
+    }
+
+    private fun loadStorageSegments() {
+        storageSegments = layout.segmentSeparators
+            .filter { it.type is LogFlumeStorageSegment }
+            .sortedBy { (it.type as LogFlumeStorageSegment).metadata[0].toInt() }
+            .map { it.type as LogFlumeStorageSegment }
+        MAX_BOATS_IN_STORAGE = storageSegments.size
+    }
+
+    fun canSendIntoStorage(): Boolean {
+        if(!transferModeActive) return false
+        if((switchSegment.type as LogFlumeSwitchSegment).state != LogFlumeSwitchSegment.SwitchState.WAITING_TO_START) return false
+        if(boatsInStorage >= MAX_BOATS_IN_STORAGE) return false
+        if(storageState != StorageState.NONE) return false
+        return true
+    }
+
+    fun sendIntoStorage() {
+        val targetSegment = MAX_BOATS_IN_STORAGE - boatsInStorage
+        storageSegments.forEach { it.mode = LogFlumeStorageSegment.Mode.PASSTHROUGH }
+        storageSegments[targetSegment-1].mode = LogFlumeStorageSegment.Mode.STORING
+        storageState = StorageState.STORING
+
+        (switchSegment.type as LogFlumeSwitchSegment).sendIntoStorage()
+        updateMenu()
+    }
+
+    fun canRetrieveFromStorage(): Boolean {
+        if(!transferModeActive) return false
+        if((switchSegment.type as LogFlumeSwitchSegment).state != LogFlumeSwitchSegment.SwitchState.RESETTING) return false
+        if(boatsInStorage <= 0) return false
+        if(storageState != StorageState.NONE) return false
+
+        return true
+    }
+
+    fun retrieveFromStorage() {
+        val targetSegment = MAX_BOATS_IN_STORAGE - boatsInStorage + 1
+        storageSegments.forEach { it.mode = LogFlumeStorageSegment.Mode.PASSTHROUGH }
+        storageState = StorageState.RETRIEVING
+
+        storageSegments[targetSegment-1].retrieve()
+        boatsInStorage--
+        updateMenu()
+    }
+
     override fun getPages(): List<RideOPPage> {
         return mutableListOf(
             RideOPHomePage(listOf(
@@ -87,7 +146,9 @@ class LogFlumeRideOP: RideOP(
                 RideOPCameraButton(13, "Station Boat Entrance", Location(Bukkit.getWorld("world"), 60.5, 2.0, -189.5, 60.0F, 10.0F), this),
             )),
             RideOPStoragePage(listOf(
-
+                LogFlumeTransferModeButton(),
+                LogFlumeTransferSendButton(),
+                LogFlumeTransferRetrieveButton(),
             ))
         )
     }
@@ -156,6 +217,7 @@ class LogFlumeRideOP: RideOP(
         transfer.setToStart()
         switch.spawnModel()
         switch.setToStart()
+        loadStorageSegments()
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(BandiCore.instance, {
             BandiCore.instance.trackManager.vehicleManager.loadTrain("logflume", layout, TrackPosition(layout.nodes.find { it.id == "117" }!!, 0), 0.0)
@@ -207,5 +269,17 @@ class LogFlumeRideOP: RideOP(
         station.dispatch()
         dispatchDelay = 20
         lastDispatch = System.currentTimeMillis()
+    }
+
+    fun getPlayerPassengers(): List<Player> {
+        val passengers = mutableListOf<Player>()
+
+        for(vehicle in layout.getVehicles()) {
+            for(attachment in vehicle.getAllAttachments().filter { it.type is SeatAttachment }) {
+                passengers.addAll((attachment.type as SeatAttachment).seat!!.getPassengers().filterIsInstance<Player>())
+            }
+        }
+
+        return passengers
     }
 }

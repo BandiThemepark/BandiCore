@@ -73,5 +73,11 @@
   "rideop-rupsbaan-supermode-description": "Activate turbo mode (Crew-only)",
   "rideop-waiting-for-operator": "Waiting for operator %operator% to dispatch %ride%",
   "rideop-camera-actionbar": "Press JUMP to open RideOP | Press CROUCH to exit camera",
-  "rideop-camera-description": "Click to open"
+  "rideop-camera-description": "Click to open",
+  "rideop-logflume-transfer-mode-title": "Transfer mode",
+  "rideop-logflume-transfer-mode-description": "No players can be on the ride",
+  "rideop-logflume-transfer-send-title": "Send into storage",
+  "rideop-logflume-transfer-send-description": "Send current boat on transfer into storage",
+  "rideop-logflume-transfer-retrieve-title": "Retrieve from storage",
+  "rideop-logflume-transfer-retrieve-description": "Retrieve a boat from storage"
 }

@@ -11,25 +11,34 @@ import org.bukkit.scheduler.BukkitRunnable
 class LogFlumeSwitchSegment: SegmentType("logflumeswitch", true, "speedKMH") {
     var state = SwitchState.WAITING_FOR_ARRIVAL
     var waitTime = 0
+    var currentVehicle: TrackVehicle? = null
     lateinit var rideOP: LogFlumeRideOP
 
     override fun onVehicleEnter(vehicle: TrackVehicle) {
         rideOP = RideOP.get("logflume")!! as LogFlumeRideOP
 
+        currentVehicle = vehicle
         vehicle.physicsType = TrackVehicle.PhysicsType.NONE
-        vehicle.speedKMH = -metadata[0].toDouble()
+
+        if(rideOP.storageState != LogFlumeRideOP.StorageState.RETRIEVING) vehicle.speedKMH = -metadata[0].toDouble()
 
         if(state == SwitchState.RESETTING) state = SwitchState.WAITING_FOR_ARRIVAL
     }
 
     override fun onVehicleUpdate(vehicle: TrackVehicle) {
-        state.tick(vehicle, this)
+        state.tick(vehicle, this, rideOP)
     }
 
     override fun onVehicleLeave(vehicle: TrackVehicle) {
-        if(state != SwitchState.WAITING_TO_EXIT) return
+        if(rideOP.storageState == LogFlumeRideOP.StorageState.STORING) {
+            state = SwitchState.RESETTING
+            currentVehicle = null
+            return
+        }
 
+        if(state != SwitchState.WAITING_TO_EXIT) return
         vehicle.physicsType = TrackVehicle.PhysicsType.ALL
+        currentVehicle = null
 
         object: BukkitRunnable() {
             override fun run() {
@@ -39,18 +48,35 @@ class LogFlumeSwitchSegment: SegmentType("logflumeswitch", true, "speedKMH") {
         }.runTaskLaterAsynchronously(BandiCore.instance, 60)
     }
 
+    fun sendIntoStorage() {
+        currentVehicle!!.speedKMH = -metadata[0].toDouble()
+    }
+
     enum class SwitchState {
         WAITING_FOR_ARRIVAL {
-            override fun tick(vehicle: TrackVehicle, segment: LogFlumeSwitchSegment) {
-                if(!TrackUtil.isPastMiddle(segment.parent, vehicle)) {
-                    vehicle.speed = 0.0
-                    segment.waitTime = 20
-                    segment.state = WAITING_TO_START
+            override fun tick(vehicle: TrackVehicle, segment: LogFlumeSwitchSegment, rideOP: LogFlumeRideOP) {
+                if(rideOP.storageState != LogFlumeRideOP.StorageState.RETRIEVING) {
+                    if(!TrackUtil.isPastMiddle(segment.parent, vehicle)) {
+                        vehicle.speed = 0.0
+                        segment.waitTime = 20
+                        segment.state = WAITING_TO_START
+                        rideOP.updateMenu()
+                    }
+                } else {
+                    if(TrackUtil.isPastMiddle(segment.parent, vehicle)) {
+                        vehicle.speed = 0.0
+                        segment.waitTime = 20
+                        segment.state = WAITING_TO_START
+                        rideOP.storageState = LogFlumeRideOP.StorageState.NONE
+                        rideOP.updateMenu()
+                    }
                 }
             }
         },
         WAITING_TO_START {
-            override fun tick(vehicle: TrackVehicle, segment: LogFlumeSwitchSegment) {
+            override fun tick(vehicle: TrackVehicle, segment: LogFlumeSwitchSegment, rideOP: LogFlumeRideOP) {
+                if(rideOP.transferModeActive) return
+
                 segment.waitTime--
                 if(segment.waitTime <= 0 && !(RideOP.get("logflume") as LogFlumeRideOP).layout.eStop) {
                     segment.rideOP.startSwitch()
@@ -59,7 +85,7 @@ class LogFlumeSwitchSegment: SegmentType("logflumeswitch", true, "speedKMH") {
             }
         },
         MOVING {
-            override fun tick(vehicle: TrackVehicle, segment: LogFlumeSwitchSegment) {
+            override fun tick(vehicle: TrackVehicle, segment: LogFlumeSwitchSegment, rideOP: LogFlumeRideOP) {
                 if(segment.rideOP.switchTimeLeft <= 0) {
                     segment.waitTime = 20
                     segment.state = WAITING_TO_RELEASE
@@ -67,7 +93,7 @@ class LogFlumeSwitchSegment: SegmentType("logflumeswitch", true, "speedKMH") {
             }
         },
         WAITING_TO_RELEASE {
-            override fun tick(vehicle: TrackVehicle, segment: LogFlumeSwitchSegment) {
+            override fun tick(vehicle: TrackVehicle, segment: LogFlumeSwitchSegment, rideOP: LogFlumeRideOP) {
                 segment.waitTime--
                 if(segment.waitTime <= 0) {
                     vehicle.speedKMH = segment.metadata[0].toDouble() * 2.0
@@ -76,16 +102,16 @@ class LogFlumeSwitchSegment: SegmentType("logflumeswitch", true, "speedKMH") {
             }
         },
         WAITING_TO_EXIT {
-            override fun tick(vehicle: TrackVehicle, segment: LogFlumeSwitchSegment) {
+            override fun tick(vehicle: TrackVehicle, segment: LogFlumeSwitchSegment, rideOP: LogFlumeRideOP) {
 
             }
         },
         RESETTING {
-            override fun tick(vehicle: TrackVehicle, segment: LogFlumeSwitchSegment) {
+            override fun tick(vehicle: TrackVehicle, segment: LogFlumeSwitchSegment, rideOP: LogFlumeRideOP) {
 
             }
         };
 
-        abstract fun tick(vehicle: TrackVehicle, segment: LogFlumeSwitchSegment)
+        abstract fun tick(vehicle: TrackVehicle, segment: LogFlumeSwitchSegment, rideOP: LogFlumeRideOP)
     }
 }
