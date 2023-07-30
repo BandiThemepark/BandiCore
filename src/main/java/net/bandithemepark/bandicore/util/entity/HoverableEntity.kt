@@ -1,7 +1,11 @@
 package net.bandithemepark.bandicore.util.entity
 
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.server.translations.LanguageUtil.getTranslatedMessage
+import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedActionBar
+import net.bandithemepark.bandicore.server.translations.MessageReplacement
 import net.bandithemepark.bandicore.util.Util
+import net.bandithemepark.bandicore.util.chat.BandiColors
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.entity.Player
@@ -103,8 +107,9 @@ interface HoverableEntity {
             }
 
             for(player in currentlyLookingAt.keys) {
-                player.sendActionBar(Util.color("Press <key:key.swapOffhand> to activate"))
-                // TODO Show text
+                val lookingAt = currentlyLookingAt[player] as HoverableEntity
+                val translatedMessage = player.getTranslatedMessage(lookingAt.translationId, MessageReplacement("key", "<key:key.swapOffhand>"))
+                player.sendActionBar(Util.color("<${BandiColors.YELLOW}>$translatedMessage"))
             }
 
             movements.clear()
