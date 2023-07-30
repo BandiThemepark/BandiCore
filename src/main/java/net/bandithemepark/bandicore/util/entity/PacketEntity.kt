@@ -457,7 +457,7 @@ abstract class PacketEntity {
                 override fun onPacketReceiving(event: PacketEvent) {
                     val packet = event.packet.handle as ServerboundPlayerInputPacket
 
-                    for(entity in active) {
+                    for(entity in active.toList()) {
                         if(entity.passengers.contains(event.player)) {
                             Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
                                 val inputEvent = PacketEntityInputEvent(entity, event.player, packet.xxa, packet.zza, packet.isShiftKeyDown, packet.isJumping)
