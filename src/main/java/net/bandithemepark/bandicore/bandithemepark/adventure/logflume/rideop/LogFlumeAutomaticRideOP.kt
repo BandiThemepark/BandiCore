@@ -16,9 +16,9 @@ class LogFlumeAutomaticRideOP(val rideOP: LogFlumeRideOP) {
 
     fun second() {
         if(rideOP.operator == null) {
-            if(false) { // TODO Transfer mode on?
-                if(!true) { // TODO Moving on transfer?
-                    // TODO Disable transfer mode
+            if(rideOP.transferModeActive) {
+                if(rideOP.storageState == LogFlumeRideOP.StorageState.NONE) {
+                    rideOP.transferModeActive = false
                 }
             } else {
                 if(rideOP.station.currentStopped != null) {
