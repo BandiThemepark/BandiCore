@@ -9,6 +9,8 @@ class LogFlumeTransferModeButton(): SwitchButton(0, "rideop-logflume-transfer-mo
     }
 
     override fun onClick(player: Player) {
+        if((rideOP as LogFlumeRideOP).storageState != LogFlumeRideOP.StorageState.NONE) return
+
         if((rideOP as LogFlumeRideOP).transferModeActive) {
             (rideOP as LogFlumeRideOP).transferModeActive = false
             rideOP.updateMenu()
