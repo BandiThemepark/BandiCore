@@ -36,7 +36,7 @@ abstract class RideOP(val id: String, val regionId: String, private val panelLoc
     var operator = null as Player?
 
     private fun placePanel() {
-        val entity = object: HoverableArmorStand("rideop", "bt.vip") {
+        val entity = object: HoverableArmorStand("rideop-panel-hover-text", "bt.vip") {
             override fun onInteract(player: Player) {
                 Bukkit.dispatchCommand(player, "rideop")
             }
