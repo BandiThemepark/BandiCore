@@ -6,6 +6,7 @@ import net.bandithemepark.bandicore.server.essentials.afk.AfkManager
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedActionBar
 import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.chat.BandiColors
+import net.bandithemepark.bandicore.util.entity.HoverableEntity
 import net.bandithemepark.bandicore.util.entity.armorstand.PacketEntityArmorStand
 import net.bandithemepark.bandicore.util.entity.event.PacketEntityDismountEvent
 import net.bandithemepark.bandicore.util.entity.event.PacketEntityInputEvent
@@ -95,6 +96,7 @@ class RideOPCamera(val location: Location, val rideOP: RideOP) {
         }
 
         player.teleport(location)
+        HoverableEntity.timer.movements[player] = player.location.clone()
 
         vehicleEntity.addPassenger(player)
         vehicleEntity.updatePassengers()
