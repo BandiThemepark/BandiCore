@@ -2,6 +2,7 @@ package net.bandithemepark.bandicore.bandithemepark.adventure.logflume.rideop
 
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.segments.LogflumeStationSegment
+import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.switch.LogFlumeStorageDoor
 import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.switch.LogFlumeStorageSegment
 import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.switch.LogFlumeSwitch
 import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.switch.LogFlumeSwitchSegment
@@ -65,11 +66,20 @@ class LogFlumeRideOP: RideOP(
     val harnessButton = LogFlumeHarnessButton()
     val dispatchButton = LogFlumeDispatchButton()
 
-    var transferModeActive = false
+    var transferModeActive = false; set(value) {
+        field = value
+        if(value) {
+            storageDoor.open()
+        } else {
+            storageDoor.close()
+        }
+    }
+
     var storageSegments = listOf<LogFlumeStorageSegment>()
     var boatsInStorage = 0
     var MAX_BOATS_IN_STORAGE = 3
     var storageState = StorageState.NONE
+    var storageDoor = LogFlumeStorageDoor(Location(Bukkit.getWorld("world")!!, 21.51, 10.5, -91.5, -90.0F, 0.0F))
 
     enum class StorageState {
         STORING, RETRIEVING, NONE
@@ -178,6 +188,8 @@ class LogFlumeRideOP: RideOP(
     var switchTimeLeft = 0
 
     override fun onTick() {
+        storageDoor.onTick()
+
         if(transferTimeLeft > 0) {
             transferTimeLeft--
 
@@ -218,6 +230,7 @@ class LogFlumeRideOP: RideOP(
         switch.spawnModel()
         switch.setToStart()
         loadStorageSegments()
+        storageDoor.spawn()
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(BandiCore.instance, {
             BandiCore.instance.trackManager.vehicleManager.loadTrain("logflume", layout, TrackPosition(layout.nodes.find { it.id == "117" }!!, 0), 0.0)
