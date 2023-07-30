@@ -17,6 +17,10 @@ class LogFlumeHarnessButton: SimpleHarnessButton(1) {
 
     override fun canOpen(): Boolean {
         val rideOP = RideOP.get("logflume") as LogFlumeRideOP
-        return rideOP.station.currentStopped != null
+
+        if(rideOP.transferModeActive) return false
+        if(rideOP.station.currentStopped == null) return false
+
+        return true
     }
 }

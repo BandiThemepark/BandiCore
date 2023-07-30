@@ -1,6 +1,7 @@
 package net.bandithemepark.bandicore.bandithemepark.adventure.logflume.rideop
 
 import net.bandithemepark.bandicore.park.attractions.rideop.util.buttons.SwitchButton
+import net.bandithemepark.bandicore.util.TrackUtil
 import org.bukkit.entity.Player
 
 class LogFlumeTransferModeButton(): SwitchButton(0, "rideop-logflume-transfer-mode-title", "rideop-logflume-transfer-mode-description") {
@@ -16,6 +17,11 @@ class LogFlumeTransferModeButton(): SwitchButton(0, "rideop-logflume-transfer-mo
             rideOP.updateMenu()
         } else {
             if((rideOP as LogFlumeRideOP).getPlayerPassengers().isNotEmpty()) return
+
+            if((rideOP as LogFlumeRideOP).station.currentStopped != null) {
+                (rideOP as LogFlumeRideOP).harnessButton.setClosed()
+                (rideOP as LogFlumeRideOP).harnessButton.open = false
+            }
 
             (rideOP as LogFlumeRideOP).transferModeActive = true
             rideOP.updateMenu()
