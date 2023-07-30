@@ -97,6 +97,10 @@ class RideOPEvents: Listener {
             rideOP.operator = null
             rideOP.updateMenu()
             player.sendTranslatedMessage("rideop-stopped", BandiColors.YELLOW.toString(), MessageReplacement("ride", rideOP.getParentAttraction()!!.appearance.displayName))
+
+            val camera = RideOPCamera.activeCameras.find { it.currentPlayer == event.player } ?: return
+            camera.stopView(event.player)
+            Bukkit.getScheduler().runTask(BandiCore.instance, Runnable { player.closeInventory() })
         }
     }
 
