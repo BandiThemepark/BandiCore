@@ -6,6 +6,7 @@ import net.bandithemepark.bandicore.bandithemepark.adventure.rupsbaan.RupsbaanRi
 import net.bandithemepark.bandicore.bandithemepark.adventure.rupsbaan.effects.RupsbaanEffectManager
 import net.bandithemepark.bandicore.park.attractions.rideop.RideOP
 import net.bandithemepark.bandicore.park.attractions.rideop.RideOPPage
+import net.bandithemepark.bandicore.park.attractions.rideop.camera.RideOPCameraButton
 import net.bandithemepark.bandicore.park.attractions.rideop.util.pages.RideOPCameraPage
 import net.bandithemepark.bandicore.park.attractions.rideop.util.pages.RideOPHomePage
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedActionBar
@@ -30,7 +31,13 @@ class RupsbaanRideOP: RideOP("rupsbaan", "rupsbaanstation",
                 RupsbaanEStopButton()
             )),
             RideOPCameraPage(listOf(
-
+                RideOPCameraButton(0, "Outside Right", Location(Bukkit.getWorld("world"), -29.0, 7.0, -184.0, -145.0F, 20.0F), this),
+                RideOPCameraButton(1, "Outside Left", Location(Bukkit.getWorld("world"), -29.0, 7.0, -206.0, -35.0F, 20.0F), this),
+                RideOPCameraButton(2, "Inside", Location(Bukkit.getWorld("world"), -40.5, 6.5, -190.5, -125.0F, 20.0F), this),
+                RideOPCameraButton(3, "Entrance", Location(Bukkit.getWorld("world"), -22.5, 6.5, -175.5, -135.0F, 20.0F), this),
+                RideOPCameraButton(4, "Queue Area 1", Location(Bukkit.getWorld("world"), -31.5, 6.5, -175.5, 150.0F, 30.0F), this),
+                RideOPCameraButton(5, "Queue Area 2", Location(Bukkit.getWorld("world"), -38.0, 7.5, -182.0, 45.0F, 33.0F), this),
+                RideOPCameraButton(6, "Exit", Location(Bukkit.getWorld("world"), -33.0, 6.5, -209.5, 55.0F, 13.0F), this),
             ))
         )
     }
