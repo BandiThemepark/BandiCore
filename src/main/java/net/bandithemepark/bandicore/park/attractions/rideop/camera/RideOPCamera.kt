@@ -156,8 +156,11 @@ class RideOPCamera(val location: Location, val rideOP: RideOP) {
                 if(camera.currentPlayer == null) continue
 
                 camera.currentPlayer!!.sendTranslatedActionBar("rideop-camera-actionbar", BandiColors.YELLOW.toString())
-                (camera.currentPlayer!! as CraftPlayer).handle.connection.send(ClientboundSetCameraPacket((camera.bukkitEntity as CraftArmorStand).handle))
-                (camera.currentPlayer!! as CraftPlayer).handle.connection.resetPosition()
+
+                try {
+                    (camera.currentPlayer!! as CraftPlayer).handle.connection.send(ClientboundSetCameraPacket((camera.bukkitEntity as CraftArmorStand).handle))
+                    (camera.currentPlayer!! as CraftPlayer).handle.connection.resetPosition()
+                } catch(_: NullPointerException) {}
             }
         }
     }
