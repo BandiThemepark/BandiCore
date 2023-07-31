@@ -85,6 +85,11 @@ class LogFlumeRideOP: RideOP(
         STORING, RETRIEVING, NONE
     }
 
+    private fun debugStorageState() {
+        val storagesString = storageSegments.joinToString(", ") { it.currentVehicle?.id ?: "null" }
+        Bukkit.getConsoleSender().sendMessage("Storage state: $storageState, boatsInStorage: $boatsInStorage, MAX_BOATS_IN_STORAGE: $MAX_BOATS_IN_STORAGE, transferModeActive: $transferModeActive, storage vehicles: $storagesString")
+    }
+
     private fun loadStorageSegments() {
         storageSegments = layout.segmentSeparators
             .filter { it.type is LogFlumeStorageSegment }
@@ -116,6 +121,8 @@ class LogFlumeRideOP: RideOP(
         if((switchSegment.type as LogFlumeSwitchSegment).state != LogFlumeSwitchSegment.SwitchState.RESETTING) return false
         if(boatsInStorage <= 0) return false
         if(storageState != StorageState.NONE) return false
+        if(switchTimeLeft != 0) return false
+        if(vehicleMovingOnToSwitch) return false
 
         return true
     }
@@ -173,10 +180,11 @@ class LogFlumeRideOP: RideOP(
     }
 
     fun isSwitchClear(): Boolean {
-        if(switchSegment.vehicles.isNotEmpty()) return false
-        if(switchTimeLeft != 0) return false
-        if(switchMovingForward) return false
-        if(layout.eStop) return false
+        if (switchSegment.vehicles.isNotEmpty()) return false
+        if (switchTimeLeft != 0) return false
+        if (switchMovingForward) return false
+        if (layout.eStop) return false
+        if (storageState != StorageState.NONE) return false
 
         return true
     }
@@ -186,6 +194,8 @@ class LogFlumeRideOP: RideOP(
 
     var switchMovingForward = false
     var switchTimeLeft = 0
+
+    var vehicleMovingOnToSwitch = false
 
     override fun onTick() {
         storageDoor.onTick()
@@ -210,7 +220,10 @@ class LogFlumeRideOP: RideOP(
                 if(switchTimeLeft == 0) switch.setToEnd()
             } else {
                 switch.moveTo(switchTimeLeft/100.0)
-                if(switchTimeLeft == 0) switch.setToStart()
+                if(switchTimeLeft == 0) {
+                    switch.setToStart()
+                    updateMenu()
+                }
             }
         }
     }

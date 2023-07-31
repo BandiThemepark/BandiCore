@@ -60,6 +60,7 @@ class LogFlumeSwitchSegment: SegmentType("logflumeswitch", true, "speedKMH") {
                         vehicle.speed = 0.0
                         segment.waitTime = 20
                         segment.state = WAITING_TO_START
+                        rideOP.vehicleMovingOnToSwitch = false
                         rideOP.updateMenu()
                     }
                 } else {

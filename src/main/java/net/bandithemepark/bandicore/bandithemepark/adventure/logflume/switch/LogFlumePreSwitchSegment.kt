@@ -23,6 +23,8 @@ class LogFlumePreSwitchSegment: SegmentType("logflumepreswitch", true, "speedKMH
         pastMiddle = false
         stopped = false
         dispatched = false
+
+        if(!needsToStop) rideOP.vehicleMovingOnToSwitch = true
     }
 
     override fun onVehicleUpdate(vehicle: TrackVehicle) {
@@ -41,6 +43,8 @@ class LogFlumePreSwitchSegment: SegmentType("logflumepreswitch", true, "speedKMH
                     if(rideOP.isSwitchClear()) {
                         dispatched = true
                         vehicle.speedKMH = -metadata[0].toDouble()
+                        rideOP.vehicleMovingOnToSwitch = true
+                        rideOP.updateMenu()
                     }
                 }
             }
