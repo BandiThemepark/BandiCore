@@ -41,6 +41,8 @@ class RideOPCommand: CommandExecutor {
                     sender.sendTranslatedMessage("rideop-no-rideops", BandiColors.RED.toString())
                     return false
                 }
+            } else {
+                rideOPs[0].openMenu(sender)
             }
         } else {
             if(rideOPs.isEmpty()) {
