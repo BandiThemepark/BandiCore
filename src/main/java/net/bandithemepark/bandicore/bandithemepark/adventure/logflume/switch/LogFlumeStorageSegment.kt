@@ -5,12 +5,14 @@ import net.bandithemepark.bandicore.park.attractions.rideop.RideOP
 import net.bandithemepark.bandicore.park.attractions.tracks.segments.SegmentType
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.TrackVehicle
 import net.bandithemepark.bandicore.util.TrackUtil
+import org.bukkit.Bukkit
 
 class LogFlumeStorageSegment: SegmentType("logflumestorage", true, "index, speedKMH") {
     var mode = Mode.PASSTHROUGH
     var currentVehicle: TrackVehicle? = null
 
     override fun onVehicleEnter(vehicle: TrackVehicle) {
+        if(vehicle.speed == 0.0) return
         currentVehicle = vehicle
     }
 
@@ -28,6 +30,7 @@ class LogFlumeStorageSegment: SegmentType("logflumestorage", true, "index, speed
     }
 
     override fun onVehicleLeave(vehicle: TrackVehicle) {
+        if(vehicle.speed == 0.0) return
         currentVehicle = null
     }
 
