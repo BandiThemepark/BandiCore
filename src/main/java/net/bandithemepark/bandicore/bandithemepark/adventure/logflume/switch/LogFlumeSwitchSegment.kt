@@ -52,6 +52,7 @@ class LogFlumeSwitchSegment: SegmentType("logflumeswitch", true, "speedKMH") {
         currentVehicle!!.speedKMH = -metadata[0].toDouble()
     }
 
+    var startOverride = false
     enum class SwitchState {
         WAITING_FOR_ARRIVAL {
             override fun tick(vehicle: TrackVehicle, segment: LogFlumeSwitchSegment, rideOP: LogFlumeRideOP) {
@@ -76,10 +77,11 @@ class LogFlumeSwitchSegment: SegmentType("logflumeswitch", true, "speedKMH") {
         },
         WAITING_TO_START {
             override fun tick(vehicle: TrackVehicle, segment: LogFlumeSwitchSegment, rideOP: LogFlumeRideOP) {
-                if(rideOP.transferModeActive) return
+                if(rideOP.transferModeActive && !segment.startOverride) return
 
                 segment.waitTime--
                 if(segment.waitTime <= 0 && !(RideOP.get("logflume") as LogFlumeRideOP).layout.eStop) {
+                    segment.startOverride = false
                     segment.rideOP.startSwitch()
                     segment.state = MOVING
                 }
