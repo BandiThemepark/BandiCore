@@ -42,7 +42,11 @@ class PlaceableEvents: Listener {
         val rotation = Math.round(event.player.location.yaw / placeableType.rotationStep) * placeableType.rotationStep
 
         // Round player yaw based on placeableType rotationStep
-        placeAt(event.player, placeableType, toPlaceAt, rotation, BandiCore.instance.placeableManager.selectedColors[event.player])
+        if(placeableType.colorable) {
+            placeAt(event.player, placeableType, toPlaceAt, rotation, BandiCore.instance.placeableManager.selectedColors[event.player])
+        } else {
+            placeAt(event.player, placeableType, toPlaceAt, rotation, null)
+        }
     }
 
     private fun placeAt(player: Player, type: PlaceableType, location: Location, rotation: Double, color: Color?) {
