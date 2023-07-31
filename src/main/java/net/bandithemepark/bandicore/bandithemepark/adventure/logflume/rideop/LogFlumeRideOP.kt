@@ -87,7 +87,8 @@ class LogFlumeRideOP: RideOP(
 
     private fun debugStorageState() {
         val storagesString = storageSegments.joinToString(", ") { it.currentVehicle?.id ?: "null" }
-        Bukkit.getConsoleSender().sendMessage("Storage state: $storageState, boatsInStorage: $boatsInStorage, MAX_BOATS_IN_STORAGE: $MAX_BOATS_IN_STORAGE, transferModeActive: $transferModeActive, storage vehicles: $storagesString")
+        val storagesModes = storageSegments.joinToString(", ") { it.mode.toString() }
+        Bukkit.getConsoleSender().sendMessage("Storage state: $storageState, boatsInStorage: $boatsInStorage, MAX_BOATS_IN_STORAGE: $MAX_BOATS_IN_STORAGE, transferModeActive: $transferModeActive, storage vehicles: $storagesString, vehicle moving onto switch: $vehicleMovingOnToSwitch, storage modes: $storagesModes")
     }
 
     private fun loadStorageSegments() {
@@ -199,6 +200,7 @@ class LogFlumeRideOP: RideOP(
 
     override fun onTick() {
         storageDoor.onTick()
+        //debugStorageState()
 
         if(transferTimeLeft > 0) {
             transferTimeLeft--
@@ -286,7 +288,7 @@ class LogFlumeRideOP: RideOP(
         automaticRideOP.dispatchesLeft--
         if(station.currentStopped != null) {
             if (station.currentStopped?.getPlayerPassengers()!!.isNotEmpty()) {
-                automaticRideOP.dispatchesLeft = 4
+                automaticRideOP.dispatchesLeft = 4 - boatsInStorage
             }
         }
 
