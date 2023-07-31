@@ -146,7 +146,7 @@ class TrackVehicleUpdater {
 
             // Updating triggers
             if (!vehicle.isCollidingThisTick && vehicle.ridingOn.triggers.isNotEmpty()) {
-                val travelledCurve = TrackUtil.getCurveBetweenPositions(oldPosition, vehicle.position)
+                val travelledCurve = if(vehicle.speed < 0.0) TrackUtil.getCurveBetweenPositions(vehicle.position, oldPosition) else TrackUtil.getCurveBetweenPositions(oldPosition, vehicle.position)
 
                 for(trigger in vehicle.ridingOn.triggers.filter { it.type != null }) {
                     val curvePoint = trigger.position.getPathPoint()
