@@ -25,12 +25,31 @@ class RideOPCommand: CommandExecutor {
         val regionsAtPlayer = BandiCore.instance.regionManager.getRegionsAt(sender.location)
         val rideOPs = RideOP.rideOPs.filter { regionsAtPlayer.contains(it.region) }
 
-        if(rideOPs.isEmpty()) {
-            sender.sendTranslatedMessage("rideop-no-rideops", BandiColors.RED.toString())
-            return false
-        }
+        if(sender.hasPermission("bandithemepark.crew")) {
+            if(rideOPs.isEmpty()) {
+                if(args.size == 1) {
+                    val rideOPId = args[0]
+                    val rideOP = RideOP.get(rideOPId)
 
-        rideOPs[0].openMenu(sender)
+                    if(rideOP == null) {
+                        sender.sendTranslatedMessage("rideop-not-found", BandiColors.RED.toString())
+                        return false
+                    }
+
+                    rideOP.openMenu(sender)
+                } else {
+                    sender.sendTranslatedMessage("rideop-no-rideops", BandiColors.RED.toString())
+                    return false
+                }
+            }
+        } else {
+            if(rideOPs.isEmpty()) {
+                sender.sendTranslatedMessage("rideop-no-rideops", BandiColors.RED.toString())
+                return false
+            }
+
+            rideOPs[0].openMenu(sender)
+        }
 
         return false
     }
