@@ -1,6 +1,7 @@
 package net.bandithemepark.bandicore.park.attractions.rideop
 
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.network.audioserver.events.AudioServerEventListeners
 import net.bandithemepark.bandicore.park.attractions.rideop.camera.RideOPCamera
 import net.bandithemepark.bandicore.park.attractions.rideop.events.RideOperateEvent
 import net.bandithemepark.bandicore.park.attractions.rideop.events.RideStopOperatingEvent
@@ -120,6 +121,8 @@ class RideOPEvents: Listener {
         if(rideOP.vipsInRegion.contains(event.player)) return
 
         rideOP.vipsInRegion.add(event.player)
+
+        if(!AudioServerEventListeners.connectedPlayers.contains(event.player)) return
         rideOP.sendInfoToNewPlayer(event.player)
     }
 
@@ -132,7 +135,7 @@ class RideOPEvents: Listener {
             if(rideOP.cameraProtection) return
 
             rideOP.vipsInRegion.remove(event.player)
-            rideOP.sendRemove(event.player)
+            if(AudioServerEventListeners.connectedPlayers.contains(event.player)) rideOP.sendRemove(event.player)
 
             if(rideOP.operator == event.player) {
                 rideOP.operator = null

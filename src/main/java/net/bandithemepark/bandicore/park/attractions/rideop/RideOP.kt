@@ -3,6 +3,7 @@ package net.bandithemepark.bandicore.park.attractions.rideop
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.network.audioserver.events.AudioServerEventListeners
 import net.bandithemepark.bandicore.park.attractions.Attraction
 import net.bandithemepark.bandicore.park.attractions.rideop.camera.RideOPCamera
 import net.bandithemepark.bandicore.server.regions.BandiRegion
@@ -188,6 +189,7 @@ abstract class RideOP(val id: String, val regionId: String, private val panelLoc
 
         val json = getStateJSON()
         for(player in vipsInRegion) {
+            if(!AudioServerEventListeners.connectedPlayers.contains(player)) continue
             BandiCore.instance.mqttConnector.sendMessage("/audioclient/rideop/${player.uniqueId}/update", json.toString())
         }
     }

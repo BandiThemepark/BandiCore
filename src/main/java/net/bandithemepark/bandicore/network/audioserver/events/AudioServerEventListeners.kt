@@ -48,6 +48,8 @@ class AudioServerEventListeners {
 
         @EventHandler
         fun onPlayerQuit(event: PlayerQuitEvent) {
+            if(!connectedPlayers.contains(event.player)) return
+
             // Send message to AudioClient to disconnect player
             val messageJson = JsonObject()
             messageJson.addProperty("uuid", event.player.uniqueId.toString())
@@ -58,6 +60,8 @@ class AudioServerEventListeners {
 
         @EventHandler
         fun onPriorityRegionEnter(event: PlayerPriorityRegionEnterEvent) {
+            if(!connectedPlayers.contains(event.player)) return
+
             val messageJson = JsonObject()
             messageJson.addProperty("uuid", event.player.uniqueId.toString())
             messageJson.add("toRegion", event.toRegion.convertToAudioClientJson())
@@ -77,6 +81,7 @@ class AudioServerEventListeners {
 
         @EventHandler
         fun onPriorityRegionLeave(event: PlayerPriorityRegionLeaveEvent) {
+            if(!connectedPlayers.contains(event.player)) return
             if(event.toRegion != null) return // The event is switching a region, which is also triggered by the enter event, so we stop here.
 
             val messageJson = JsonObject()
