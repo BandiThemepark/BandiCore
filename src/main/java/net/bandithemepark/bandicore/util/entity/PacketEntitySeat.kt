@@ -32,10 +32,6 @@ class PacketEntitySeat(val attraction: Attraction?): PacketEntity() {
     fun moveEntity(position: Vector, rotation: Quaternion, rotationDegrees: Vector) {
         super.moveEntity(position.x, position.y, position.z, rotationDegrees.y.toFloat(), rotationDegrees.y.toFloat())
 
-//        for(passenger in getPassengers().filterIsInstance<Player>()) {
-//            queuedPositionUpdates[passenger] = position.clone().add(Vector(0.0, 1.25, 0.0))
-//        }
-
         Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
             for(passenger in getPassengers().filterIsInstance<Player>()) {
                 (passenger as CraftPlayer).handle.setPosRaw(position.x, position.y+1.25, position.z)
@@ -65,7 +61,6 @@ class PacketEntitySeat(val attraction: Attraction?): PacketEntity() {
         addPassenger(player)
         updatePassengers()
         player.setAfkProtection(true)
-        //BandiCore.instance.smoothCoastersAPI.setRotationMode(null, player, RotationMode.PLAYER)
 
         return true
     }
@@ -134,18 +129,6 @@ class PacketEntitySeat(val attraction: Attraction?): PacketEntity() {
 
         fun isRiding(entity: Entity): Boolean {
             return seats.any { it.getPassengers().contains(entity) }
-        }
-
-        val queuedPositionUpdates = hashMapOf<Player, Vector>()
-
-        fun startPositionTimer() {
-            Bukkit.getScheduler().runTaskTimer(BandiCore.instance, Runnable {
-                for((player, position) in queuedPositionUpdates.entries) {
-                    (player as CraftPlayer).handle.setPosRaw(position.x, position.y+1.25, position.z)
-                }
-
-                queuedPositionUpdates.clear()
-            }, 0, 1)
         }
     }
 }
