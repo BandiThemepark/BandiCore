@@ -19,6 +19,20 @@ class AchievementManager {
     val categories = mutableListOf<AchievementCategory>()
     val ownedAchievements = hashMapOf<Player, MutableList<Achievement>>()
 
+    fun ownsAchievement(player: Player, achievementId: String): Boolean {
+        if(ownedAchievements[player] == null) return false
+        val achievement = getAchievement(achievementId) ?: return false
+
+        return ownedAchievements[player]!!.contains(achievement)
+    }
+
+    fun getAchievement(searchName: String): Achievement? {
+        val allAchievements = mutableListOf<Achievement>()
+        categories.forEach { allAchievements.addAll(it.achievements) }
+
+        return allAchievements.find { it.searchName == searchName }
+    }
+
     fun give(achievement: Achievement, player: Player) {
         BackendAchievement.giveAchievement(player, achievement) {
             if(ownedAchievements[player] != null && ownedAchievements[player]!!.contains(achievement)) return@giveAchievement
