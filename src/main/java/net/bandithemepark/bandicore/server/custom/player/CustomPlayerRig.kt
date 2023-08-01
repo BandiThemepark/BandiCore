@@ -5,10 +5,9 @@ import net.bandithemepark.bandicore.server.animatronics.AnimatronicNode
 import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.entity.PacketEntity
 import net.bandithemepark.bandicore.util.entity.armorstand.PacketEntityArmorStand
-import net.bandithemepark.bandicore.util.entity.itemdisplay.PacketItemDisplay
+import net.bandithemepark.bandicore.util.entity.display.PacketItemDisplay
 import net.bandithemepark.bandicore.util.math.Quaternion
 import net.minecraft.world.entity.decoration.ArmorStand
-import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.entity.ItemDisplay

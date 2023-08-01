@@ -2,7 +2,7 @@ package net.bandithemepark.bandicore.server.placeables
 
 import com.google.gson.JsonObject
 import net.bandithemepark.bandicore.BandiCore
-import net.bandithemepark.bandicore.util.entity.itemdisplay.PacketItemDisplay
+import net.bandithemepark.bandicore.util.entity.display.PacketItemDisplay
 import net.bandithemepark.bandicore.util.math.Quaternion
 import org.bukkit.Bukkit
 import org.bukkit.Color

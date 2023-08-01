@@ -6,12 +6,10 @@ import com.google.gson.JsonParser
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.entity.PacketEntity
-import net.bandithemepark.bandicore.util.entity.itemdisplay.PacketItemDisplay
+import net.bandithemepark.bandicore.util.entity.display.PacketItemDisplay
 import net.bandithemepark.bandicore.util.math.Quaternion
-import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
-import org.bukkit.craftbukkit.v1_20_R1.entity.CraftItemDisplay
 import org.bukkit.entity.ItemDisplay
 import org.bukkit.entity.Player
 import org.bukkit.util.Vector

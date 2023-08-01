@@ -1,7 +1,7 @@
 package net.bandithemepark.bandicore.bandithemepark.adventure.logflume.switch
 
 import net.bandithemepark.bandicore.util.ItemFactory
-import net.bandithemepark.bandicore.util.entity.itemdisplay.PacketItemDisplay
+import net.bandithemepark.bandicore.util.entity.display.PacketItemDisplay
 import net.minecraft.util.Brightness
 import net.minecraft.world.entity.Display
 import org.bukkit.Location
