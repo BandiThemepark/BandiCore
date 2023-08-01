@@ -10,14 +10,11 @@ import com.mojang.datafixers.util.Pair
 import me.partypronl.themeparkcore.util.packetwrappers.WrapperPlayServerEntityTeleport
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.util.entity.event.PacketEntityDismountEvent
-import net.bandithemepark.bandicore.util.entity.event.PacketEntityInteractEvent
 import net.bandithemepark.bandicore.util.entity.event.PacketEntityInputEvent
+import net.bandithemepark.bandicore.util.entity.event.PacketEntityInteractEvent
 import net.minecraft.network.protocol.Packet
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket
-import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket
-import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket
-import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket
-import net.minecraft.network.protocol.game.ServerboundPlayerInputPacket
+import net.minecraft.network.protocol.game.*
+import net.minecraft.network.syncher.SynchedEntityData.DataValue
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EquipmentSlot
@@ -214,8 +211,10 @@ abstract class PacketEntity {
             return
         }
 
-        val packet = ClientboundSetEntityDataPacket(handle.id, handle.entityData.nonDefaultValues!!)
-        (player as CraftPlayer).handle.connection.send(packet)
+        handle.entityData.refresh((player as CraftPlayer).handle)
+
+//        val packet = ClientboundSetEntityDataPacket(handle.id, handle.entityData.nonDefaultValues!!)
+//        (player as CraftPlayer).handle.connection.send(packet)
     }
 
     private fun sendPacket(packet: Packet<*>) {
