@@ -35,77 +35,31 @@ class RigTest: CommandExecutor {
         if(!command.name.equals("rigtest", true)) return false
         if(sender !is Player) return false
 
-        val armorStand = PacketEntityArmorStand()
-        armorStand.spawn(sender.location)
-        armorStand.handle!!.isInvisible = true
-        armorStand.handle!!.isNoGravity = true
-        (armorStand.handle!! as ArmorStand).isMarker = true
-        armorStand.updateMetadata()
-
-        val testPositionDisplay = PacketItemDisplay()
-        testPositionDisplay.spawn(sender.location)
-        testPositionDisplay.setItemStack(ItemFactory(Material.DIAMOND_HOE).setCustomModelData(6).build())
-        testPositionDisplay.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.HEAD)
-        testPositionDisplay.updateMetadata()
-
         val itemDisplay = PacketItemDisplay()
         itemDisplay.spawn(sender.location)
-        itemDisplay.setItemStack(ItemFactory(Material.DIAMOND_HOE).setCustomModelData(6).build())
+        itemDisplay.setItemStack(ItemFactory(Material.DIAMOND_SHOVEL).setCustomModelData(8).build())
         itemDisplay.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.HEAD)
         itemDisplay.updateMetadata()
 
-        armorStand.addPassenger(itemDisplay.handle!!.id)
-        armorStand.updatePassengers()
+        Bukkit.getScheduler().runTaskLater(BandiCore.instance, Runnable {
+            itemDisplay.startGlowFor(sender)
 
-        val basePosition = sender.location.toVector()
-        var tick = 0
-        Bukkit.getScheduler().runTaskTimer(BandiCore.instance, Runnable {
-            tick++
+            Bukkit.getScheduler().runTaskLater(BandiCore.instance, Runnable {
+                itemDisplay.endGlowFor(sender)
+            }, 40)
+        }, 40)
 
-            if(tick < 100) {
-                armorStand.moveEntity(basePosition.x, basePosition.y, basePosition.z)
-            }
-        }, 0, 1)
-
-
-
-//        val itemDisplay = PacketItemDisplay()
-//        itemDisplay.spawn(sender.location)
-//        itemDisplay.setItemStack(ItemFactory(Material.DIAMOND_HOE).setCustomModelData(6).build())
-//        itemDisplay.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.HEAD)
+//        val bukkitDisplay = sender.world.spawnEntity(sender.location, EntityType.ITEM_DISPLAY) as CraftItemDisplay
+//        bukkitDisplay.itemStack = ItemFactory(Material.DIAMOND_SHOVEL).setCustomModelData(8).build()
+//        bukkitDisplay.itemDisplayTransform = ItemDisplay.ItemDisplayTransform.HEAD
 //
-//        itemDisplay.moveEntity(sender.location.x, sender.location.y + 2.0f, sender.location.z)
-//        itemDisplay.setInterpolationDuration(2)
+//        Bukkit.getScheduler().runTaskLater(BandiCore.instance, Runnable {
+//            bukkitDisplay.isGlowing = true
 //
-//        val matrix = Matrix4f().translation(0.0f, 0.0f, 0.0f).rotation(Quaternion.fromYawPitchRoll(0.0, 0.0, 0.0).toBukkitQuaternion())
-//        itemDisplay.setTransformationMatrix(matrix)
-//
-//        itemDisplay.updateMetadata()
-//
-//        var rotation = 0.0
-//        Bukkit.getScheduler().runTaskTimerAsynchronously(BandiCore.instance, Runnable {
-//            itemDisplay.setInterpolationDelay(-1)
-//            rotation += 2.0
-//            //val newMatrix = Matrix4f().translation(0.0f, 0.0f, 0.0f).rotation(Quaternion.fromYawPitchRoll(rotation, rotation, rotation).toBukkitQuaternion())
-//            val newMatrix = Matrix4f().translation(0.0f, sin(Math.toRadians(rotation)).toFloat() * 5.0f, 0.0f)
-//            itemDisplay.setTransformationMatrix(newMatrix)
-//            itemDisplay.updateMetadata()
-//        }, 0, 1)
-
-
-
-//        val customPlayer = NewCustomPlayer(sender.getAdaptedSkin(), sender.location, Vector())
-//        customPlayer.spawn()
-//        customPlayer.rig.playAnimation("wave", true)
-
-//        val customPlayer = NewCustomPlayer(sender.getAdaptedSkin(), Location(sender.world, 0.0, 0.0, 0.0), Vector())
-//        customPlayer.spawn()
-//        customPlayer.rig.playAnimation("wave", true)
-//        //customPlayer.loadFrom("customplayer/rideposition/sit")
-//
-//        Bukkit.getScheduler().runTaskTimer(BandiCore.instance, Runnable {
-//            customPlayer.moveTo(sender.location.toVector(), Vector(sender.location.pitch, sender.location.yaw, 0.0F))
-//        }, 0, 1)
+//            Bukkit.getScheduler().runTaskLater(BandiCore.instance, Runnable {
+//                bukkitDisplay.isGlowing = false
+//            }, 40)
+//        }, 40)
 
         return false
     }
