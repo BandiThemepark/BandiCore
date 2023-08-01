@@ -80,5 +80,6 @@
   "rideop-logflume-transfer-send-description": "Send current boat on transfer into storage",
   "rideop-logflume-transfer-retrieve-title": "Retrieve from storage",
   "rideop-logflume-transfer-retrieve-description": "Retrieve a boat from storage",
-  "rideop-panel-hover-text": "Press %key% to open RideOP"
+  "rideop-panel-hover-text": "Press %key% to open RideOP",
+  "already-in-dressing-room": "You are already in the dressing room"
 }

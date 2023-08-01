@@ -8,6 +8,7 @@ import net.bandithemepark.bandicore.util.ItemFactory
 import org.bukkit.Color
 import org.bukkit.Material
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 
 class HatCosmetic: CosmeticType("hat") {
     lateinit var material: Material
@@ -37,5 +38,10 @@ class HatCosmetic: CosmeticType("hat") {
     override fun onUnEquip(player: Player) {
         player.equipment.helmet = null
         player.getNameTag()!!.heightOffset = 0.0
+    }
+
+    override fun getDressingRoomItem(player: Player, color: Color?, cosmetic: Cosmetic): ItemStack {
+        return if(colorable) ItemFactory(material).setCustomModelData(customModelData).setArmorColor(color).build()
+               else ItemFactory(material).setCustomModelData(customModelData).build()
     }
 }

@@ -143,3 +143,13 @@ commands:
       - bandieffects
   removenearplaceables:
     description: Removes all placeables in a 2 block radius around you
+  dressingroom:
+    description: Open the dressing room
+    aliases:
+      - backpack
+      - bp
+      - cosmetics
+      - cosmetic
+      - dressingrooms
+      - equipment
+      - equip

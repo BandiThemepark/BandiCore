@@ -60,6 +60,8 @@ import net.bandithemepark.bandicore.park.attractions.rideop.RideOPEvents
 import net.bandithemepark.bandicore.park.attractions.rideop.camera.RideOPCamera
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.SeatAttachment
 import net.bandithemepark.bandicore.park.cosmetics.CosmeticManager
+import net.bandithemepark.bandicore.park.cosmetics.dressingroom.DressingRoomCommand
+import net.bandithemepark.bandicore.park.cosmetics.dressingroom.DressingRoomEvents
 import net.bandithemepark.bandicore.park.cosmetics.requirements.types.AchievementCosmeticRequirement
 import net.bandithemepark.bandicore.park.cosmetics.requirements.types.RidecounterCosmeticRequirement
 import net.bandithemepark.bandicore.park.cosmetics.requirements.types.VIPCosmeticRequirement
@@ -298,6 +300,7 @@ class BandiCore: JavaPlugin() {
         getCommand("achievements")!!.setExecutor(AchievementMenuCommand())
         getCommand("effect")!!.setExecutor(EffectCommand())
         getCommand("removenearplaceables")!!.setExecutor(PlaceableRemoveCommand())
+        getCommand("dressingroom")!!.setExecutor(DressingRoomCommand())
     }
 
     private fun registerEvents() {
@@ -345,6 +348,7 @@ class BandiCore: JavaPlugin() {
         getServer().pluginManager.registerEvents(PlaceableEvents(), this)
         getServer().pluginManager.registerEvents(RideOPCamera.Events(), this)
         getServer().pluginManager.registerEvents(CosmeticManager.Events(), this)
+        getServer().pluginManager.registerEvents(DressingRoomEvents(), this)
     }
 
     private fun prepareSettings() {

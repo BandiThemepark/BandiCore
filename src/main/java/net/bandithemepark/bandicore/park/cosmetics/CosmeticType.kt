@@ -3,6 +3,7 @@ package net.bandithemepark.bandicore.park.cosmetics
 import com.google.gson.JsonObject
 import org.bukkit.Color
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 
 abstract class CosmeticType(val id: String): Cloneable {
     lateinit var metadata: JsonObject
@@ -11,6 +12,7 @@ abstract class CosmeticType(val id: String): Cloneable {
     abstract fun isColorable(): Boolean
     abstract fun onEquip(player: Player, color: Color?, cosmetic: Cosmetic)
     abstract fun onUnEquip(player: Player)
+    abstract fun getDressingRoomItem(player: Player, color: Color?, cosmetic: Cosmetic): ItemStack
 
     fun register() {
         types.add(this)
