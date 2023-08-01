@@ -59,6 +59,11 @@ import net.bandithemepark.bandicore.park.attractions.rideop.RideOPCommand
 import net.bandithemepark.bandicore.park.attractions.rideop.RideOPEvents
 import net.bandithemepark.bandicore.park.attractions.rideop.camera.RideOPCamera
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.SeatAttachment
+import net.bandithemepark.bandicore.park.cosmetics.CosmeticManager
+import net.bandithemepark.bandicore.park.cosmetics.requirements.types.AchievementCosmeticRequirement
+import net.bandithemepark.bandicore.park.cosmetics.requirements.types.RidecounterCosmeticRequirement
+import net.bandithemepark.bandicore.park.cosmetics.requirements.types.VIPCosmeticRequirement
+import net.bandithemepark.bandicore.park.cosmetics.types.HatCosmetic
 import net.bandithemepark.bandicore.park.modsupport.SmoothCoastersChecker
 import net.bandithemepark.bandicore.park.npc.ThemeParkNPCSkin
 import net.bandithemepark.bandicore.park.npc.path.editor.PathPointEditorCommand
@@ -125,6 +130,7 @@ class BandiCore: JavaPlugin() {
     lateinit var animatronicManager: AnimatronicManager
     lateinit var effectManager: EffectManager
     lateinit var placeableManager: PlaceableManager
+    lateinit var cosmeticManager: CosmeticManager
 
     var okHttpClient = OkHttpClient()
     var restarter = Restart()
@@ -178,6 +184,12 @@ class BandiCore: JavaPlugin() {
 
         // Setup achievements after triggers have been registered
         server.achievementManager.setup()
+
+        // Everything related to cosmetics and shops
+        registerCosmeticTypes()
+        registerCosmeticRequirementTypes()
+        cosmeticManager = CosmeticManager()
+        cosmeticManager.setup()
 
         // Starting the necessary timers
         //NPC.startTimer()
@@ -332,6 +344,7 @@ class BandiCore: JavaPlugin() {
         getServer().pluginManager.registerEvents(SpecialAudioManagement(), this)
         getServer().pluginManager.registerEvents(PlaceableEvents(), this)
         getServer().pluginManager.registerEvents(RideOPCamera.Events(), this)
+        getServer().pluginManager.registerEvents(CosmeticManager.Events(), this)
     }
 
     private fun prepareSettings() {
@@ -378,5 +391,15 @@ class BandiCore: JavaPlugin() {
     private fun registerEffectTypes() {
         AnimatronicEffect().register()
         SpatialAudioEffect().register()
+    }
+
+    private fun registerCosmeticTypes() {
+        HatCosmetic().register()
+    }
+
+    private fun registerCosmeticRequirementTypes() {
+        VIPCosmeticRequirement().register()
+        RidecounterCosmeticRequirement().register()
+        AchievementCosmeticRequirement().register()
     }
 }
