@@ -5,11 +5,14 @@ import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.entity.PacketEntity
 import net.bandithemepark.bandicore.util.entity.armorstand.PacketEntityArmorStand
+import net.bandithemepark.bandicore.util.entity.display.PacketTextDisplay
 import net.bandithemepark.bandicore.util.entity.event.SeatEnterEvent
 import net.bandithemepark.bandicore.util.entity.event.SeatExitEvent
 import net.minecraft.world.entity.decoration.ArmorStand
 import org.bukkit.GameMode
+import org.bukkit.entity.Display
 import org.bukkit.entity.Player
+import org.bukkit.entity.TextDisplay
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerGameModeChangeEvent
@@ -17,9 +20,11 @@ import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerToggleFlightEvent
 import org.bukkit.event.player.PlayerToggleSneakEvent
 import org.bukkit.scheduler.BukkitRunnable
+import org.bukkit.util.Vector
 
 class PlayerNameTag(val player: Player) {
-    val armorStand = PacketEntityArmorStand()
+    val parentArmorStand = PacketEntityArmorStand()
+    val textDisplay = PacketTextDisplay()
     var heightOffset = 0.0
     private var isVisible = false
 
@@ -41,19 +46,32 @@ class PlayerNameTag(val player: Player) {
      */
     fun spawn() {
         isVisible = true
-        if(!armorStand.spawned && !hidden) {
-            armorStand.visibilityType = PacketEntity.VisibilityType.BLACKLIST
-            armorStand.visibilityList = mutableListOf(player)
 
-            armorStand.spawn(player.location.clone().add(0.0, 1.7 + heightOffset, 0.0))
-            armorStand.handle!!.isInvisible = true
-            armorStand.handle!!.isNoGravity = true
-            armorStand.handle!!.isCustomNameVisible = true
-            (armorStand.handle!! as ArmorStand).isMarker = true
+        if(!textDisplay.spawned && !hidden) {
+            parentArmorStand.spawn(player.location.clone().add(0.0, 2.0 + heightOffset, 0.0))
+            parentArmorStand.handle.isInvisible = true
+            (parentArmorStand.handle as ArmorStand).isMarker = true
+            parentArmorStand.handle.isNoGravity = true
+            parentArmorStand.updateMetadata()
+
+            textDisplay.visibilityType = PacketEntity.VisibilityType.BLACKLIST
+            textDisplay.visibilityList = mutableListOf(player)
+
+            textDisplay.spawn(player.location.clone().add(0.0, 2.0 + heightOffset, 0.0))
 
             val rank = BandiCore.instance.server.rankManager.loadedPlayerRanks[player]!!
-            armorStand.handle!!.customName = PaperAdventure.asVanilla(Util.color("<${rank.color}>${rank.name} ${player.name}"))
-            armorStand.updateMetadata()
+            val text = Util.color("<${rank.color}>${rank.name} ${player.name}")
+            textDisplay.setText(text)
+
+            textDisplay.setBillboard(Display.Billboard.CENTER)
+            textDisplay.setDefaultBackground(true)
+            textDisplay.setSeeThrough(false)
+            textDisplay.setAlignment(TextDisplay.TextAlignment.CENTER)
+
+            textDisplay.updateMetadata()
+
+            parentArmorStand.addPassenger(textDisplay.handle.id)
+            parentArmorStand.updatePassengers()
         }
     }
 
@@ -62,7 +80,8 @@ class PlayerNameTag(val player: Player) {
      */
     fun deSpawn() {
         isVisible = false
-        armorStand.deSpawn()
+        textDisplay.deSpawn()
+        parentArmorStand.deSpawn()
     }
 
     /**
@@ -70,15 +89,17 @@ class PlayerNameTag(val player: Player) {
      */
     fun updateName() {
         val rank = BandiCore.instance.server.rankManager.loadedPlayerRanks[player]!!
-        armorStand.handle!!.customName = PaperAdventure.asVanilla(Util.color("<${rank.color}>${rank.name} ${player.name}"))
-        armorStand.updateMetadata()
+        val text = Util.color("<${rank.color}>${rank.name} ${player.name}")
+        textDisplay.setText(text)
+        textDisplay.updateMetadata()
     }
 
     /**
      * Updates the position of the name tag. Doesn't need to be called really.
      */
     fun updatePosition() {
-        armorStand.teleport(player.location.clone().add(0.0, 1.7+heightOffset, 0.0))
+        val position = player.location.toVector().add(Vector(0.0, 2.0+heightOffset, 0.0))
+        parentArmorStand.moveEntity(position.x, position.y, position.z)
     }
 
     init {
