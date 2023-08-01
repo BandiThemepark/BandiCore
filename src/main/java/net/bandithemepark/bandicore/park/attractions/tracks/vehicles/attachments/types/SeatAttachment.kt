@@ -19,8 +19,11 @@ import net.bandithemepark.bandicore.util.entity.event.SeatExitEvent
 import net.bandithemepark.bandicore.util.entity.marker.PacketEntityMarker
 import net.bandithemepark.bandicore.util.math.Quaternion
 import net.kyori.adventure.text.Component
+import net.minecraft.network.protocol.game.ClientboundPlayerInfoRemovePacket
+import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket
 import org.bukkit.Bukkit
 import org.bukkit.Location
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -189,17 +192,38 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
         fun updateForJoining(joining: Player) {
             hiddenPlayers.forEach {
                 joining.hidePlayer(BandiCore.instance, it)
+                addToTablist(it, joining)
             }
         }
 
         fun hide(player: Player) {
             hiddenPlayers.add(player)
-            for(player2 in Bukkit.getOnlinePlayers()) player2.hidePlayer(BandiCore.instance, player)
+            for(player2 in Bukkit.getOnlinePlayers()) {
+                if(player2 == player) continue
+
+                player2.hidePlayer(BandiCore.instance, player)
+                addToTablist(player, player2)
+            }
         }
 
         fun show(player: Player) {
             hiddenPlayers.remove(player)
-            for(player2 in Bukkit.getOnlinePlayers()) player2.showPlayer(BandiCore.instance, player)
+            for(player2 in Bukkit.getOnlinePlayers()) {
+                if(player2 == player) continue
+
+                player2.showPlayer(BandiCore.instance, player)
+                removeFromTablist(player, player2)
+            }
+        }
+
+        private fun addToTablist(toAdd: Player, forPlayer: Player) {
+            val packet = ClientboundPlayerInfoUpdatePacket(ClientboundPlayerInfoUpdatePacket.Action.ADD_PLAYER, (toAdd as CraftPlayer).handle)
+            (forPlayer as CraftPlayer).handle.connection.send(packet)
+        }
+
+        private fun removeFromTablist(toRemove: Player, forPlayer: Player) {
+            val packet = ClientboundPlayerInfoRemovePacket(mutableListOf((toRemove as CraftPlayer).handle.uuid))
+            (forPlayer as CraftPlayer).handle.connection.send(packet)
         }
 
         const val BODY_HEIGHT = 1.1
