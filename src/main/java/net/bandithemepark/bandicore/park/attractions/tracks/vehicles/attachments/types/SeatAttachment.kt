@@ -1,5 +1,6 @@
 package net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types
 
+import com.mojang.authlib.GameProfile
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.network.audioserver.ride.SpecialAudioManagement
 import net.bandithemepark.bandicore.park.attractions.Attraction
@@ -21,14 +22,23 @@ import net.bandithemepark.bandicore.util.math.Quaternion
 import net.kyori.adventure.text.Component
 import net.minecraft.network.protocol.game.ClientboundPlayerInfoRemovePacket
 import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket
+import net.minecraft.network.protocol.game.ClientboundRemoveMobEffectPacket
+import net.minecraft.network.protocol.game.ClientboundUpdateMobEffectPacket
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.effect.MobEffect
+import net.minecraft.world.effect.MobEffectInstance
 import org.bukkit.Bukkit
 import org.bukkit.Location
+import org.bukkit.craftbukkit.v1_20_R1.CraftServer
+import org.bukkit.craftbukkit.v1_20_R1.CraftWorld
 import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.util.Vector
+import java.util.*
+import kotlin.collections.HashMap
 
 class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
     lateinit var parent: Attachment
@@ -192,38 +202,25 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
         fun updateForJoining(joining: Player) {
             hiddenPlayers.forEach {
                 joining.hidePlayer(BandiCore.instance, it)
-                addToTablist(it, joining)
             }
         }
 
         fun hide(player: Player) {
             hiddenPlayers.add(player)
+
             for(player2 in Bukkit.getOnlinePlayers()) {
                 if(player2 == player) continue
-
                 player2.hidePlayer(BandiCore.instance, player)
-                addToTablist(player, player2)
             }
         }
 
         fun show(player: Player) {
             hiddenPlayers.remove(player)
+
             for(player2 in Bukkit.getOnlinePlayers()) {
                 if(player2 == player) continue
-
                 player2.showPlayer(BandiCore.instance, player)
-                removeFromTablist(player, player2)
             }
-        }
-
-        private fun addToTablist(toAdd: Player, forPlayer: Player) {
-            val packet = ClientboundPlayerInfoUpdatePacket(ClientboundPlayerInfoUpdatePacket.Action.ADD_PLAYER, (toAdd as CraftPlayer).handle)
-            (forPlayer as CraftPlayer).handle.connection.send(packet)
-        }
-
-        private fun removeFromTablist(toRemove: Player, forPlayer: Player) {
-            val packet = ClientboundPlayerInfoRemovePacket(mutableListOf((toRemove as CraftPlayer).handle.uuid))
-            (forPlayer as CraftPlayer).handle.connection.send(packet)
         }
 
         const val BODY_HEIGHT = 1.1
