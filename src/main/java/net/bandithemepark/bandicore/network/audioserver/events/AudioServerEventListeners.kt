@@ -60,6 +60,9 @@ class AudioServerEventListeners {
 
         @EventHandler
         fun onPriorityRegionEnter(event: PlayerPriorityRegionEnterEvent) {
+            // Update current region of player
+            currentRegion[event.player] = event.toRegion
+
             if(!connectedPlayers.contains(event.player)) return
 
             val messageJson = JsonObject()
@@ -74,15 +77,16 @@ class AudioServerEventListeners {
             }
 
             BandiCore.instance.mqttConnector.sendMessage("/audioclient/player/${event.player.uniqueId}/regions", messageJson.toString())
-
-            // Update current region of player
-            currentRegion[event.player] = event.toRegion
         }
 
         @EventHandler
         fun onPriorityRegionLeave(event: PlayerPriorityRegionLeaveEvent) {
-            if(!connectedPlayers.contains(event.player)) return
             if(event.toRegion != null) return // The event is switching a region, which is also triggered by the enter event, so we stop here.
+
+            // Update current region of player
+            currentRegion.remove(event.player)
+
+            if(!connectedPlayers.contains(event.player)) return
 
             val messageJson = JsonObject()
             messageJson.addProperty("uuid", event.player.uniqueId.toString())
@@ -90,9 +94,6 @@ class AudioServerEventListeners {
             messageJson.add("fromRegion", event.fromRegion.convertToAudioClientJson())
 
             BandiCore.instance.mqttConnector.sendMessage("/audioclient/player/${event.player.uniqueId}/regions", messageJson.toString())
-
-            // Update current region of player
-            currentRegion.remove(event.player)
         }
 
         // ALL EXTERNAL EVENT HANDLING
