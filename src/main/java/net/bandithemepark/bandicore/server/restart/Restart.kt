@@ -18,7 +18,7 @@ import org.bukkit.entity.Player
 import java.time.Duration
 
 class Restart {
-    private var countdownLeft = 200 // Ticks, so 10 seconds
+    private var countdownLeft = 40 // Ticks, so 10 seconds
     private var countdownStarted = false
     private var toSend = mutableListOf<Player>()
     private var restartSent = false
