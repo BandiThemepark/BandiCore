@@ -1,11 +1,15 @@
 package net.bandithemepark.bandicore.server.animation.rig
 
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.server.animatronics.Animatronic
+import net.bandithemepark.bandicore.server.custom.player.CustomPlayerRig
+import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin.Companion.getAdaptedSkin
 import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.chat.BandiColors
 import net.bandithemepark.bandicore.util.entity.display.PacketItemDisplay
 import net.bandithemepark.bandicore.util.entity.display.PacketTextDisplay
+import net.bandithemepark.bandicore.util.math.Quaternion
 import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.Material
@@ -23,17 +27,9 @@ class RigTest: CommandExecutor {
         if(!command.name.equals("rigtest", true)) return false
         if(sender !is Player) return false
 
-        val textDisplay = PacketTextDisplay()
-        textDisplay.spawn(sender.location)
-        textDisplay.setText(Util.color("<${BandiColors.YELLOW}>I am a text display"))
-        textDisplay.setAlignment(TextDisplay.TextAlignment.RIGHT)
-        textDisplay.setBackgroundColor(Color.fromARGB(100, 10, 0, 0))
-        textDisplay.setSeeThrough(false)
-        textDisplay.setShadow(true)
-        textDisplay.setTextOpacity(0.9)
-        textDisplay.setBillboard(Display.Billboard.VERTICAL)
-        textDisplay.setTransformationMatrix(Matrix4f().scale(1f, 1f, 1f))
-        textDisplay.updateMetadata()
+        val customPlayer = CustomPlayerRig(sender.getAdaptedSkin())
+        customPlayer.spawn(sender.location.clone().add(0.0, 0.0, 0.0), null)
+        customPlayer.playAnimationLooped("stand")
 
 
 //        val bukkitDisplay = sender.world.spawnEntity(sender.location, EntityType.ITEM_DISPLAY) as CraftItemDisplay
