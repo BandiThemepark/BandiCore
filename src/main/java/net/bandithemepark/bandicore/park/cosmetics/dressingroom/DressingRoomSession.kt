@@ -4,9 +4,12 @@ import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.park.attractions.rideop.camera.RideOPCamera
 import net.bandithemepark.bandicore.park.cosmetics.dressingroom.ui.StartPage
 import net.bandithemepark.bandicore.park.cosmetics.dressingroom.ui.UIPage
+import net.bandithemepark.bandicore.server.custom.player.CustomPlayerRig
+import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin.Companion.getAdaptedSkin
 import net.bandithemepark.bandicore.server.essentials.ranks.nametag.PlayerNameTag.Companion.getNameTag
 import net.bandithemepark.bandicore.util.entity.HoverableEntity
 import net.bandithemepark.bandicore.util.entity.armorstand.PacketEntityArmorStand
+import net.bandithemepark.bandicore.util.math.Quaternion
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.title.Title
 import net.minecraft.network.protocol.game.ClientboundMoveEntityPacket
@@ -34,6 +37,7 @@ class DressingRoomSession(
 
     lateinit var bukkitEntity: ArmorStand
     lateinit var vehicleEntity: PacketEntityArmorStand
+    lateinit var customPlayer: CustomPlayerRig
 
     var exited = false
     var currentPage: UIPage = StartPage()
@@ -41,10 +45,22 @@ class DressingRoomSession(
 
     init {
         setupCamera()
+        setupCustomPlayer()
         startView()
         currentPage.render(dressingRoom.interfacePosition.toLocation(dressingRoom.world), player, dressingRoom.interfaceYaw)
 
         activeSessions.add(this)
+    }
+
+    private fun setupCustomPlayer() {
+        customPlayer = CustomPlayerRig(player.getAdaptedSkin())
+        customPlayer.spawn(dressingRoom.playerPosition.toLocation(dressingRoom.world), null)
+        customPlayer.moveTo(dressingRoom.playerPosition, Quaternion.fromYawPitchRoll(0.0, dressingRoom.playerYaw, 0.0))
+        customPlayer.playAnimationLooped("scream")
+    }
+
+    private fun removeCustomPlayer() {
+        customPlayer.deSpawn()
     }
 
     fun exit() {
@@ -114,6 +130,7 @@ class DressingRoomSession(
         Bukkit.getScheduler().runTaskLater(BandiCore.instance, Runnable {
             currentPage.remove(player)
             stopCamera()
+            removeCustomPlayer()
             removeCamera()
         }, 10)
     }

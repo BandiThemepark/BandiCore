@@ -19,7 +19,7 @@ class CustomPlayerRig(val skin: CustomPlayerSkin) {
     lateinit var parentArmorStand: PacketEntityArmorStand
     private var spawned = false
 
-    fun spawn(spawnLocation: Location, hiddenFor: Player) {
+    fun spawn(spawnLocation: Location, hiddenFor: Player?) {
         // Remove rotation here, because rotation is added later using transform
         spawnLocation.pitch = 0.0f
         spawnLocation.yaw = 0.0f
@@ -27,7 +27,7 @@ class CustomPlayerRig(val skin: CustomPlayerSkin) {
         // Spawn parent armorstand for smoothness
         parentArmorStand = PacketEntityArmorStand()
         parentArmorStand.visibilityType = PacketEntity.VisibilityType.BLACKLIST
-        parentArmorStand.visibilityList = mutableListOf(hiddenFor)
+        if(hiddenFor != null) parentArmorStand.visibilityList = mutableListOf(hiddenFor)
         parentArmorStand.spawn(spawnLocation)
         parentArmorStand.handle!!.isInvisible = true
         parentArmorStand.handle!!.isNoGravity = true
@@ -37,7 +37,7 @@ class CustomPlayerRig(val skin: CustomPlayerSkin) {
         // Spawn animatronic
         animatronic = Animatronic("player_rig")
         animatronic.visibilityType = PacketEntity.VisibilityType.BLACKLIST
-        animatronic.visibilityList = mutableListOf(hiddenFor)
+        if(hiddenFor != null) animatronic.visibilityList = mutableListOf(hiddenFor)
 
         // Update spawn order to make sure textures are correct
         val newNodes = mutableListOf<AnimatronicNode>()
@@ -59,6 +59,16 @@ class CustomPlayerRig(val skin: CustomPlayerSkin) {
     fun playPose(poseName: String) {
         if(!spawned) return
         animatronic.playAnimation(poseName, true)
+    }
+
+    fun playAnimationLooped(animationName: String) {
+        if(!spawned) return
+        animatronic.playAnimation(animationName, true)
+    }
+
+    fun playAnimationOnce(animationName: String) {
+        if(!spawned) return
+        animatronic.playAnimation(animationName, false)
     }
 
     fun deSpawn() {
