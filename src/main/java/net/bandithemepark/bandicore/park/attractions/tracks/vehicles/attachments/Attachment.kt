@@ -30,7 +30,7 @@ class Attachment(var id: String, val position: AttachmentPosition, val secondary
         // Updating the personal position of this attachment
         val newPosition = position.clone()
         newPosition.add(this.position.getPosition(rotation))
-        //Bukkit.broadcast(Component.text("Updating main position, offset: ${this.position.toVector()}, before: $position, after: $newPosition"))
+
         val newRotation = rotation.clone()
         newRotation.multiply(Quaternion.fromYawPitchRoll(this.position.pitch, this.position.yaw, this.position.roll))
 
@@ -39,7 +39,7 @@ class Attachment(var id: String, val position: AttachmentPosition, val secondary
         for(secondaryPosition in secondaryPositions) {
             val newSecondaryPosition = position.clone()
             newSecondaryPosition.add(secondaryPosition.getPosition(rotation))
-            //Bukkit.broadcast(Component.text("Updating secondary position, before: ${secondaryPosition.toVector().clone().add(position)}, after: $newSecondaryPosition"))
+
             val newSecondaryRotation = rotation.clone()
             newSecondaryRotation.multiply(Quaternion.fromYawPitchRoll(secondaryPosition.pitch, secondaryPosition.yaw, secondaryPosition.roll))
 

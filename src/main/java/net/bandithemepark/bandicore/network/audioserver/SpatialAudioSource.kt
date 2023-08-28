@@ -7,21 +7,29 @@ import org.bukkit.Location
 import java.util.*
 
 class SpatialAudioSource(var uuid: UUID, private var location: Location, var audioSourceId: String, var looping: Boolean, var innerRange: Double, var outerRange: Double) {
+    val world = location.world
 
     init {
         active.add(this)
         sourceUpdates.add(SpatialAudioSourceUpdateAdded(this))
     }
 
-    fun setLocation(location: Location) {
+    fun setLocation(location: Location, volume: Double = 1.0, pitch: Double = 1.0) {
         this.location = location
 
-        val similar = sourceUpdates.find { it.uuid == uuid && it is SpatialAudioSourceUpdateMovement }
-        if(similar != null) {
-            sourceUpdates.remove(similar)
+        val existing = try {
+            sourceUpdates.find { it.uuid == uuid && it is SpatialAudioSourceUpdateMovement }
+        } catch (e: Exception) {
+            null
         }
 
-        sourceUpdates.add(SpatialAudioSourceUpdateMovement(uuid, location))
+        if(existing != null) {
+            (existing as SpatialAudioSourceUpdateMovement).toLocation = location
+            existing.volume = volume
+            existing.pitch = pitch
+        } else {
+            sourceUpdates.add(SpatialAudioSourceUpdateMovement(uuid, location, volume, pitch))
+        }
     }
 
     fun remove() {
@@ -55,7 +63,11 @@ class SpatialAudioSource(var uuid: UUID, private var location: Location, var aud
 
             val array = JsonArray()
             sourceUpdates.forEach {
-                array.add(it.toJson())
+                try {
+                    array.add(it.toJson())
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
 
             messageJson.add("sources", array)
@@ -70,7 +82,7 @@ class SpatialAudioSource(var uuid: UUID, private var location: Location, var aud
         abstract fun toJson(): JsonObject
     }
 
-    class SpatialAudioSourceUpdateMovement(uuid: UUID, val toLocation: Location): SpatialAudioSourceUpdate(uuid) {
+    class SpatialAudioSourceUpdateMovement(uuid: UUID, var toLocation: Location, var volume: Double = 1.0, var pitch: Double = 1.0): SpatialAudioSourceUpdate(uuid) {
         override fun toJson(): JsonObject {
             val json = JsonObject()
             json.addProperty("action", "movement")
@@ -79,6 +91,8 @@ class SpatialAudioSource(var uuid: UUID, private var location: Location, var aud
             json.addProperty("x", toLocation.x)
             json.addProperty("y", toLocation.y)
             json.addProperty("z", toLocation.z)
+            json.addProperty("volume", volume)
+            json.addProperty("pitch", pitch)
             return json
         }
     }

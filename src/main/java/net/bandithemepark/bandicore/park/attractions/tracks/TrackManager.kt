@@ -26,6 +26,7 @@ import net.bandithemepark.bandicore.park.attractions.tracks.triggers.types.Effec
 import net.bandithemepark.bandicore.park.attractions.tracks.triggers.types.EjectTrigger
 import net.bandithemepark.bandicore.park.attractions.tracks.triggers.types.TestTrigger
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.TrackVehicleManager
+import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.AudioAttachment
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.ModelAttachment
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.SeatAttachment
 import net.bandithemepark.bandicore.util.FileManager
@@ -93,6 +94,7 @@ class TrackManager(val splineType: SplineType, val pointsPerMeter: Int, val fric
     private fun registerAttachments() {
         ModelAttachment().register()
         SeatAttachment().register()
+        AudioAttachment().register()
     }
 
     private fun internalSetup() {

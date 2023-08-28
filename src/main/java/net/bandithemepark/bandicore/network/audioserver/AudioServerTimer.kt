@@ -10,7 +10,7 @@ class AudioServerTimer: BukkitRunnable() {
     var currentTick = 0
     override fun run() {
         currentTick++
-        if(currentTick == 2) {
+        if(currentTick == 1) {
             currentTick = 0
 
             SpatialAudioSource.updateSources()
