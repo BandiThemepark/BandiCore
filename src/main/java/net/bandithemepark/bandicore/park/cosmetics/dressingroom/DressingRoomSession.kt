@@ -56,7 +56,18 @@ class DressingRoomSession(
         customPlayer = CustomPlayerRig(player.getAdaptedSkin())
         customPlayer.spawn(dressingRoom.playerPosition.toLocation(dressingRoom.world), null)
         customPlayer.moveTo(dressingRoom.playerPosition, Quaternion.fromYawPitchRoll(0.0, dressingRoom.playerYaw, 0.0))
-        customPlayer.playAnimationLooped("scream")
+
+        customPlayer.playAnimationOnce("dressing_room_enter") { playRandomIdleAnimation() }
+    }
+
+    val idleAnimations = listOf("dressing_room_idle_1")
+    private fun playRandomIdleAnimation() {
+        val animationId = idleAnimations.random()
+        customPlayer.playAnimationOnce(animationId) { playRandomIdleAnimation() }
+    }
+
+    fun playAnimation(animationName: String) {
+        customPlayer.playAnimationOnce(animationName) { playRandomIdleAnimation() }
     }
 
     private fun removeCustomPlayer() {

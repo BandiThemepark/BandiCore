@@ -66,9 +66,10 @@ class CustomPlayerRig(val skin: CustomPlayerSkin) {
         animatronic.playAnimation(animationName, true)
     }
 
-    fun playAnimationOnce(animationName: String) {
+    fun playAnimationOnce(animationName: String, onComplete: Runnable) {
         if(!spawned) return
         animatronic.playAnimation(animationName, false)
+        animatronic.onComplete = onComplete
     }
 
     fun deSpawn() {
