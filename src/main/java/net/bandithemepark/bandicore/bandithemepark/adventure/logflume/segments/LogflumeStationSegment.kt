@@ -1,5 +1,6 @@
 package net.bandithemepark.bandicore.bandithemepark.adventure.logflume.segments
 
+import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.rideop.LogFlumeRideOP
 import net.bandithemepark.bandicore.park.attractions.rideop.RideOP
 import net.bandithemepark.bandicore.park.attractions.tracks.segments.SegmentType
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.TrackVehicle
@@ -25,7 +26,12 @@ class LogflumeStationSegment: SegmentType("logflumestation", true, "MOVEMENT_SPE
                     vehicle.speed = 0.0
                     vehicle.physicsType = TrackVehicle.PhysicsType.NONE
                     currentStopped = vehicle
-                    RideOP.get("logflume")!!.updateMenu()
+
+                    val rideOP = (RideOP.get("logflume")!! as LogFlumeRideOP)
+                    rideOP.updateMenu()
+                    if(rideOP.lastDispatch + 1000L * rideOP.automaticRideOP.automaticDispatchTimeSeconds < System.currentTimeMillis()) {
+                        rideOP.lastDispatch = System.currentTimeMillis() - (rideOP.automaticRideOP.automaticDispatchTimeSeconds / 2.0).toLong()
+                    }
                 }
             }
         }
