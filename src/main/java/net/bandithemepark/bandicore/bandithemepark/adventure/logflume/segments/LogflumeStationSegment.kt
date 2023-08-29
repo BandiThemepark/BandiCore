@@ -13,7 +13,7 @@ class LogflumeStationSegment: SegmentType("logflumestation", true, "MOVEMENT_SPE
     val hasBeenDispatched = mutableListOf<TrackVehicle>()
 
     override fun onVehicleEnter(vehicle: TrackVehicle) {
-        vehicle.physicsType = TrackVehicle.PhysicsType.COLLISION_ONLY
+        vehicle.physicsType = TrackVehicle.PhysicsType.NONE
         vehicle.speedKMH = metadata[0].toDouble()
     }
 
@@ -50,7 +50,7 @@ class LogflumeStationSegment: SegmentType("logflumestation", true, "MOVEMENT_SPE
         }
 
         hasBeenDispatched.add(currentStopped!!)
-        currentStopped!!.physicsType = TrackVehicle.PhysicsType.COLLISION_ONLY
+        currentStopped!!.physicsType = TrackVehicle.PhysicsType.NONE
         currentStopped = null
     }
 }

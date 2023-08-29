@@ -12,9 +12,12 @@ class WaterSegment: SegmentType("water", false, "waterSpeed, brakeSpeed (Default
         val waterSpeed = metadata[0].toDouble()
 
         if(vehicle.speed >= 0) {
+            if(vehicle.collidedInFront != null) return
             if(vehicle.speedKMH == waterSpeed) return
 
             if(vehicle.speedKMH < waterSpeed) {
+                if(vehicle.collidedBehind != null) vehicle.collidedBehind = null
+
                 vehicle.speedKMH += 0.04
                 if(vehicle.speedKMH > waterSpeed) vehicle.speedKMH = waterSpeed
             } else {
@@ -23,9 +26,12 @@ class WaterSegment: SegmentType("water", false, "waterSpeed, brakeSpeed (Default
                 // TODO Splash
             }
         } else {
+            if(vehicle.collidedBehind != null) return
             if(vehicle.speedKMH == -waterSpeed) return
 
             if(vehicle.speedKMH > -waterSpeed) {
+                if(vehicle.collidedInFront != null) vehicle.collidedInFront = null
+
                 vehicle.speedKMH -= 0.04
                 if(vehicle.speedKMH < -waterSpeed) vehicle.speedKMH = -waterSpeed
             } else {
