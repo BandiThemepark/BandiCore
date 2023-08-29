@@ -66,7 +66,7 @@ class SpatialAudioSource(var uuid: UUID, private var location: Location, var aud
                 try {
                     array.add(it.toJson())
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    //e.printStackTrace()
                 }
             }
 
