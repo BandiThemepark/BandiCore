@@ -20,7 +20,18 @@ class TrackVehicle(val ridingOn: TrackLayout, var position: TrackPosition, val i
     var gravityMultiplier = 1.0
     var physicsType = PhysicsType.ALL
     var actions = mutableListOf<TrackVehicleAction>()
-    var isCollidingThisTick = false
+
+    var collidedInFront: TrackVehicle? = null
+    var collidedBehind: TrackVehicle? = null
+
+    fun hasCollided(): Boolean {
+        return collidedInFront != null || collidedBehind != null
+    }
+
+    fun getFinalCollidedForwards(): TrackVehicle {
+        if(collidedInFront == null) return this
+        return collidedInFront!!.getFinalCollidedForwards()
+    }
 
     var speedMS: Double
         get() = speed * 20.0
