@@ -253,6 +253,10 @@ class LogFlumeRideOP: RideOP(
             BandiCore.instance.trackManager.vehicleManager.loadTrain("logflume", layout, TrackPosition(layout.nodes.find { it.id == "119" }!!, 0), 0.0)
             BandiCore.instance.trackManager.vehicleManager.loadTrain("logflume", layout, TrackPosition(layout.nodes.find { it.id == "120" }!!, 0), 0.0)
             BandiCore.instance.trackManager.vehicleManager.loadTrain("logflume", layout, TrackPosition(layout.nodes.find { it.id == "121" }!!, 0), 0.0)
+            BandiCore.instance.trackManager.vehicleManager.loadTrain("logflume", layout, TrackPosition(layout.nodes.find { it.id == "122" }!!, 0), 0.0)
+            BandiCore.instance.trackManager.vehicleManager.loadTrain("logflume", layout, TrackPosition(layout.nodes.find { it.id == "123" }!!, 0), 0.0)
+            BandiCore.instance.trackManager.vehicleManager.loadTrain("logflume", layout, TrackPosition(layout.nodes.find { it.id == "124" }!!, 0), 0.0)
+            BandiCore.instance.trackManager.vehicleManager.loadTrain("logflume", layout, TrackPosition(layout.nodes.find { it.id == "125" }!!, 0), 0.0)
         }, 10)
     }
 
@@ -288,7 +292,7 @@ class LogFlumeRideOP: RideOP(
         automaticRideOP.dispatchesLeft--
         if(station.currentStopped != null) {
             if (station.currentStopped?.getPlayerPassengers()!!.isNotEmpty()) {
-                automaticRideOP.dispatchesLeft = 4 - boatsInStorage
+                automaticRideOP.dispatchesLeft = 7 - boatsInStorage
             }
         }
 
