@@ -47,42 +47,40 @@ class TrackVehicleUpdater {
 
             // Updating the collisions
 
-            //Bukkit.broadcast(Component.text("Vehicle ${vehicle.id} collidedInFront: ${vehicle.collidedInFront?.id} collidedBehind: ${vehicle.collidedBehind?.id}"))
-
-            // Eerst checken of kan updaten en weer bewegen
+            // Check if collided vehicles are still colliding, and if not, update states so that vehicles can move again
             if(vehicle.hasCollided()) {
                 if(vehicle.collidedInFront != null) {
-                    // Boat afremmen als verder nodig
+                    // Break vehicle if it is getting closer to vehicle in front
                     if(vehicle.collidedInFront!!.speed < vehicle.speed) {
                         vehicle.speed = vehicle.collidedInFront!!.speed
                     }
 
                     if(vehicle.collidedInFront!!.speed > vehicle.speed) {
-                        // Boat zelf mag weer bewegen en collision is afgelopen
+                        // The vehicle can move again and the collision is over
                         vehicle.collidedInFront = null
                         vehicle.collidedBehind?.collidedInFront = null
                     }
                 } else {
-                    // Boat afremmen als verder nodig
+                    // Break vehicle behind if it is getting too close
                     if(vehicle.collidedBehind!!.speed > vehicle.speed) {
                         vehicle.collidedBehind!!.speed = vehicle.speed
                     }
 
                     if(vehicle.collidedBehind!!.speed < vehicle.speed) {
-                        // boat zelf mag weer bewegen en collision is afgelopen
+                        // The vehicle can move again and the collision is over
                         vehicle.collidedBehind = null
                         vehicle.collidedInFront?.collidedBehind = null
                     }
                 }
             }
 
-            // Dan collision checks
+            // Collision checking
             if(vehicle.ridingOn.getVehicles().size > 1 && vehicle.speed != 0.0) {
                 if(vehicle.speed > 0) {
                     val nextVehicle = vehicle.getNextVehicle()
 
                     if(nextVehicle != null && vehicle.overlaps(nextVehicle)) {
-                        // Er is een botsing
+                        // A collision has occurred
                         val finalVehicle = nextVehicle.getFinalCollidedForwards()
 
                         if(finalVehicle == nextVehicle) {
@@ -101,7 +99,7 @@ class TrackVehicleUpdater {
                                 finalVehicle.speed = vehicle.speed
 
                                 finalVehicle.collidedBehind!!.collidedInFront = null
-                                finalVehicle.collidedBehind = vehicle
+                                finalVehicle.collidedBehind = null // TODO: Check if this is correct
                             }
 
                             vehicle.speed = nextVehicle.speed
@@ -119,37 +117,45 @@ class TrackVehicleUpdater {
                 }
 
                 if(vehicle.speed < 0) {
+                    val previousVehicle = vehicle.getPreviousVehicle()
 
+                    if(previousVehicle != null && previousVehicle.overlaps(vehicle)) {
+                        // A collision has occurred
+                        val finalVehicle = previousVehicle.getFinalCollidedBehind()
+
+                        if(finalVehicle == previousVehicle) {
+                            if(previousVehicle.physicsType != TrackVehicle.PhysicsType.NONE) {
+                                val previousSpeed = previousVehicle.speed
+                                previousVehicle.speed = vehicle.speed
+                                vehicle.speed = previousSpeed
+                            } else {
+                                vehicle.speed = previousVehicle.speed
+                            }
+
+                            previousVehicle.collidedInFront = vehicle
+                            vehicle.collidedBehind = previousVehicle
+                        } else {
+                            if(finalVehicle.physicsType != TrackVehicle.PhysicsType.NONE) {
+                                finalVehicle.speed = vehicle.speed
+
+                                finalVehicle.collidedInFront!!.collidedBehind = null
+                                finalVehicle.collidedInFront = null
+                            }
+
+                            vehicle.speed = previousVehicle.speed
+
+                            previousVehicle.collidedInFront = vehicle
+                            vehicle.collidedBehind = previousVehicle
+                        }
+
+                        val backSecond = vehicle.getBack()
+                        val frontFirst = previousVehicle.getFront()
+                        val distance = backSecond.getDistanceTo(frontFirst)
+
+                        vehicle.position.move(vehicle.ridingOn, distance + 1)
+                    }
                 }
             }
-
-
-//            vehicle.isCollidingThisTick = false
-//
-//            if(vehicle.ridingOn.getVehicles().size > 1 && vehicle.speed != 0.0) {
-//                if(vehicle.speed > 0) {
-//                    val nextVehicle = vehicle.getNextVehicle()
-//
-//                    if(nextVehicle != null && vehicle.overlaps(nextVehicle)) {
-//                        vehicle.isCollidingThisTick = true
-//
-//                        if(nextVehicle.physicsType == TrackVehicle.PhysicsType.NONE) {
-//                            vehicle.speed = nextVehicle.speed
-//                        } else {
-//                            vehicle.speed = vehicle.speed/10.0
-//                            nextVehicle.speed += vehicle.speed
-//                        }
-//
-//                        val backSecond = nextVehicle.getBack()
-//                        val frontFirst = vehicle.getFront()
-//                        val distance = backSecond.getDistanceTo(frontFirst)
-//
-//                        vehicle.position.move(vehicle.ridingOn, -(distance + 0))
-//                    }
-//                } else {
-//
-//                }
-//            }
 
             // Physics calculations
             if(vehicle.physicsType != TrackVehicle.PhysicsType.NONE && vehicle.physicsType != TrackVehicle.PhysicsType.COLLISION_ONLY) {
