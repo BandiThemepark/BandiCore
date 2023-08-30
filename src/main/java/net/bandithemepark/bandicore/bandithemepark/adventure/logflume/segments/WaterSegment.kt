@@ -3,7 +3,7 @@ package net.bandithemepark.bandicore.bandithemepark.adventure.logflume.segments
 import net.bandithemepark.bandicore.park.attractions.tracks.segments.SegmentType
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.TrackVehicle
 
-class WaterSegment: SegmentType("water", false, "waterSpeed, brakeSpeed (Default 1.0)") {
+class WaterSegment: SegmentType("water", false, "waterSpeed, brakeSpeed (Default 1.0), backwards (Default false)") {
     override fun onVehicleEnter(vehicle: TrackVehicle) {
         vehicle.physicsType = TrackVehicle.PhysicsType.NONE
     }
@@ -11,7 +11,7 @@ class WaterSegment: SegmentType("water", false, "waterSpeed, brakeSpeed (Default
     override fun onVehicleUpdate(vehicle: TrackVehicle) {
         val waterSpeed = metadata[0].toDouble()
 
-        if(vehicle.speed >= 0) {
+        if(!isBackwards()) {
             if(vehicle.collidedInFront != null) return
             if(vehicle.speedKMH == waterSpeed) return
 
@@ -44,5 +44,10 @@ class WaterSegment: SegmentType("water", false, "waterSpeed, brakeSpeed (Default
 
     override fun onVehicleLeave(vehicle: TrackVehicle) {
         vehicle.physicsType = TrackVehicle.PhysicsType.ALL
+    }
+
+    private fun isBackwards(): Boolean {
+        if(metadata.size < 3) return false
+        return metadata[2].lowercase() == "true"
     }
 }
