@@ -12,7 +12,7 @@ class LogFlumeAutomaticRideOP(val rideOP: LogFlumeRideOP) {
     var dispatchesLeft = 0
     var countdown = false
     var countdownLeft = 0
-    var automaticDispatchTimeSeconds = 90
+    var automaticDispatchTimeSeconds = 60
 
     fun second() {
         if(rideOP.operator == null) {
