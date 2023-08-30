@@ -33,6 +33,11 @@ class TrackVehicle(val ridingOn: TrackLayout, var position: TrackPosition, val i
         return collidedInFront!!.getFinalCollidedForwards()
     }
 
+    fun getFinalCollidedBehind(): TrackVehicle {
+        if(collidedBehind == null) return this
+        return collidedBehind!!.getFinalCollidedBehind()
+    }
+
     var speedMS: Double
         get() = speed * 20.0
         set(value) {
@@ -147,21 +152,40 @@ class TrackVehicle(val ridingOn: TrackLayout, var position: TrackPosition, val i
     }
 
     /**
+     * Gets the vehicle behind this vehicle
+     * @return The vehicle behind this vehicle, null if there is none behind it
+     */
+    fun getPreviousVehicle(): TrackVehicle? {
+        return ridingOn.getVehicles().filter { it != this }.find { it.getNextVehicle() == this }
+    }
+
+    /**
      * Checks whether this vehicle overlaps with another
      * @param otherVehicle The other vehicle
      * @return Whether this vehicle overlaps with another
      */
     fun overlaps(otherVehicle: TrackVehicle): Boolean {
-        // Get front and back of both vehicles
         val front = getFront()
         val back = getBack()
-        val nodesBetween = TrackUtil.getCurveBetweenPositions(back, front)
 
         val otherFront = otherVehicle.getFront()
         val otherBack = otherVehicle.getBack()
-        val otherNodesBetween = TrackUtil.getCurveBetweenPositions(otherBack, otherFront)
 
-        return nodesBetween.any { otherNodesBetween.contains(it) }
+        if(front.getDistanceTo(otherBack) < 0.1) return true
+        if(otherFront.getDistanceTo(back) < 0.1) return true
+
+        return false
+
+//        // Get front and back of both vehicles
+//        val front = getFront()
+//        val back = getBack()
+//        val nodesBetween = TrackUtil.getCurveBetweenPositions(back, front)
+//
+//        val otherFront = otherVehicle.getFront()
+//        val otherBack = otherVehicle.getBack()
+//        val otherNodesBetween = TrackUtil.getCurveBetweenPositions(otherBack, otherFront)
+//
+//        return nodesBetween.any { otherNodesBetween.contains(it) }
     }
 
     /**
