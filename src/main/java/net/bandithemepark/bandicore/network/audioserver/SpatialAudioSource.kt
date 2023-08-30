@@ -5,6 +5,7 @@ import com.google.gson.JsonObject
 import net.bandithemepark.bandicore.BandiCore
 import org.bukkit.Location
 import java.util.*
+import kotlin.ConcurrentModificationException
 
 class SpatialAudioSource(var uuid: UUID, private var location: Location, var audioSourceId: String, var looping: Boolean, var innerRange: Double, var outerRange: Double) {
     val world = location.world
@@ -62,12 +63,16 @@ class SpatialAudioSource(var uuid: UUID, private var location: Location, var aud
             val messageJson = JsonObject()
 
             val array = JsonArray()
-            sourceUpdates.forEach {
-                try {
-                    array.add(it.toJson())
-                } catch (e: Exception) {
-                    //e.printStackTrace()
+            try {
+                sourceUpdates.forEach {
+                    try {
+                        array.add(it.toJson())
+                    } catch (e: Exception) {
+                        //e.printStackTrace()
+                    }
                 }
+            } catch (e: ConcurrentModificationException) {
+                //e.printStackTrace()
             }
 
             messageJson.add("sources", array)
