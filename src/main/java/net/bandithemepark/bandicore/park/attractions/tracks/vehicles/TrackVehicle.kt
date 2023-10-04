@@ -133,12 +133,14 @@ class TrackVehicle(val ridingOn: TrackLayout, var position: TrackPosition, val i
      */
     fun getNextVehicle(): TrackVehicle? {
         val vehiclesOnTrack = ridingOn.getVehicles().filter { it != this }
+        if(vehiclesOnTrack.size == 1) return vehiclesOnTrack[0]
 
         var currentNode = position.nodePosition
         var nextVehicle = null as TrackVehicle?
 
         while(currentNode.connectedTo != null) {
-            val vehiclesOnNode = vehiclesOnTrack.filter { it.position.nodePosition == currentNode }.filter { it.position.position >= position.position }
+            var vehiclesOnNode = vehiclesOnTrack.filter { it.position.nodePosition == currentNode }//.filter { it.position.position >= position.position }
+            if(currentNode == position.nodePosition) vehiclesOnNode = vehiclesOnNode.filter { it.position.position >= position.position }
 
             if(vehiclesOnNode.isNotEmpty()) {
                 nextVehicle = vehiclesOnNode.sortedBy { it.position.position }[0]
