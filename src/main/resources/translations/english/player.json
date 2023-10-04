@@ -81,5 +81,15 @@
   "rideop-logflume-transfer-retrieve-title": "Retrieve from storage",
   "rideop-logflume-transfer-retrieve-description": "Retrieve a boat from storage",
   "rideop-panel-hover-text": "Press %key% to open RideOP",
-  "already-in-dressing-room": "You are already in the dressing room"
+  "already-in-dressing-room": "You are already in the dressing room",
+  "rideop-cancan-transfer-mode-title": "Transfer mode",
+  "rideop-cancan-transfer-mode-description": "No players can be on the ride",
+  "rideop-cancan-storage-send-title-0": "Send into storage 1",
+  "rideop-cancan-storage-send-title-1": "Send into storage 2",
+  "rideop-cancan-storage-send-description-0": "Send current cart on transfer into storage 1",
+  "rideop-cancan-storage-send-description-1": "Send current cart on transfer into storage 2",
+  "rideop-cancan-storage-retrieve-title-0": "Retrieve from storage 1",
+  "rideop-cancan-storage-retrieve-title-1": "Retrieve from storage 2",
+  "rideop-cancan-storage-retrieve-description-0": "Retrieve a cart from storage 1",
+  "rideop-cancan-storage-retrieve-description-1": "Retrieve a cart from storage 2"
 }

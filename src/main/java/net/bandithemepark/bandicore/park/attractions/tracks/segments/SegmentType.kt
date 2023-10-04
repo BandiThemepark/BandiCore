@@ -24,9 +24,7 @@ abstract class SegmentType(val id: String, val isBlockSection: Boolean, val howT
      * @return True if the next block section is clear
      */
     fun isNextBlockClear(): Boolean {
-        if(TrackUtil.getTrack(parent)!!.eStop) {
-            return false
-        }
+        if(TrackUtil.getTrack(parent)!!.eStop) return false
 
         var clear = true
         var current: SegmentSeparator? = parent

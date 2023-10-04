@@ -7,6 +7,10 @@ import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.switch.Log
 import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.switch.LogFlumeSwitchSegment
 import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.transferone.LogFlumePreTransferSegment
 import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.transferone.LogFlumeTransferSegment
+import net.bandithemepark.bandicore.bandithemepark.paris.cancancoaster.segments.CanCanFinalBrakeSegment
+import net.bandithemepark.bandicore.bandithemepark.paris.cancancoaster.segments.CanCanLiftSegment
+import net.bandithemepark.bandicore.bandithemepark.paris.cancancoaster.segments.CanCanStationSegment
+import net.bandithemepark.bandicore.bandithemepark.paris.cancancoaster.segments.CanCanStorageSegment
 import net.bandithemepark.bandicore.park.attractions.tracks.commands.*
 import net.bandithemepark.bandicore.park.attractions.tracks.editing.TrackEditor
 import net.bandithemepark.bandicore.park.attractions.tracks.editing.editors.TrackEditorNode
@@ -16,14 +20,13 @@ import net.bandithemepark.bandicore.park.attractions.tracks.editing.editors.Trac
 import net.bandithemepark.bandicore.park.attractions.tracks.runnables.TrackRunnable
 import net.bandithemepark.bandicore.park.attractions.tracks.segments.SegmentSeparator
 import net.bandithemepark.bandicore.park.attractions.tracks.segments.SegmentType
-import net.bandithemepark.bandicore.park.attractions.tracks.segments.types.TestBrakeSegment
-import net.bandithemepark.bandicore.park.attractions.tracks.segments.types.TestLiftHillSegment
-import net.bandithemepark.bandicore.park.attractions.tracks.segments.types.TestSegment
+import net.bandithemepark.bandicore.park.attractions.tracks.segments.types.*
 import net.bandithemepark.bandicore.park.attractions.tracks.splines.SplineType
 import net.bandithemepark.bandicore.park.attractions.tracks.triggers.TrackTrigger
 import net.bandithemepark.bandicore.park.attractions.tracks.triggers.TrackTriggerType
 import net.bandithemepark.bandicore.park.attractions.tracks.triggers.types.EffectTrigger
 import net.bandithemepark.bandicore.park.attractions.tracks.triggers.types.EjectTrigger
+import net.bandithemepark.bandicore.park.attractions.tracks.triggers.types.OnrideAudioTrigger
 import net.bandithemepark.bandicore.park.attractions.tracks.triggers.types.TestTrigger
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.TrackVehicleManager
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.AudioAttachment
@@ -47,11 +50,13 @@ class TrackManager(val splineType: SplineType, val pointsPerMeter: Int, val fric
         registerCommands()
         registerEditors()
         registerAttachments()
-        //PacketEntitySeat.startPositionTimer()
         Bukkit.getLogger().info("Loaded ${loadedTracks.size} tracks")
     }
 
     private fun registerSegments() {
+        DriveTiresSegment().register()
+        BlockBrakeSegment().register()
+
         TestSegment().register()
         TestBrakeSegment().register()
         TestLiftHillSegment().register()
@@ -66,12 +71,18 @@ class TrackManager(val splineType: SplineType, val pointsPerMeter: Int, val fric
         LogFlumeSwitchSegment().register()
         LogFlumePreSwitchSegment().register()
         LogFlumeStorageSegment().register()
+
+        CanCanStationSegment().register()
+        CanCanLiftSegment().register()
+        CanCanStorageSegment().register()
+        CanCanFinalBrakeSegment().register()
     }
 
     private fun registerTriggers() {
         TestTrigger().register()
         EjectTrigger().register()
         EffectTrigger().register()
+        OnrideAudioTrigger().register()
     }
 
     private fun registerCommands() {

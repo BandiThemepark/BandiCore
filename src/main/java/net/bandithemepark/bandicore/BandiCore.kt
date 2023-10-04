@@ -38,6 +38,8 @@ import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.rideop.Log
 import net.bandithemepark.bandicore.bandithemepark.adventure.rupsbaan.RupsbaanAttraction
 import net.bandithemepark.bandicore.bandithemepark.adventure.rupsbaan.RupsbaanCart
 import net.bandithemepark.bandicore.bandithemepark.adventure.rupsbaan.rideop.RupsbaanRideOP
+import net.bandithemepark.bandicore.bandithemepark.paris.cancancoaster.CanCanAttraction
+import net.bandithemepark.bandicore.bandithemepark.paris.cancancoaster.CanCanRideOP
 import net.bandithemepark.bandicore.network.audioserver.AudioCommand
 import net.bandithemepark.bandicore.network.audioserver.AudioServerTimer
 import net.bandithemepark.bandicore.network.audioserver.SpatialAudioSource
@@ -380,11 +382,13 @@ class BandiCore: JavaPlugin() {
     private fun registerRideOPs() {
         LogFlumeRideOP().register()
         RupsbaanRideOP().register()
+        CanCanRideOP().register()
     }
 
     private fun registerAttractions() {
         LogFlumeAttraction().register()
         RupsbaanAttraction().register()
+        CanCanAttraction().register()
     }
 
     private fun registerAchievementRewardTypes() {
