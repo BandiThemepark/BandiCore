@@ -13,9 +13,10 @@ class AudioServerTimer: BukkitRunnable() {
         if(currentTick == 1) {
             currentTick = 0
 
-            SpatialAudioSource.updateSources()
-
-            BandiCore.instance.mqttConnector.sendMessage("/audioclient/playerlocations", getCurrentPlayerInfo().toString())
+            Bukkit.getScheduler().runTaskAsynchronously(BandiCore.instance, Runnable {
+                SpatialAudioSource.updateSources()
+                BandiCore.instance.mqttConnector.sendMessage("/audioclient/playerlocations", getCurrentPlayerInfo().toString())
+            })
         }
     }
 
