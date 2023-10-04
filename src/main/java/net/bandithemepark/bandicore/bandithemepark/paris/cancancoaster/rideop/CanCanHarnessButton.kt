@@ -10,7 +10,11 @@ class CanCanHarnessButton: SimpleHarnessButton(1) {
     }
 
     override fun setClosed() {
-        TrackUtil.setHarnessOpen((rideOP as CanCanRideOP).stationSegment.vehicles[0], false)
+        try {
+            TrackUtil.setHarnessOpen((rideOP as CanCanRideOP).stationSegment.vehicles[0], false)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     override fun canOpen(): Boolean {

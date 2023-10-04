@@ -12,6 +12,7 @@ import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTransla
 import net.bandithemepark.bandicore.server.translations.MessageReplacement
 import net.bandithemepark.bandicore.util.TrackUtil
 import net.bandithemepark.bandicore.util.chat.BandiColors
+import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
