@@ -4,6 +4,7 @@ import net.bandithemepark.bandicore.park.attractions.tracks.splines.BezierSpline
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.util.Vector
+import org.joml.Math.clamp
 import kotlin.math.*
 
 
@@ -104,30 +105,38 @@ object MathUtil {
      * @return Interpolated angle
      */
     fun interpolateAngles(a1: Double, a2: Double, t: Double): Double {
-        val delta = a2-a1
-        if(delta > 180.0 || delta < -180.0) {
-            val a1Target = if(a1 < 0) -180.0 else 180.0
-            val a2From = if(a2 < 0) -180.0 else 180.0
+        var delta = repeat((a2 - a1), 360.0)
+        if(delta > 180) delta -= 360
+        return a1 + delta * t
 
-            val a1Dif = a1Target - a1
-            val a2Dif = a2 - a2From
+//        val delta = a2-a1
+//        if(delta > 180.0 || delta < -180.0) {
+//            val a1Target = if(a1 < 0) -180.0 else 180.0
+//            val a2From = if(a2 < 0) -180.0 else 180.0
+//
+//            val a1Dif = a1Target - a1
+//            val a2Dif = a2 - a2From
+//
+//            val point180 = a1Dif/(a1Dif+a2Dif)
+//
+//            //Bukkit.broadcast(Component.text("INTERPOLATION ========= From $a1 to $a2"))
+//            //Bukkit.broadcast(Component.text("t: $t, a1Target: $a1Target, a2From: $a2From, a1Dif: $a1Dif, a2Dif: $a2Dif, point180: $point180, delta: $delta"))
+//            if(t < point180) {
+//                //Bukkit.broadcast(Component.text("ONE a1: $a1, a1Target: $a1Target, t: $t"))
+//                val newT = t * (1.0/point180)
+//                return BezierSpline().linear(a1, a1Target, newT)
+//            } else {
+//                //Bukkit.broadcast(Component.text("TWO a2From: $a2From, a2: $a2, t: $t"))
+//                val newT = (t-point180) * (1.0/point180)
+//                return BezierSpline().linear(a2From, a2, newT)
+//            }
+//        } else {
+//            return BezierSpline().linear(a1, a2, t)
+//        }
+    }
 
-            val point180 = a1Dif/(a1Dif+a2Dif)
-
-            //Bukkit.broadcast(Component.text("INTERPOLATION ========= From $a1 to $a2"))
-            //Bukkit.broadcast(Component.text("t: $t, a1Target: $a1Target, a2From: $a2From, a1Dif: $a1Dif, a2Dif: $a2Dif, point180: $point180, delta: $delta"))
-            if(t < point180) {
-                //Bukkit.broadcast(Component.text("ONE a1: $a1, a1Target: $a1Target, t: $t"))
-                val newT = t * (1.0/point180)
-                return BezierSpline().linear(a1, a1Target, newT)
-            } else {
-                //Bukkit.broadcast(Component.text("TWO a2From: $a2From, a2: $a2, t: $t"))
-                val newT = (t-point180) * (1.0/point180)
-                return BezierSpline().linear(a2From, a2, newT)
-            }
-        } else {
-            return BezierSpline().linear(a1, a2, t)
-        }
+    private fun repeat(t: Double, length: Double): Double {
+        return clamp(t - floor(t / length) * length, 0.0, length)
     }
 
     /**

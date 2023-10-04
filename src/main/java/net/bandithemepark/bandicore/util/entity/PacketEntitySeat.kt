@@ -9,6 +9,7 @@ import net.bandithemepark.bandicore.util.entity.event.PacketEntityInteractEvent
 import net.bandithemepark.bandicore.util.entity.event.SeatEnterEvent
 import net.bandithemepark.bandicore.util.entity.event.SeatExitEvent
 import net.bandithemepark.bandicore.util.math.Quaternion
+import net.kyori.adventure.text.Component
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.decoration.ArmorStand
