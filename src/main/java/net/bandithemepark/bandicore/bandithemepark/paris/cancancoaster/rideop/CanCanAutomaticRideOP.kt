@@ -5,13 +5,14 @@ import net.bandithemepark.bandicore.bandithemepark.paris.cancancoaster.CanCanRid
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedActionBar
 import net.bandithemepark.bandicore.server.translations.MessageReplacement
 import net.bandithemepark.bandicore.util.chat.BandiColors
+import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 
 class CanCanAutomaticRideOP(val rideOP: CanCanRideOP) {
     val COUNTDOWN_TIME = 10
     val AUTOMATIC_DISPATCH_TIME_SECONDS_FOUR_TRAINS = 60
     val AUTOMATIC_DISPATCH_TIME_SECONDS_FIVE_TRAINS = 45
-    val AUTOMATIC_DISPATCH_TIME_SECONDS_SIX_TRAINS = 45
+    val AUTOMATIC_DISPATCH_TIME_SECONDS_SIX_TRAINS = 35
 
     var currentState = State.IDLE
     var countdownLeft = COUNTDOWN_TIME
