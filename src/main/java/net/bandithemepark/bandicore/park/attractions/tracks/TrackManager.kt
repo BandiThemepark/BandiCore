@@ -56,6 +56,7 @@ class TrackManager(val splineType: SplineType, val pointsPerMeter: Int, val fric
     private fun registerSegments() {
         DriveTiresSegment().register()
         BlockBrakeSegment().register()
+        TrimBrakeSegment().register()
 
         TestSegment().register()
         TestBrakeSegment().register()
