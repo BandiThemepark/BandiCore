@@ -98,8 +98,23 @@ class CanCanAutomaticRideOP(val rideOP: CanCanRideOP) {
                     return
                 }
 
+                if(!automaticRideOP.rideOP.harnessesLocked) {
+                    automaticRideOP.rideOP.harnessesLocked = true
+                    automaticRideOP.rideOP.updateLockedState()
+                }
+
                 automaticRideOP.countdownLeft--
                 automaticRideOP.rideOP.getPlayersInStation().forEach { it.sendTranslatedActionBar("automatic-rideop-dispatch-in", BandiColors.YELLOW.toString(), MessageReplacement("ride", automaticRideOP.rideOP.getParentAttraction()!!.appearance.displayName), MessageReplacement("seconds", automaticRideOP.countdownLeft.toString())) }
+
+                if(automaticRideOP.countdownLeft == 2) {
+                    if(automaticRideOP.rideOP.pushDownAllButton.isAvailable()) {
+                        for(harness in automaticRideOP.rideOP.getAllHarnesses()) {
+                            if(harness.harnessPosition != 0.0 && harness.currentProgress >= 30) {
+                                harness.startDownwardsInterpolation()
+                            }
+                        }
+                    }
+                }
 
                 if(automaticRideOP.countdownLeft <= 0) {
                     automaticRideOP.currentState = DISPATCHING
@@ -123,6 +138,14 @@ class CanCanAutomaticRideOP(val rideOP: CanCanRideOP) {
                 }
 
                 if(!automaticRideOP.rideOP.canDispatch()) {
+                    if(automaticRideOP.rideOP.pushDownAllButton.isAvailable()) {
+                        for(harness in automaticRideOP.rideOP.getAllHarnesses()) {
+                            if(harness.harnessPosition != 0.0 && harness.currentProgress >= 30) {
+                                harness.startDownwardsInterpolation()
+                            }
+                        }
+                    }
+
                     return
                 }
 

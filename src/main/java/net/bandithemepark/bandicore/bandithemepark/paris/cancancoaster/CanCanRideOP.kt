@@ -1,6 +1,7 @@
 package net.bandithemepark.bandicore.bandithemepark.paris.cancancoaster
 
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.bandithemepark.adventure.rupsbaan.rideop.RupsbaanRideOP
 import net.bandithemepark.bandicore.bandithemepark.paris.cancancoaster.rideop.*
 import net.bandithemepark.bandicore.bandithemepark.paris.cancancoaster.rideop.transfer.CanCanStorageRetrieveButton
 import net.bandithemepark.bandicore.bandithemepark.paris.cancancoaster.rideop.transfer.CanCanStorageSendButton
@@ -10,18 +11,23 @@ import net.bandithemepark.bandicore.bandithemepark.paris.cancancoaster.segments.
 import net.bandithemepark.bandicore.bandithemepark.paris.cancancoaster.segments.CanCanStorageSegment
 import net.bandithemepark.bandicore.park.attractions.rideop.RideOP
 import net.bandithemepark.bandicore.park.attractions.rideop.RideOPPage
+import net.bandithemepark.bandicore.park.attractions.rideop.events.RideOperateEvent
+import net.bandithemepark.bandicore.park.attractions.rideop.events.RideStopOperatingEvent
 import net.bandithemepark.bandicore.park.attractions.rideop.util.pages.RideOPCameraPage
 import net.bandithemepark.bandicore.park.attractions.rideop.util.pages.RideOPHomePage
 import net.bandithemepark.bandicore.park.attractions.rideop.util.pages.RideOPStoragePage
 import net.bandithemepark.bandicore.park.attractions.tracks.TrackPosition
 import net.bandithemepark.bandicore.park.attractions.tracks.segments.SegmentSeparator
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.TrackVehicle
+import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.HarnessAttachment
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.SeatAttachment
 import net.bandithemepark.bandicore.util.track.TrackForkMerge
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.entity.Player
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
 
 class CanCanRideOP: RideOP("cancancoaster", "cancanstation", Location(Bukkit.getWorld("world"), -161.0, -12.2, -30.5, -90f, -90f)) {
     val track = BandiCore.instance.trackManager.loadedTracks.find { it.id == "cancan" }!!
@@ -31,6 +37,7 @@ class CanCanRideOP: RideOP("cancancoaster", "cancanstation", Location(Bukkit.get
 
     val gatesButton = CanCanGatesButton()
     val harnessButton = CanCanHarnessButton()
+    val pushDownAllButton = CanCanPushDownAllButton()
 
     val automaticRideOP = CanCanAutomaticRideOP(this)
 
@@ -51,6 +58,7 @@ class CanCanRideOP: RideOP("cancancoaster", "cancanstation", Location(Bukkit.get
             RideOPHomePage(listOf(
                 gatesButton,
                 harnessButton,
+                pushDownAllButton,
                 CanCanIndicator(),
                 CanCanDispatchButton(),
                 CanCanEStop(),
@@ -86,9 +94,9 @@ class CanCanRideOP: RideOP("cancancoaster", "cancanstation", Location(Bukkit.get
 
         }, 10)
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(BandiCore.instance, {
-            BandiCore.instance.trackManager.vehicleManager.loadTrain("cancan", track, TrackPosition(track.nodes.find { it.id == "24" }!!, 0), 8.0)
-        }, 20)
+//        Bukkit.getScheduler().scheduleSyncDelayedTask(BandiCore.instance, {
+//            BandiCore.instance.trackManager.vehicleManager.loadTrain("cancan", track, TrackPosition(track.nodes.find { it.id == "24" }!!, 0), 8.0)
+//        }, 20)
     }
 
     override fun onServerStop() {
@@ -117,6 +125,11 @@ class CanCanRideOP: RideOP("cancancoaster", "cancanstation", Location(Bukkit.get
         if(track.eStop) return false
         if(harnessButton.open) return false
         if(gatesButton.open) return false
+
+        for(harness in getAllHarnesses()) {
+            if(harness.harnessPosition != 0.0) return false
+        }
+
         return true
     }
 
@@ -218,7 +231,44 @@ class CanCanRideOP: RideOP("cancancoaster", "cancanstation", Location(Bukkit.get
         return track.getVehicles().size - storageSegments.filter { it.vehicles.isNotEmpty() }.size
     }
 
+    var harnessesLocked = true
+    fun updateLockedState() {
+        getAllHarnesses().forEach {
+            it.harnessesLocked = harnessesLocked
+        }
+    }
+
+    fun getAllHarnesses(): List<HarnessAttachment> {
+        return getCurrentTrain()?.getAllAttachments()?.filter { it.type is HarnessAttachment }?.map { it.type as HarnessAttachment } ?: listOf()
+    }
+
     enum class TransferState {
         SENDING, RETRIEVING, NONE
+    }
+
+    class Events: Listener {
+        @EventHandler
+        fun onOperate(event: RideOperateEvent) {
+            if(event.rideOP.id != "cancancoaster") return
+
+            val canCanRideOP = event.rideOP as CanCanRideOP
+            if(!canCanRideOP.harnessesLocked) return
+
+            canCanRideOP.getAllHarnesses().forEach {
+                if(it.spawned) it.markFor(event.player)
+            }
+        }
+
+        @EventHandler
+        fun onStopOperating(event: RideStopOperatingEvent) {
+            if(event.rideOP.id != "cancancoaster") return
+
+            val canCanRideOP = event.rideOP as CanCanRideOP
+            if(!canCanRideOP.harnessesLocked) return
+
+            canCanRideOP.getAllHarnesses().forEach {
+                if(it.spawned) it.unMarkFor(event.player)
+            }
+        }
     }
 }

@@ -4,7 +4,7 @@ import net.bandithemepark.bandicore.bandithemepark.paris.cancancoaster.CanCanRid
 import net.bandithemepark.bandicore.park.attractions.rideop.util.buttons.DispatchButton
 import org.bukkit.entity.Player
 
-class CanCanDispatchButton: DispatchButton(4) {
+class CanCanDispatchButton: DispatchButton(8) {
 
     override fun onDispatch(player: Player) {
         (rideOP as CanCanRideOP).dispatch()

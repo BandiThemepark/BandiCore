@@ -351,6 +351,7 @@ class BandiCore: JavaPlugin() {
         getServer().pluginManager.registerEvents(RideOPCamera.Events(), this)
         getServer().pluginManager.registerEvents(CosmeticManager.Events(), this)
         getServer().pluginManager.registerEvents(DressingRoomEvents(), this)
+        getServer().pluginManager.registerEvents(CanCanRideOP.Events(), this)
     }
 
     private fun prepareSettings() {
