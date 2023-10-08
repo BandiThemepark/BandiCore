@@ -19,7 +19,7 @@ import org.bukkit.util.Vector
 import org.joml.Matrix4f
 import java.lang.Exception
 
-class ModelAttachment: AttachmentType("model", "MATERIAL, CUSTOM_MODEL_DATA") {
+open class ModelAttachment(id: String = "model", howToConfigure: String = "MATERIAL, CUSTOM_MODEL_DATA"): AttachmentType(id, howToConfigure) {
 
     var parentArmorStand: PacketEntityArmorStand? = null
     var displayEntity: PacketItemDisplay? = null
@@ -90,6 +90,9 @@ class ModelAttachment: AttachmentType("model", "MATERIAL, CUSTOM_MODEL_DATA") {
     override fun onDeSpawn() {
         displayEntity?.deSpawn()
         displayEntity = null
+
+        parentArmorStand?.deSpawn()
+        parentArmorStand = null
     }
 
     override fun onMetadataLoad(metadata: List<String>) {

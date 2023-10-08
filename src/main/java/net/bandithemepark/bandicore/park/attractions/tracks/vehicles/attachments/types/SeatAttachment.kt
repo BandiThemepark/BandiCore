@@ -40,15 +40,18 @@ import org.bukkit.util.Vector
 import java.util.*
 import kotlin.collections.HashMap
 
-class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
+class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID, HARNESS_ATTACHMENT_ID") {
     lateinit var parent: Attachment
     var seat: PacketEntitySeat? = null
     private lateinit var marker: PacketEntityMarker
     var attraction: Attraction? = null
     var tickMovementDirection = null as MovementDirection?
+    var harnessAttachmentId: String? = null
+    var harnessAttachment: Attachment? = null
 
     override fun onSpawn(location: Location, parent: Attachment) {
         this.parent = parent
+        if(harnessAttachmentId != null) harnessAttachment = parent.parent!!.getAllAttachments().find { it.id == harnessAttachmentId }
         marker = PacketEntityMarker(location.world)
 
         seat = PacketEntitySeat(attraction)
@@ -93,21 +96,12 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
         val seatPosition = secondaryPositions.keys.toList()[0]
         val seatRotation = secondaryPositions[seatPosition]!!
         val editedPosition = seatPosition.clone()
-        editedPosition.y = editedPosition.y - (BODY_HEIGHT + ARMOR_STAND_HEIGHT)
+        editedPosition.y -= (BODY_HEIGHT + ARMOR_STAND_HEIGHT)
         seat!!.moveEntity(editedPosition, seatRotation, rotationDegrees)
 
         // Updating the position of the player rig
         customPlayer?.moveTo(mainPosition.clone(), mainRotation.clone())
-//        customPlayer?.location = mainPosition.clone().toLocation(seat!!.location!!.world)
-//        customPlayer?.completeRotation = mainRotation.clone()
-//        try {
-//            customPlayer?.update()
-//        } catch (_: java.lang.NullPointerException) {}
-
         lastPosition = mainPosition.clone()
-//        val editedPosition = mainPosition.clone()
-//        editedPosition.y = editedPosition.y - ARMOR_STAND_HEIGHT
-//        seat!!.moveEntity(editedPosition, mainRotation, rotationDegrees)
     }
 
     override fun onDeSpawn() {
@@ -120,6 +114,10 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
 
     override fun onMetadataLoad(metadata: List<String>) {
         attraction = Attraction.get(metadata[0])
+
+        if(metadata.size >= 2) {
+            harnessAttachmentId = metadata[1]
+        }
     }
 
     override fun markFor(player: Player) {
@@ -156,6 +154,10 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
                 hide(event.player)
                 val seat = connections[event.entering]!!
                 seat.spawnCustomPlayer(event.player)
+
+                if(seat.harnessAttachment != null) {
+                    seat.harnessAttachment!!.type.markFor(event.player)
+                }
             }
         }
 
@@ -167,6 +169,10 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
                 show(event.player)
                 val seat = connections[event.exiting]!!
                 seat.deSpawnCustomPlayer(event.player)
+
+                if(seat.harnessAttachment != null) {
+                    seat.harnessAttachment!!.type.unMarkFor(event.player)
+                }
             }
         }
 
@@ -189,6 +195,19 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID") {
                         seat.tickMovementDirection = MovementDirection.LEFT
                     } else if(event.x < 0) {
                         seat.tickMovementDirection = MovementDirection.RIGHT
+                    }
+
+                    if(event.z >= 0) return
+                    if(seat.harnessAttachment == null) return
+                    if(!(seat.harnessAttachment!!.type as HarnessAttachment).harnessesLocked) return
+
+                    val harness = seat.harnessAttachment!!.type as HarnessAttachment
+                    if(harness.harnessPosition - 0.5 < 0.0) {
+                        harness.harnessPosition = 0.0
+                        harness.unMarkFor(event.player)
+                        if(seat.attraction?.rideOP?.operator != null) harness.unMarkFor(seat.attraction!!.rideOP!!.operator!!)
+                    } else {
+                        harness.harnessPosition -= 0.5
                     }
                 }
             }

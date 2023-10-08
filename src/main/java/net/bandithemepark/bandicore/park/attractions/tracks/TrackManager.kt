@@ -29,9 +29,7 @@ import net.bandithemepark.bandicore.park.attractions.tracks.triggers.types.Eject
 import net.bandithemepark.bandicore.park.attractions.tracks.triggers.types.OnrideAudioTrigger
 import net.bandithemepark.bandicore.park.attractions.tracks.triggers.types.TestTrigger
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.TrackVehicleManager
-import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.AudioAttachment
-import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.ModelAttachment
-import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.SeatAttachment
+import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.*
 import net.bandithemepark.bandicore.util.FileManager
 import net.bandithemepark.bandicore.util.entity.PacketEntitySeat
 import org.bukkit.Bukkit
@@ -107,6 +105,8 @@ class TrackManager(val splineType: SplineType, val pointsPerMeter: Int, val fric
         ModelAttachment().register()
         SeatAttachment().register()
         AudioAttachment().register()
+        HarnessAttachment().register()
+        HarnessHolderAttachment().register()
     }
 
     private fun internalSetup() {
