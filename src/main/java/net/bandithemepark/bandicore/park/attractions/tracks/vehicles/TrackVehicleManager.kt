@@ -132,6 +132,8 @@ class TrackVehicleManager {
             member.attachments = attachments
             vehicle.members.add(member)
 
+            member.getAllAttachments().forEach { it.parent = member }
+
             for(attachment in member.getAllAttachments()) {
                 attachment.type.onSpawn(Location(layout.world, layout.origin.x + position.nodePosition.x, layout.origin.y + position.nodePosition.y, layout.origin.z + position.nodePosition.z), attachment)
             }

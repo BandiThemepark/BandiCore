@@ -1,5 +1,6 @@
 package net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments
 
+import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.TrackVehicleMember
 import net.bandithemepark.bandicore.util.math.Quaternion
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
@@ -54,4 +55,6 @@ class Attachment(var id: String, val position: AttachmentPosition, val secondary
             child.update(newPosition.clone(), newRotation.clone(), originalRotation.clone())
         }
     }
+
+    var parent: TrackVehicleMember? = null
 }
