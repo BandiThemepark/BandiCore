@@ -15,6 +15,7 @@ class RupsbaanPushDownAllButton: NormalButton(3, "rideop-rupsbaan-push-title", "
     }
 
     override fun onClick(player: Player) {
+        if(!isAvailable()) return
         for(cart in (rideOP as RupsbaanRideOP).ride.carts) {
             cart.startDownwardsInterpolation()
         }
