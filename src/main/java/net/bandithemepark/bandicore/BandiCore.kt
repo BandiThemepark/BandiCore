@@ -105,6 +105,9 @@ import net.bandithemepark.bandicore.server.essentials.warps.DeleteWarpCommand
 import net.bandithemepark.bandicore.server.essentials.warps.NearestWarpCommand
 import net.bandithemepark.bandicore.server.essentials.warps.SetWarpCommand
 import net.bandithemepark.bandicore.server.essentials.warps.WarpCommand
+import net.bandithemepark.bandicore.server.minigames.Minigame
+import net.bandithemepark.bandicore.server.minigames.MinigameTest
+import net.bandithemepark.bandicore.server.minigames.cooking.CookingMinigame
 import net.bandithemepark.bandicore.server.placeables.PlaceableEvents
 import net.bandithemepark.bandicore.server.placeables.PlaceableManager
 import net.bandithemepark.bandicore.server.placeables.PlaceableRemoveCommand
@@ -225,6 +228,8 @@ class BandiCore: JavaPlugin() {
         placeableManager = PlaceableManager()
         placeableManager.loadPlaced()
 
+        registerMinigames()
+
         SpatialAudioSource(
             UUID.randomUUID(),
             Location(Bukkit.getWorld("world")!!, 17.5, 0.0, -144.5),
@@ -303,6 +308,7 @@ class BandiCore: JavaPlugin() {
         getCommand("effect")!!.setExecutor(EffectCommand())
         getCommand("removenearplaceables")!!.setExecutor(PlaceableRemoveCommand())
         getCommand("dressingroom")!!.setExecutor(DressingRoomCommand())
+        getCommand("cooking")!!.setExecutor(MinigameTest())
     }
 
     private fun registerEvents() {
@@ -410,5 +416,10 @@ class BandiCore: JavaPlugin() {
         VIPCosmeticRequirement().register()
         RidecounterCosmeticRequirement().register()
         AchievementCosmeticRequirement().register()
+    }
+
+    private fun registerMinigames() {
+        CookingMinigame().register()
+        Minigame.startTimer()
     }
 }
