@@ -2,6 +2,7 @@ package net.bandithemepark.bandicore.server.minigames
 
 import net.bandithemepark.bandicore.BandiCore
 import org.bukkit.Bukkit
+import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
 abstract class Minigame(val id: String, val name: String, val description: List<String>, val icon: ItemStack, val warpId: String) {
@@ -18,6 +19,10 @@ abstract class Minigame(val id: String, val name: String, val description: List<
 
         fun get(id: String): Minigame? {
             return minigames.find { it.id == id }
+        }
+
+        fun getCurrentGame(player: Player): MinigameGame? {
+            return minigames.flatMap { it.games }.find { it.currentPlayers.contains(player) }
         }
 
         fun startTimer() {

@@ -107,6 +107,7 @@ import net.bandithemepark.bandicore.server.essentials.warps.SetWarpCommand
 import net.bandithemepark.bandicore.server.essentials.warps.WarpCommand
 import net.bandithemepark.bandicore.server.minigames.Minigame
 import net.bandithemepark.bandicore.server.minigames.MinigameTest
+import net.bandithemepark.bandicore.server.minigames.cooking.CookingEvents
 import net.bandithemepark.bandicore.server.minigames.cooking.CookingMinigame
 import net.bandithemepark.bandicore.server.placeables.PlaceableEvents
 import net.bandithemepark.bandicore.server.placeables.PlaceableManager
@@ -358,6 +359,7 @@ class BandiCore: JavaPlugin() {
         getServer().pluginManager.registerEvents(CosmeticManager.Events(), this)
         getServer().pluginManager.registerEvents(DressingRoomEvents(), this)
         getServer().pluginManager.registerEvents(CanCanRideOP.Events(), this)
+        getServer().pluginManager.registerEvents(CookingEvents(), this)
     }
 
     private fun prepareSettings() {

@@ -16,7 +16,7 @@ open class MinigamePlayer(player: Player): CraftPlayer(Bukkit.getServer() as Cra
     val originalInventory = player.inventory.contents!!.clone()
     val originalGameMode = player.gameMode
 
-    fun reset() {
+    open fun reset() {
         inventory.contents = originalInventory
         gameMode = originalGameMode
         teleport(originalLocation)

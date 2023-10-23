@@ -1,4 +1,8 @@
 package net.bandithemepark.bandicore.server.minigames.cooking.placeable
 
-abstract class CookingPlaceableProgressable: CookingPlaceableHolder() {
+import org.bukkit.Location
+import org.bukkit.inventory.ItemStack
+
+abstract class CookingPlaceableProgressable(location: Location, model: ItemStack): CookingPlaceableHolder(location, model) {
+
 }
