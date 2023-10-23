@@ -1,6 +1,9 @@
 package net.bandithemepark.bandicore.server.minigames.casino
 
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.server.essentials.coins.CoinManager
+import net.bandithemepark.bandicore.server.essentials.coins.CoinManager.Companion.getBalance
+import org.bukkit.entity.Player
 
 class CasinoOdds(val odds: List<CasinoOdd>) {
     init {
@@ -8,11 +11,13 @@ class CasinoOdds(val odds: List<CasinoOdd>) {
     }
 
     /**
-     * Runs the odds and returns the amount of money the player won
+     * Runs the odds and returns the amount of money the player won.
+     * Automatically changes player balance and adds the played data to the jackpot.
      * @param inputAmount The amount of money the player bet
      * @return The amount of money the player won
+     * @throws JackpotWinException When the player wins the jackpot
      */
-    fun play(inputAmount: Int): Int {
+    fun play(player: Player, inputAmount: Int): Int {
         val random = Math.random()
         var currentChance = 0.0
 
@@ -20,6 +25,13 @@ class CasinoOdds(val odds: List<CasinoOdd>) {
         for(odd in odds) {
             currentChance += odd.chance
             if(random <= currentChance) {
+                if(odd.isJackpot) {
+                    val jackpot = BandiCore.instance.casino.jackpot
+                    jackpot.addPlayed(inputAmount, 0)
+                    jackpot.winJackpot(player)
+                    throw JackpotWinException()
+                }
+
                 winAmount = (inputAmount * odd.multiplier).toInt()
                 break
             }
@@ -27,6 +39,10 @@ class CasinoOdds(val odds: List<CasinoOdd>) {
 
         val jackpot = BandiCore.instance.casino.jackpot
         jackpot.addPlayed(inputAmount, winAmount)
+
+        val balanceChange = winAmount - inputAmount
+        CoinManager.setLoadedBalance(player, player.getBalance() + balanceChange)
+        CoinManager.saveBalance(player)
 
         return winAmount
     }
@@ -39,7 +55,7 @@ class CasinoOdds(val odds: List<CasinoOdd>) {
         }
 
         // Average multiplier need to be 0.9
-        val averageMultiplier = odds.sumOf { it.multiplier } / odds.size
+        val averageMultiplier = odds.filter { !it.isJackpot }.sumOf { it.multiplier } / odds.size
         if(averageMultiplier != 1.0 - CasinoJackpot.JACKPOT_CUT_PERCENTAGE) {
             throw InvalidOddsException("Average multiplier of all odds need to be ${1.0 - CasinoJackpot.JACKPOT_CUT_PERCENTAGE}. Currently it is $averageMultiplier")
         }
@@ -47,3 +63,4 @@ class CasinoOdds(val odds: List<CasinoOdd>) {
 }
 
 class InvalidOddsException(message: String): Exception(message)
+class JackpotWinException: Exception()

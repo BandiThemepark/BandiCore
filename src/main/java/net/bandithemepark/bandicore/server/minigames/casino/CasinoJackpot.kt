@@ -1,7 +1,12 @@
 package net.bandithemepark.bandicore.server.minigames.casino
 
 import com.google.gson.JsonObject
+import net.bandithemepark.bandicore.server.essentials.coins.CoinManager
+import net.bandithemepark.bandicore.server.essentials.coins.CoinManager.Companion.getBalance
 import net.bandithemepark.bandicore.util.FileUtil
+import net.bandithemepark.bandicore.util.Util.sendColoredMessage
+import org.bukkit.Bukkit
+import org.bukkit.entity.Player
 
 class CasinoJackpot {
     companion object {
@@ -54,5 +59,24 @@ class CasinoJackpot {
         json.addProperty("outgoing", 0)
 
         FileUtil.saveToFile(json, "plugins/BandiCore/casino/jackpot.json")
+    }
+
+    /**
+     * When a player wins the jackpot, this function is called.
+     * @param player The player who won the jackpot
+     */
+    fun winJackpot(player: Player) {
+        val wonAmount = jackpot
+        jackpot = 0
+
+        CoinManager.setLoadedBalance(player, player.getBalance() + wonAmount)
+        CoinManager.saveBalance(player)
+
+        Bukkit.getOnlinePlayers().forEach {
+            it.sendColoredMessage(" ")
+            it.sendColoredMessage("<gradient:#E89C31:#DBA858>JACKPOT WINNER!</gradient>")
+            it.sendColoredMessage("<#DBA858>${player.name} has won the jackpot of <#8C0E0F>$wonAmount <#DBA858>coins!")
+            it.sendColoredMessage(" ")
+        }
     }
 }
