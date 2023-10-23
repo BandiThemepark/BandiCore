@@ -107,6 +107,7 @@ import net.bandithemepark.bandicore.server.essentials.warps.SetWarpCommand
 import net.bandithemepark.bandicore.server.essentials.warps.WarpCommand
 import net.bandithemepark.bandicore.server.minigames.Minigame
 import net.bandithemepark.bandicore.server.minigames.MinigameTest
+import net.bandithemepark.bandicore.server.minigames.casino.Casino
 import net.bandithemepark.bandicore.server.minigames.cooking.CookingEvents
 import net.bandithemepark.bandicore.server.minigames.cooking.CookingMinigame
 import net.bandithemepark.bandicore.server.placeables.PlaceableEvents
@@ -139,6 +140,7 @@ class BandiCore: JavaPlugin() {
     lateinit var effectManager: EffectManager
     lateinit var placeableManager: PlaceableManager
     lateinit var cosmeticManager: CosmeticManager
+    lateinit var casino: Casino
 
     var okHttpClient = OkHttpClient()
     var restarter = Restart()
@@ -421,6 +423,8 @@ class BandiCore: JavaPlugin() {
     }
 
     private fun registerMinigames() {
+        casino = Casino()
+
         CookingMinigame().register()
         Minigame.startTimer()
     }
