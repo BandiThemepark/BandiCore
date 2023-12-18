@@ -1,7 +1,7 @@
 plugins {
     `java-library`
-    id("io.papermc.paperweight.userdev") version "1.3.9-SNAPSHOT"
-    id("xyz.jpenilla.run-paper") version "1.0.6"
+    id("io.papermc.paperweight.userdev") version "1.5.11"
+    id("xyz.jpenilla.run-paper") version "2.2.2"
 
     id("maven-publish")
     id("com.github.johnrengelman.shadow") version "7.0.0"
@@ -42,7 +42,7 @@ repositories {
 
 dependencies {
     implementation("org.mineskin:java-client:1.2.2-SNAPSHOT")
-    paperDevBundle("1.20-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("1.20.4-R0.1-SNAPSHOT")
     compileOnly("javax.annotation:javax.annotation-api:1.3.2")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")

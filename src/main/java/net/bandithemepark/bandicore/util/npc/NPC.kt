@@ -7,18 +7,21 @@ import net.bandithemepark.bandicore.BandiCore
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.*
 import net.minecraft.server.MinecraftServer
+import net.minecraft.server.level.ClientInformation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EquipmentSlot
+import net.minecraft.world.entity.HumanoidArm
+import net.minecraft.world.entity.player.ChatVisiblity
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.block.data.type.TrapDoor
-import org.bukkit.craftbukkit.v1_20_R1.CraftWorld
-import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer
-import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack
+import org.bukkit.craftbukkit.v1_20_R3.CraftWorld
+import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer
+import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -47,12 +50,12 @@ class NPC(val name: String, val textureProperty: Property, var visibilityType: N
         profile!!.properties.put("textures", textureProperty)
 
         // Creating the actual NPC instance and moving it to the spawn location
-        npc = ServerPlayer(server, (location.world as CraftWorld).handle, profile!!)
+        npc = ServerPlayer(server, (location.world as CraftWorld).handle, profile!!, ClientInformation("", 1, ChatVisiblity.FULL, true, 127, HumanoidArm.RIGHT, true, true))
         npc!!.setPos(location.x, location.y, location.z)
 
         // Sending packets for spawning the NPC
         sendPacket(ClientboundPlayerInfoUpdatePacket(ClientboundPlayerInfoUpdatePacket.Action.ADD_PLAYER, npc!!))
-        sendPacket(ClientboundAddPlayerPacket(npc!!))
+        //sendPacket(ClientboundAddPlayerPacket(npc!!))
         showSecondLayer()
 
         spawned = true
@@ -72,7 +75,7 @@ class NPC(val name: String, val textureProperty: Property, var visibilityType: N
      */
     fun spawnFor(player: Player) {
         (player as CraftPlayer).handle.connection.send(ClientboundPlayerInfoUpdatePacket(ClientboundPlayerInfoUpdatePacket.Action.ADD_PLAYER, npc!!))
-        player.handle.connection.send(ClientboundAddPlayerPacket(npc!!))
+        //player.handle.connection.send(ClientboundAddPlayerPacket(npc!!))
 
         val data = npc!!.entityData
         data.set(net.minecraft.world.entity.player.Player.DATA_PLAYER_MODE_CUSTOMISATION, 127.toByte())

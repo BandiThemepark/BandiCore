@@ -19,8 +19,8 @@ import net.minecraft.network.protocol.game.ClientboundSetCameraPacket
 import net.minecraft.network.protocol.game.ClientboundTeleportEntityPacket
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
-import org.bukkit.craftbukkit.v1_20_R1.entity.CraftArmorStand
-import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer
+import org.bukkit.craftbukkit.v1_20_R3.entity.CraftArmorStand
+import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer
 import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
