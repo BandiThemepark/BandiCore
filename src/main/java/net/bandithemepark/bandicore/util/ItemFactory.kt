@@ -172,7 +172,7 @@ class ItemFactory {
         require(itemStack.type == Material.PLAYER_HEAD) { "You can not apply a skull texture to an item that is not a skull" }
         val skullMeta = itemMeta as SkullMeta
 
-        val profile = GameProfile(UUID.randomUUID(), null)
+        val profile = GameProfile(UUID.randomUUID(), "a")
         val encodedData: ByteArray = Base64.getEncoder()
             .encode("{textures:{SKIN:{url:\"http://textures.minecraft.net/texture/$texture\"}}}".toByteArray())
         profile.properties.put("textures", Property("textures", String(encodedData)))
