@@ -14,14 +14,14 @@ class CasinoOdds(val odds: List<CasinoOdd>) {
      * Runs the odds and returns the amount of money the player won.
      * Automatically changes player balance and adds the played data to the jackpot.
      * @param inputAmount The amount of money the player bet
-     * @return The amount of money the player won
-     * @throws JackpotWinException When the player wins the jackpot
+     * @return The won odd
      */
-    fun play(player: Player, inputAmount: Int): Int {
+    fun play(player: Player, inputAmount: Int): CasinoOdd {
         val random = Math.random()
         var currentChance = 0.0
 
         var winAmount = 0
+        var winOdd = odds[0]
         for(odd in odds) {
             currentChance += odd.chance
             if(random <= currentChance) {
@@ -29,10 +29,11 @@ class CasinoOdds(val odds: List<CasinoOdd>) {
                     val jackpot = BandiCore.instance.casino.jackpot
                     jackpot.addPlayed(inputAmount, 0)
                     jackpot.winJackpot(player)
-                    throw JackpotWinException()
+                    return odd
                 }
 
                 winAmount = (inputAmount * odd.multiplier).toInt()
+                winOdd = odd
                 break
             }
         }
@@ -44,7 +45,7 @@ class CasinoOdds(val odds: List<CasinoOdd>) {
         CoinManager.setLoadedBalance(player, player.getBalance() + balanceChange)
         CoinManager.saveBalance(player)
 
-        return winAmount
+        return winOdd
     }
 
     private fun validateOdds() {
@@ -56,11 +57,15 @@ class CasinoOdds(val odds: List<CasinoOdd>) {
 
         // Average multiplier need to be 0.9
         val averageMultiplier = odds.filter { !it.isJackpot }.sumOf { it.multiplier } / odds.size
+
+        // Calculate how much you should lower one of the multipliers to get the average multiplier to 0.9
+        val multiplierDifference = 1.0 - CasinoJackpot.JACKPOT_CUT_PERCENTAGE - averageMultiplier
+        val multiplierDifferencePerOdd = multiplierDifference * odds.filter { !it.isJackpot }.size
+
         if(averageMultiplier != 1.0 - CasinoJackpot.JACKPOT_CUT_PERCENTAGE) {
-            throw InvalidOddsException("Average multiplier of all odds need to be ${1.0 - CasinoJackpot.JACKPOT_CUT_PERCENTAGE}. Currently it is $averageMultiplier")
+            throw InvalidOddsException("Average multiplier of all odds need to be ${1.0 - CasinoJackpot.JACKPOT_CUT_PERCENTAGE}. Currently it is $averageMultiplier. You should change one of them by $multiplierDifferencePerOdd")
         }
     }
 }
 
 class InvalidOddsException(message: String): Exception(message)
-class JackpotWinException: Exception()
