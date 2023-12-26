@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack
 abstract class CookingPlaceable(val location: Location, val model: ItemStack) {
 
     var displayEntity: PacketItemDisplay? = null
-    fun place(players: List<CookingPlayer>) {
+    open fun place(players: List<CookingPlayer>) {
         location.block.type = Material.BARRIER
         displayEntity = PacketItemDisplay()
         displayEntity!!.visibilityType = PacketEntity.VisibilityType.WHITELIST

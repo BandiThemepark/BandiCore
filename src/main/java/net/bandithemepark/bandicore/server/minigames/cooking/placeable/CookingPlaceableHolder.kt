@@ -7,6 +7,7 @@ import net.bandithemepark.bandicore.util.entity.PacketEntity
 import net.bandithemepark.bandicore.util.entity.display.PacketItemDisplay
 import org.bukkit.Location
 import org.bukkit.inventory.ItemStack
+import org.joml.Matrix4f
 
 abstract class CookingPlaceableHolder(location: Location, model: ItemStack): CookingPlaceable(location, model), CookingItemHolder {
     override var currentItem: CookingItem? = null
@@ -25,8 +26,9 @@ abstract class CookingPlaceableHolder(location: Location, model: ItemStack): Coo
         itemDisplay = PacketItemDisplay()
         itemDisplay!!.visibilityType = PacketEntity.VisibilityType.WHITELIST
         itemDisplay!!.visibilityList = displayEntity!!.visibilityList.toMutableList()
-        itemDisplay!!.spawn(location.clone().add(0.0, 1.5, 0.0))
+        itemDisplay!!.spawn(location.clone().add(0.0, 1.0 + (1.0 / 32.0), 0.0))
         itemDisplay!!.setItemStack(itemStack)
+        itemDisplay!!.setTransformationMatrix(Matrix4f().rotateXYZ(Math.toRadians(90.0).toFloat(), 0.0f, 0.0f))
         itemDisplay!!.updateMetadata()
     }
 

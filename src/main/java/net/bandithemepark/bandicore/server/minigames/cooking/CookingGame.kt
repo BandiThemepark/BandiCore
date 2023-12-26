@@ -13,6 +13,8 @@ import net.bandithemepark.bandicore.util.chat.BandiColors
 import net.kyori.adventure.title.Title
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
+import org.bukkit.potion.PotionEffect
+import org.bukkit.potion.PotionEffectType
 import java.time.Duration
 import kotlin.random.Random
 
@@ -43,8 +45,10 @@ class CookingGame(val map: CookingMap) {
             player.teleport(map.spawnLocations[index])
             player.inventory.clear()
             player.gameMode = GameMode.ADVENTURE
-            player.foodLevel = 200
+            player.foodLevel = 5
             player.createBossBar()
+            player.inventory.heldItemSlot = 4
+            player.addPotionEffect(PotionEffect(PotionEffectType.JUMP, 999999, 200, false, false))
         }
 
         map.placeables.forEach {
@@ -64,6 +68,7 @@ class CookingGame(val map: CookingMap) {
 
         currentPlayers.forEach { it.updateBossBar() }
         updateOrders()
+        updateReturningPlates()
 
         map.placeables.filterIsInstance<CookingPlaceableStove>().forEach { it.update() }
 
@@ -156,7 +161,9 @@ class CookingGame(val map: CookingMap) {
     }
 
     fun addPlateToSink(amount: Int = 1) {
-        map.placeables.filterIsInstance<CookingPlaceableSink>()[0].plates += amount
+        val sink = map.placeables.filterIsInstance<CookingPlaceableSink>()[0]
+        sink.plates += amount
+        sink.updateProgressBar()
     }
 
     data class ReturningPlate(var timeLeft: Int) {

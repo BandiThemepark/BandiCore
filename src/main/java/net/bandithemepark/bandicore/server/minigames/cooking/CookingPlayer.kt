@@ -9,6 +9,7 @@ import org.bukkit.boss.BarColor
 import org.bukkit.boss.BarStyle
 import org.bukkit.boss.BossBar
 import org.bukkit.entity.Player
+import org.bukkit.potion.PotionEffectType
 
 class CookingPlayer(player: Player, val game: CookingGame, val type: CookingMinigameGame): MinigamePlayer(player), CookingItemHolder {
     var bossBar: BossBar? = null
@@ -36,6 +37,7 @@ class CookingPlayer(player: Player, val game: CookingGame, val type: CookingMini
     override fun reset() {
         super.reset()
         removeBossBar()
+        removePotionEffect(PotionEffectType.JUMP)
     }
 
     override var currentItem: CookingItem? = null

@@ -44,12 +44,12 @@ class CookingMinigameSolo: CookingMinigameGame("cooking-solo", 1, 1, "Cooking (S
         CookingPlaceableSink(Location(Bukkit.getWorld("world"), -83.5, 14.0, -118.5, -90.0f, 0.0f)),
         CookingPlaceableWashedPlates(Location(Bukkit.getWorld("world"), -83.5, 14.0, -119.5, -90.0f, 0.0f)),
     ), listOf(
-        CookingRecipeCook(CookingItem.BURGER, CookingItem.COOKED_BURGER, CookingItem.BURNT_BURGER, 10 * 20, 8 * 20),
+        CookingRecipeCook(CookingItem.BURGER, CookingItem.COOKED_BURGER, CookingItem.BURNT_BURGER, 10 * 20, 10 * 20),
         CookingRecipeCook(CookingItem.BURGER_WITH_CHEESE, CookingItem.COOKED_BURGER_WITH_CHEESE, CookingItem.BURNT_BURGER_WITH_CHEESE, 10 * 20, 8 * 20),
-        CookingRecipeCook(CookingItem.UNCOOKED_TOSTI, CookingItem.TOSTI, CookingItem.BURNT_TOSTI, 10 * 20, 8 * 20),
+        CookingRecipeCook(CookingItem.UNCOOKED_TOSTI, CookingItem.TOSTI, CookingItem.BURNT_TOSTI, 10 * 20, 10 * 20),
 
-        CookingRecipeCutting(CookingItem.TOMATO, CookingItem.TOMATO_SLICE, 5),
-        CookingRecipeCutting(CookingItem.LETTUCE, CookingItem.LETTUCE_SLICE, 5),
+        CookingRecipeCutting(CookingItem.TOMATO, CookingItem.TOMATO_SLICE, 10),
+        CookingRecipeCutting(CookingItem.LETTUCE, CookingItem.LETTUCE_SLICE, 10),
 
         CookingRecipeCombine(CookingItem.BURGER_BUN, CookingItem.LETTUCE_SLICE, CookingItem.BURGER_BUN_LETTUCE_SLICE),
         CookingRecipeCombine(CookingItem.BURGER_BUN_LETTUCE_SLICE, CookingItem.TOMATO_SLICE, CookingItem.BURGER_BUN_LETTUCE_SLICE_TOMATO_SLICE),
