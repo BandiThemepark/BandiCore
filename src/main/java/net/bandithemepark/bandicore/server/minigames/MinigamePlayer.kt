@@ -22,5 +22,6 @@ open class MinigamePlayer(player: Player): CraftPlayer(Bukkit.getServer() as Cra
         teleport(originalLocation)
         getBossBar()?.overrideText = null
         getBossBar()?.update()
+        // TODO: Set reach attribute to default value when Minecraft has updated
     }
 }

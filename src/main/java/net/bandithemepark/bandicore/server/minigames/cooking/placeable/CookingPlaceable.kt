@@ -27,4 +27,12 @@ abstract class CookingPlaceable(val location: Location, val model: ItemStack) {
 
     abstract fun onRightClick(player: CookingPlayer)
     abstract fun onLeftClick(player: CookingPlayer)
+
+    fun showGlow(player: CookingPlayer) {
+        displayEntity!!.startGlowFor(player)
+    }
+
+    fun hideGlow(player: CookingPlayer) {
+        displayEntity!!.endGlowFor(player)
+    }
 }

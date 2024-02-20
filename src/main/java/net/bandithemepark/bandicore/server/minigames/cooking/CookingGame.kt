@@ -56,6 +56,8 @@ class CookingGame(val map: CookingMap) {
             if(it is CookingItemHolder) it.setItem(null)
         }
 
+        // TODO: Update player reach attribute when Minecraft has updated
+
         addOrder()
         addOrder()
         addOrder()
@@ -76,6 +78,8 @@ class CookingGame(val map: CookingMap) {
             end()
         }
     }
+
+    val REACH = 2.0
 
     var nextOrderIn = 0
     private fun updateOrders() {
