@@ -9,6 +9,7 @@ class LogFlumeTransferSendButton: NormalButton(2, "rideop-logflume-transfer-send
     }
 
     override fun onClick(player: Player) {
+        if(!isAvailable()) return
         (rideOP as LogFlumeRideOP).sendIntoStorage()
     }
 }

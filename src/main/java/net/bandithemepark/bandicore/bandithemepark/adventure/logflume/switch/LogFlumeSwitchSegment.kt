@@ -6,6 +6,8 @@ import net.bandithemepark.bandicore.park.attractions.rideop.RideOP
 import net.bandithemepark.bandicore.park.attractions.tracks.segments.SegmentType
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.TrackVehicle
 import net.bandithemepark.bandicore.util.TrackUtil
+import net.kyori.adventure.text.Component
+import org.bukkit.Bukkit
 import org.bukkit.scheduler.BukkitRunnable
 
 class LogFlumeSwitchSegment: SegmentType("logflumeswitch", true, "speedKMH") {
@@ -30,6 +32,7 @@ class LogFlumeSwitchSegment: SegmentType("logflumeswitch", true, "speedKMH") {
     }
 
     override fun onVehicleLeave(vehicle: TrackVehicle) {
+        Bukkit.broadcast(Component.text("Vehicle left switch, storage state: ${rideOP.storageState}"))
         if(rideOP.storageState == LogFlumeRideOP.StorageState.STORING) {
             state = SwitchState.RESETTING
             currentVehicle = null

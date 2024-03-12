@@ -5,6 +5,7 @@ import net.bandithemepark.bandicore.park.attractions.rideop.RideOP
 import net.bandithemepark.bandicore.park.attractions.tracks.segments.SegmentType
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.TrackVehicle
 import net.bandithemepark.bandicore.util.TrackUtil
+import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 
 class LogFlumeStorageSegment: SegmentType("logflumestorage", true, "index, speedKMH") {
@@ -12,6 +13,7 @@ class LogFlumeStorageSegment: SegmentType("logflumestorage", true, "index, speed
     var currentVehicle: TrackVehicle? = null
 
     override fun onVehicleEnter(vehicle: TrackVehicle) {
+        Bukkit.broadcast(Component.text("Vehicle entered storage ${metadata[0]} at speed ${vehicle.speedKMH}km/h"))
         if(vehicle.speed == 0.0) return
         currentVehicle = vehicle
     }
@@ -19,6 +21,7 @@ class LogFlumeStorageSegment: SegmentType("logflumestorage", true, "index, speed
     override fun onVehicleUpdate(vehicle: TrackVehicle) {
         if(mode == Mode.STORING) {
             if(!TrackUtil.isPastMiddle(parent, vehicle)) {
+                Bukkit.broadcast(Component.text("Stopped vehicle ${vehicle.id} at storage ${metadata[0]}"))
                 vehicle.speed = 0.0
                 val rideOP = (RideOP.get("logflume") as LogFlumeRideOP)
                 rideOP.storageState = LogFlumeRideOP.StorageState.NONE
