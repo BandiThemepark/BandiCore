@@ -66,6 +66,7 @@ class CanCanStationSegment: SegmentType("cancanstation", true, "DISPATCH_SPEED_K
     override fun onVehicleLeave(vehicle: TrackVehicle) {
         if(dispatched) vehicle.physicsType = TrackVehicle.PhysicsType.ALL
         currentVehicle = null
+        Bukkit.broadcast(Component.text("Vehicle left station, was sent backwards? ${!dispatched}"))
     }
 
     fun dispatch() {
