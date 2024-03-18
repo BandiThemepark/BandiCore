@@ -14,6 +14,7 @@ class Effect(val fileName: String) {
     var duration = 0
     var loop = false
     val keyframes = mutableListOf<EffectKeyframe>()
+    var forwards = false
 
     init {
         val file = File("plugins/BandiCore/effects/$fileName.json")
@@ -28,6 +29,7 @@ class Effect(val fileName: String) {
         // Load main values
         duration = json.get("duration").asInt
         loop = json.get("loop").asBoolean
+        if(json.has("forwards")) forwards = json.get("forwards").asBoolean
 
         // Load all keyframes
         val keyframesJson = json.getAsJsonArray("keyframes")
@@ -42,6 +44,12 @@ class Effect(val fileName: String) {
      * Starts playing the effect
      */
     fun play() {
+        if(forwards && BandiCore.instance.effectManager.playingEffects.any { it.fileName == this.fileName }) {
+            val alreadyPlayingEffect = BandiCore.instance.effectManager.playingEffects.find { it.fileName == this.fileName }!!
+            alreadyPlayingEffect.currentTick = 0
+            return
+        }
+
         playCurrentFrame()
         BandiCore.instance.effectManager.playingEffects.add(this)
     }
@@ -51,13 +59,13 @@ class Effect(val fileName: String) {
      * Called by the EffectManager every tick
      */
     fun tick() {
-        currentTick++
+        if(currentTick < duration) currentTick++
 
         if(currentTick >= duration) {
             if(loop) {
                 currentTick = 0
             } else {
-                stop()
+                if(!forwards) stop()
                 return
             }
         }
