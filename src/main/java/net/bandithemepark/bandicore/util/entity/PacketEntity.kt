@@ -86,7 +86,7 @@ abstract class PacketEntity {
      * @param player The player to spawn the entity for
      */
     fun spawnFor(player: Player) {
-        val packet = ClientboundAddEntityPacket(handle)
+        val packet = ClientboundAddEntityPacket(handle.id, handle.uuid, location.x, location.y, location.z, 0f, 0f, handle.type, 0, handle.deltaMovement, 0.0)
         (player as CraftPlayer).handle.connection.send(packet)
     }
 
