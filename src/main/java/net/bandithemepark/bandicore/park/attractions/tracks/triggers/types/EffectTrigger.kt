@@ -8,7 +8,10 @@ import org.bukkit.Bukkit
 
 class EffectTrigger: TrackTriggerType("effect", "EFFECT_NAME") {
     override fun onActivation(vehicle: TrackVehicle) {
-        if(BandiCore.instance.effectManager.playingEffects.any { it.fileName == metadata[0] }) return
+        if(BandiCore.instance.effectManager.playingEffects.any { it.fileName == metadata[0] }) {
+            val alreadyPlayingEffect = BandiCore.instance.effectManager.playingEffects.find { it.fileName == metadata[0] }!!
+            if(!alreadyPlayingEffect.forwards) return
+        }
 
         val effect = Effect(metadata[0])
         effect.play()
