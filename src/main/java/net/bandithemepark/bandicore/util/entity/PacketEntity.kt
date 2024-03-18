@@ -6,9 +6,11 @@ import com.comphenix.protocol.events.ListenerPriority
 import com.comphenix.protocol.events.PacketAdapter
 import com.comphenix.protocol.events.PacketContainer
 import com.comphenix.protocol.events.PacketEvent
+import com.comphenix.protocol.events.PacketListener
 import com.mojang.datafixers.util.Pair
 import me.partypronl.themeparkcore.util.packetwrappers.WrapperPlayServerEntityTeleport
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.entity.event.PacketEntityDismountEvent
 import net.bandithemepark.bandicore.util.entity.event.PacketEntityInputEvent
 import net.bandithemepark.bandicore.util.entity.event.PacketEntityInteractEvent
@@ -39,6 +41,8 @@ abstract class PacketEntity {
     private val passengers = mutableListOf<org.bukkit.entity.Entity>()
     private val passengerIds = mutableListOf<Int>()
 
+    var debug = false
+
     // Spawning and despawning
     abstract fun getInstance(world: ServerLevel, x: Double, y: Double, z: Double): Entity
 
@@ -49,7 +53,18 @@ abstract class PacketEntity {
     open fun spawn(spawnLocation: Location) {
         handle = getInstance((spawnLocation.world as CraftWorld).handle, spawnLocation.x, spawnLocation.y, spawnLocation.z)
 
-        val packet = ClientboundAddEntityPacket(handle)
+        val packetListener = object: PacketAdapter(BandiCore.instance, ListenerPriority.NORMAL, PacketType.Play.Server.SPAWN_ENTITY) {
+            override fun onPacketSending(event: PacketEvent) {
+                val packet = event.packet.handle as ClientboundAddEntityPacket
+                Util.debug("PacketEntity Spawn", "Spawn packet sent to ${event.player.name}, entityType: ${packet.type}, entityId: ${packet.id}, x: ${packet.x}, y: ${packet.y}, z: ${packet.z}")
+            }
+        }
+
+        if(debug) {
+            ProtocolLibrary.getProtocolManager().addPacketListener(packetListener)
+        }
+
+        val packet = ClientboundAddEntityPacket(handle.id, handle.uuid, spawnLocation.x, spawnLocation.y, spawnLocation.z, 0f, 0f, handle.type, 0, handle.deltaMovement, 0.0)
         sendPacket(packet)
 
         this.location = spawnLocation
@@ -57,6 +72,13 @@ abstract class PacketEntity {
 
         spawned = true
         active.add(this)
+
+        if(debug) {
+            Util.debug("PacketEntity", "Spawned entity with ID ${handle.id} at ${spawnLocation.x}, ${spawnLocation.y}, ${spawnLocation.z}")
+            Bukkit.getScheduler().scheduleSyncDelayedTask(BandiCore.instance, Runnable {
+                ProtocolLibrary.getProtocolManager().removePacketListener(packetListener)
+            }, 2)
+        }
     }
 
     /**
@@ -93,6 +115,17 @@ abstract class PacketEntity {
         private set
 
     private fun updateLocation() {
+        val packetListener = object: PacketAdapter(BandiCore.instance, ListenerPriority.NORMAL, PacketType.Play.Server.ENTITY_TELEPORT) {
+            override fun onPacketSending(event: PacketEvent) {
+                val packet = event.packet.handle as ClientboundTeleportEntityPacket
+                Util.debug("PacketEntity Location Update", "Teleport Entity packet sent to ${event.player.name}, entityId: ${packet.id}, x: ${packet.x}, y: ${packet.y}, z: ${packet.z}")
+            }
+        }
+
+        if(debug) {
+            //ProtocolLibrary.getProtocolManager().addPacketListener(packetListener)
+        }
+
         val packet = WrapperPlayServerEntityTeleport()
         packet.entityID = handle.id
         packet.x = location.x
@@ -111,6 +144,13 @@ abstract class PacketEntity {
                     packet.sendPacket(player)
                 }
             }
+        }
+
+        if(debug) {
+            Util.debug("PacketEntity", "Updated location of entity with ID ${handle.id} to ${location.x}, ${location.y}, ${location.z}")
+            Bukkit.getScheduler().scheduleSyncDelayedTask(BandiCore.instance, Runnable {
+                ProtocolLibrary.getProtocolManager().removePacketListener(packetListener)
+            }, 2)
         }
     }
 
