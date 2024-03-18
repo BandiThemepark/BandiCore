@@ -5,9 +5,11 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.util.ItemFactory
+import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.entity.PacketEntity
 import net.bandithemepark.bandicore.util.entity.display.PacketItemDisplay
 import net.bandithemepark.bandicore.util.math.Quaternion
+import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.entity.ItemDisplay
@@ -23,7 +25,7 @@ import java.util.*
  * Represents an animatronic, created with Animated Java in Blockbench
  * @param fileName The name of the file, without the extension. For example, if the file is named "animatronic.json", the fileName would be "animatronic". The default directory (plugins/BandiCore/animatronics/) is automatically included
  */
-class Animatronic(fileName: String) {
+class Animatronic(fileName: String, var forwards: Boolean = false, var debug: Boolean = false) {
     lateinit var namespace: String
     lateinit var itemMaterial: Material
 
@@ -69,6 +71,10 @@ class Animatronic(fileName: String) {
         for((name, animationJson) in animationsJson.entrySet()) {
             animations.add(AnimatronicAnimation(name, animationJson.asJsonObject))
         }
+
+        if(debug) {
+            Util.debug("Animatronic", "Loading animatronic $namespace with ${nodes.size} nodes and ${animations.size} animations")
+        }
     }
 
     var spawned = false
@@ -92,9 +98,14 @@ class Animatronic(fileName: String) {
 
         for(node in nodes) {
             val displayEntity = PacketItemDisplay()
+            if(debug) displayEntity.debug = true
             displayEntity.visibilityType = visibilityType
             displayEntity.visibilityList = visibilityList
             displayEntity.spawn(spawnLocation.clone())
+            if(debug) {
+                Util.debug("Animatronic", "Spawned node ${node.uuid} at $spawnLocation. Material is $itemMaterial with custom model data ${node.customModelData} and visibility type $visibilityType")
+                displayEntity.startGlowFor(Bukkit.getPlayer("PartyProNL")!!)
+            }
 
             displayEntity.setItemStack(ItemFactory(itemMaterial).setCustomModelData(node.customModelData).build())
             displayEntity.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.HEAD)
@@ -112,6 +123,10 @@ class Animatronic(fileName: String) {
         spawned = true
         BandiCore.instance.animatronicManager.spawnedAnimatronics.add(this)
         applyPose(defaultPose)
+
+        if(debug) {
+            Util.debug("Animatronic", "Spawned animatronic $namespace at $baseLocation with rotation $baseRotation")
+        }
     }
 
     /**
@@ -171,14 +186,24 @@ class Animatronic(fileName: String) {
         animationLooping = loop
 
         applyCurrentAnimationFrame()
+
+        if(debug) {
+            Util.debug("Animatronic", "Playing animation $name on animatronic $namespace")
+        }
     }
 
     /**
      * Stops the currently playing animation and resets to the default pose
      */
     fun stopAnimation() {
+        if(currentAnimation == null) return
+
         currentAnimation = null
-        applyPose(defaultPose)
+        if(!forwards) applyPose(defaultPose)
+
+        if(debug) {
+            Util.debug("Animatronic", "Stopped animation on animatronic $namespace")
+        }
     }
 
     /**
@@ -194,6 +219,10 @@ class Animatronic(fileName: String) {
         displayEntities.clear()
         spawned = false
         queuedForDeSpawn = true
+
+        if(debug) {
+            Util.debug("Animatronic", "De-spawned animatronic $namespace")
+        }
     }
 
     var queuedForDeSpawn = false
