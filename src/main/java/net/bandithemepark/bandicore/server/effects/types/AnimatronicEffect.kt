@@ -38,17 +38,20 @@ class AnimatronicEffect: EffectType("animatronic") {
         if(json.has("forwards")) forwards = json.get("forwards").asBoolean
     }
 
-    lateinit var animatronic: Animatronic
+    var animatronic: Animatronic? = null
 
     override fun onPlay() {
-        animatronic = Animatronic(name)
-        if(!animatronic.spawned) animatronic.spawn(baseLocation, baseRotation)
-        animatronic.playAnimation(animationName, loop)
+        if(animatronic == null) animatronic = Animatronic(name, forwards, debug)
+        if(debug) Util.debug("AnimatronicEffect", "Playing animation $animationName on animatronic $name, is spawned? ${animatronic!!.spawned}")
+        if(!animatronic!!.spawned) animatronic!!.spawn(baseLocation, baseRotation)
+        animatronic!!.playAnimation(animationName, loop)
 
-        if(debug) Util.debug("AnimatronicEffect", "Playing animation $animationName on animatronic $name")
+        if(debug) {
+            Util.debug("AnimatronicEffect", "Playing animation $animationName on animatronic $name")
+        }
 
         if(!loop && !forwards) {
-            animatronic.onComplete = Runnable { animatronic.deSpawn() }
+            animatronic!!.onComplete = Runnable { animatronic!!.deSpawn() }
         }
     }
 
@@ -57,9 +60,9 @@ class AnimatronicEffect: EffectType("animatronic") {
     }
 
     override fun onEffectEnd() {
-        if(!animatronic.spawned) return
+        if(!animatronic!!.spawned) return
 
-        animatronic.stopAnimation()
-        animatronic.deSpawn()
+        animatronic!!.stopAnimation()
+        animatronic!!.deSpawn()
     }
 }
