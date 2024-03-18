@@ -3,6 +3,7 @@ package net.bandithemepark.bandicore.server.effects
 import com.google.gson.JsonObject
 
 abstract class EffectType(val id: String): Cloneable {
+    var debug = false
 
     fun register() {
         types.add(this)
