@@ -5,6 +5,7 @@ import com.google.gson.JsonParser
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
+import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Location
 import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer
@@ -15,6 +16,10 @@ import java.util.*
 import kotlin.math.sqrt
 
 object Util {
+    fun debug(topic: String, message: String) {
+        Bukkit.getConsoleSender().sendMessage("[DEBUG] [$topic] $message")
+    }
+
     /**
      * Formats a string using MiniMessage. MiniMessage documentation can be found at https://docs.adventure.kyori.net/minimessage/format.html.
      * Use things like <#FFFFFF>, <u> Underlined, <b> Bold, <i> Italic, <st> Strikethrough, <obf> Obfuscated, <newline> Newline in your messages.
