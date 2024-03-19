@@ -5,6 +5,7 @@ import net.bandithemepark.bandicore.network.audioserver.SpatialAudioSource
 import net.bandithemepark.bandicore.server.effects.EffectType
 import org.bukkit.Bukkit
 import org.bukkit.Location
+import org.bukkit.entity.Player
 import java.util.*
 
 class SpatialAudioEffect: EffectType("spatial_audio") {
@@ -29,7 +30,7 @@ class SpatialAudioEffect: EffectType("spatial_audio") {
     }
 
     var spatialAudio: SpatialAudioSource? = null
-    override fun onPlay() {
+    override fun onPlay(players: List<Player>?) {
         if(spatialAudio != null) return
 
         spatialAudio = SpatialAudioSource(

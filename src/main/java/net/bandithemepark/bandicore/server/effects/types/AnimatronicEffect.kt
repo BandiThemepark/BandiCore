@@ -4,9 +4,11 @@ import com.google.gson.JsonObject
 import net.bandithemepark.bandicore.server.animatronics.Animatronic
 import net.bandithemepark.bandicore.server.effects.EffectType
 import net.bandithemepark.bandicore.util.Util
+import net.bandithemepark.bandicore.util.entity.PacketEntity
 import net.bandithemepark.bandicore.util.math.Quaternion
 import org.bukkit.Bukkit
 import org.bukkit.Location
+import org.bukkit.entity.Player
 
 class AnimatronicEffect: EffectType("animatronic") {
     lateinit var name: String
@@ -40,8 +42,14 @@ class AnimatronicEffect: EffectType("animatronic") {
 
     var animatronic: Animatronic? = null
 
-    override fun onPlay() {
+    override fun onPlay(players: List<Player>?) {
         if(animatronic == null) animatronic = Animatronic(name, forwards, debug)
+
+        if(players != null) {
+            animatronic!!.visibilityType = PacketEntity.VisibilityType.WHITELIST
+            animatronic!!.visibilityList = players.toMutableList()
+        }
+
         if(debug) Util.debug("AnimatronicEffect", "Playing animation $animationName on animatronic $name, is spawned? ${animatronic!!.spawned}")
         if(!animatronic!!.spawned) animatronic!!.spawn(baseLocation, baseRotation)
         animatronic!!.playAnimation(animationName, loop)

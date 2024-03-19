@@ -4,13 +4,14 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import net.bandithemepark.bandicore.BandiCore
 import org.bukkit.Bukkit
+import org.bukkit.entity.Player
 import java.io.File
 
 /**
  * Represents an effect, created using our own effect scripting system
  * @param fileName The name of the file, without the extension. For example, if the file is named "effect.json", the fileName would be "effect". The default directory (plugins/BandiCore/effects/) is automatically included
  */
-class Effect(val fileName: String) {
+class Effect(val fileName: String, val players: List<Player>?) {
     var duration = 0
     var loop = false
     val keyframes = mutableListOf<EffectKeyframe>()
@@ -78,7 +79,7 @@ class Effect(val fileName: String) {
      */
     private fun playCurrentFrame() {
         for(keyframe in keyframes.filter { it.time == currentTick }) {
-            keyframe.type.onPlay()
+            keyframe.type.onPlay(players)
         }
 
         for(keyframe in keyframes.filter { it.time <= currentTick }) {
