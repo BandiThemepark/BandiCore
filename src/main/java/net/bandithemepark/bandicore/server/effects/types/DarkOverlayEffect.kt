@@ -27,6 +27,10 @@ class DarkOverlayEffect: EffectType("dark_overlay"), Listener {
     override fun onPlay(players: List<Player>?) {
         if(players == null) return
 
+        if(debug) {
+            Util.debug("DarkOverlayEffect", "Playing dark overlay effect for the following players: ${players.joinToString(", ") { it.name }}")
+        }
+
         showingFor = players
         tick = 0
         players.forEach {
