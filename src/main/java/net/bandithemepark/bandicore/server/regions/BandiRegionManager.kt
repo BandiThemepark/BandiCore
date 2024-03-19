@@ -2,6 +2,7 @@ package net.bandithemepark.bandicore.server.regions
 
 import net.bandithemepark.bandicore.network.backend.BackendRegion
 import net.bandithemepark.bandicore.park.attractions.rideop.RideOP
+import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import java.util.*
@@ -25,13 +26,12 @@ class BandiRegionManager {
         return regions.map { it.name }
     }
 
-    fun createNew(name: String, callback: () -> Unit): BandiRegion {
-        val region = BandiRegion(UUID.randomUUID(), name, name, 0, mutableListOf())
-        regions.add(region)
-
-        BackendRegion().create(name) { callback.invoke() }
-
-        return region
+    fun createNew(name: String, callback: () -> Unit) {
+        BackendRegion().create(name) {
+            val region = BandiRegion(UUID.fromString(it.get("id").asString), name, name, 0, mutableListOf())
+            regions.add(region)
+            callback.invoke()
+        }
     }
 
     fun deleteRegion(region: BandiRegion, callback: () -> Unit) {
