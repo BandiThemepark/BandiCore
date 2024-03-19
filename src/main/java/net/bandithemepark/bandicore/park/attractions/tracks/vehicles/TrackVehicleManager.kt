@@ -23,6 +23,7 @@ class TrackVehicleManager {
         VehicleCommandSpawn().register()
         VehicleCommandDeSpawn().register()
         VehicleCommandEdit().register()
+        VehicleCommandOpenHarnesses().register()
     }
 
     /**
