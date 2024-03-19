@@ -90,6 +90,8 @@ import net.bandithemepark.bandicore.server.custom.player.editor.CustomPlayerEdit
 import net.bandithemepark.bandicore.server.effects.EffectCommand
 import net.bandithemepark.bandicore.server.effects.EffectManager
 import net.bandithemepark.bandicore.server.effects.types.AnimatronicEffect
+import net.bandithemepark.bandicore.server.effects.types.DarkOverlayEffect
+import net.bandithemepark.bandicore.server.effects.types.ParticleEffect
 import net.bandithemepark.bandicore.server.effects.types.SpatialAudioEffect
 import net.bandithemepark.bandicore.server.essentials.*
 import net.bandithemepark.bandicore.server.essentials.coins.CoinManager
@@ -412,6 +414,8 @@ class BandiCore: JavaPlugin() {
     private fun registerEffectTypes() {
         AnimatronicEffect().register()
         SpatialAudioEffect().register()
+        ParticleEffect().register()
+        DarkOverlayEffect().register()
     }
 
     private fun registerCosmeticTypes() {
