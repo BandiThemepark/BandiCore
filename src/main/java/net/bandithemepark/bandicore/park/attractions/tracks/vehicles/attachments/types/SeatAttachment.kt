@@ -263,7 +263,7 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID, HARNESS_ATTACHMENT_
         }
 
         const val BODY_HEIGHT = 1.1
-        const val ARMOR_STAND_HEIGHT = 1.95
+        const val ARMOR_STAND_HEIGHT = 1.85
     }
 
     enum class MovementDirection {
