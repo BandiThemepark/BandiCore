@@ -2,6 +2,7 @@ package net.bandithemepark.bandicore.server.effects.types
 
 import com.google.gson.JsonObject
 import net.bandithemepark.bandicore.server.effects.EffectType
+import net.bandithemepark.bandicore.util.Util
 import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.Location
@@ -17,6 +18,7 @@ class ParticleEffect: EffectType("particle") {
     var duration = 0
     lateinit var location: Location
     var color: Color? = null
+    var size = 1
     var spreadRange: Vector? = null
     var velocity = Vector()
     var velocitySpread: Vector? = null
@@ -65,6 +67,8 @@ class ParticleEffect: EffectType("particle") {
             val velocitySpreadZ = velocitySpreadJson.get("z").asDouble
             velocitySpread = Vector(velocitySpreadX, velocitySpreadY, velocitySpreadZ)
         }
+
+        if(json.has("size")) size = json.get("size").asInt
     }
 
     fun showParticles(players: List<Player>?) {
@@ -91,10 +95,26 @@ class ParticleEffect: EffectType("particle") {
                 )
             }
 
-            toShowTo.forEach { player ->
-                player.spawnParticle(
-                    particle, spawnLocation, 0, velocity.x, velocity.y, velocity.z
+            var dustOptions: Particle.DustOptions? = null
+            if(particle === Particle.REDSTONE && color != null) {
+                dustOptions = Particle.DustOptions(color!!, size.toFloat())
+            }
+
+            if(debug) {
+                Util.debug(
+                    "ParticleEffect",
+                    "Showing particle $particle at $spawnLocation with velocity $velocity"
                 )
+            }
+
+            toShowTo.forEach { player ->
+                if(dustOptions != null) {
+                    player.spawnParticle(particle, spawnLocation, 0, velocity.x, velocity.y, velocity.z, dustOptions)
+                } else {
+                    player.spawnParticle(
+                        particle, spawnLocation, 0, velocity.x, velocity.y, velocity.z
+                    )
+                }
             }
         }
     }
