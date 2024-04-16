@@ -32,7 +32,7 @@ class LogFlumeSwitchSegment: SegmentType("logflumeswitch", true, "speedKMH") {
     }
 
     override fun onVehicleLeave(vehicle: TrackVehicle) {
-        Bukkit.broadcast(Component.text("Vehicle left switch, storage state: ${rideOP.storageState}"))
+//        Bukkit.broadcast(Component.text("Vehicle left switch, storage state: ${rideOP.storageState}"))
         if(rideOP.storageState == LogFlumeRideOP.StorageState.STORING) {
             state = SwitchState.RESETTING
             currentVehicle = null

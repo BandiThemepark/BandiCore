@@ -26,7 +26,7 @@ class LogFlumePreSwitchSegment: SegmentType("logflumepreswitch", true, "speedKMH
         stopped = false
         dispatched = false
 
-        Bukkit.broadcast(Component.text("Vehicle entered pre-switch, needs to stop: $needsToStop"))
+//        Bukkit.broadcast(Component.text("Vehicle entered pre-switch, needs to stop: $needsToStop"))
 
         if(!needsToStop) rideOP.vehicleMovingOnToSwitch = true
     }
