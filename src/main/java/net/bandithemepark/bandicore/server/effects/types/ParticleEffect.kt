@@ -6,8 +6,10 @@ import net.bandithemepark.bandicore.util.Util
 import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.Location
+import org.bukkit.Material
 import org.bukkit.Particle
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
 
 class ParticleEffect: EffectType("particle") {
@@ -22,6 +24,7 @@ class ParticleEffect: EffectType("particle") {
     var spreadRange: Vector? = null
     var velocity = Vector()
     var velocitySpread: Vector? = null
+    var blocks: List<Material>? = null
 
     override fun loadSettings(json: JsonObject) {
         if(json.has("loop")) loop = json.get("loop").asBoolean
@@ -68,6 +71,11 @@ class ParticleEffect: EffectType("particle") {
             velocitySpread = Vector(velocitySpreadX, velocitySpreadY, velocitySpreadZ)
         }
 
+        if(json.has("blocks")) {
+            val blocksJson = json.getAsJsonArray("blocks")
+            blocks = blocksJson.map { Material.valueOf(it.asString) }
+        }
+
         if(json.has("size")) size = json.get("size").asInt
     }
 
@@ -110,6 +118,10 @@ class ParticleEffect: EffectType("particle") {
             toShowTo.forEach { player ->
                 if(dustOptions != null) {
                     player.spawnParticle(particle, spawnLocation, 0, velocity.x, velocity.y, velocity.z, dustOptions)
+                } else if(blocks != null) {
+                    val randomMaterial = blocks!!.random()
+                    val itemStack = ItemStack(randomMaterial)
+                    player.spawnParticle(Particle.ITEM_CRACK, spawnLocation, 0, velocity.x, velocity.y, velocity.z, itemStack)
                 } else {
                     player.spawnParticle(
                         particle, spawnLocation, 0, velocity.x, velocity.y, velocity.z
