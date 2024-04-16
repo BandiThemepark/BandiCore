@@ -5,15 +5,11 @@ import net.bandithemepark.bandicore.util.entity.PacketEntity
 import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.Display.BlockDisplay
-import net.minecraft.world.entity.Display.ItemDisplay
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.item.ItemDisplayContext
-import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer
-import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack
-import org.bukkit.entity.ItemDisplay.ItemDisplayTransform
-import org.bukkit.entity.Player
-import org.bukkit.inventory.ItemStack
+import org.bukkit.block.data.BlockData
+import org.bukkit.craftbukkit.v1_20_R3.block.data.CraftBlockData
+import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer
 import org.joml.Matrix4f
 
 class PacketBlockDisplay: PacketEntity() {
@@ -26,11 +22,15 @@ class PacketBlockDisplay: PacketEntity() {
     }
 
     fun setInterpolationDuration(duration: Int) {
-        (handle as BlockDisplay).interpolationDuration = duration
+        (handle as BlockDisplay).transformationInterpolationDuration = duration
     }
 
     fun setInterpolationDelay(ticks: Int) {
-        (handle as BlockDisplay).interpolationDelay = ticks
+        (handle as BlockDisplay).transformationInterpolationDelay = ticks
+    }
+
+    fun setBlockState(blockData: BlockData) {
+        (handle as BlockDisplay).blockState = (blockData as CraftBlockData).state
     }
 
     override fun updateMetadata() {
