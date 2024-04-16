@@ -5,6 +5,8 @@ import net.bandithemepark.bandicore.park.attractions.rideop.RideOP
 import net.bandithemepark.bandicore.park.attractions.tracks.segments.SegmentType
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.TrackVehicle
 import net.bandithemepark.bandicore.util.TrackUtil
+import net.kyori.adventure.text.Component
+import org.bukkit.Bukkit
 
 class LogFlumePreSwitchSegment: SegmentType("logflumepreswitch", true, "speedKMH") {
     lateinit var rideOP: LogFlumeRideOP
@@ -23,6 +25,8 @@ class LogFlumePreSwitchSegment: SegmentType("logflumepreswitch", true, "speedKMH
         pastMiddle = false
         stopped = false
         dispatched = false
+
+//        Bukkit.broadcast(Component.text("Vehicle entered pre-switch, needs to stop: $needsToStop"))
 
         if(!needsToStop) rideOP.vehicleMovingOnToSwitch = true
     }

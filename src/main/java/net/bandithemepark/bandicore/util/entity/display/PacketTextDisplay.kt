@@ -15,7 +15,7 @@ import net.minecraft.world.entity.EntityType
 import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.Location
-import org.bukkit.craftbukkit.v1_20_R1.entity.CraftTextDisplay
+import org.bukkit.craftbukkit.v1_20_R3.entity.CraftTextDisplay
 import org.bukkit.entity.Display.Billboard
 import org.bukkit.entity.TextDisplay.TextAlignment
 import org.joml.Matrix4f
@@ -53,7 +53,7 @@ class PacketTextDisplay: PacketEntity() {
      * @param color The color to set, can be null to remove the background. ARGB supported
      */
     fun setBackgroundColor(color: Color?) {
-        if(color == null) (handle as TextDisplay).backgroundColor = -1 else (handle as TextDisplay).backgroundColor = color.asARGB()
+        //if(color == null) (handle as TextDisplay).backgroundColor = -1 else (handle as TextDisplay).backgroundColor = color.asARGB()
     }
 
     /**
@@ -61,7 +61,7 @@ class PacketTextDisplay: PacketEntity() {
      * @param lineWidth The maximum line width in amount of characters
      */
     fun setLineWidth(lineWidth: Int) {
-        (handle as TextDisplay).lineWidth = lineWidth
+        //(handle as TextDisplay).lineWidth = lineWidth
     }
 
     /**

@@ -11,7 +11,7 @@ class NearestWarpCommand: CommandExecutor {
         if (!command.name.equals("nearestwarp", true)) return false
         if(sender !is Player) return false
 
-        val playerWarps = BandiCore.instance.server.warpManager.getWarpsFor(sender)
+        val playerWarps = BandiCore.instance.server.warpManager.getWarpsFor(sender).filter { it.location.world != null }
         val nearestWarp = playerWarps.minByOrNull { it.location.distance(sender.location) }!!
         sender.teleport(nearestWarp.location)
 

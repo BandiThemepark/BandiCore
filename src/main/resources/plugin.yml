@@ -153,3 +153,5 @@ commands:
       - dressingrooms
       - equipment
       - equip
+  cooking:
+    description: Test command for cooking minigame

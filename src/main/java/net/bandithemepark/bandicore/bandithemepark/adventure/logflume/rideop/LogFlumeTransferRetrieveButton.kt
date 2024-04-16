@@ -9,6 +9,7 @@ class LogFlumeTransferRetrieveButton: NormalButton(3, "rideop-logflume-transfer-
     }
 
     override fun onClick(player: Player) {
+        if(!isAvailable()) return
         (rideOP as LogFlumeRideOP).retrieveFromStorage()
     }
 }

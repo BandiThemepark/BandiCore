@@ -57,6 +57,7 @@
   "track-vehicle-command-despawned": "Successfully despawned the chosen vehicle",
   "track-vehicle-editor-started": "You've started editing the selected vehicle",
   "track-vehicle-editor-stopped": "You've stopped editing the selected vehicle",
+  "track-vehicle-command-open-harnesses": "Opened the harnesses of the chosen vehicle",
   "vehicle-editor-friction-multiplier": "Please enter the friction multiplier you would like to set for this vehicle. Type 'cancel' to cancel",
   "vehicle-editor-friction-multiplier-cancelled": "Successfully cancelled setting the friction multiplier",
   "vehicle-editor-friction-multiplier-success": "Successfully set the friction multiplier",

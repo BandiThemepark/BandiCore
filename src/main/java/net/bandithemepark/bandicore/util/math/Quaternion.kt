@@ -291,4 +291,8 @@ class Quaternion(var x: Double, var y: Double, var z: Double, var w: Double): Cl
             return result
         }
     }
+
+    override fun toString(): String {
+        return "Quaternion{x=$x, y=$y, z=$z, w=$w}"
+    }
 }

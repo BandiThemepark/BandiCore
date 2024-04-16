@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.network.audioserver.ride.SpecialAudioManagement
 import net.bandithemepark.bandicore.park.attractions.Attraction
+import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.TrackVehicle
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.Attachment
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.AttachmentPosition
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.AttachmentType
@@ -29,9 +30,10 @@ import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectInstance
 import org.bukkit.Bukkit
 import org.bukkit.Location
-import org.bukkit.craftbukkit.v1_20_R1.CraftServer
-import org.bukkit.craftbukkit.v1_20_R1.CraftWorld
-import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer
+import org.bukkit.attribute.Attribute
+import org.bukkit.craftbukkit.v1_20_R3.CraftServer
+import org.bukkit.craftbukkit.v1_20_R3.CraftWorld
+import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -65,10 +67,27 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID, HARNESS_ATTACHMENT_
         connections[seat!!] = this
     }
 
+    var parentVehicle: TrackVehicle? = null
+    var failedToFind = false
     private var lastPosition = Vector(0.0, 0.0, 0.0)
     val poseDebuff = 2
     var poseDebuffCounter = 0
     override fun onUpdate(mainPosition: Vector, mainRotation: Quaternion, secondaryPositions: HashMap<Vector, Quaternion>, rotationDegrees: Vector) {
+        if(parentVehicle == null && !failedToFind) {
+            parentVehicle = BandiCore.instance.trackManager.vehicleManager.vehicles.find { it.getAllAttachments().contains(parent) }
+            if(parentVehicle == null) failedToFind = true
+        }
+
+        if(parentVehicle != null) {
+            val speed = parentVehicle!!.speedKMH
+            var baseValue = 0.1 + (speed / 45.0) * (0.15 - 0.1)
+            if(baseValue < 0) baseValue = -baseValue
+            if(baseValue > 0.15) baseValue = 0.15
+            seat!!.getPassengers().filterIsInstance<Player>().forEach {
+                it.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)!!.baseValue = baseValue
+            }
+        }
+
         // Updating the pose of the player rig
         // TODO Make these poses configurable
         // TODO Load these poses on metadata load
@@ -169,6 +188,7 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID, HARNESS_ATTACHMENT_
                 show(event.player)
                 val seat = connections[event.exiting]!!
                 seat.deSpawnCustomPlayer(event.player)
+                event.player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)!!.baseValue = 0.1
 
                 if(seat.harnessAttachment != null) {
                     seat.harnessAttachment!!.type.unMarkFor(event.player)
@@ -243,7 +263,7 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID, HARNESS_ATTACHMENT_
         }
 
         const val BODY_HEIGHT = 1.1
-        const val ARMOR_STAND_HEIGHT = 1.675
+        const val ARMOR_STAND_HEIGHT = 1.85
     }
 
     enum class MovementDirection {

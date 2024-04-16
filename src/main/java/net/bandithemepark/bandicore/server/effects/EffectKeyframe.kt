@@ -8,5 +8,6 @@ class EffectKeyframe(json: JsonObject) {
 
     init {
         type.loadSettings(json.getAsJsonObject("settings"))
+        if(json.has("debug")) type.debug = json.get("debug").asBoolean
     }
 }

@@ -7,7 +7,7 @@ import net.bandithemepark.bandicore.util.npc.NPCPath
 import net.kyori.adventure.text.Component
 import net.minecraft.server.MinecraftServer
 import org.bukkit.Bukkit
-import org.bukkit.craftbukkit.v1_20_R1.CraftServer
+import org.bukkit.craftbukkit.v1_20_R3.CraftServer
 
 class ThemeParkNPC(val skin: ThemeParkNPCSkin) {
     val npc = NPC("TPNPC", skin.textureProperty, NPC.NPCVisibilityType.BLACKLIST, getServer())

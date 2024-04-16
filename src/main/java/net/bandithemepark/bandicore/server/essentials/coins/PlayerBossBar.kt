@@ -12,12 +12,18 @@ import org.bukkit.event.player.PlayerJoinEvent
 class PlayerBossBar(val player: Player) {
     private val bossBar = Bukkit.createBossBar("", BarColor.YELLOW, BarStyle.SOLID)
     var regionText = null as String?
+    var overrideText = null as String?
 
     init {
         bossBar.addPlayer(player)
     }
 
     fun update() {
+        if(overrideText != null) {
+            bossBar.setTitle(overrideText)
+            return
+        }
+
         bossBar.setTitle("§7${getDisplayedRegionText()} | ${player.getBalance()} coins")
     }
 

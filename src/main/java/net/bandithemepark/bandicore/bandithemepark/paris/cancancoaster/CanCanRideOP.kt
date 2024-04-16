@@ -215,7 +215,15 @@ class CanCanRideOP: RideOP("cancancoaster", "cancanstation", Location(Bukkit.get
         transferMode = true
         transferState = TransferState.NONE
 
-        if(isTrainInStation()) harnessButton.setClosed()
+        if(isTrainInStation()) {
+            harnessesLocked = true
+            updateLockedState()
+            for(harness in getAllHarnesses()) {
+                if(harness.harnessPosition != 0.0 && harness.currentProgress >= 30) {
+                    harness.startDownwardsInterpolation()
+                }
+            }
+        }
 
         updateMenu()
     }

@@ -90,6 +90,8 @@ import net.bandithemepark.bandicore.server.custom.player.editor.CustomPlayerEdit
 import net.bandithemepark.bandicore.server.effects.EffectCommand
 import net.bandithemepark.bandicore.server.effects.EffectManager
 import net.bandithemepark.bandicore.server.effects.types.AnimatronicEffect
+import net.bandithemepark.bandicore.server.effects.types.DarkOverlayEffect
+import net.bandithemepark.bandicore.server.effects.types.ParticleEffect
 import net.bandithemepark.bandicore.server.effects.types.SpatialAudioEffect
 import net.bandithemepark.bandicore.server.essentials.*
 import net.bandithemepark.bandicore.server.essentials.coins.CoinManager
@@ -105,6 +107,12 @@ import net.bandithemepark.bandicore.server.essentials.warps.DeleteWarpCommand
 import net.bandithemepark.bandicore.server.essentials.warps.NearestWarpCommand
 import net.bandithemepark.bandicore.server.essentials.warps.SetWarpCommand
 import net.bandithemepark.bandicore.server.essentials.warps.WarpCommand
+import net.bandithemepark.bandicore.server.minigames.Minigame
+import net.bandithemepark.bandicore.server.minigames.MinigameTest
+import net.bandithemepark.bandicore.server.minigames.casino.Casino
+import net.bandithemepark.bandicore.server.minigames.casino.slotmachine.SlotMachineEvents
+import net.bandithemepark.bandicore.server.minigames.cooking.CookingEvents
+import net.bandithemepark.bandicore.server.minigames.cooking.CookingMinigame
 import net.bandithemepark.bandicore.server.placeables.PlaceableEvents
 import net.bandithemepark.bandicore.server.placeables.PlaceableManager
 import net.bandithemepark.bandicore.server.placeables.PlaceableRemoveCommand
@@ -135,6 +143,7 @@ class BandiCore: JavaPlugin() {
     lateinit var effectManager: EffectManager
     lateinit var placeableManager: PlaceableManager
     lateinit var cosmeticManager: CosmeticManager
+    lateinit var casino: Casino
 
     var okHttpClient = OkHttpClient()
     var restarter = Restart()
@@ -225,6 +234,8 @@ class BandiCore: JavaPlugin() {
         placeableManager = PlaceableManager()
         placeableManager.loadPlaced()
 
+        registerMinigames()
+
         SpatialAudioSource(
             UUID.randomUUID(),
             Location(Bukkit.getWorld("world")!!, 17.5, 0.0, -144.5),
@@ -303,6 +314,7 @@ class BandiCore: JavaPlugin() {
         getCommand("effect")!!.setExecutor(EffectCommand())
         getCommand("removenearplaceables")!!.setExecutor(PlaceableRemoveCommand())
         getCommand("dressingroom")!!.setExecutor(DressingRoomCommand())
+        getCommand("cooking")!!.setExecutor(MinigameTest())
     }
 
     private fun registerEvents() {
@@ -352,6 +364,8 @@ class BandiCore: JavaPlugin() {
         getServer().pluginManager.registerEvents(CosmeticManager.Events(), this)
         getServer().pluginManager.registerEvents(DressingRoomEvents(), this)
         getServer().pluginManager.registerEvents(CanCanRideOP.Events(), this)
+        getServer().pluginManager.registerEvents(CookingEvents(), this)
+        getServer().pluginManager.registerEvents(SlotMachineEvents(), this)
     }
 
     private fun prepareSettings() {
@@ -400,6 +414,8 @@ class BandiCore: JavaPlugin() {
     private fun registerEffectTypes() {
         AnimatronicEffect().register()
         SpatialAudioEffect().register()
+        ParticleEffect().register()
+        DarkOverlayEffect().register()
     }
 
     private fun registerCosmeticTypes() {
@@ -410,5 +426,12 @@ class BandiCore: JavaPlugin() {
         VIPCosmeticRequirement().register()
         RidecounterCosmeticRequirement().register()
         AchievementCosmeticRequirement().register()
+    }
+
+    private fun registerMinigames() {
+        casino = Casino()
+
+        CookingMinigame().register()
+        Minigame.startTimer()
     }
 }

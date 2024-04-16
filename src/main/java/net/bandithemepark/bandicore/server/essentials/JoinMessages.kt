@@ -17,7 +17,7 @@ class JoinMessages: Listener {
         event.joinMessage(Util.color("<${BandiColors.LIGHT_GRAY}>${event.player.name} joined"))
         event.player.showTitle(Title.title(Component.text("\uE000"), Util.color("<${BandiColors.LIGHT_GRAY}>Welcome to BandiThemepark"), Title.Times.times(Duration.ofMillis(0), Duration.ofMillis(3000), Duration.ofMillis(1000))))
 
-        val playerWarps = BandiCore.instance.server.warpManager.getWarpsFor(event.player)
+        val playerWarps = BandiCore.instance.server.warpManager.getWarpsFor(event.player).filter { it.location.world != null }
         val nearestWarp = playerWarps.minByOrNull { it.location.distance(event.player.location) }!!
         event.player.teleport(nearestWarp.location)
     }

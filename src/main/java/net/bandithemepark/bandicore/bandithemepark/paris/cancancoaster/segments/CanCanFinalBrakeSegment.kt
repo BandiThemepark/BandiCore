@@ -17,6 +17,7 @@ class CanCanFinalBrakeSegment: SegmentType("cancanfinalblockbrake", true, "MAX_S
         shouldStop = !isNextBlockClear() || (RideOP.get("cancancoaster")!! as CanCanRideOP).transferMode
         stopped = false
         released = false
+        if(!shouldStop) (RideOP.get("cancancoaster")!! as CanCanRideOP).dispatchedFromFinal = true
     }
 
     override fun onVehicleUpdate(vehicle: TrackVehicle) {

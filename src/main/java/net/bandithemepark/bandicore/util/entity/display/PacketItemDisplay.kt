@@ -1,6 +1,7 @@
 package net.bandithemepark.bandicore.util.entity.display
 
 import com.mojang.math.Transformation
+import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.entity.PacketEntity
 import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket
 import net.minecraft.server.level.ServerLevel
@@ -8,8 +9,8 @@ import net.minecraft.world.entity.Display.ItemDisplay
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.item.ItemDisplayContext
-import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer
-import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack
+import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer
+import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack
 import org.bukkit.entity.ItemDisplay.ItemDisplayTransform
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -33,11 +34,11 @@ class PacketItemDisplay: PacketEntity() {
     }
 
     fun setInterpolationDuration(duration: Int) {
-        (handle as ItemDisplay).interpolationDuration = duration
+        (handle as ItemDisplay).transformationInterpolationDuration = duration
     }
 
     fun setInterpolationDelay(ticks: Int) {
-        (handle as ItemDisplay).interpolationDelay = ticks
+        (handle as ItemDisplay).transformationInterpolationDelay = ticks
     }
 
     override fun updateMetadata() {

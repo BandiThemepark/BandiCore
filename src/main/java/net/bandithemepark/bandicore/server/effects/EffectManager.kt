@@ -20,7 +20,7 @@ class EffectManager {
 
         for(effectName in effectNames) {
             try {
-                val effect = Effect(effectName)
+                val effect = Effect(effectName, null)
                 effect.play()
             } catch (e: Exception) {
                 Bukkit.getLogger().warning("Could not load effect $effectName on server start. Please remove it from the config.yml if it has been deleted")
@@ -47,7 +47,7 @@ class EffectManager {
 
         for(effectName in newEffectNames) {
             try {
-                val effect = Effect(effectName)
+                val effect = Effect(effectName, null)
                 effect.play()
             } catch (e: Exception) {
                 Bukkit.getLogger().warning("Could not load effect $effectName on server start. Please remove it from the config.yml if it has been deleted")

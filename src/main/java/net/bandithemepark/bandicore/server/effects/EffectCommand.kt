@@ -66,7 +66,7 @@ class EffectCommand: CommandExecutor, TabCompleter {
 
     private fun playEffect(sender: CommandSender, id: String) {
         try {
-            val effect = Effect(id)
+            val effect = Effect(id, null)
             effect.play()
 
             sender.sendTranslatedMessage("effect-command-play", BandiColors.YELLOW.toString(), MessageReplacement("id", id))
