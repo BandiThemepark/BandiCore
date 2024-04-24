@@ -80,6 +80,7 @@ abstract class PacketEntity {
 
         if(regionId != null) {
             region = BandiCore.instance.regionManager.getFromId(regionId)
+            region!!.packetEntities.add(this)
             if(region != null) playersInRegion = Bukkit.getOnlinePlayers().filter { region!!.containsPlayer(it) }.toMutableList()
         }
 
@@ -109,6 +110,12 @@ abstract class PacketEntity {
 
         spawned = false
         active.remove(this)
+
+        if(region != null) {
+            region!!.packetEntities.remove(this)
+            region = null
+            playersInRegion.clear()
+        }
     }
 
     /**

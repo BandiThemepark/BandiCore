@@ -41,7 +41,7 @@ class PacketEntitySeat(val attraction: Attraction?): PacketEntity() {
         })
     }
 
-    override fun spawn(spawnLocation: Location, regionId: String? = null) {
+    override fun spawn(spawnLocation: Location, regionId: String?) {
         super.spawn(spawnLocation, regionId)
         seats.add(this)
     }

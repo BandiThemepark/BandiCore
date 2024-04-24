@@ -3,6 +3,7 @@ package net.bandithemepark.bandicore.server.regions.events
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.server.essentials.coins.PlayerBossBar.Companion.getBossBar
 import net.bandithemepark.bandicore.server.regions.BandiRegion
+import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.entity.Player
@@ -39,7 +40,8 @@ class BandiRegionEvents: Listener {
     // Spawn packet entities of region when entering it
     @EventHandler
     fun onPlayerRegionEnter(event: PlayerRegionEnterEvent) {
-        event.toRegion.packetEntities.forEach { if(it.getPlayersVisibleFor().contains(event.player)) {
+        event.toRegion.packetEntities.forEach { if(it.getPlayersVisibleFor().contains(event.player) && !it.playersInRegion.contains(event.player)) {
+            it.playersInRegion.add(event.player)
             it.spawnFor(event.player)
             it.updateMetadataFor(event.player)
             it.updateEquipmentFor(event.player)
@@ -50,7 +52,13 @@ class BandiRegionEvents: Listener {
     // De-spawn packet entities of region when exiting it
     @EventHandler
     fun onPlayerRegionLeave(event: PlayerRegionLeaveEvent) {
-        event.fromRegion.packetEntities.forEach { if(it.getPlayersVisibleFor().contains(event.player)) it.deSpawnFor(event.player) }
+        Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
+            if(event.fromRegion.containsPlayer(event.player)) return@Runnable
+            event.fromRegion.packetEntities.forEach {
+                if(it.getPlayersVisibleFor().contains(event.player)) it.deSpawnFor(event.player)
+                it.playersInRegion.remove(event.player)
+            }
+        })
     }
 
     fun update(player: Player, from: Location, to: Location) {
