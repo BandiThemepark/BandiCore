@@ -28,28 +28,28 @@ class RupsbaanCart {
     val seat1Attachment = Attachment("seat1",
         AttachmentPosition(0.5, 0.5, -1.3, 0.0, 0.0, 0.0),
         mutableListOf(),
-        AttachmentType.get("seat", listOf("rupsbaan"))!!,
+        AttachmentType.get("seat", listOf("rupsbaan", "kaliba"))!!,
         mutableListOf()
     )
 
     val seat2Attachment = Attachment("seat2",
         AttachmentPosition(-0.5, 0.5, -1.3, 0.0, 0.0, 0.0),
         mutableListOf(),
-        AttachmentType.get("seat", listOf("rupsbaan"))!!,
+        AttachmentType.get("seat", listOf("rupsbaan", "kaliba"))!!,
         mutableListOf()
     )
 
     val harnessAttachment = Attachment("harness",
         AttachmentPosition(0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
         mutableListOf(),
-        AttachmentType.get("model", listOf("DIAMOND_HOE", "4"))!!,
+        AttachmentType.get("model", listOf("DIAMOND_HOE", "4", "kaliba"))!!,
         mutableListOf()
     )
 
     private val modelAttachment = Attachment("model",
         AttachmentPosition(0.0, 0.0, 0.875, 0.0, 0.0, 0.0),
         mutableListOf(),
-        AttachmentType.get("model", listOf("DIAMOND_HOE", "2"))!!,
+        AttachmentType.get("model", listOf("DIAMOND_HOE", "2", "kaliba"))!!,
         mutableListOf(seat1Attachment, seat2Attachment)
     )
 
@@ -129,14 +129,14 @@ class RupsbaanCart {
         try { BandiCore.instance.server.scoreboard.updateScoreboard() } catch(_: Exception) {}
         modelAttachment.children.add(harnessAttachment)
 
-        modelAttachment.type.onMetadataLoad(listOf("DIAMOND_HOE", "3"))
+        modelAttachment.type.onMetadataLoad(listOf("DIAMOND_HOE", "3", "kaliba"))
     }
 
     private fun deSpawnHarness() {
         harnessAttachment.type.onDeSpawn()
         modelAttachment.children.remove(harnessAttachment)
 
-        modelAttachment.type.onMetadataLoad(listOf("DIAMOND_HOE", "2"))
+        modelAttachment.type.onMetadataLoad(listOf("DIAMOND_HOE", "2", "kaliba"))
     }
 
     var harnessPosition: Double = 0.0

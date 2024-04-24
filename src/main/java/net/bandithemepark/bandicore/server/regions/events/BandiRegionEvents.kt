@@ -41,13 +41,15 @@ class BandiRegionEvents: Listener {
     // Spawn packet entities of region when entering it
     @EventHandler
     fun onPlayerRegionEnter(event: PlayerRegionEnterEvent) {
-        event.toRegion.packetEntities.forEach { if(it.getPlayersVisibleFor().contains(event.player) && !it.playersInRegion.contains(event.player)) {
-            it.playersInRegion.add(event.player)
-            it.spawnFor(event.player)
-            it.updateMetadataFor(event.player)
-            it.updateEquipmentFor(event.player)
-            it.updatePassengersFor(event.player)
-        }}
+        event.toRegion.packetEntities.forEach {
+            if(it.getPlayersVisibleFor().contains(event.player) && !it.playersInRegion.contains(event.player)) {
+                it.playersInRegion.add(event.player)
+                it.spawnFor(event.player)
+                it.updateMetadataFor(event.player)
+                it.updateEquipmentFor(event.player)
+                it.updatePassengersFor(event.player)
+            }
+        }
     }
 
     // De-spawn packet entities of region when exiting it
