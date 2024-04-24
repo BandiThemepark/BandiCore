@@ -30,6 +30,7 @@ import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectInstance
 import org.bukkit.Bukkit
 import org.bukkit.Location
+import org.bukkit.World
 import org.bukkit.attribute.Attribute
 import org.bukkit.craftbukkit.v1_20_R3.CraftServer
 import org.bukkit.craftbukkit.v1_20_R3.CraftWorld
@@ -51,16 +52,20 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID, HARNESS_ATTACHMENT_
     var harnessAttachmentId: String? = null
     var harnessAttachment: Attachment? = null
 
+    lateinit var world: World
+
     override fun onSpawn(location: Location, parent: Attachment) {
         this.parent = parent
+        world = location.world
+
         if(harnessAttachmentId != null) harnessAttachment = parent.parent!!.getAllAttachments().find { it.id == harnessAttachmentId }
         marker = PacketEntityMarker(location.world)
 
         seat = PacketEntitySeat(attraction)
         seat!!.exitingLocation = attraction?.exitingLocation
         seat!!.spawn(location)
-        seat!!.handle!!.isInvisible = true
-        seat!!.handle!!.isNoGravity = true
+        seat!!.handle.isInvisible = true
+        seat!!.handle.isNoGravity = true
         seat!!.updateMetadata()
         updateSecondPosition()
 
@@ -73,6 +78,23 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID, HARNESS_ATTACHMENT_
     val poseDebuff = 2
     var poseDebuffCounter = 0
     override fun onUpdate(mainPosition: Vector, mainRotation: Quaternion, secondaryPositions: HashMap<Vector, Quaternion>, rotationDegrees: Vector) {
+        if(seat!!.spawned) {
+            if(!seat!!.harnessesOpen && seat!!.getPassengers().isEmpty()) {
+                // De-spawn seat if no passengers are in it and the harnesses are closed
+                connections.remove(seat)
+                seat!!.deSpawn()
+            }
+        } else {
+            if(seat!!.harnessesOpen) {
+                // Re-spawn seat if the harnesses are opened
+                seat!!.spawn(mainPosition.toLocation(world))
+                seat!!.handle.isInvisible = true
+                seat!!.handle.isNoGravity = true
+                seat!!.updateMetadata()
+                connections[seat!!] = this
+            }
+        }
+
         if(parentVehicle == null && !failedToFind) {
             parentVehicle = BandiCore.instance.trackManager.vehicleManager.vehicles.find { it.getAllAttachments().contains(parent) }
             if(parentVehicle == null) failedToFind = true
