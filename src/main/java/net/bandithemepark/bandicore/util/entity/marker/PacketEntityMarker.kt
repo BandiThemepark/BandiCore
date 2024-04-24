@@ -41,10 +41,10 @@ class PacketEntityMarker(val world: World): PacketEntity() {
 
         if(viewers.size == 1) {
             spawn(lastPosition.toLocation(world).add(Vector(0.0, -1.675, 0.0)))
-            handle!!.isInvisible = true
-            (handle!! as ArmorStand).isMarker = true
-            handle!!.isNoGravity = true
-            handle!!.setGlowingTag(true)
+            handle.isInvisible = true
+            (handle as ArmorStand).isMarker = true
+            handle.isNoGravity = true
+            handle.setGlowingTag(true)
             updateMetadata()
             helmet = ItemStack(Material.STONE_BUTTON)
         } else {

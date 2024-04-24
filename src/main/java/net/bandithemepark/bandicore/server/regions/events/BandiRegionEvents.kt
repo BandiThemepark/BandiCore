@@ -36,6 +36,23 @@ class BandiRegionEvents: Listener {
         }
     }
 
+    // Spawn packet entities of region when entering it
+    @EventHandler
+    fun onPlayerRegionEnter(event: PlayerRegionEnterEvent) {
+        event.toRegion.packetEntities.forEach { if(it.getPlayersVisibleFor().contains(event.player)) {
+            it.spawnFor(event.player)
+            it.updateMetadataFor(event.player)
+            it.updateEquipmentFor(event.player)
+            it.updatePassengersFor(event.player)
+        }}
+    }
+
+    // De-spawn packet entities of region when exiting it
+    @EventHandler
+    fun onPlayerRegionLeave(event: PlayerRegionLeaveEvent) {
+        event.fromRegion.packetEntities.forEach { if(it.getPlayersVisibleFor().contains(event.player)) it.deSpawnFor(event.player) }
+    }
+
     fun update(player: Player, from: Location, to: Location) {
         if(from.blockX == to.blockX && from.blockY == to.blockY && from.blockZ == to.blockZ) return
 

@@ -6,12 +6,15 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter
 import com.sk89q.worldedit.math.BlockVector2
 import com.sk89q.worldedit.math.BlockVector3
 import com.sk89q.worldedit.regions.Polygonal2DRegion
+import net.bandithemepark.bandicore.util.entity.PacketEntity
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.entity.Player
 import java.util.*
 
 class BandiRegion(val uuid: UUID, val name: String, var displayName: String, var priority: Int, var areas: MutableList<Polygonal2DRegion>) {
+    val packetEntities = mutableListOf<PacketEntity>()
+
     fun containsLocation(location: Location): Boolean {
         areas.forEach {
             if(it.contains(BlockVector3.at(location.blockX, location.blockY, location.blockZ))) return true

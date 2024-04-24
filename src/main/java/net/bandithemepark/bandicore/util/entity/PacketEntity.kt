@@ -10,6 +10,7 @@ import com.comphenix.protocol.events.PacketListener
 import com.mojang.datafixers.util.Pair
 import me.partypronl.themeparkcore.util.packetwrappers.WrapperPlayServerEntityTeleport
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.server.regions.BandiRegion
 import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.entity.event.PacketEntityDismountEvent
 import net.bandithemepark.bandicore.util.entity.event.PacketEntityInputEvent
@@ -43,6 +44,10 @@ abstract class PacketEntity {
 
     var debug = false
 
+    // Region based visibility stuff
+    var region: BandiRegion? = null
+    var playersInRegion = mutableListOf<Player>()
+
     // Spawning and despawning
     abstract fun getInstance(world: ServerLevel, x: Double, y: Double, z: Double): Entity
 
@@ -50,7 +55,7 @@ abstract class PacketEntity {
      * Spawns the entity at a certain location
      * @param spawnLocation The location to spawn the entity at
      */
-    open fun spawn(spawnLocation: Location) {
+    open fun spawn(spawnLocation: Location, regionId: String? = null) {
         handle = getInstance((spawnLocation.world as CraftWorld).handle, spawnLocation.x, spawnLocation.y, spawnLocation.z)
 
         val packetListener = object: PacketAdapter(BandiCore.instance, ListenerPriority.NORMAL, PacketType.Play.Server.SPAWN_ENTITY) {
@@ -73,9 +78,14 @@ abstract class PacketEntity {
         spawned = true
         active.add(this)
 
+        if(regionId != null) {
+            region = BandiCore.instance.regionManager.getFromId(regionId)
+            if(region != null) playersInRegion = Bukkit.getOnlinePlayers().filter { region!!.containsPlayer(it) }.toMutableList()
+        }
+
         if(debug) {
             Util.debug("PacketEntity", "Spawned entity with ID ${handle.id} at ${spawnLocation.x}, ${spawnLocation.y}, ${spawnLocation.z}")
-            Bukkit.getScheduler().scheduleSyncDelayedTask(BandiCore.instance, Runnable {
+            Bukkit.getScheduler().scheduleSyncDelayedTask(BandiCore.instance, {
                 ProtocolLibrary.getProtocolManager().removePacketListener(packetListener)
             }, 2)
         }
@@ -115,17 +125,6 @@ abstract class PacketEntity {
         private set
 
     private fun updateLocation() {
-        val packetListener = object: PacketAdapter(BandiCore.instance, ListenerPriority.NORMAL, PacketType.Play.Server.ENTITY_TELEPORT) {
-            override fun onPacketSending(event: PacketEvent) {
-                val packet = event.packet.handle as ClientboundTeleportEntityPacket
-                Util.debug("PacketEntity Location Update", "Teleport Entity packet sent to ${event.player.name}, entityId: ${packet.id}, x: ${packet.x}, y: ${packet.y}, z: ${packet.z}")
-            }
-        }
-
-        if(debug) {
-            //ProtocolLibrary.getProtocolManager().addPacketListener(packetListener)
-        }
-
         val packet = WrapperPlayServerEntityTeleport()
         packet.entityID = handle.id
         packet.x = location.x
@@ -144,13 +143,6 @@ abstract class PacketEntity {
                     packet.sendPacket(player)
                 }
             }
-        }
-
-        if(debug) {
-            Util.debug("PacketEntity", "Updated location of entity with ID ${handle.id} to ${location.x}, ${location.y}, ${location.z}")
-            Bukkit.getScheduler().scheduleSyncDelayedTask(BandiCore.instance, Runnable {
-                ProtocolLibrary.getProtocolManager().removePacketListener(packetListener)
-            }, 2)
         }
     }
 
@@ -252,18 +244,27 @@ abstract class PacketEntity {
         }
 
         handle.entityData.refresh((player as CraftPlayer).handle)
-
-//        val packet = ClientboundSetEntityDataPacket(handle.id, handle.entityData.nonDefaultValues!!)
-//        (player as CraftPlayer).handle.connection.send(packet)
     }
 
     private fun sendPacket(packet: Packet<*>) {
         if(visibilityType == VisibilityType.WHITELIST) {
-            for(player in visibilityList) (player as CraftPlayer).handle.connection.send(packet)
+            for(player in visibilityList) {
+                if(region != null) {
+                    if(playersInRegion.contains(player)) (player as CraftPlayer).handle.connection.send(packet)
+                } else {
+                    (player as CraftPlayer).handle.connection.send(packet)
+                }
+            }
         }
 
         if(visibilityType == VisibilityType.BLACKLIST) {
-            for(player in Bukkit.getOnlinePlayers().filter { !visibilityList.contains(it) }) (player as CraftPlayer).handle.connection.send(packet)
+            for(player in Bukkit.getOnlinePlayers().filter { !visibilityList.contains(it) }) {
+                if(region != null) {
+                    if(playersInRegion.contains(player)) (player as CraftPlayer).handle.connection.send(packet)
+                } else {
+                    (player as CraftPlayer).handle.connection.send(packet)
+                }
+            }
         }
     }
 
@@ -272,8 +273,13 @@ abstract class PacketEntity {
      */
     fun getPlayersVisibleFor(): List<Player> {
         return when(visibilityType) {
-            VisibilityType.WHITELIST -> visibilityList
-            VisibilityType.BLACKLIST -> Bukkit.getOnlinePlayers().filter { !visibilityList.contains(it) }
+            VisibilityType.WHITELIST -> {
+                visibilityList
+            }
+
+            VisibilityType.BLACKLIST -> {
+                Bukkit.getOnlinePlayers().filter { !visibilityList.contains(it) }
+            }
         }
     }
 
