@@ -3,15 +3,17 @@ package net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachment
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.park.attractions.rideop.RideOP
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.Attachment
+import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.math.MathUtil
 import net.bandithemepark.bandicore.util.math.Quaternion
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Location
+import org.bukkit.Material
 import org.bukkit.util.Vector
 
-class HarnessAttachment: ModelAttachment("harness", "MATERIAL, CUSTOM_MODEL_DATA_HARNESS, UP_ANGLE") {
+class HarnessAttachment: ModelAttachment("harness", "MATERIAL, CUSTOM_MODEL_DATA_HARNESS, UP_ANGLE, REGION_ID?") {
     lateinit var parent: Attachment
     var upAngle = 0.0
     lateinit var lastLocation: Location
@@ -65,8 +67,9 @@ class HarnessAttachment: ModelAttachment("harness", "MATERIAL, CUSTOM_MODEL_DATA
     }
 
     override fun onMetadataLoad(metadata: List<String>) {
-        super.onMetadataLoad(metadata)
+        model = ItemFactory(Material.matchMaterial(metadata[0].uppercase())!!).setCustomModelData(metadata[1].toInt()).build()
         upAngle = metadata[2].toDouble()
+        if(metadata.size > 3) regionId = metadata[3]
     }
 
     var spawned = false

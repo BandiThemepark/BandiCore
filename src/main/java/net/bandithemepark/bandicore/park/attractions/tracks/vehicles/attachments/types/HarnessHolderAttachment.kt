@@ -10,7 +10,7 @@ import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
 
-class HarnessHolderAttachment: ModelAttachment("harness_holder", "MATERIAL, CUSTOM_MODEL_DATA_HARNESS, CUSTOM_MODEL_DATA_NO_HARNESS") {
+class HarnessHolderAttachment: ModelAttachment("harness_holder", "MATERIAL, CUSTOM_MODEL_DATA_HARNESS, CUSTOM_MODEL_DATA_NO_HARNESS, REGION_ID?") {
     var modelNoHarness: ItemStack? = null
     lateinit var parent: Attachment
     lateinit var lastLocation: Location
@@ -18,6 +18,7 @@ class HarnessHolderAttachment: ModelAttachment("harness_holder", "MATERIAL, CUST
     override fun onMetadataLoad(metadata: List<String>) {
         model = ItemFactory(Material.matchMaterial(metadata[0].uppercase())!!).setCustomModelData(metadata[1].toInt()).build()
         modelNoHarness = ItemFactory(Material.matchMaterial(metadata[0].uppercase())!!).setCustomModelData(metadata[2].toInt()).build()
+        regionId = if(metadata.size > 3) metadata[3] else null
     }
 
     override fun onSpawn(location: Location, parent: Attachment) {

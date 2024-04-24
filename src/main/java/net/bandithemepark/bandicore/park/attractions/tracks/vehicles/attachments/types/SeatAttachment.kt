@@ -43,7 +43,7 @@ import org.bukkit.util.Vector
 import java.util.*
 import kotlin.collections.HashMap
 
-class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID, HARNESS_ATTACHMENT_ID") {
+class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID, REGION_ID?, HARNESS_ATTACHMENT_ID?") {
     lateinit var parent: Attachment
     var seat: PacketEntitySeat? = null
     private lateinit var marker: PacketEntityMarker
@@ -53,6 +53,7 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID, HARNESS_ATTACHMENT_
     var harnessAttachment: Attachment? = null
 
     lateinit var world: World
+    var regionId: String? = null
 
     override fun onSpawn(location: Location, parent: Attachment) {
         this.parent = parent
@@ -63,7 +64,7 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID, HARNESS_ATTACHMENT_
 
         seat = PacketEntitySeat(attraction)
         seat!!.exitingLocation = attraction?.exitingLocation
-        seat!!.spawn(location)
+        seat!!.spawn(location, regionId)
         seat!!.handle.isInvisible = true
         seat!!.handle.isNoGravity = true
         seat!!.updateMetadata()
@@ -156,8 +157,12 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID, HARNESS_ATTACHMENT_
     override fun onMetadataLoad(metadata: List<String>) {
         attraction = Attraction.get(metadata[0])
 
-        if(metadata.size >= 2) {
-            harnessAttachmentId = metadata[1]
+        if(metadata.size > 1) {
+            regionId = metadata[1]
+        }
+
+        if(metadata.size > 2) {
+            harnessAttachmentId = metadata[2]
         }
     }
 
