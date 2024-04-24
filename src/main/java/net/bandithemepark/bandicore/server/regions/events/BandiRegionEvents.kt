@@ -3,6 +3,7 @@ package net.bandithemepark.bandicore.server.regions.events
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.server.essentials.coins.PlayerBossBar.Companion.getBossBar
 import net.bandithemepark.bandicore.server.regions.BandiRegion
+import net.bandithemepark.bandicore.util.entity.PacketEntitySeat
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Location
@@ -55,8 +56,10 @@ class BandiRegionEvents: Listener {
         Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
             if(event.fromRegion.containsPlayer(event.player)) return@Runnable
             event.fromRegion.packetEntities.forEach {
-                if(it.getPlayersVisibleFor().contains(event.player)) it.deSpawnFor(event.player)
-                it.playersInRegion.remove(event.player)
+                if(it.getPlayersVisibleFor().contains(event.player)) {
+                    it.deSpawnFor(event.player)
+                    it.playersInRegion.remove(event.player)
+                }
             }
         })
     }

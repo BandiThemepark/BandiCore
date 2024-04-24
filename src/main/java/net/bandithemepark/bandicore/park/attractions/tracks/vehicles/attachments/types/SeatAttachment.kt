@@ -88,7 +88,7 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID, REGION_ID?, HARNESS
         } else {
             if(seat!!.harnessesOpen) {
                 // Re-spawn seat if the harnesses are opened
-                seat!!.spawn(mainPosition.toLocation(world))
+                seat!!.spawn(mainPosition.toLocation(world), regionId)
                 seat!!.handle.isInvisible = true
                 seat!!.handle.isNoGravity = true
                 seat!!.updateMetadata()
