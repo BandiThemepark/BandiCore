@@ -19,12 +19,13 @@ import org.bukkit.util.Vector
 import org.joml.Matrix4f
 import java.lang.Exception
 
-open class ModelAttachment(id: String = "model", howToConfigure: String = "MATERIAL, CUSTOM_MODEL_DATA"): AttachmentType(id, howToConfigure) {
+open class ModelAttachment(id: String = "model", howToConfigure: String = "MATERIAL, CUSTOM_MODEL_DATA, REGION_ID?"): AttachmentType(id, howToConfigure) {
 
     var parentArmorStand: PacketEntityArmorStand? = null
     var displayEntity: PacketItemDisplay? = null
     var model: ItemStack? = null
     var spawnLocation: Location? = null
+    var regionId: String? = null
 
     override fun onSpawn(location: Location, parent: Attachment) {
         val armorStandSpawnLocation = location.clone()
@@ -33,7 +34,7 @@ open class ModelAttachment(id: String = "model", howToConfigure: String = "MATER
 
         // Spawn an ArmorStand to hold the item display (used for smoothness)
         parentArmorStand = PacketEntityArmorStand()
-        parentArmorStand!!.spawn(armorStandSpawnLocation)
+        parentArmorStand!!.spawn(armorStandSpawnLocation, regionId)
         try {
             parentArmorStand!!.handle.isInvisible = true
             parentArmorStand!!.handle.isNoGravity = true
@@ -46,7 +47,7 @@ open class ModelAttachment(id: String = "model", howToConfigure: String = "MATER
 
         // Spawn the display entity
         displayEntity = PacketItemDisplay()
-        displayEntity!!.spawn(location)
+        displayEntity!!.spawn(location, regionId)
 
         displayEntity!!.setItemStack(model)
         displayEntity!!.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.HEAD)
@@ -98,6 +99,7 @@ open class ModelAttachment(id: String = "model", howToConfigure: String = "MATER
     override fun onMetadataLoad(metadata: List<String>) {
         model = ItemFactory(Material.matchMaterial(metadata[0].uppercase())!!).setCustomModelData(metadata[1].toInt()).build()
         displayEntity?.setItemStack(model)
+        if(metadata.size > 2) regionId = metadata[2]
     }
 
     override fun markFor(player: Player) {
