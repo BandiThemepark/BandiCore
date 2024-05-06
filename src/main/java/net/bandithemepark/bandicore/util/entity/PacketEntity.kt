@@ -484,13 +484,15 @@ abstract class PacketEntity {
         fun onJoin(event: PlayerJoinEvent) {
             val toUpdateRotationFor = mutableListOf<PacketEntity>()
             for(entity in active) {
-                if(entity.isVisibleFor(event.player)) {
-                    toUpdateRotationFor.add(entity)
-                    entity.spawnFor(event.player)
-                    entity.updateMetadataFor(event.player)
-                    entity.updateEquipmentFor(event.player)
-                    entity.updatePassengersFor(event.player)
-                }
+                try {
+                    if (entity.isVisibleFor(event.player)) {
+                        toUpdateRotationFor.add(entity)
+                        entity.spawnFor(event.player)
+                        entity.updateMetadataFor(event.player)
+                        entity.updateEquipmentFor(event.player)
+                        entity.updatePassengersFor(event.player)
+                    }
+                } catch(_: NullPointerException) {}
             }
 
             Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
@@ -510,6 +512,7 @@ abstract class PacketEntity {
                     val packet = event.packet.handle as ServerboundPlayerInputPacket
 
                     for(entity in active.toList()) {
+                        try {
                         if(entity.passengers.contains(event.player)) {
                             Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
                                 val inputEvent = PacketEntityInputEvent(entity, event.player, packet.xxa, packet.zza, packet.isShiftKeyDown, packet.isJumping)
@@ -522,6 +525,7 @@ abstract class PacketEntity {
                                 }
                             })
                         }
+                        } catch (_: NullPointerException) {}
                     }
                 }
             })
@@ -532,14 +536,16 @@ abstract class PacketEntity {
                     val entityId = packet.integers.read(0)
 
                     for(entity in active) {
-                        if(entity.handle.id == entityId) {
-                            Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
-                                val interactEvent = PacketEntityInteractEvent(entity, event.player)
-                                Bukkit.getPluginManager().callEvent(interactEvent)
+                        try {
+                            if (entity.handle.id == entityId) {
+                                Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
+                                    val interactEvent = PacketEntityInteractEvent(entity, event.player)
+                                    Bukkit.getPluginManager().callEvent(interactEvent)
 
-                                if(interactEvent.isCancelled) event.isCancelled = true
-                            })
-                        }
+                                    if (interactEvent.isCancelled) event.isCancelled = true
+                                })
+                            }
+                        } catch(_: NullPointerException) {}
                     }
                 }
             })
