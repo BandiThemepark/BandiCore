@@ -72,6 +72,7 @@ import net.bandithemepark.bandicore.park.modsupport.SmoothCoastersChecker
 import net.bandithemepark.bandicore.park.npc.ThemeParkNPCSkin
 import net.bandithemepark.bandicore.park.npc.path.editor.PathPointEditorCommand
 import net.bandithemepark.bandicore.park.npc.path.editor.PathPointEditorEvents
+import net.bandithemepark.bandicore.server.BandiThemeParkCommand
 import net.bandithemepark.bandicore.server.achievements.AchievementManager
 import net.bandithemepark.bandicore.server.achievements.menu.AchievementCategoriesMenu
 import net.bandithemepark.bandicore.server.achievements.menu.AchievementMenu
@@ -315,6 +316,7 @@ class BandiCore: JavaPlugin() {
         getCommand("removenearplaceables")!!.setExecutor(PlaceableRemoveCommand())
         getCommand("dressingroom")!!.setExecutor(DressingRoomCommand())
         getCommand("cooking")!!.setExecutor(MinigameTest())
+        getCommand("bandithemepark")!!.setExecutor(BandiThemeParkCommand())
     }
 
     private fun registerEvents() {

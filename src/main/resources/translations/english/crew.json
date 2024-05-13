@@ -191,5 +191,7 @@
   "effect-command-stop": "Stopped playing effect %id%",
   "placeable-remove-no-nearby": "No nearby placeables were found in a radius of 2 blocks",
   "placeable-remove-success": "Successfully removed %amount% placeables",
-  "rideop-not-found": "No RideOP with the given ID was found"
+  "rideop-not-found": "No RideOP with the given ID was found",
+  "debug-start": "Started debugging %option%",
+  "debug-invalid-option": "No matching debug option found"
 }

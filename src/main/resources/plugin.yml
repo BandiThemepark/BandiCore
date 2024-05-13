@@ -155,3 +155,5 @@ commands:
       - equip
   cooking:
     description: Test command for cooking minigame
+  bandithemepark:
+    description: Main command for BandiThemepark
