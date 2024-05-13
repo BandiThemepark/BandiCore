@@ -41,6 +41,7 @@ class DarkOverlayEffect: EffectType("dark_overlay"), Listener {
         }
 
         BandiCore.instance.getServer().pluginManager.registerEvents(this, BandiCore.instance)
+        active.add(this)
     }
 
     var tick = 0
@@ -61,6 +62,7 @@ class DarkOverlayEffect: EffectType("dark_overlay"), Listener {
 
         showingFor = null
         SeatExitEvent.getHandlerList().unregister(this)
+        active.remove(this)
     }
 
     @EventHandler
@@ -73,6 +75,11 @@ class DarkOverlayEffect: EffectType("dark_overlay"), Listener {
                 Title.title(
                     Component.text("\uE021"), Util.color(""), Title.Times.times(
                         Duration.ofMillis(0L), Duration.ofMillis(0L), Duration.ofMillis(fadeOutTime * 50L))))
+            showingFor = showingFor!!.filter { it != event.player }
         }
+    }
+
+    companion object {
+        val active = mutableListOf<DarkOverlayEffect>()
     }
 }
