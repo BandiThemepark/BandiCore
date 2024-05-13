@@ -152,7 +152,7 @@ class BandiCore: JavaPlugin() {
     override fun onEnable() {
         instance = this
         startTime = System.currentTimeMillis()
-        Bukkit.getLogger().info("Server start time set to $startTime")
+        Bukkit.getConsoleSender().sendMessage("Server start time set to $startTime")
         smoothCoastersAPI = SmoothCoastersAPI(this)
 
         // Saving the default settings
