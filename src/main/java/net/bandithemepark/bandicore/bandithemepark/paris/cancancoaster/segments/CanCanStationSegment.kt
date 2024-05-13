@@ -11,6 +11,7 @@ import net.bandithemepark.bandicore.server.essentials.ranks.nametag.PlayerNameTa
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedMessage
 import net.bandithemepark.bandicore.server.translations.MessageReplacement
 import net.bandithemepark.bandicore.util.TrackUtil
+import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.chat.BandiColors
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
@@ -66,7 +67,7 @@ class CanCanStationSegment: SegmentType("cancanstation", true, "DISPATCH_SPEED_K
     override fun onVehicleLeave(vehicle: TrackVehicle) {
         if(dispatched) vehicle.physicsType = TrackVehicle.PhysicsType.ALL
         currentVehicle = null
-//        Bukkit.broadcast(Component.text("Vehicle left station, was sent backwards? ${!dispatched}"))
+        parent.vehicles.clear()
     }
 
     fun dispatch() {

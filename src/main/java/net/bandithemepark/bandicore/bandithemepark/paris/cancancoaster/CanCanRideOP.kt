@@ -298,7 +298,7 @@ class CanCanRideOP: RideOP("cancancoaster", "cancanstation", Location(Bukkit.get
             sender.sendMessage(Util.color("Train in station: ${rideOP.isTrainInStation()}"))
             sender.sendMessage(Util.color("Station currentTrain: ${stationSegment.currentVehicle?.id}"))
             sender.sendMessage(Util.color("Station dispatched: ${stationSegment.dispatched}"))
-            sender.sendMessage(Util.color("Station amount of vehicles: ${stationSegment.parent.vehicles.size}"))
+            sender.sendMessage(Util.color("Station amount of vehicles: ${stationSegment.parent.vehicles.size} (${stationSegment.parent.vehicles.map { it.id }})"))
             sender.sendMessage(Util.color("FinalBrake should stop: ${finalBrakeSegment.shouldStop}"))
             sender.sendMessage(Util.color("FinalBrake stopped: ${finalBrakeSegment.stopped}"))
             sender.sendMessage(Util.color("FinalBrake released: ${finalBrakeSegment.released}"))
