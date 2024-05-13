@@ -193,5 +193,7 @@
   "placeable-remove-success": "Successfully removed %amount% placeables",
   "rideop-not-found": "No RideOP with the given ID was found",
   "debug-start": "Started debugging %option%",
-  "debug-invalid-option": "No matching debug option found"
+  "debug-invalid-option": "No matching debug option found",
+  "test-start": "Started testing %option%",
+  "test-invalid-option": "No matching test option found"
 }

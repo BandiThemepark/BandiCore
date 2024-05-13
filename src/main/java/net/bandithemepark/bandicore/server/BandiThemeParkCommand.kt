@@ -7,6 +7,7 @@ import net.bandithemepark.bandicore.server.translations.MessageReplacement
 import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.chat.BandiColors
 import net.bandithemepark.bandicore.util.debug.Debuggable
+import net.bandithemepark.bandicore.util.debug.Testable
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -45,6 +46,15 @@ class BandiThemeParkCommand: CommandExecutor, TabCompleter {
                 } else {
                     sender.sendTranslatedMessage("debug-invalid-option", BandiColors.RED.toString())
                 }
+            } else if(args[0].equals("test", true)) {
+                val testable = Testable.getTestable(args[1])
+
+                if(testable != null) {
+                    sender.sendTranslatedMessage("test-start", BandiColors.YELLOW.toString(), MessageReplacement("option", args[1]))
+                    testable.test(sender)
+                } else {
+                    sender.sendTranslatedMessage("test-invalid-option", BandiColors.RED.toString())
+                }
             } else {
                 sendHelp(sender)
             }
@@ -60,18 +70,21 @@ class BandiThemeParkCommand: CommandExecutor, TabCompleter {
         sender.sendMessage(Util.color("<${BandiColors.RED}>/bandithemepark restart"))
         sender.sendMessage(Util.color("<${BandiColors.RED}>/bandithemepark servermode <mode>"))
         sender.sendMessage(Util.color("<${BandiColors.RED}>/bandithemepark debug <option>"))
+        sender.sendMessage(Util.color("<${BandiColors.RED}>/bandithemepark test <option>"))
     }
 
     override fun onTabComplete(sender: CommandSender, command: Command, label: String, args: Array<out String>): MutableList<String>? {
-        if(!command.name.equals("region", true)) return null
+        if(!command.name.equals("bandithemepark", true)) return null
 
         if(args.size == 1) {
-            return Util.getTabCompletions(args[0], listOf("restart", "servermode", "debug", "help"))
+            return Util.getTabCompletions(args[0], listOf("restart", "servermode", "debug", "help", "test"))
         } else if(args.size == 2) {
             if(args[0].equals("servermode", true)) {
                 return Util.getTabCompletions(args[1], ServerMode.getAllIds())
             } else if(args[0].equals("debug", true)) {
                 return Util.getTabCompletions(args[1], Debuggable.debuggables.keys.toList())
+            } else if(args[0].equals("test", true)) {
+                return Util.getTabCompletions(args[1], Testable.testables.keys.toList())
             }
         }
 
