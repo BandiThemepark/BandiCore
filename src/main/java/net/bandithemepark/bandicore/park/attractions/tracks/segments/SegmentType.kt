@@ -2,6 +2,7 @@ package net.bandithemepark.bandicore.park.attractions.tracks.segments
 
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.TrackVehicle
 import net.bandithemepark.bandicore.util.TrackUtil
+import net.bandithemepark.bandicore.util.Util
 
 abstract class SegmentType(val id: String, val isBlockSection: Boolean, val howToUse: String): Cloneable {
     override fun clone(): SegmentType {
@@ -23,22 +24,32 @@ abstract class SegmentType(val id: String, val isBlockSection: Boolean, val howT
      * Tells you if the next block section is clear
      * @return True if the next block section is clear
      */
-    fun isNextBlockClear(): Boolean {
-        if(TrackUtil.getTrack(parent)!!.eStop) return false
+    fun isNextBlockClear(debug: Boolean = false): Boolean {
+        if(debug) Util.debug("IsNextBlockClear", "Starting check of if next block is clear")
+        if(TrackUtil.getTrack(parent)!!.eStop) {
+            if(debug) Util.debug("IsNextBlockClear", "E-Stop is active")
+            return false
+        }
+
+        val track = TrackUtil.getTrack(parent)!!
 
         var clear = true
         var current: SegmentSeparator? = parent
 
         while(current!!.next  != null) {
+            if(debug) Util.debug("IsNextBlockClear", "Next block found")
             current = current.next
+            if(debug) Util.debug("IsNextBlockClear", "Checking block with index ${track.segmentSeparators.indexOf(current)}")
 
             if(current!!.vehicles.isNotEmpty()) {
+                if(debug) Util.debug("IsNextBlockClear", "Block is not clear because it has vehicles")
                 clear = false
                 break
             }
 
             if(current.type != null) {
                 if(current.type!!.isBlockSection) {
+                    if(debug) Util.debug("IsNextBlockClear", "Block is clear, because next empty block is a block section")
                     break
                 }
             }
