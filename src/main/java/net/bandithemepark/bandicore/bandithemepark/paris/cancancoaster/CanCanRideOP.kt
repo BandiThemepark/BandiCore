@@ -290,6 +290,7 @@ class CanCanRideOP: RideOP("cancancoaster", "cancanstation", Location(Bukkit.get
             val rideOP: CanCanRideOP = get("cancancoaster")!! as CanCanRideOP
             val stationSegment = rideOP.stationSegment.type as CanCanStationSegment
             val finalBrakeSegment = rideOP.track.segmentSeparators.find { it.type is CanCanFinalBrakeSegment }!!.type as CanCanFinalBrakeSegment
+            val liftSegment = rideOP.liftSegment.type as CanCanLiftSegment
 
             sender.sendMessage(Util.color("<${BandiColors.YELLOW}>CanCan Coaster debugging"))
             sender.sendMessage(Util.color("Transfer mode: ${rideOP.transferMode}"))
@@ -303,6 +304,13 @@ class CanCanRideOP: RideOP("cancancoaster", "cancanstation", Location(Bukkit.get
             sender.sendMessage(Util.color("FinalBrake released: ${finalBrakeSegment.released}"))
             sender.sendMessage(Util.color("FinalBrake next block clear: ${finalBrakeSegment.isNextBlockClear(true)}"))
             sender.sendMessage(Util.color("FinalBrake amount of vehicles: ${finalBrakeSegment.parent.vehicles.size}"))
+            sender.sendMessage(Util.color("Lift paused: ${liftSegment.paused}"))
+            sender.sendMessage(Util.color("Lift waitingCanGo: ${liftSegment.waitingCanGo}"))
+            sender.sendMessage(Util.color("Lift available: ${liftSegment.available}"))
+
+            for(vehicle in liftSegment.vehicleStates.keys) {
+                sender.sendMessage(Util.color("Lift vehicle ${vehicle.id} state: ${liftSegment.vehicleStates[vehicle]}"))
+            }
         }
     }
 }
