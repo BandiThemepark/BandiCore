@@ -69,6 +69,12 @@ abstract class PacketEntity {
             ProtocolLibrary.getProtocolManager().addPacketListener(packetListener)
         }
 
+        if(regionId != null) {
+            region = BandiCore.instance.regionManager.getFromId(regionId)
+            region!!.packetEntities.add(this)
+            if(region != null) playersInRegion = Bukkit.getOnlinePlayers().filter { region!!.containsPlayer(it) }.toMutableList()
+        }
+
         val packet = ClientboundAddEntityPacket(handle.id, handle.uuid, spawnLocation.x, spawnLocation.y, spawnLocation.z, 0f, 0f, handle.type, 0, handle.deltaMovement, 0.0)
         sendPacket(packet)
 
@@ -77,12 +83,6 @@ abstract class PacketEntity {
 
         spawned = true
         active.add(this)
-
-        if(regionId != null) {
-            region = BandiCore.instance.regionManager.getFromId(regionId)
-            region!!.packetEntities.add(this)
-            if(region != null) playersInRegion = Bukkit.getOnlinePlayers().filter { region!!.containsPlayer(it) }.toMutableList()
-        }
 
         if(debug) {
             Util.debug("PacketEntity", "Spawned entity with ID ${handle.id} at ${spawnLocation.x}, ${spawnLocation.y}, ${spawnLocation.z}")
