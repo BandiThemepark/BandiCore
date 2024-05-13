@@ -49,5 +49,6 @@ class CanCanFinalBrakeSegment: SegmentType("cancanfinalblockbrake", true, "MAX_S
 
     override fun onVehicleLeave(vehicle: TrackVehicle) {
         shouldStop = false
+        parent.vehicles.clear()
     }
 }
