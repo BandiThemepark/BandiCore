@@ -4,10 +4,7 @@ import com.mojang.authlib.GameProfile
 import com.mojang.authlib.properties.Property
 import net.bandithemepark.bandicore.BandiCore
 import net.kyori.adventure.text.Component
-import org.bukkit.Color
-import org.bukkit.Material
-import org.bukkit.NamespacedKey
-import org.bukkit.OfflinePlayer
+import org.bukkit.*
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
@@ -15,6 +12,7 @@ import org.bukkit.inventory.meta.LeatherArmorMeta
 import org.bukkit.inventory.meta.SkullMeta
 import org.bukkit.persistence.PersistentDataType
 import java.lang.reflect.Field
+import java.net.URL
 import java.util.*
 
 
@@ -170,21 +168,16 @@ class ItemFactory {
 
     fun setSkullTexture(texture: String): ItemFactory {
         require(itemStack.type == Material.PLAYER_HEAD) { "You can not apply a skull texture to an item that is not a skull" }
-        val skullMeta = itemMeta as SkullMeta
 
-        val profile = GameProfile(UUID.randomUUID(), "a")
-        val encodedData: ByteArray = Base64.getEncoder()
-            .encode("{textures:{SKIN:{url:\"http://textures.minecraft.net/texture/$texture\"}}}".toByteArray())
-        profile.properties.put("textures", Property("textures", String(encodedData)))
-        val profileField: Field?
-        try {
-            profileField = skullMeta.javaClass.getDeclaredField("profile")
-            profileField.isAccessible = true
-            profileField.set(skullMeta, profile)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        val profile = Bukkit.createProfile(UUID.randomUUID())
+        val textures = profile.textures
+        textures.skin = URL("http://textures.minecraft.net/texture/$texture")
+        profile.setTextures(textures)
+
+        val skullMeta = itemMeta as SkullMeta
+        skullMeta.playerProfile = profile
         itemMeta = skullMeta
+
         return this
     }
 
