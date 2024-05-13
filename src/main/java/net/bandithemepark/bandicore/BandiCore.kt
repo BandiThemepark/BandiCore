@@ -238,15 +238,6 @@ class BandiCore: JavaPlugin() {
         registerMinigames()
         registerDebuggables()
 
-        SpatialAudioSource(
-            UUID.randomUUID(),
-            Location(Bukkit.getWorld("world")!!, 17.5, 0.0, -144.5),
-            "5439a750-25b0-11ee-a1ee-0242ac1d0002",
-            true,
-            5.0,
-            10.0
-        )
-
         // Things that need to be done for players who are already online (Like when a reload happens)
         forOnlinePlayers()
 
