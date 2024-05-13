@@ -157,3 +157,6 @@ commands:
     description: Test command for cooking minigame
   bandithemepark:
     description: Main command for BandiThemepark
+    aliases:
+      - btp
+      - bandi
