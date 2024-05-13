@@ -10,7 +10,7 @@ import org.bukkit.entity.Player
 class CanCanAttraction: Attraction(
     "cancancoaster",
     AttractionAppearance("CanCan Coaster", listOf("Youri hasn't added a description yet"), Material.DIAMOND_HOE, 7),
-    Location(Bukkit.getWorld("world")!!, -159.5, -11.0, -45.0, 180f, -10f)
+    Location(Bukkit.getWorld("world")!!, -96.5, -3.0, -42.0, 180f, -10f)
     ) {
 
     override fun getPlayerPassengers(): List<Player> {

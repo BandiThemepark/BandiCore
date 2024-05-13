@@ -34,7 +34,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 
-class CanCanRideOP: RideOP("cancancoaster", "cancanstation", Location(Bukkit.getWorld("world"), -161.0, -12.2, -30.5, -90f, -90f)) {
+class CanCanRideOP: RideOP("cancancoaster", "cancanstation", Location(Bukkit.getWorld("world"), -98.0, -4.2, -27.5, -90f, -90f)) {
     val track = BandiCore.instance.trackManager.loadedTracks.find { it.id == "cancan" }!!
     val stationSegment = track.segmentSeparators.find { it.type is CanCanStationSegment }!!
     val liftSegment = track.segmentSeparators.find { it.type!! is CanCanLiftSegment }!!

@@ -6,11 +6,11 @@ import org.bukkit.Bukkit
 import org.bukkit.Location
 
 class CanCanGatesButton: GatesButton(0, listOf(
-    Location(Bukkit.getWorld("world"), -166.0, -11.0, -41.0),
-    Location(Bukkit.getWorld("world"), -166.0, -11.0, -39.0),
-    Location(Bukkit.getWorld("world"), -166.0, -11.0, -37.0),
-    Location(Bukkit.getWorld("world"), -166.0, -11.0, -35.0),
-    Location(Bukkit.getWorld("world"), -166.0, -11.0, -33.0),
+    Location(Bukkit.getWorld("world"), -103.0, -3.0, -38.0),
+    Location(Bukkit.getWorld("world"), -103.0, -3.0, -36.0),
+    Location(Bukkit.getWorld("world"), -103.0, -3.0, -34.0),
+    Location(Bukkit.getWorld("world"), -103.0, -3.0, -32.0),
+    Location(Bukkit.getWorld("world"), -103.0, -3.0, -30.0),
 )) {
     override fun check(): Boolean {
         return (rideOP as CanCanRideOP).isTrainInStation()
