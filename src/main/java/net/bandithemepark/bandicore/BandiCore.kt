@@ -360,6 +360,7 @@ class BandiCore: JavaPlugin() {
         getServer().pluginManager.registerEvents(CanCanRideOP.Events(), this)
         getServer().pluginManager.registerEvents(CookingEvents(), this)
         getServer().pluginManager.registerEvents(SlotMachineEvents(), this)
+        getServer().pluginManager.registerEvents(BandiThemeParkCommand(), this)
     }
 
     private fun prepareSettings() {

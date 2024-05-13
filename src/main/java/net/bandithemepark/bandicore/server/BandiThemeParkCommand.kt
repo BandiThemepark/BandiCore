@@ -12,8 +12,11 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerCommandPreprocessEvent
 
-class BandiThemeParkCommand: CommandExecutor, TabCompleter {
+class BandiThemeParkCommand: CommandExecutor, TabCompleter, Listener {
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (!command.name.equals("bandithemepark", true)) return false
         if (!sender.hasPermission("bandithemepark.crew")) {
@@ -89,5 +92,16 @@ class BandiThemeParkCommand: CommandExecutor, TabCompleter {
         }
 
         return null
+    }
+
+    // Disable the default /restart command and make it execute the custom restart
+    @EventHandler
+    fun onCommand(event: PlayerCommandPreprocessEvent) {
+        if(!event.player.hasPermission("bandithemepark.crew")) return
+
+        if(event.message.equals("/restart", true)) {
+            event.isCancelled = true
+            BandiCore.instance.restarter.start()
+        }
     }
 }
