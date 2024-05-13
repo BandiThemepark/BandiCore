@@ -6,6 +6,7 @@ import net.bandithemepark.bandicore.bandithemepark.paris.cancancoaster.rideop.*
 import net.bandithemepark.bandicore.bandithemepark.paris.cancancoaster.rideop.transfer.CanCanStorageRetrieveButton
 import net.bandithemepark.bandicore.bandithemepark.paris.cancancoaster.rideop.transfer.CanCanStorageSendButton
 import net.bandithemepark.bandicore.bandithemepark.paris.cancancoaster.rideop.transfer.CanCanTransferModeButton
+import net.bandithemepark.bandicore.bandithemepark.paris.cancancoaster.segments.CanCanFinalBrakeSegment
 import net.bandithemepark.bandicore.bandithemepark.paris.cancancoaster.segments.CanCanLiftSegment
 import net.bandithemepark.bandicore.bandithemepark.paris.cancancoaster.segments.CanCanStationSegment
 import net.bandithemepark.bandicore.bandithemepark.paris.cancancoaster.segments.CanCanStorageSegment
@@ -21,10 +22,14 @@ import net.bandithemepark.bandicore.park.attractions.tracks.segments.SegmentSepa
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.TrackVehicle
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.HarnessAttachment
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.SeatAttachment
+import net.bandithemepark.bandicore.util.Util
+import net.bandithemepark.bandicore.util.chat.BandiColors
+import net.bandithemepark.bandicore.util.debug.Debuggable
 import net.bandithemepark.bandicore.util.track.TrackForkMerge
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Location
+import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -277,6 +282,25 @@ class CanCanRideOP: RideOP("cancancoaster", "cancanstation", Location(Bukkit.get
             canCanRideOP.getAllHarnesses().forEach {
                 if(it.spawned) it.unMarkFor(event.player)
             }
+        }
+    }
+
+    class Debug: Debuggable {
+        override fun debug(sender: CommandSender) {
+            val rideOP: CanCanRideOP = get("cancancoaster")!! as CanCanRideOP
+            val stationSegment = rideOP.stationSegment.type as CanCanStationSegment
+            val finalBrakeSegment = rideOP.track.segmentSeparators.find { it.type is CanCanFinalBrakeSegment }!!.type as CanCanFinalBrakeSegment
+
+            sender.sendMessage(Util.color("<${BandiColors.YELLOW}>CanCan Coaster debugging"))
+            sender.sendMessage(Util.color("Transfer mode: ${rideOP.transferMode}"))
+            sender.sendMessage(Util.color("Transfer state: ${rideOP.transferState}"))
+            sender.sendMessage(Util.color("Train in station: ${rideOP.isTrainInStation()}"))
+            sender.sendMessage(Util.color("Station currentTrain: ${stationSegment.currentVehicle?.id}"))
+            sender.sendMessage(Util.color("Station dispatched: ${stationSegment.dispatched}"))
+            sender.sendMessage(Util.color("FinalBrake should stop: ${finalBrakeSegment.shouldStop}"))
+            sender.sendMessage(Util.color("FinalBrake stopped: ${finalBrakeSegment.stopped}"))
+            sender.sendMessage(Util.color("FinalBrake released: ${finalBrakeSegment.released}"))
+            sender.sendMessage(Util.color("FinalBrake next block clear: ${finalBrakeSegment.isNextBlockClear()}"))
         }
     }
 }

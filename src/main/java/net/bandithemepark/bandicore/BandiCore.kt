@@ -236,6 +236,7 @@ class BandiCore: JavaPlugin() {
         placeableManager.loadPlaced()
 
         registerMinigames()
+        registerDebuggables()
 
         SpatialAudioSource(
             UUID.randomUUID(),
@@ -435,5 +436,9 @@ class BandiCore: JavaPlugin() {
 
         CookingMinigame().register()
         Minigame.startTimer()
+    }
+
+    private fun registerDebuggables() {
+        CanCanRideOP.Debug().register("cancan")
     }
 }
