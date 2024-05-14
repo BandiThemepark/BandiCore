@@ -4,6 +4,7 @@ import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.network.backend.BackendCosmetic
 import net.bandithemepark.bandicore.park.cosmetics.dressingroom.DressingRoom
 import net.bandithemepark.bandicore.park.cosmetics.dressingroom.DressingRoomSession
+import net.bandithemepark.bandicore.util.debug.Reloadable
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -11,7 +12,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 
-class CosmeticManager {
+class CosmeticManager: Reloadable {
     val cosmetics = mutableListOf<Cosmetic>()
     val ownedCosmetics = mutableListOf<PlayerOwnedCosmetics>()
     val dressingRoom = DressingRoom()
@@ -20,6 +21,7 @@ class CosmeticManager {
         loadCosmetics()
         dressingRoom.spawnDecorations()
         startTimer()
+        register("cosmetics")
     }
 
     private fun startTimer() {
@@ -35,7 +37,7 @@ class CosmeticManager {
                 cosmetics.add(cosmetic)
             }
 
-            Bukkit.getLogger().info("Loaded ${cosmetics.size} cosmetics")
+            Bukkit.getConsoleSender().sendMessage("Loaded ${cosmetics.size} cosmetics")
         }
     }
 
@@ -66,5 +68,10 @@ class CosmeticManager {
         fun onQuit(event: PlayerQuitEvent) {
             BandiCore.instance.cosmeticManager.unloadOwnedCosmetics(event.player)
         }
+    }
+
+    override fun reload() {
+        cosmetics.clear()
+        loadCosmetics()
     }
 }
