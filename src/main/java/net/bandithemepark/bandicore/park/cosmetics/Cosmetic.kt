@@ -1,6 +1,7 @@
 package net.bandithemepark.bandicore.park.cosmetics
 
 import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import net.bandithemepark.bandicore.park.cosmetics.requirements.CosmeticRequirement
 import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.chat.BandiColors
@@ -52,16 +53,16 @@ class Cosmetic(
             val price = json.get("price").asInt
 
             val requirements = mutableListOf<CosmeticRequirement>()
-            for(element in json.get("requirements").asJsonArray) {
+            for(element in JsonParser().parse(json.get("requirements").asString).asJsonArray) {
                 val requirement = CosmeticRequirement.fromJson(element.asJsonObject)
                 requirements.add(requirement)
             }
 
-            val metadata = json.get("metaData").asJsonObject
+            val metadata = JsonParser().parse(json.get("metaData").asString).asJsonObject
             type.onMetadataLoad(metadata)
 
             val tags = mutableListOf<CosmeticTag>()
-            for(element in json.get("itemTags").asString.replace("[", "").replace("]", "").replace(", ", ",").split(",")) {
+            for(element in json.get("itemTags").asString.replace("\"", "").replace("[", "").replace("]", "").replace(", ", ",").split(",")) {
                 val tag = CosmeticTag.valueOf(element)
                 tags.add(tag)
             }
