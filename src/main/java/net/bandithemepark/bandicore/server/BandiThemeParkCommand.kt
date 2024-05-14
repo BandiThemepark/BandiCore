@@ -91,7 +91,7 @@ class BandiThemeParkCommand: CommandExecutor, TabCompleter, Listener {
         if(!command.name.equals("bandithemepark", true)) return null
 
         if(args.size == 1) {
-            return Util.getTabCompletions(args[0], listOf("restart", "servermode", "debug", "help", "test"))
+            return Util.getTabCompletions(args[0], listOf("restart", "servermode", "debug", "help", "test", "reload"))
         } else if(args.size == 2) {
             if(args[0].equals("servermode", true)) {
                 return Util.getTabCompletions(args[1], ServerMode.getAllIds())
