@@ -7,6 +7,7 @@ import net.bandithemepark.bandicore.server.translations.MessageReplacement
 import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.chat.BandiColors
 import net.bandithemepark.bandicore.util.debug.Debuggable
+import net.bandithemepark.bandicore.util.debug.Reloadable
 import net.bandithemepark.bandicore.util.debug.Testable
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -58,6 +59,15 @@ class BandiThemeParkCommand: CommandExecutor, TabCompleter, Listener {
                 } else {
                     sender.sendTranslatedMessage("test-invalid-option", BandiColors.RED.toString())
                 }
+            } else if(args[0].equals("reload", true)) {
+                val reloadable = Reloadable.getReloadable(args[1])
+
+                if(reloadable != null) {
+                    sender.sendTranslatedMessage("reload-start", BandiColors.YELLOW.toString(), MessageReplacement("option", args[1]))
+                    reloadable.reload()
+                } else {
+                    sender.sendTranslatedMessage("reload-invalid-option", BandiColors.RED.toString())
+                }
             } else {
                 sendHelp(sender)
             }
@@ -74,6 +84,7 @@ class BandiThemeParkCommand: CommandExecutor, TabCompleter, Listener {
         sender.sendMessage(Util.color("<${BandiColors.RED}>/bandithemepark servermode <mode>"))
         sender.sendMessage(Util.color("<${BandiColors.RED}>/bandithemepark debug <option>"))
         sender.sendMessage(Util.color("<${BandiColors.RED}>/bandithemepark test <option>"))
+        sender.sendMessage(Util.color("<${BandiColors.RED}>/bandithemepark reload <option>"))
     }
 
     override fun onTabComplete(sender: CommandSender, command: Command, label: String, args: Array<out String>): MutableList<String>? {
@@ -88,6 +99,8 @@ class BandiThemeParkCommand: CommandExecutor, TabCompleter, Listener {
                 return Util.getTabCompletions(args[1], Debuggable.debuggables.keys.toList())
             } else if(args[0].equals("test", true)) {
                 return Util.getTabCompletions(args[1], Testable.testables.keys.toList())
+            } else if(args[0].equals("reload", true)) {
+                return Util.getTabCompletions(args[1], Reloadable.reloadables.keys.toList())
             }
         }
 

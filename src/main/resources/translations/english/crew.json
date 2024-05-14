@@ -195,5 +195,7 @@
   "debug-start": "Started debugging %option%",
   "debug-invalid-option": "No matching debug option found",
   "test-start": "Started testing %option%",
-  "test-invalid-option": "No matching test option found"
+  "test-invalid-option": "No matching test option found",
+  "reload-start": "Reloading %option%...",
+  "reload-invalid-option": "No matching reload option found"
 }
