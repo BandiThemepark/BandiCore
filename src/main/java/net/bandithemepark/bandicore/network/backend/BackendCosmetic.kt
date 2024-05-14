@@ -15,7 +15,7 @@ object BackendCosmetic {
         val client = BandiCore.instance.okHttpClient
 
         val request = Request.Builder()
-            .url("https://api.bandithemepark.net/cosmetics")
+            .url("https://api.bandithemepark.net/cosmetics&limit=10000")
             .method("GET", null)
             .header("Authorization", BandiCore.instance.server.apiKey)
             .build()
@@ -28,7 +28,7 @@ object BackendCosmetic {
             override fun onResponse(call: Call, response: Response) {
                 val responseJson = JsonParser().parse(response.body!!.string()).asJsonObject
                 if(responseJson.has("data") && !responseJson.get("data").isJsonNull) {
-                    val data = responseJson.getAsJsonArray("data")
+                    val data = responseJson.getAsJsonObject("cosmetics").getAsJsonArray("data")
                     callback.invoke(data)
                 } else {
                     BandiCore.instance.logger.severe("An attempt was made at loading all cosmetics, but no data was found. The following message was given: ${responseJson.get("message")}")
