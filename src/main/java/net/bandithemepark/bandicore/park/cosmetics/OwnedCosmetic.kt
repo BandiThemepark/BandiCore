@@ -5,7 +5,7 @@ import net.bandithemepark.bandicore.BandiCore
 import org.bukkit.Color
 import java.util.*
 
-data class OwnedCosmetic(val cosmetic: Cosmetic, val equipped: Boolean, val amount: Int, val color: Color?) {
+data class OwnedCosmetic(val cosmetic: Cosmetic, var equipped: Boolean, val amount: Int, var color: Color?) {
     companion object {
         fun fromJson(json: JsonObject): OwnedCosmetic {
             val cosmeticId = UUID.fromString(json.get("cosmeticId").asString)
