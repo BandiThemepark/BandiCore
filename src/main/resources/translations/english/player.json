@@ -91,5 +91,8 @@
   "rideop-cancan-storage-retrieve-title-0": "Retrieve from storage 1",
   "rideop-cancan-storage-retrieve-title-1": "Retrieve from storage 2",
   "rideop-cancan-storage-retrieve-description-0": "Retrieve a cart from storage 1",
-  "rideop-cancan-storage-retrieve-description-1": "Retrieve a cart from storage 2"
+  "rideop-cancan-storage-retrieve-description-1": "Retrieve a cart from storage 2",
+  "equip-type-not-found": "The entered cosmetic type was not found",
+  "equip-cosmetic-not-found": "The entered cosmetic was not found",
+  "equip-success": "Equipped cosmetic %cosmetic%",
 }

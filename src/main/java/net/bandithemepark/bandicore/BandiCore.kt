@@ -42,7 +42,6 @@ import net.bandithemepark.bandicore.bandithemepark.paris.cancancoaster.CanCanAtt
 import net.bandithemepark.bandicore.bandithemepark.paris.cancancoaster.CanCanRideOP
 import net.bandithemepark.bandicore.network.audioserver.AudioCommand
 import net.bandithemepark.bandicore.network.audioserver.AudioServerTimer
-import net.bandithemepark.bandicore.network.audioserver.SpatialAudioSource
 import net.bandithemepark.bandicore.network.audioserver.VolumeCommand
 import net.bandithemepark.bandicore.network.audioserver.events.AudioServerEventListeners
 import net.bandithemepark.bandicore.network.audioserver.map.ChunkRendererCommand
@@ -62,6 +61,7 @@ import net.bandithemepark.bandicore.park.attractions.rideop.RideOPEvents
 import net.bandithemepark.bandicore.park.attractions.rideop.camera.RideOPCamera
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.SeatAttachment
 import net.bandithemepark.bandicore.park.cosmetics.CosmeticManager
+import net.bandithemepark.bandicore.park.cosmetics.command.EquipCommand
 import net.bandithemepark.bandicore.park.cosmetics.dressingroom.DressingRoomCommand
 import net.bandithemepark.bandicore.park.cosmetics.dressingroom.DressingRoomEvents
 import net.bandithemepark.bandicore.park.cosmetics.requirements.types.AchievementCosmeticRequirement
@@ -122,8 +122,6 @@ import net.bandithemepark.bandicore.server.regions.BandiRegionManager
 import net.bandithemepark.bandicore.server.regions.events.BandiRegionEvents
 import net.bandithemepark.bandicore.util.entity.HoverableEntity
 import net.bandithemepark.bandicore.util.entity.PacketEntitySeat
-import org.bukkit.Location
-import java.util.*
 
 class BandiCore: JavaPlugin() {
     companion object {
@@ -309,6 +307,7 @@ class BandiCore: JavaPlugin() {
         getCommand("dressingroom")!!.setExecutor(DressingRoomCommand())
         getCommand("cooking")!!.setExecutor(MinigameTest())
         getCommand("bandithemepark")!!.setExecutor(BandiThemeParkCommand())
+        getCommand("equip")!!.setExecutor(EquipCommand())
     }
 
     private fun registerEvents() {

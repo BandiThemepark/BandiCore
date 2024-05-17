@@ -152,7 +152,6 @@ commands:
       - cosmetic
       - dressingrooms
       - equipment
-      - equip
   cooking:
     description: Test command for cooking minigame
   bandithemepark:
@@ -160,3 +159,5 @@ commands:
     aliases:
       - btp
       - bandi
+  equip:
+    description: Equip a cosmetic
