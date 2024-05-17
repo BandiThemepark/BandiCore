@@ -44,4 +44,8 @@ class HatCosmetic: CosmeticType("hat") {
         return if(colorable) ItemFactory(material).setCustomModelData(customModelData).setArmorColor(color).build()
                else ItemFactory(material).setCustomModelData(customModelData).build()
     }
+
+    override fun onJoin(player: Player) {
+        onUnEquip(player)
+    }
 }

@@ -13,6 +13,7 @@ abstract class CosmeticType(val id: String): Cloneable {
     abstract fun onEquip(player: Player, color: Color?, cosmetic: Cosmetic)
     abstract fun onUnEquip(player: Player)
     abstract fun getDressingRoomItem(player: Player, color: Color?, cosmetic: Cosmetic): ItemStack
+    abstract fun onJoin(player: Player)
 
     fun register() {
         types.add(this)
