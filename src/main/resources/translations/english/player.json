@@ -95,4 +95,5 @@
   "equip-type-not-found": "The entered cosmetic type was not found",
   "equip-cosmetic-not-found": "The entered cosmetic was not found",
   "equip-success": "Equipped cosmetic %cosmetic%",
+  "unequip-success": "Unequipped cosmetic"
 }

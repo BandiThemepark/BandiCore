@@ -62,6 +62,7 @@ import net.bandithemepark.bandicore.park.attractions.rideop.camera.RideOPCamera
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.SeatAttachment
 import net.bandithemepark.bandicore.park.cosmetics.CosmeticManager
 import net.bandithemepark.bandicore.park.cosmetics.command.EquipCommand
+import net.bandithemepark.bandicore.park.cosmetics.command.UnEquipCommand
 import net.bandithemepark.bandicore.park.cosmetics.dressingroom.DressingRoomCommand
 import net.bandithemepark.bandicore.park.cosmetics.dressingroom.DressingRoomEvents
 import net.bandithemepark.bandicore.park.cosmetics.requirements.types.AchievementCosmeticRequirement
@@ -308,6 +309,7 @@ class BandiCore: JavaPlugin() {
         getCommand("cooking")!!.setExecutor(MinigameTest())
         getCommand("bandithemepark")!!.setExecutor(BandiThemeParkCommand())
         getCommand("equip")!!.setExecutor(EquipCommand())
+        getCommand("unequip")!!.setExecutor(UnEquipCommand())
     }
 
     private fun registerEvents() {
