@@ -102,12 +102,19 @@ class CosmeticManager: Reloadable {
     fun equip(player: Player, cosmetic: Cosmetic, color: Color? = null) {
         val ownedCosmetic = ownedCosmetics.find { it.owner == player } ?: return
         val owned = ownedCosmetic.ownedCosmetics.find { it.cosmetic == cosmetic } ?: return
+        val currentEquipped = ownedCosmetic.ownedCosmetics.filter { it.cosmetic.type.id == cosmetic.type.id }.find { it.equipped }
+
+        if(currentEquipped != null) {
+            currentEquipped.cosmetic.type.onUnEquip(player)
+            currentEquipped.equipped = false
+            BackendCosmetic.updateOwned(player, currentEquipped.cosmetic, equipped = false) { }
+        }
 
         owned.color = color
         owned.cosmetic.type.onEquip(player, owned.color, owned.cosmetic)
         owned.equipped = true
 
-        // TODO UPDATE DATABASE
+        BackendCosmetic.updateOwned(player, cosmetic, equipped = true, color = color) { }
     }
 
     /**
@@ -122,7 +129,7 @@ class CosmeticManager: Reloadable {
         equipped.cosmetic.type.onUnEquip(player)
         equipped.equipped = false
 
-        // TODO UPDATE DATABASE
+        BackendCosmetic.updateOwned(player, equipped.cosmetic, equipped = false) { }
     }
 
     class Events: Listener {
