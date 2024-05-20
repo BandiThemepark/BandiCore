@@ -47,10 +47,13 @@ class DressingRoomSession(
         customPlayer.spawn(dressingRoom.playerPosition.toLocation(dressingRoom.world), null)
         customPlayer.moveTo(dressingRoom.playerPosition, Quaternion.fromYawPitchRoll(0.0, dressingRoom.playerYaw, 0.0))
 
-        customPlayer.playAnimationOnce("dressing_room_enter") { playRandomIdleAnimation() }
+        Bukkit.getScheduler().runTaskLater(BandiCore.instance, Runnable {
+            customPlayer.playAnimationOnce("dressing_room_enter") { playRandomIdleAnimation() }
+
+        }, 10)
     }
 
-    val idleAnimations = listOf("dressing_room_idle_1")
+    val idleAnimations = listOf("dressing_room_idle_1", "dressing_room_idle_2")
     private fun playRandomIdleAnimation() {
         val animationId = idleAnimations.random()
         customPlayer.playAnimationOnce(animationId) { playRandomIdleAnimation() }
