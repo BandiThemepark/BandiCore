@@ -150,8 +150,10 @@ class PlayerNameTag(val player: Player) {
         val position = player.location.toVector().add(Vector(0.0, 2.0+heightOffset, 0.0))
         parentArmorStand.moveEntity(position.x, position.y, position.z)
 
-        val titlePosition = player.location.toVector().add(Vector(0.0, 2.0+heightOffset+TITLE_HEIGHT_OFFSET, 0.0))
-        titleParentArmorStand.moveEntity(titlePosition.x, titlePosition.y, titlePosition.z)
+        if(titleParentArmorStand.spawned) {
+            val titlePosition = player.location.toVector().add(Vector(0.0, 2.0 + heightOffset + TITLE_HEIGHT_OFFSET, 0.0))
+            titleParentArmorStand.moveEntity(titlePosition.x, titlePosition.y, titlePosition.z)
+        }
     }
 
     init {
