@@ -6,6 +6,7 @@ import net.bandithemepark.bandicore.park.cosmetics.requirements.CosmeticRequirem
 import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.chat.BandiColors
 import net.kyori.adventure.text.Component
+import org.bukkit.Bukkit
 import java.util.UUID
 
 class Cosmetic(
@@ -62,9 +63,15 @@ class Cosmetic(
             type.onMetadataLoad(metadata)
 
             val tags = mutableListOf<CosmeticTag>()
-            for(element in json.get("itemTags").asString.replace("\"", "").replace("[", "").replace("]", "").replace(", ", ",").split(",")) {
-                val tag = CosmeticTag.valueOf(element)
-                tags.add(tag)
+            for (element in json.get("itemTags").asString.replace("\"", "").replace("[", "").replace("]", "")
+                .replace(", ", ",").split(",")) {
+                if(element == "") continue
+                try {
+                    val tag = CosmeticTag.valueOf(element)
+                    tags.add(tag)
+                } catch (e: IllegalArgumentException) {
+                    Bukkit.getConsoleSender().sendMessage("No tag named $element found for cosmetic $name")
+                }
             }
 
             return Cosmetic(id, name, displayName, description, consumable, type, price, requirements, tags)
