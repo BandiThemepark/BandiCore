@@ -34,7 +34,14 @@ class HatCosmetic: CosmeticType("hat") {
                         else ItemFactory(material).setCustomModelData(customModelData).setDisplayName(cosmetic.getItemName()).setLore(cosmetic.getItemStackDescription()).build()
 
         player.equipment.helmet = itemStack
-        player.getNameTag()!!.heightOffset = heightOffset
+
+        if(player.getNameTag() != null) {
+            player.getNameTag()!!.heightOffset = heightOffset
+        } else {
+            Bukkit.getScheduler().runTaskLater(BandiCore.instance, Runnable {
+                player.getNameTag()!!.heightOffset = heightOffset
+            }, 20)
+        }
     }
 
     override fun onUnEquip(player: Player) {
