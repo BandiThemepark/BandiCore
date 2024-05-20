@@ -91,8 +91,8 @@ class RankManager {
             rank.applyPermissions(player)
 
             Bukkit.getScheduler().runTaskLater(BandiCore.instance, Runnable {
-                BandiCore.instance.server.scoreboard.updateScoreboard()
                 PlayerNameTag(player)
+                BandiCore.instance.server.scoreboard.updateScoreboard()
             }, 3)
         }
     }
