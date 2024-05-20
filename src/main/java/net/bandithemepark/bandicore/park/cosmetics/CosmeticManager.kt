@@ -9,6 +9,7 @@ import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
@@ -125,7 +126,7 @@ class CosmeticManager: Reloadable {
     }
 
     class Events: Listener {
-        @EventHandler
+        @EventHandler(priority = EventPriority.HIGHEST)
         fun onJoin(event: PlayerJoinEvent) {
             BandiCore.instance.cosmeticManager.loadOwnedCosmetics(event.player) {
                 val ownedCosmetics = BandiCore.instance.cosmeticManager.ownedCosmetics.find { it.owner == event.player } ?: return@loadOwnedCosmetics
