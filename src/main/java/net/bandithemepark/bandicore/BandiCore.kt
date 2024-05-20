@@ -70,6 +70,7 @@ import net.bandithemepark.bandicore.park.cosmetics.requirements.types.Ridecounte
 import net.bandithemepark.bandicore.park.cosmetics.requirements.types.VIPCosmeticRequirement
 import net.bandithemepark.bandicore.park.cosmetics.types.HandheldCosmetic
 import net.bandithemepark.bandicore.park.cosmetics.types.HatCosmetic
+import net.bandithemepark.bandicore.park.cosmetics.types.TitleCosmetic
 import net.bandithemepark.bandicore.park.modsupport.SmoothCoastersChecker
 import net.bandithemepark.bandicore.park.npc.ThemeParkNPCSkin
 import net.bandithemepark.bandicore.park.npc.path.editor.PathPointEditorCommand
@@ -418,6 +419,7 @@ class BandiCore: JavaPlugin() {
     private fun registerCosmeticTypes() {
         HatCosmetic().register()
         HandheldCosmetic().register()
+        TitleCosmetic().register()
     }
 
     private fun registerCosmeticRequirementTypes() {
