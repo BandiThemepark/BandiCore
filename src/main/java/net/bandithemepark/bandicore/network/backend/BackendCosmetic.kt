@@ -12,6 +12,8 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
+import org.bukkit.Bukkit
+import org.bukkit.Color
 import org.bukkit.entity.Player
 import java.io.IOException
 
@@ -114,6 +116,41 @@ object BackendCosmetic {
         val request = Request.Builder()
             .url("https://api.bandithemepark.net/cosmetics/remove/${player.uniqueId}")
             .method("POST", data.toString().toRequestBody(mediaType))
+            .header("Authorization", BandiCore.instance.server.apiKey)
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                callback.invoke()
+            }
+        })
+    }
+
+    /**
+     * Update info about a player's owned cosmetic
+     * @param player The player to update the cosmetic for
+     * @param cosmetic The cosmetic to update
+     * @param equipped Whether the cosmetic is equipped (optional)
+     * @param amount The amount of the cosmetic (optional)
+     * @param color The color of the cosmetic (optional)
+     * @param callback What to do when the cosmetic is updated
+     */
+    fun updateOwned(player: Player, cosmetic: Cosmetic, equipped: Boolean? = null, amount: Int? = null, color: Color? = null, callback: () -> Unit) {
+        val client = BandiCore.instance.okHttpClient
+        val mediaType = "application/json".toMediaTypeOrNull()
+
+        val data = JsonObject()
+        if(equipped != null) data.addProperty("equipped", equipped)
+        if(amount != null) data.addProperty("amount", amount)
+        if(color != null) data.addProperty("color", color.asRGB())
+
+        val request = Request.Builder()
+            .url("https://api.bandithemepark.net/cosmetics/updateOwnedCosmetic/${player.uniqueId}/${cosmetic.id}")
+            .method("PUT", data.toString().toRequestBody(mediaType))
             .header("Authorization", BandiCore.instance.server.apiKey)
             .build()
 
