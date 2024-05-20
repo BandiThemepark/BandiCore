@@ -85,7 +85,13 @@ class BandiScoreboard {
      * @param player The player to show it for
      */
     fun showFor(player: Player) {
-        player.scoreboard = mainScoreboard
+        try {
+            player.scoreboard = mainScoreboard
+        } catch(_: NullPointerException) {
+            Bukkit.getScheduler().runTaskLater(BandiCore.instance, Runnable {
+                player.scoreboard = mainScoreboard
+            }, 1)
+        }
     }
 
     private val selectedColors = hashMapOf<String, ChatColor>()
