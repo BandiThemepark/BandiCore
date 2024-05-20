@@ -11,6 +11,7 @@ import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTransla
 import net.bandithemepark.bandicore.util.FileManager
 import net.bandithemepark.bandicore.util.chat.BandiColors
 import net.bandithemepark.bandicore.util.Util
+import net.bandithemepark.bandicore.util.debug.Reloadable
 import org.apache.commons.io.FileUtils
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -22,11 +23,12 @@ import org.bukkit.event.player.PlayerJoinEvent
 import java.io.File
 import java.nio.charset.Charset
 
-class Language(val id: String, val shortenedId: String) {
+class Language(val id: String, val shortenedId: String): Reloadable {
     val translations = hashMapOf<String, String>()
 
     init {
         loadTranslations()
+        register("translations")
     }
 
     private fun loadTranslations() {
@@ -84,5 +86,9 @@ class Language(val id: String, val shortenedId: String) {
             }
             return null
         }
+    }
+
+    override fun reload() {
+        loadTranslations()
     }
 }
