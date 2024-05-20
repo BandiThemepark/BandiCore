@@ -1,6 +1,5 @@
 package net.bandithemepark.bandicore.server.essentials.ranks.nametag
 
-import io.papermc.paper.adventure.PaperAdventure
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.entity.PacketEntity
@@ -8,6 +7,7 @@ import net.bandithemepark.bandicore.util.entity.armorstand.PacketEntityArmorStan
 import net.bandithemepark.bandicore.util.entity.display.PacketTextDisplay
 import net.bandithemepark.bandicore.util.entity.event.SeatEnterEvent
 import net.bandithemepark.bandicore.util.entity.event.SeatExitEvent
+import net.kyori.adventure.text.Component
 import net.minecraft.world.entity.decoration.ArmorStand
 import org.bukkit.GameMode
 import org.bukkit.entity.Display
@@ -24,9 +24,28 @@ import org.bukkit.util.Vector
 
 class PlayerNameTag(val player: Player) {
     val parentArmorStand = PacketEntityArmorStand()
+    val titleParentArmorStand = PacketEntityArmorStand()
     val textDisplay = PacketTextDisplay()
+    val titleDisplay = PacketTextDisplay()
     var heightOffset = 0.0
     private var isVisible = false
+
+    var title: Component? = null
+        set(value) {
+            field = value
+
+            if(value == null) {
+                if(titleDisplay.spawned) titleDisplay.deSpawn()
+                if(titleParentArmorStand.spawned) titleParentArmorStand.deSpawn()
+            } else {
+                if(!titleDisplay.spawned) {
+                    spawnTitleDisplay()
+                } else {
+                    titleDisplay.setText(value)
+                    titleDisplay.updateMetadata()
+                }
+            }
+        }
 
     var hidden = false
     set(value) {
@@ -39,6 +58,32 @@ class PlayerNameTag(val player: Player) {
         } else {
             if(isVisible) spawn()
         }
+    }
+
+    private fun spawnTitleDisplay() {
+        if(title == null) return
+        if(hidden) return
+        if(titleDisplay.spawned) return
+
+        titleParentArmorStand.spawn(player.location.clone().add(0.0, 2.0 + heightOffset + TITLE_HEIGHT_OFFSET, 0.0))
+        titleParentArmorStand.handle.isInvisible = true
+        (titleParentArmorStand.handle as ArmorStand).isMarker = true
+        titleParentArmorStand.handle.isNoGravity = true
+        titleParentArmorStand.updateMetadata()
+
+        titleDisplay.visibilityType = PacketEntity.VisibilityType.BLACKLIST
+        titleDisplay.visibilityList = mutableListOf(player)
+
+        titleDisplay.spawn(player.location.clone().add(0.0, 2.0 + heightOffset + TITLE_HEIGHT_OFFSET, 0.0))
+        titleDisplay.setBillboard(Display.Billboard.CENTER)
+        titleDisplay.setDefaultBackground(true)
+        titleDisplay.setSeeThrough(false)
+        titleDisplay.setAlignment(TextDisplay.TextAlignment.CENTER)
+        titleDisplay.setText(title!!)
+        titleDisplay.updateMetadata()
+
+        titleParentArmorStand.addPassenger(titleDisplay.handle.id)
+        titleParentArmorStand.updatePassengers()
     }
 
     /**
@@ -72,6 +117,8 @@ class PlayerNameTag(val player: Player) {
 
             parentArmorStand.addPassenger(textDisplay.handle.id)
             parentArmorStand.updatePassengers()
+
+            spawnTitleDisplay()
         }
     }
 
@@ -82,6 +129,8 @@ class PlayerNameTag(val player: Player) {
         isVisible = false
         textDisplay.deSpawn()
         parentArmorStand.deSpawn()
+        titleDisplay.deSpawn()
+        titleParentArmorStand.deSpawn()
     }
 
     /**
@@ -100,6 +149,9 @@ class PlayerNameTag(val player: Player) {
     fun updatePosition() {
         val position = player.location.toVector().add(Vector(0.0, 2.0+heightOffset, 0.0))
         parentArmorStand.moveEntity(position.x, position.y, position.z)
+
+        val titlePosition = player.location.toVector().add(Vector(0.0, 2.0+heightOffset+TITLE_HEIGHT_OFFSET, 0.0))
+        titleParentArmorStand.moveEntity(titlePosition.x, titlePosition.y, titlePosition.z)
     }
 
     init {
@@ -117,6 +169,8 @@ class PlayerNameTag(val player: Player) {
         fun Player.getNameTag(): PlayerNameTag? {
             return get(this)
         }
+
+        const val TITLE_HEIGHT_OFFSET = 0.35
     }
 
     class Events: Listener {
