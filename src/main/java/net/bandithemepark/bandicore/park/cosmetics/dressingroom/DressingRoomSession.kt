@@ -40,14 +40,11 @@ class DressingRoomSession(
     lateinit var customPlayer: CustomPlayerRig
 
     var exited = false
-    var currentPage: UIPage = StartPage()
-    var lastInteraction = System.currentTimeMillis()
 
     init {
         setupCamera()
         setupCustomPlayer()
         startView()
-        currentPage.render(dressingRoom.interfacePosition.toLocation(dressingRoom.world), player, dressingRoom.interfaceYaw)
 
         activeSessions.add(this)
     }
@@ -78,16 +75,6 @@ class DressingRoomSession(
         stopView()
 
         activeSessions.remove(this)
-    }
-
-    fun openPage(page: UIPage) {
-        currentPage.remove(player)
-        currentPage = page
-        currentPage.render(dressingRoom.interfacePosition.toLocation(dressingRoom.world), player, dressingRoom.interfaceYaw)
-
-        Bukkit.getScheduler().runTaskLater(BandiCore.instance, Runnable {
-            resetPosition()
-        }, 2)
     }
 
     private fun setupCamera() {
@@ -139,7 +126,6 @@ class DressingRoomSession(
         )
 
         Bukkit.getScheduler().runTaskLater(BandiCore.instance, Runnable {
-            currentPage.remove(player)
             stopCamera()
             removeCustomPlayer()
             removeCamera()
@@ -157,9 +143,8 @@ class DressingRoomSession(
         vehicleEntity.updatePassengers()
 
         player.gameMode = GameMode.SPECTATOR
-        resetPosition()
-//        (player as CraftPlayer).handle.connection.send(ClientboundSetCameraPacket((bukkitEntity as CraftArmorStand).handle))
-//        player.handle.connection.resetPosition()
+        (player as CraftPlayer).handle.connection.send(ClientboundSetCameraPacket((bukkitEntity as CraftArmorStand).handle))
+        player.handle.connection.resetPosition()
     }
 
     private fun stopCamera() {
@@ -177,21 +162,7 @@ class DressingRoomSession(
     }
 
     fun onTick() {
-        //val packet = ClientboundTeleportEntityPacket()
-        //(player as CraftPlayer).handle.connection.send(packet)
-    }
 
-    fun resetPosition() {
-        val location = dressingRoom.cameraPosition.toLocation(dressingRoom.world)
-        location.yaw = dressingRoom.cameraYaw.toFloat()
-        location.pitch = dressingRoom.cameraPitch.toFloat()
-        location.y -= 2.3
-        player.teleport(location)
-
-        vehicleEntity.removePassenger(player)
-        vehicleEntity.updatePassengers()
-        vehicleEntity.addPassenger(player)
-        vehicleEntity.updatePassengers()
     }
 
     companion object {
