@@ -68,6 +68,7 @@ import net.bandithemepark.bandicore.park.cosmetics.dressingroom.DressingRoomEven
 import net.bandithemepark.bandicore.park.cosmetics.requirements.types.AchievementCosmeticRequirement
 import net.bandithemepark.bandicore.park.cosmetics.requirements.types.RidecounterCosmeticRequirement
 import net.bandithemepark.bandicore.park.cosmetics.requirements.types.VIPCosmeticRequirement
+import net.bandithemepark.bandicore.park.cosmetics.types.HandheldCosmetic
 import net.bandithemepark.bandicore.park.cosmetics.types.HatCosmetic
 import net.bandithemepark.bandicore.park.modsupport.SmoothCoastersChecker
 import net.bandithemepark.bandicore.park.npc.ThemeParkNPCSkin
@@ -416,6 +417,7 @@ class BandiCore: JavaPlugin() {
 
     private fun registerCosmeticTypes() {
         HatCosmetic().register()
+        HandheldCosmetic().register()
     }
 
     private fun registerCosmeticRequirementTypes() {
