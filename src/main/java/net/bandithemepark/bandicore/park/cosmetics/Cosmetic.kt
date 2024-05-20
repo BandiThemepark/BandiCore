@@ -21,7 +21,7 @@ class Cosmetic(
 ) {
 
     fun getItemName(): Component {
-        return Util.color("<${BandiColors.YELLOW}>$displayName")
+        return Util.color("<!i><${BandiColors.YELLOW}>$displayName")
     }
 
     fun getItemStackDescription(): MutableList<Component> {
@@ -29,14 +29,14 @@ class Cosmetic(
 
         if(tags.isNotEmpty()) {
             for(tag in tags) {
-                components.add(Util.color("<${BandiColors.GREEN}>${tag.displayName}"))
+                components.add(Util.color("<!i><${BandiColors.GREEN}>${tag.displayName}"))
             }
 
             components.add(Util.color(" "))
         }
 
         for(line in description) {
-            components.add(Util.color("<${BandiColors.LIGHT_GRAY}>$line"))
+            components.add(Util.color("<!i><${BandiColors.LIGHT_GRAY}>$line"))
         }
 
         return components
