@@ -197,5 +197,9 @@
   "test-start": "Started testing %option%",
   "test-invalid-option": "No matching test option found",
   "reload-start": "Reloading %option%...",
-  "reload-invalid-option": "No matching reload option found"
+  "reload-invalid-option": "No matching reload option found",
+  "player-does-not-own-cosmetic": "The target player does not own this cosmetic",
+  "player-already-owns-cosmetic": "The target player already owns this cosmetic",
+  "cosmetic-given": "You have successfully given the target player the cosmetic",
+  "cosmetic-removed": "You have successfully removed the cosmetic from the target player"
 }
