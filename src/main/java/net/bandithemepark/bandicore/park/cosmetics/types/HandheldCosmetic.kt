@@ -32,7 +32,7 @@ class HandheldCosmetic: CosmeticType("handheld") {
     }
 
     override fun onUnEquip(player: Player) {
-        player.inventory.setItem(1, null)
+        player.inventory.setItem(1, ItemStack(Material.AIR))
     }
 
     override fun getDressingRoomItem(player: Player, color: Color?, cosmetic: Cosmetic): ItemStack {
