@@ -11,7 +11,7 @@ data class OwnedCosmetic(val cosmetic: Cosmetic, var equipped: Boolean, val amou
             val cosmeticId = UUID.fromString(json.get("cosmeticId").asString)
             val equipped = json.get("equipped").asBoolean
             val amount = json.get("amount").asInt
-            val color = Color.fromRGB(json.get("color").asInt)
+            val color = if(json.get("color").asInt != 0) Color.fromRGB(json.get("color").asInt) else null
 
             val cosmetic = BandiCore.instance.cosmeticManager.cosmetics.find { it.id == cosmeticId }!!
 
