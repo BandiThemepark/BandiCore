@@ -60,6 +60,15 @@ class BandiThemeParkCommand: CommandExecutor, TabCompleter, Listener {
                     sender.sendTranslatedMessage("test-invalid-option", BandiColors.RED.toString())
                 }
             } else if(args[0].equals("reload", true)) {
+                if(args[1].equals("all", true)) {
+                    for(reloadable in Reloadable.reloadables.values) {
+                        val id = Reloadable.reloadables.keys.find { Reloadable.getReloadable(it) == reloadable }!!
+                        sender.sendTranslatedMessage("reload-start", BandiColors.YELLOW.toString(), MessageReplacement("option", id))
+                        reloadable.reload()
+                    }
+                    return false
+                }
+
                 val reloadable = Reloadable.getReloadable(args[1])
 
                 if(reloadable != null) {
@@ -84,7 +93,7 @@ class BandiThemeParkCommand: CommandExecutor, TabCompleter, Listener {
         sender.sendMessage(Util.color("<${BandiColors.RED}>/bandithemepark servermode <mode>"))
         sender.sendMessage(Util.color("<${BandiColors.RED}>/bandithemepark debug <option>"))
         sender.sendMessage(Util.color("<${BandiColors.RED}>/bandithemepark test <option>"))
-        sender.sendMessage(Util.color("<${BandiColors.RED}>/bandithemepark reload <option>"))
+        sender.sendMessage(Util.color("<${BandiColors.RED}>/bandithemepark reload <option/all>"))
     }
 
     override fun onTabComplete(sender: CommandSender, command: Command, label: String, args: Array<out String>): MutableList<String>? {
@@ -100,7 +109,7 @@ class BandiThemeParkCommand: CommandExecutor, TabCompleter, Listener {
             } else if(args[0].equals("test", true)) {
                 return Util.getTabCompletions(args[1], Testable.testables.keys.toList())
             } else if(args[0].equals("reload", true)) {
-                return Util.getTabCompletions(args[1], Reloadable.reloadables.keys.toList())
+                return Util.getTabCompletions(args[1], Reloadable.reloadables.keys.toList().plus("all"))
             }
         }
 
