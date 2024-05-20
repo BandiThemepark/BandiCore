@@ -37,11 +37,18 @@ class HatCosmetic: CosmeticType("hat") {
 
     override fun onUnEquip(player: Player) {
         player.equipment.helmet = null
-        player.getNameTag()!!.heightOffset = 0.0
+
+        if(player.getNameTag() != null) {
+            player.getNameTag()!!.heightOffset = 0.0
+        } else {
+            Bukkit.getScheduler().runTaskLater(BandiCore.instance, Runnable {
+                player.getNameTag()!!.heightOffset = 0.0
+            }, 20)
+        }
     }
 
     override fun getDressingRoomItem(player: Player, color: Color?, cosmetic: Cosmetic): ItemStack {
-        return if(colorable) ItemFactory(material).setCustomModelData(customModelData).setArmorColor(color).build()
+        return if(colorable) ItemFactory(Material.LEATHER_HORSE_ARMOR).setCustomModelData(customModelData).setArmorColor(color).build()
                else ItemFactory(material).setCustomModelData(customModelData).build()
     }
 
