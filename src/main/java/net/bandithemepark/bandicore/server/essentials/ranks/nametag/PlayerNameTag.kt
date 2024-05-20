@@ -129,8 +129,8 @@ class PlayerNameTag(val player: Player) {
         isVisible = false
         textDisplay.deSpawn()
         parentArmorStand.deSpawn()
-        titleDisplay.deSpawn()
-        titleParentArmorStand.deSpawn()
+        if(titleDisplay.spawned) titleDisplay.deSpawn()
+        if(titleParentArmorStand.spawned) titleParentArmorStand.deSpawn()
     }
 
     /**
