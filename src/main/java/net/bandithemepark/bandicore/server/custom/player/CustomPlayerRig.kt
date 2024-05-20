@@ -16,7 +16,7 @@ import org.bukkit.util.Vector
 
 class CustomPlayerRig(val skin: CustomPlayerSkin) {
     lateinit var animatronic: Animatronic
-    lateinit var parentArmorStand: PacketEntityArmorStand
+    //lateinit var parentArmorStand: PacketEntityArmorStand
     private var spawned = false
 
     fun spawn(spawnLocation: Location, hiddenFor: Player?) {
@@ -25,14 +25,14 @@ class CustomPlayerRig(val skin: CustomPlayerSkin) {
         spawnLocation.yaw = 0.0f
 
         // Spawn parent armorstand for smoothness
-        parentArmorStand = PacketEntityArmorStand()
-        parentArmorStand.visibilityType = PacketEntity.VisibilityType.BLACKLIST
-        if(hiddenFor != null) parentArmorStand.visibilityList = mutableListOf(hiddenFor)
-        parentArmorStand.spawn(spawnLocation)
-        parentArmorStand.handle!!.isInvisible = true
-        parentArmorStand.handle!!.isNoGravity = true
-        (parentArmorStand.handle!! as ArmorStand).isMarker = true
-        parentArmorStand.updateMetadata()
+//        parentArmorStand = PacketEntityArmorStand()
+//        parentArmorStand.visibilityType = PacketEntity.VisibilityType.BLACKLIST
+//        if(hiddenFor != null) parentArmorStand.visibilityList = mutableListOf(hiddenFor)
+//        parentArmorStand.spawn(spawnLocation)
+//        parentArmorStand.handle!!.isInvisible = true
+//        parentArmorStand.handle!!.isNoGravity = true
+//        (parentArmorStand.handle!! as ArmorStand).isMarker = true
+//        parentArmorStand.updateMetadata()
 
         // Spawn animatronic
         animatronic = Animatronic("player_rig")
@@ -74,23 +74,23 @@ class CustomPlayerRig(val skin: CustomPlayerSkin) {
 
     fun deSpawn() {
         animatronic.deSpawn()
-        parentArmorStand.deSpawn()
+        //parentArmorStand.deSpawn()
         spawned = false
     }
 
     fun moveTo(position: Vector, rotation: Quaternion) {
         if(!spawned) return
 
-        parentArmorStand.moveEntity(position.x, position.y, position.z)
+        //parentArmorStand.moveEntity(position.x, position.y, position.z)
         animatronic.baseRotation = rotation
     }
 
     private fun updateDisplayEntities() {
         animatronic.displayEntities.values.forEach {
             it.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.THIRDPERSON_RIGHTHAND)
-            parentArmorStand.addPassenger(it.handle!!.id)
+            //parentArmorStand.addPassenger(it.handle!!.id)
         }
-        parentArmorStand.updatePassengers()
+        //parentArmorStand.updatePassengers()
 
         setItem("body", 7)
         setItem("head", 8)
