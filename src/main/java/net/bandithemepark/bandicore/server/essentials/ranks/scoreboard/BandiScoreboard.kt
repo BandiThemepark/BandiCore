@@ -28,54 +28,70 @@ class BandiScoreboard {
      * Updates the main scoreboard, and applies it to everyone
      */
     fun updateScoreboard() {
-        try {
-            mainScoreboard.teams.toList().forEach {
-                try {
-                    it.unregister()
-                } catch (_: IllegalArgumentException) {
-
-                }
+        // Register teams if they have not already been registered
+        if(mainScoreboard.teams.isEmpty()) {
+            // Register teams for all ranks
+            for (rank in BandiCore.instance.server.rankManager.loadedRanks) {
+                val team = mainScoreboard.registerNewTeam(rank.scoreboardName)
+                team.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER)
+                team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER)
             }
-        } catch(_: ConcurrentModificationException) {
 
-        }
+            // Register team for NPCs
+            val npcTeam = mainScoreboard.registerNewTeam("npc")
+            npcTeam.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER)
 
-        for(rank in BandiCore.instance.server.rankManager.loadedRanks) {
-            val team = mainScoreboard.registerNewTeam(rank.scoreboardName)
-            team.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER)
-            team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER)
-
-            for(player in BandiCore.instance.server.rankManager.loadedPlayerRanks.keys.filter { rank == BandiCore.instance.server.rankManager.loadedPlayerRanks[it] }) {
-                team.addEntry(player.name)
-            }
-        }
-
-        for(color in ChatColor.values()) {
-            try {
+            // Register team for each color (used for hover)
+            for(color in ChatColor.values()) {
                 val team = mainScoreboard.registerNewTeam(color.name)
                 team.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER)
                 team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER)
                 team.color(paperColors[color])
-
-                for ((key, value) in selectedColors.entries.toSet()) {
-                    if (value == color) {
-                        team.addEntry(key)
-                    }
-                }
-            } catch(_: java.lang.IllegalArgumentException) {}
+            }
         }
 
-        val npcTeam = mainScoreboard.registerNewTeam("npc")
-        npcTeam.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER)
+        for (rank in BandiCore.instance.server.rankManager.loadedRanks) {
+            // Remove all entries from the team
+            val team = mainScoreboard.getTeam(rank.scoreboardName)!!
+            team.removeEntries(team.entries)
 
+            // Add all players with the rank to the team
+            for (player in BandiCore.instance.server.rankManager.loadedPlayerRanks.keys.filter { rank == BandiCore.instance.server.rankManager.loadedPlayerRanks[it] }) {
+                team.addEntry(player.name)
+            }
+        }
+
+        // Update team entries for each color
+        for(color in ChatColor.values()) {
+            // Clear team
+            val team = mainScoreboard.getTeam(color.name)!!
+            team.removeEntries(team.entries)
+
+            // Add all entities with the color to the team
+            for ((key, value) in selectedColors.entries.toSet()) {
+                if (value == color) {
+                    team.addEntry(key)
+                }
+            }
+        }
+
+        // Clear NPC team
+        val npcTeam = mainScoreboard.getTeam("npc")!!
+        npcTeam.removeEntries(npcTeam.entries)
+
+        // Add NPCs to team
         for(npc in NPC.active) {
             npcTeam.addEntry(npc.name)
         }
 
+        // Tablist updates
         for(player in Bukkit.getOnlinePlayers()) {
+            // Update name
             val rank = BandiCore.instance.server.rankManager.loadedPlayerRanks[player]
             val rankName = rank?.name ?: "Guest"
             player.playerListName(Util.color("$rankName ${player.name}").color(TextColor.fromHexString(rank?.color ?: "#64666b")))
+
+            // Update tablist for player
             player.updatePlayerList()
         }
     }
