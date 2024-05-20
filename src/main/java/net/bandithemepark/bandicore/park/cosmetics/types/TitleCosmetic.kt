@@ -6,6 +6,7 @@ import net.bandithemepark.bandicore.park.cosmetics.CosmeticType
 import net.bandithemepark.bandicore.server.essentials.ranks.nametag.PlayerNameTag.Companion.getNameTag
 import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.Util
+import net.bandithemepark.bandicore.util.chat.BandiColors
 import org.bukkit.Color
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -31,7 +32,14 @@ class TitleCosmetic: CosmeticType("title") {
     }
 
     override fun getDressingRoomItem(player: Player, color: Color?, cosmetic: Cosmetic): ItemStack {
-        return ItemFactory(Material.NAME_TAG).setDisplayName(cosmetic.getItemName()).setLore(cosmetic.getItemStackDescription()).build()
+        val lore = cosmetic.getItemStackDescription()
+        if(text != null) {
+            lore.add(Util.color(" "))
+            lore.add(Util.color("<${BandiColors.LIGHT_GRAY}>Displays the following text: "))
+            lore.add(Util.color(text!!))
+        }
+
+        return ItemFactory(Material.NAME_TAG).setDisplayName(cosmetic.getItemName()).setLore(lore).build()
     }
 
     override fun onJoin(player: Player) {
