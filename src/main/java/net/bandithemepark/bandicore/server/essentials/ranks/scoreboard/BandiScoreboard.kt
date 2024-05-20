@@ -53,7 +53,7 @@ class BandiScoreboard {
         for (rank in BandiCore.instance.server.rankManager.loadedRanks) {
             // Remove all entries from the team
             val team = mainScoreboard.getTeam(rank.scoreboardName)!!
-            team.removeEntries(team.entries)
+            try { team.removeEntries(team.entries) } catch(_: Exception) {}
 
             // Add all players with the rank to the team
             for (player in BandiCore.instance.server.rankManager.loadedPlayerRanks.keys.filter { rank == BandiCore.instance.server.rankManager.loadedPlayerRanks[it] }) {
@@ -65,7 +65,7 @@ class BandiScoreboard {
         for(color in ChatColor.values()) {
             // Clear team
             val team = mainScoreboard.getTeam(color.name)!!
-            team.removeEntries(team.entries)
+            try { team.removeEntries(team.entries) } catch(_: Exception) {}
 
             // Add all entities with the color to the team
             for ((key, value) in selectedColors.entries.toSet()) {
@@ -77,7 +77,7 @@ class BandiScoreboard {
 
         // Clear NPC team
         val npcTeam = mainScoreboard.getTeam("npc")!!
-        npcTeam.removeEntries(npcTeam.entries)
+        try { npcTeam.removeEntries(npcTeam.entries) } catch(_: Exception) {}
 
         // Add NPCs to team
         for(npc in NPC.active) {
