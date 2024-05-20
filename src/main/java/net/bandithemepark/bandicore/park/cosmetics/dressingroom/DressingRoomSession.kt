@@ -1,9 +1,6 @@
 package net.bandithemepark.bandicore.park.cosmetics.dressingroom
 
 import net.bandithemepark.bandicore.BandiCore
-import net.bandithemepark.bandicore.park.attractions.rideop.camera.RideOPCamera
-import net.bandithemepark.bandicore.park.cosmetics.dressingroom.ui.StartPage
-import net.bandithemepark.bandicore.park.cosmetics.dressingroom.ui.UIPage
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayerRig
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin.Companion.getAdaptedSkin
 import net.bandithemepark.bandicore.server.essentials.ranks.nametag.PlayerNameTag.Companion.getNameTag
@@ -12,11 +9,7 @@ import net.bandithemepark.bandicore.util.entity.armorstand.PacketEntityArmorStan
 import net.bandithemepark.bandicore.util.math.Quaternion
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.title.Title
-import net.minecraft.network.protocol.game.ClientboundMoveEntityPacket
-import net.minecraft.network.protocol.game.ClientboundPlayerLookAtPacket
-import net.minecraft.network.protocol.game.ClientboundPlayerPositionPacket
 import net.minecraft.network.protocol.game.ClientboundSetCameraPacket
-import net.minecraft.network.protocol.game.ClientboundTeleportEntityPacket
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.craftbukkit.v1_20_R3.entity.CraftArmorStand

@@ -16,8 +16,6 @@ class DressingRoom {
     val cameraPosition: Vector = Vector(70.25, 2.2, -148.2)
     val cameraYaw: Double = 109.6
     val cameraPitch: Double = 0.0
-    val interfacePosition: Vector = Vector(68.0, 1.5, -147.6)
-    val interfaceYaw: Double = -105.0
 
     fun spawnDecorations() {
         spawnDecoration(ItemFactory(Material.DIAMOND_SHOVEL).setCustomModelData(17).build(), Location(Bukkit.getWorld("world")!!, 66.0, 1.5,-153.0, -45f, 0f))
