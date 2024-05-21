@@ -142,6 +142,24 @@ class Animatronic(fileName: String, var forwards: Boolean = false, var debug: Bo
         }
     }
 
+    val scaleOverrides = hashMapOf<UUID, Double>()
+    fun setScaleOverride(nodeName: String, scale: Double) {
+        val node = nodes.find { it.name == nodeName } ?: return
+        scaleOverrides[node.uuid] = scale
+    }
+
+    val rotationOverrides = hashMapOf<UUID, Vector>()
+    fun setRotationOverride(nodeName: String, rotation: Vector) {
+        val node = nodes.find { it.name == nodeName } ?: return
+        rotationOverrides[node.uuid] = rotation
+    }
+
+    val positionOverrides = hashMapOf<UUID, Vector>()
+    fun setPositionOverride(nodeName: String, position: Vector) {
+        val node = nodes.find { it.name == nodeName } ?: return
+        positionOverrides[node.uuid] = position
+    }
+
     /**
      * Applies the given pose to the animatronic
      * Automatically called for the default pose on spawn
@@ -162,6 +180,20 @@ class Animatronic(fileName: String, var forwards: Boolean = false, var debug: Bo
                 .rotate(baseRotation.toBukkitQuaternion())
                 .translate(beforeTranslation)
                 .rotate(beforeRotation)
+
+            if(scaleOverrides.containsKey(node.uuid)) {
+                matrix.scale(scaleOverrides[node.uuid]!!.toFloat())
+            }
+
+            if(rotationOverrides.containsKey(node.uuid)) {
+                val override = rotationOverrides[node.uuid]!!
+                matrix.rotate(Quaternion.fromYawPitchRoll(override.x, override.y, override.z).toBukkitQuaternion())
+            }
+
+            if(positionOverrides.containsKey(node.uuid)) {
+                val override = positionOverrides[node.uuid]!!
+                matrix.translate(override.x.toFloat(), override.y.toFloat(), override.z.toFloat())
+            }
 
             displayEntity.setTransformationMatrix(matrix)
 
