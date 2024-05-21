@@ -1,6 +1,7 @@
 package net.bandithemepark.bandicore.park.cosmetics.dressingroom
 
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.park.cosmetics.CosmeticManager.Companion.getEquipped
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayerRig
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin.Companion.getAdaptedSkin
 import net.bandithemepark.bandicore.server.essentials.ranks.nametag.PlayerNameTag.Companion.getNameTag
@@ -46,6 +47,9 @@ class DressingRoomSession(
         customPlayer = CustomPlayerRig(player.getAdaptedSkin())
         customPlayer.spawn(dressingRoom.playerPosition.toLocation(dressingRoom.world), null)
         customPlayer.moveTo(dressingRoom.playerPosition, Quaternion.fromYawPitchRoll(0.0, dressingRoom.playerYaw, 0.0))
+
+        val hat = player.getEquipped("hat")
+        if(hat != null) customPlayer.setHat(hat.cosmetic.type.getDressingRoomItem(player, hat.color, hat.cosmetic))
 
         Bukkit.getScheduler().runTaskLater(BandiCore.instance, Runnable {
             customPlayer.playAnimationOnce("dressing_room_enter") { playRandomIdleAnimation() }
