@@ -51,37 +51,32 @@ class BandiScoreboard {
         }
 
         for (rank in BandiCore.instance.server.rankManager.loadedRanks) {
-            // Remove all entries from the team
             val team = mainScoreboard.getTeam(rank.scoreboardName)!!
-            try { team.removeEntries(team.entries) } catch(_: Exception) {}
 
             // Add all players with the rank to the team
             for (player in BandiCore.instance.server.rankManager.loadedPlayerRanks.keys.filter { rank == BandiCore.instance.server.rankManager.loadedPlayerRanks[it] }) {
-                team.addEntry(player.name)
+                if(!team.hasEntry(player.name)) team.addEntry(player.name)
             }
         }
 
         // Update team entries for each color
         for(color in ChatColor.values()) {
-            // Clear team
             val team = mainScoreboard.getTeam(color.name)!!
-            try { team.removeEntries(team.entries) } catch(_: Exception) {}
 
             // Add all entities with the color to the team
             for ((key, value) in selectedColors.entries.toSet()) {
                 if (value == color) {
-                    team.addEntry(key)
+                    if(!team.hasEntry(key)) team.addEntry(key)
                 }
             }
         }
 
         // Clear NPC team
         val npcTeam = mainScoreboard.getTeam("npc")!!
-        try { npcTeam.removeEntries(npcTeam.entries) } catch(_: Exception) {}
 
         // Add NPCs to team
         for(npc in NPC.active) {
-            npcTeam.addEntry(npc.name)
+            if(!npcTeam.hasEntry(npc.name)) npcTeam.addEntry(npc.name)
         }
 
         // Tablist updates
