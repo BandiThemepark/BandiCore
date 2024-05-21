@@ -1,10 +1,10 @@
 package net.bandithemepark.bandicore.util.entity.display
 
 import com.mojang.math.Transformation
-import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.entity.PacketEntity
 import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.entity.Display
 import net.minecraft.world.entity.Display.ItemDisplay
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
@@ -35,6 +35,7 @@ class PacketItemDisplay: PacketEntity() {
 
     fun setInterpolationDuration(duration: Int) {
         (handle as ItemDisplay).transformationInterpolationDuration = duration
+        (handle as ItemDisplay).entityData.set(Display.DATA_POS_ROT_INTERPOLATION_DURATION_ID, duration)
     }
 
     fun setInterpolationDelay(ticks: Int) {
