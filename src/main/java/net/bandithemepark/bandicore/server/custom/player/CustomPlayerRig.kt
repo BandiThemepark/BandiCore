@@ -12,27 +12,17 @@ import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.entity.ItemDisplay
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
 
 class CustomPlayerRig(val skin: CustomPlayerSkin) {
     lateinit var animatronic: Animatronic
-    //lateinit var parentArmorStand: PacketEntityArmorStand
     private var spawned = false
 
     fun spawn(spawnLocation: Location, hiddenFor: Player?) {
         // Remove rotation here, because rotation is added later using transform
         spawnLocation.pitch = 0.0f
         spawnLocation.yaw = 0.0f
-
-        // Spawn parent armorstand for smoothness
-//        parentArmorStand = PacketEntityArmorStand()
-//        parentArmorStand.visibilityType = PacketEntity.VisibilityType.BLACKLIST
-//        if(hiddenFor != null) parentArmorStand.visibilityList = mutableListOf(hiddenFor)
-//        parentArmorStand.spawn(spawnLocation)
-//        parentArmorStand.handle!!.isInvisible = true
-//        parentArmorStand.handle!!.isNoGravity = true
-//        (parentArmorStand.handle!! as ArmorStand).isMarker = true
-//        parentArmorStand.updateMetadata()
 
         // Spawn animatronic
         animatronic = Animatronic("player_rig")
@@ -47,6 +37,7 @@ class CustomPlayerRig(val skin: CustomPlayerSkin) {
         newNodes.add(animatronic.nodes.find { it.name == "right_arm" }!!)
         newNodes.add(animatronic.nodes.find { it.name == "left_leg" }!!)
         newNodes.add(animatronic.nodes.find { it.name == "right_leg" }!!)
+        newNodes.add(animatronic.nodes.find { it.name == "hat" }!!)
         animatronic.nodes = newNodes
 
         animatronic.spawn(spawnLocation, Quaternion.fromYawPitchRoll(0.0, 0.0, 0.0))
@@ -100,6 +91,17 @@ class CustomPlayerRig(val skin: CustomPlayerSkin) {
 
         setItem("left_leg", 1)
         setItem("right_leg", 2)
+
+        val hatDisplayEntity = getDisplayEntity("hat")
+        hatDisplayEntity.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.HEAD)
+        animatronic.setScaleOverride("hat", 0.5)
+        animatronic.setRotationOverride("hat", Vector(0.0, 180.0, 0.0))
+        animatronic.setPositionOverride("hat", Vector(0.0, -0.25, 0.0))
+        setItem("hat", null)
+    }
+
+    fun setHat(itemStack: ItemStack?) {
+        setItem("hat", itemStack)
     }
 
     private fun getDisplayEntity(nodeName: String): PacketItemDisplay {
@@ -109,6 +111,12 @@ class CustomPlayerRig(val skin: CustomPlayerSkin) {
     private fun setItem(nodeName: String, modelData: Int) {
         val displayEntity = getDisplayEntity(nodeName)
         displayEntity.setItemStack(ItemFactory(Material.PLAYER_HEAD).setSkullTexture(skin.texture).setCustomModelData(modelData).build())
+        displayEntity.updateMetadata()
+    }
+
+    private fun setItem(nodeName: String, itemStack: ItemStack?) {
+        val displayEntity = getDisplayEntity(nodeName)
+        displayEntity.setItemStack(itemStack)
         displayEntity.updateMetadata()
     }
 }
