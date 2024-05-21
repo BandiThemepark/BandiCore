@@ -141,6 +141,11 @@ class DressingRoomSession(
         player.gameMode = GameMode.SPECTATOR
         (player as CraftPlayer).handle.connection.send(ClientboundSetCameraPacket((bukkitEntity as CraftArmorStand).handle))
         player.handle.connection.resetPosition()
+
+        Bukkit.getScheduler().runTaskLater(BandiCore.instance, Runnable {
+            (player).handle.connection.send(ClientboundSetCameraPacket((bukkitEntity as CraftArmorStand).handle))
+            player.handle.connection.resetPosition()
+        }, 2)
     }
 
     private fun stopCamera() {
