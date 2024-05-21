@@ -61,6 +61,7 @@ import net.bandithemepark.bandicore.park.attractions.rideop.RideOPEvents
 import net.bandithemepark.bandicore.park.attractions.rideop.camera.RideOPCamera
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.SeatAttachment
 import net.bandithemepark.bandicore.park.cosmetics.CosmeticManager
+import net.bandithemepark.bandicore.park.cosmetics.balloons.Balloon
 import net.bandithemepark.bandicore.park.cosmetics.command.EquipCommand
 import net.bandithemepark.bandicore.park.cosmetics.command.UnEquipCommand
 import net.bandithemepark.bandicore.park.cosmetics.dressingroom.DressingRoomCommand
@@ -123,8 +124,11 @@ import net.bandithemepark.bandicore.server.placeables.PlaceableRemoveCommand
 import net.bandithemepark.bandicore.server.regions.BandiRegionCommand
 import net.bandithemepark.bandicore.server.regions.BandiRegionManager
 import net.bandithemepark.bandicore.server.regions.events.BandiRegionEvents
+import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.entity.HoverableEntity
 import net.bandithemepark.bandicore.util.entity.PacketEntitySeat
+import org.bukkit.Material
+import org.bukkit.util.Vector
 
 class BandiCore: JavaPlugin() {
     companion object {
@@ -238,6 +242,8 @@ class BandiCore: JavaPlugin() {
 
         registerMinigames()
         registerDebuggables()
+        registerTests()
+        Balloon.startTimer()
 
         // Things that need to be done for players who are already online (Like when a reload happens)
         forOnlinePlayers()
@@ -437,5 +443,9 @@ class BandiCore: JavaPlugin() {
 
     private fun registerDebuggables() {
         CanCanRideOP.Debug().register("cancan")
+    }
+
+    private fun registerTests() {
+        Balloon(ItemFactory(Material.RED_WOOL).build(), Vector(-89.5, 29.0, -125.5), Bukkit.getWorld("world")!!).register("balloon")
     }
 }
