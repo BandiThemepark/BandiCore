@@ -15,6 +15,17 @@ import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 
 class CosmeticManager: Reloadable {
+    companion object {
+        fun Player.getOwnedCosmetics(): PlayerOwnedCosmetics? {
+            return BandiCore.instance.cosmeticManager.ownedCosmetics.find { it.owner == this }
+        }
+
+        fun Player.getEquipped(typeId: String): OwnedCosmetic? {
+            val ownedCosmetics = getOwnedCosmetics() ?: return null
+            return ownedCosmetics.ownedCosmetics.find { it.cosmetic.type.id == typeId && it.equipped }
+        }
+    }
+
     val cosmetics = mutableListOf<Cosmetic>()
     val ownedCosmetics = mutableListOf<PlayerOwnedCosmetics>()
     val dressingRoom = DressingRoom()
