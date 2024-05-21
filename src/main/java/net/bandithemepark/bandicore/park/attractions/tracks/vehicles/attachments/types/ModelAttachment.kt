@@ -1,5 +1,6 @@
 package net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types
 
+import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.Attachment
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.AttachmentType
 import net.bandithemepark.bandicore.util.ItemFactory
@@ -35,25 +36,40 @@ open class ModelAttachment(id: String = "model", howToConfigure: String = "MATER
         // Spawn an ArmorStand to hold the item display (used for smoothness)
         parentArmorStand = PacketEntityArmorStand()
         parentArmorStand!!.spawn(armorStandSpawnLocation, regionId)
-        try {
-            parentArmorStand!!.handle.isInvisible = true
-            parentArmorStand!!.handle.isNoGravity = true
-            (parentArmorStand!!.handle as ArmorStand).isMarker = true
-            parentArmorStand!!.updateMetadata()
-        } catch (e: Exception) {
-            Bukkit.getConsoleSender().sendMessage("PacketArmorStand handle is null? Spawn state: ${parentArmorStand!!.spawned}")
-            e.printStackTrace()
-        }
 
         // Spawn the display entity
         displayEntity = PacketItemDisplay()
         displayEntity!!.spawn(location, regionId)
 
-        displayEntity!!.setItemStack(model)
-        displayEntity!!.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.HEAD)
-        displayEntity!!.setInterpolationDuration(2)
+        // Set properties of armorstand
+        if(parentArmorStand!!.isInitialized()) {
+            parentArmorStand!!.handle.isInvisible = true
+            parentArmorStand!!.handle.isNoGravity = true
+            (parentArmorStand!!.handle as ArmorStand).isMarker = true
+            parentArmorStand!!.updateMetadata()
+        } else {
+            Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
+                parentArmorStand!!.handle.isInvisible = true
+                parentArmorStand!!.handle.isNoGravity = true
+                (parentArmorStand!!.handle as ArmorStand).isMarker = true
+                parentArmorStand!!.updateMetadata()
+            })
+        }
 
-        displayEntity!!.updateMetadata()
+        // Set properties of the display entity
+        if(displayEntity!!.isInitialized()) {
+            displayEntity!!.setItemStack(model)
+            displayEntity!!.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.HEAD)
+            displayEntity!!.setInterpolationDuration(2)
+            displayEntity!!.updateMetadata()
+        } else {
+            Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
+                displayEntity!!.setItemStack(model)
+                displayEntity!!.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.HEAD)
+                displayEntity!!.setInterpolationDuration(2)
+                displayEntity!!.updateMetadata()
+            })
+        }
 
         // Attach the display entity to the ArmorStand
         parentArmorStand!!.addPassenger(displayEntity!!.handle.id)

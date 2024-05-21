@@ -31,6 +31,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.inventory.ItemStack
+import java.util.UUID
 
 abstract class PacketEntity {
     lateinit var handle: Entity
@@ -50,6 +51,9 @@ abstract class PacketEntity {
 
     // Spawning and despawning
     abstract fun getInstance(world: ServerLevel, x: Double, y: Double, z: Double): Entity
+
+    val uuid = UUID.randomUUID()
+    fun isInitialized() = ::handle.isInitialized
 
     /**
      * Spawns the entity at a certain location
