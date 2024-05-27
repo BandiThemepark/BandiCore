@@ -94,9 +94,9 @@ class CustomPlayerRig(val skin: CustomPlayerSkin) {
 
         val hatDisplayEntity = getDisplayEntity("hat")
         hatDisplayEntity.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.HEAD)
-        animatronic.setScaleOverride("hat", 0.5)
+        animatronic.setScaleOverride("hat", 0.55)
         animatronic.setRotationOverride("hat", Vector(0.0, 180.0, 0.0))
-        animatronic.setPositionOverride("hat", Vector(0.0, -0.25, 0.0))
+        animatronic.setPositionOverride("hat", Vector(0.0, -0.40, 0.0))
         setItem("hat", null)
     }
 
