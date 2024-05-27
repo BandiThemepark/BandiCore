@@ -51,6 +51,9 @@ class DressingRoomSession(
         val hat = player.getEquipped("hat")
         if(hat != null) customPlayer.setHat(hat.cosmetic.type.getDressingRoomItem(player, hat.color, hat.cosmetic))
 
+        val handheld = player.getEquipped("handheld")
+        if(handheld != null) customPlayer.setHandheld(handheld.cosmetic.type.getDressingRoomItem(player, handheld.color, handheld.cosmetic))
+
         Bukkit.getScheduler().runTaskLater(BandiCore.instance, Runnable {
             customPlayer.playAnimationOnce("dressing_room_enter") { playRandomIdleAnimation() }
 

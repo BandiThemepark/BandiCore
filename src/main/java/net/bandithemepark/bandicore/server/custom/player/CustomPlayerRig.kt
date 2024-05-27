@@ -38,6 +38,7 @@ class CustomPlayerRig(val skin: CustomPlayerSkin) {
         newNodes.add(animatronic.nodes.find { it.name == "left_leg" }!!)
         newNodes.add(animatronic.nodes.find { it.name == "right_leg" }!!)
         newNodes.add(animatronic.nodes.find { it.name == "hat" }!!)
+        newNodes.add(animatronic.nodes.find { it.name == "handheld" }!!)
         animatronic.nodes = newNodes
 
         animatronic.spawn(spawnLocation, Quaternion.fromYawPitchRoll(0.0, 0.0, 0.0))
@@ -98,10 +99,19 @@ class CustomPlayerRig(val skin: CustomPlayerSkin) {
         animatronic.setRotationOverride("hat", Vector(0.0, 180.0, 0.0))
         animatronic.setPositionOverride("hat", Vector(0.0, -0.40, 0.0))
         setItem("hat", null)
+
+        val handheldDisplayEntity = getDisplayEntity("handheld")
+        handheldDisplayEntity.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.THIRDPERSON_RIGHTHAND)
+        animatronic.setRotationOverride("handheld", Vector(90.0, 180.0, 0.0))
+        setItem("handheld", null)
     }
 
     fun setHat(itemStack: ItemStack?) {
         setItem("hat", itemStack)
+    }
+
+    fun setHandheld(itemStack: ItemStack?) {
+        setItem("handheld", itemStack)
     }
 
     private fun getDisplayEntity(nodeName: String): PacketItemDisplay {
