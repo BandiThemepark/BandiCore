@@ -28,11 +28,11 @@ class HandheldCosmetic: CosmeticType("handheld") {
         val itemStack = if(colorable) ItemFactory(Material.LEATHER_HORSE_ARMOR).setCustomModelData(customModelData).setDisplayName(cosmetic.getItemName()).setLore(cosmetic.getItemStackDescription()).setArmorColor(color).build()
         else ItemFactory(material).setCustomModelData(customModelData).setDisplayName(cosmetic.getItemName()).setLore(cosmetic.getItemStackDescription()).build()
 
-        player.inventory.setItem(1, itemStack)
+        player.inventory.setItem(EquipmentSlot.OFF_HAND, itemStack)
     }
 
     override fun onUnEquip(player: Player) {
-        player.inventory.setItem(1, ItemStack(Material.AIR))
+        player.inventory.setItem(EquipmentSlot.OFF_HAND, ItemStack(Material.AIR))
     }
 
     override fun getDressingRoomItem(player: Player, color: Color?, cosmetic: Cosmetic): ItemStack {
