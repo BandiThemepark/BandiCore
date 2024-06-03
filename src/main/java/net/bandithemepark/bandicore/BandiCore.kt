@@ -370,6 +370,7 @@ class BandiCore: JavaPlugin() {
         getServer().pluginManager.registerEvents(CookingEvents(), this)
         getServer().pluginManager.registerEvents(SlotMachineEvents(), this)
         getServer().pluginManager.registerEvents(BandiThemeParkCommand(), this)
+        getServer().pluginManager.registerEvents(HandheldCosmetic.Events(), this)
     }
 
     private fun prepareSettings() {
