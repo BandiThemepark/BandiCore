@@ -5,6 +5,8 @@ import net.bandithemepark.bandicore.park.cosmetics.CosmeticManager.Companion.get
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayerRig
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin.Companion.getAdaptedSkin
 import net.bandithemepark.bandicore.server.essentials.ranks.nametag.PlayerNameTag.Companion.getNameTag
+import net.bandithemepark.bandicore.util.Util
+import net.bandithemepark.bandicore.util.chat.BandiColors
 import net.bandithemepark.bandicore.util.entity.HoverableEntity
 import net.bandithemepark.bandicore.util.entity.armorstand.PacketEntityArmorStand
 import net.bandithemepark.bandicore.util.math.Quaternion
@@ -170,7 +172,7 @@ class DressingRoomSession(
     }
 
     fun onTick() {
-
+        player.sendActionBar(Util.color("<${BandiColors.YELLOW}>JUMP to equip | CROUCH to exit"))
     }
 
     companion object {
