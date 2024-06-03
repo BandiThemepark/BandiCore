@@ -19,6 +19,9 @@ class CustomPlayerRig(val skin: CustomPlayerSkin) {
     lateinit var animatronic: Animatronic
     private var spawned = false
 
+    var visibilityType: PacketEntity.VisibilityType = PacketEntity.VisibilityType.BLACKLIST
+    var visibilityList = mutableListOf<Player>()
+
     fun spawn(spawnLocation: Location, hiddenFor: Player?) {
         // Remove rotation here, because rotation is added later using transform
         spawnLocation.pitch = 0.0f
@@ -26,7 +29,8 @@ class CustomPlayerRig(val skin: CustomPlayerSkin) {
 
         // Spawn animatronic
         animatronic = Animatronic("player_rig")
-        animatronic.visibilityType = PacketEntity.VisibilityType.BLACKLIST
+        animatronic.visibilityType = visibilityType
+        animatronic.visibilityList = visibilityList
         if(hiddenFor != null) animatronic.visibilityList = mutableListOf(hiddenFor)
 
         // Update spawn order to make sure textures are correct

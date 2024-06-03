@@ -1,13 +1,16 @@
 package net.bandithemepark.bandicore.park.cosmetics.dressingroom
 
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.park.cosmetics.Cosmetic
 import net.bandithemepark.bandicore.park.cosmetics.CosmeticManager.Companion.getEquipped
+import net.bandithemepark.bandicore.park.cosmetics.OwnedCosmetic
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayerRig
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin.Companion.getAdaptedSkin
 import net.bandithemepark.bandicore.server.essentials.ranks.nametag.PlayerNameTag.Companion.getNameTag
 import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.chat.BandiColors
 import net.bandithemepark.bandicore.util.entity.HoverableEntity
+import net.bandithemepark.bandicore.util.entity.PacketEntity
 import net.bandithemepark.bandicore.util.entity.armorstand.PacketEntityArmorStand
 import net.bandithemepark.bandicore.util.math.Quaternion
 import net.kyori.adventure.text.Component
@@ -47,6 +50,8 @@ class DressingRoomSession(
 
     private fun setupCustomPlayer() {
         customPlayer = CustomPlayerRig(player.getAdaptedSkin())
+        customPlayer.visibilityType = PacketEntity.VisibilityType.WHITELIST
+        customPlayer.visibilityList = mutableListOf(player)
         customPlayer.spawn(dressingRoom.playerPosition.toLocation(dressingRoom.world), null)
         customPlayer.moveTo(dressingRoom.playerPosition, Quaternion.fromYawPitchRoll(0.0, dressingRoom.playerYaw, 0.0))
 
@@ -173,6 +178,47 @@ class DressingRoomSession(
 
     fun onTick() {
         player.sendActionBar(Util.color("<${BandiColors.YELLOW}>JUMP to equip | CROUCH to exit"))
+    }
+
+    val equipAnimations = hashMapOf(
+        "hat" to listOf("dressing_room_equip_hat_1")
+    )
+
+    fun equipCosmetic(ownedCosmetic: OwnedCosmetic) {
+        val cosmetic = ownedCosmetic.cosmetic
+
+        // Update custom player
+        if(cosmetic.type.id == "hat") {
+            customPlayer.setHat(cosmetic.type.getDressingRoomItem(player, ownedCosmetic.color, cosmetic))
+        } else if(cosmetic.type.id == "handheld") {
+            customPlayer.setHandheld(cosmetic.type.getDressingRoomItem(player, ownedCosmetic.color, cosmetic))
+        }
+
+        // Equip cosmetic
+        BandiCore.instance.cosmeticManager.equip(player, cosmetic, ownedCosmetic.color)
+
+        // Play animation if present
+        val animations = equipAnimations[cosmetic.type.id]
+        if(!animations.isNullOrEmpty()) playAnimation(animations.random())
+    }
+
+    val unEquipAnimations = hashMapOf(
+        "hat" to listOf("dressing_room_equip_hat_1")
+    )
+
+    fun unEquip(typeId: String) {
+        BandiCore.instance.cosmeticManager.unEquip(player, typeId)
+
+        // Update custom player
+        if(typeId == "hat") {
+            customPlayer.setHat(null)
+        } else if(typeId == "handheld") {
+            customPlayer.setHandheld(null)
+        }
+
+        // Play animation if present
+        val animations = unEquipAnimations[typeId]
+        if(!animations.isNullOrEmpty()) playAnimation(animations.random())
     }
 
     companion object {

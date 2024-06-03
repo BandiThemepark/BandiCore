@@ -35,8 +35,8 @@ class TitleCosmetic: CosmeticType("title") {
         val lore = cosmetic.getItemStackDescription()
         if(text != null) {
             lore.add(Util.color(" "))
-            lore.add(Util.color("<${BandiColors.LIGHT_GRAY}>Displays the following text: "))
-            lore.add(Util.color(text!!))
+            lore.add(Util.color("<!i><${BandiColors.LIGHT_GRAY}>Displays the following text: "))
+            lore.add(Util.color("<!i>" + text!!))
         }
 
         return ItemFactory(Material.NAME_TAG).setDisplayName(cosmetic.getItemName()).setLore(lore).build()

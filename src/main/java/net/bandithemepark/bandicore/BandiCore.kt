@@ -64,8 +64,10 @@ import net.bandithemepark.bandicore.park.cosmetics.CosmeticManager
 import net.bandithemepark.bandicore.park.cosmetics.balloons.Balloon
 import net.bandithemepark.bandicore.park.cosmetics.command.EquipCommand
 import net.bandithemepark.bandicore.park.cosmetics.command.UnEquipCommand
+import net.bandithemepark.bandicore.park.cosmetics.dressingroom.DressingRoomCategoryMenu
 import net.bandithemepark.bandicore.park.cosmetics.dressingroom.DressingRoomCommand
 import net.bandithemepark.bandicore.park.cosmetics.dressingroom.DressingRoomEvents
+import net.bandithemepark.bandicore.park.cosmetics.dressingroom.DressingRoomMenu
 import net.bandithemepark.bandicore.park.cosmetics.requirements.types.AchievementCosmeticRequirement
 import net.bandithemepark.bandicore.park.cosmetics.requirements.types.RidecounterCosmeticRequirement
 import net.bandithemepark.bandicore.park.cosmetics.requirements.types.VIPCosmeticRequirement
@@ -371,6 +373,8 @@ class BandiCore: JavaPlugin() {
         getServer().pluginManager.registerEvents(SlotMachineEvents(), this)
         getServer().pluginManager.registerEvents(BandiThemeParkCommand(), this)
         getServer().pluginManager.registerEvents(HandheldCosmetic.Events(), this)
+        getServer().pluginManager.registerEvents(DressingRoomMenu.Events(), this)
+        getServer().pluginManager.registerEvents(DressingRoomCategoryMenu.Events(), this)
     }
 
     private fun prepareSettings() {

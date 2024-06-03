@@ -20,8 +20,7 @@ class DressingRoomEvents: Listener {
     @EventHandler
     fun onEntityInput(event: PacketEntityInputEvent) {
         if(event.jumping) {
-            // Open UI
-            Bukkit.broadcast(Component.text("Open UI"))
+            DressingRoomMenu().open(event.player)
             BandiCore.instance.afkManager.resetAfkTime(event.player)
         }
     }
