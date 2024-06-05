@@ -1,7 +1,6 @@
 package net.bandithemepark.bandicore.park.cosmetics.dressingroom
 
 import net.bandithemepark.bandicore.BandiCore
-import net.bandithemepark.bandicore.park.cosmetics.Cosmetic
 import net.bandithemepark.bandicore.park.cosmetics.CosmeticManager.Companion.getEquipped
 import net.bandithemepark.bandicore.park.cosmetics.OwnedCosmetic
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayerRig
@@ -181,7 +180,7 @@ class DressingRoomSession(
     }
 
     val equipAnimations = hashMapOf(
-        "hat" to listOf("dressing_room_equip_hat_1")
+        "hat" to listOf("dressing_room_equip_hat_1", "dressing_room_equip_hat_2")
     )
 
     fun equipCosmetic(ownedCosmetic: OwnedCosmetic) {

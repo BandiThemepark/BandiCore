@@ -130,6 +130,28 @@ class CustomPlayerRig(val skin: CustomPlayerSkin) {
 
     private fun setItem(nodeName: String, itemStack: ItemStack?) {
         val displayEntity = getDisplayEntity(nodeName)
+
+        if(!displayEntity.spawned && itemStack != null) {
+            displayEntity.spawn(animatronic.basePosition.toLocation(animatronic.world).clone())
+
+            displayEntity.setItemStack(itemStack)
+            displayEntity.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.HEAD)
+
+            if(nodeName == "handheld") {
+                displayEntity.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.THIRDPERSON_RIGHTHAND)
+            }
+
+            displayEntity.setInterpolationDuration(2)
+            displayEntity.setInterpolationDelay(-1)
+
+            displayEntity.updateMetadata()
+        }
+
+        if(itemStack == null && displayEntity.spawned) {
+            displayEntity.deSpawn()
+            return
+        }
+
         displayEntity.setItemStack(itemStack)
         displayEntity.updateMetadata()
     }
