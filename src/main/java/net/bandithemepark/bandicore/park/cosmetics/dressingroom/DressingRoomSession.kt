@@ -3,14 +3,17 @@ package net.bandithemepark.bandicore.park.cosmetics.dressingroom
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.park.cosmetics.CosmeticManager.Companion.getEquipped
 import net.bandithemepark.bandicore.park.cosmetics.OwnedCosmetic
+import net.bandithemepark.bandicore.park.cosmetics.types.TitleCosmetic
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayerRig
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin.Companion.getAdaptedSkin
+import net.bandithemepark.bandicore.server.essentials.ranks.nametag.PlayerNameTag
 import net.bandithemepark.bandicore.server.essentials.ranks.nametag.PlayerNameTag.Companion.getNameTag
 import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.chat.BandiColors
 import net.bandithemepark.bandicore.util.entity.HoverableEntity
 import net.bandithemepark.bandicore.util.entity.PacketEntity
 import net.bandithemepark.bandicore.util.entity.armorstand.PacketEntityArmorStand
+import net.bandithemepark.bandicore.util.entity.display.PacketTextDisplay
 import net.bandithemepark.bandicore.util.math.Quaternion
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.title.Title
@@ -19,9 +22,7 @@ import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.craftbukkit.v1_20_R3.entity.CraftArmorStand
 import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer
-import org.bukkit.entity.ArmorStand
-import org.bukkit.entity.EntityType
-import org.bukkit.entity.Player
+import org.bukkit.entity.*
 import org.bukkit.util.Vector
 import java.time.Duration
 
@@ -62,8 +63,10 @@ class DressingRoomSession(
 
         Bukkit.getScheduler().runTaskLater(BandiCore.instance, Runnable {
             customPlayer.playAnimationOnce("dressing_room_enter") { playRandomIdleAnimation() }
-
         }, 10)
+
+        spawnNameTag()
+        if (player.getEquipped("title") != null) spawnTitle()
     }
 
     val idleAnimations = listOf("dressing_room_idle_1", "dressing_room_idle_2")
@@ -78,6 +81,8 @@ class DressingRoomSession(
 
     private fun removeCustomPlayer() {
         customPlayer.deSpawn()
+        deSpawnNameTag()
+        deSpawnTitle()
     }
 
     fun exit() {
@@ -189,15 +194,18 @@ class DressingRoomSession(
     fun equipCosmetic(ownedCosmetic: OwnedCosmetic) {
         val cosmetic = ownedCosmetic.cosmetic
 
+        // Equip cosmetic
+        BandiCore.instance.cosmeticManager.equip(player, cosmetic, ownedCosmetic.color)
+
         // Update custom player
         if(cosmetic.type.id == "hat") {
             customPlayer.setHat(cosmetic.type.getDressingRoomItem(player, ownedCosmetic.color, cosmetic))
         } else if(cosmetic.type.id == "handheld") {
             customPlayer.setHandheld(cosmetic.type.getDressingRoomItem(player, ownedCosmetic.color, cosmetic))
+        } else if(cosmetic.type.id == "title") {
+            deSpawnTitle()
+            spawnTitle()
         }
-
-        // Equip cosmetic
-        BandiCore.instance.cosmeticManager.equip(player, cosmetic, ownedCosmetic.color)
 
         // Play animation if present
         val animations = equipAnimations[cosmetic.type.id]
@@ -216,11 +224,62 @@ class DressingRoomSession(
             customPlayer.setHat(null)
         } else if(typeId == "handheld") {
             customPlayer.setHandheld(null)
+        } else if(typeId == "title") {
+            deSpawnTitle()
         }
 
         // Play animation if present
         val animations = unEquipAnimations[typeId]
         if(!animations.isNullOrEmpty()) playAnimation(animations.random())
+    }
+
+    private var textDisplay: PacketTextDisplay? = null
+    private var titleDisplay: PacketTextDisplay? = null
+
+    private fun spawnNameTag() {
+        textDisplay = PacketTextDisplay()
+        textDisplay!!.visibilityType = PacketEntity.VisibilityType.WHITELIST
+        textDisplay!!.visibilityList = mutableListOf(player)
+
+        textDisplay!!.spawn(customPlayer.animatronic.basePosition.toLocation(player.world).add(0.0, 2.0 + player.getNameTag()!!.heightOffset, 0.0))
+
+        val rank = BandiCore.instance.server.rankManager.loadedPlayerRanks[player]!!
+        val text = Util.color("<${rank.color}>${rank.name} ${player.name}")
+        textDisplay!!.setText(text)
+        textDisplay!!.setBillboard(Display.Billboard.CENTER)
+        textDisplay!!.setDefaultBackground(true)
+        textDisplay!!.setSeeThrough(false)
+        textDisplay!!.setAlignment(TextDisplay.TextAlignment.CENTER)
+        textDisplay!!.updateMetadata()
+    }
+
+    private fun deSpawnNameTag() {
+        textDisplay!!.deSpawn()
+        textDisplay = null
+    }
+
+    private fun spawnTitle() {
+        if(titleDisplay != null) return
+
+        titleDisplay = PacketTextDisplay()
+        val title = Util.color((player.getEquipped("title")!!.cosmetic.type as TitleCosmetic).text!!)
+        titleDisplay!!.visibilityType = PacketEntity.VisibilityType.WHITELIST
+        titleDisplay!!.visibilityList = mutableListOf(player)
+
+        titleDisplay!!.spawn(customPlayer.animatronic.basePosition.toLocation(player.world).add(0.0, 2.0 + player.getNameTag()!!.heightOffset + PlayerNameTag.TITLE_HEIGHT_OFFSET, 0.0))
+
+        titleDisplay!!.setBillboard(Display.Billboard.CENTER)
+        titleDisplay!!.setDefaultBackground(true)
+        titleDisplay!!.setSeeThrough(false)
+        titleDisplay!!.setAlignment(TextDisplay.TextAlignment.CENTER)
+        titleDisplay!!.setText(title)
+        titleDisplay!!.updateMetadata()
+    }
+
+    private fun deSpawnTitle() {
+        if(titleDisplay == null) return
+        titleDisplay!!.deSpawn()
+        titleDisplay = null
     }
 
     companion object {
