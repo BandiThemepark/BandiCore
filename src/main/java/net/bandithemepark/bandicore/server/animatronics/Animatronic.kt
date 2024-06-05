@@ -12,6 +12,7 @@ import net.bandithemepark.bandicore.util.math.Quaternion
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.World
 import org.bukkit.entity.ItemDisplay
 import org.bukkit.entity.Player
 import org.bukkit.util.Vector
@@ -28,6 +29,7 @@ import java.util.*
 class Animatronic(fileName: String, var forwards: Boolean = false, var debug: Boolean = false) {
     lateinit var namespace: String
     lateinit var itemMaterial: Material
+    lateinit var world: World
 
     var nodes = mutableListOf<AnimatronicNode>()
     lateinit var defaultPose: AnimatronicPose
@@ -95,6 +97,7 @@ class Animatronic(fileName: String, var forwards: Boolean = false, var debug: Bo
         val spawnLocation = baseLocation.clone()
         spawnLocation.pitch = 0.0f
         spawnLocation.yaw = 0.0f
+        world = baseLocation.world!!
 
         for(node in nodes) {
             val displayEntity = PacketItemDisplay()
@@ -104,7 +107,6 @@ class Animatronic(fileName: String, var forwards: Boolean = false, var debug: Bo
             displayEntity.spawn(spawnLocation.clone())
             if(debug) {
                 Util.debug("Animatronic", "Spawned node ${node.uuid} at $spawnLocation. Material is $itemMaterial with custom model data ${node.customModelData} and visibility type $visibilityType")
-                displayEntity.startGlowFor(Bukkit.getPlayer("PartyProNL")!!)
             }
 
             displayEntity.setItemStack(ItemFactory(itemMaterial).setCustomModelData(node.customModelData).build())
