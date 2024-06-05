@@ -116,13 +116,17 @@ class DressingRoomSession(
             Title.title(
                 Component.text("\uE000"),
                 Component.text(""),
-                Title.Times.times(Duration.ofMillis(500), Duration.ofMillis(0), Duration.ofMillis(500))
+                Title.Times.times(Duration.ofMillis(500), Duration.ofMillis(100), Duration.ofMillis(500))
             )
         )
 
         Bukkit.getScheduler().runTaskLater(BandiCore.instance, Runnable {
-            startCamera()
+            player.teleport(dressingRoom.cameraPosition.toLocation(dressingRoom.world))
         }, 10)
+
+        Bukkit.getScheduler().runTaskLater(BandiCore.instance, Runnable {
+            startCamera()
+        }, 12)
     }
 
     private fun stopView() {
@@ -145,7 +149,6 @@ class DressingRoomSession(
         player.getNameTag()!!.hidden = true
         exited = false
 
-        player.teleport(dressingRoom.cameraPosition.toLocation(dressingRoom.world))
         HoverableEntity.timer.movements[player] = player.location.clone()
 
         vehicleEntity.addPassenger(player)
