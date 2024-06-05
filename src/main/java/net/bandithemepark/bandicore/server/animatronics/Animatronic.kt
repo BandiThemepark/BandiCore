@@ -172,6 +172,7 @@ class Animatronic(fileName: String, var forwards: Boolean = false, var debug: Bo
 
         for(node in pose.nodes) {
             val displayEntity = displayEntities[node.uuid] ?: continue
+            if(!displayEntity.spawned) continue
             displayEntity.setInterpolationDelay(-1)
 
             val oldMatrix = node.matrix.clone() as Matrix4f
