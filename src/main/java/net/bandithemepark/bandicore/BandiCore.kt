@@ -125,6 +125,7 @@ import net.bandithemepark.bandicore.server.regions.BandiRegionCommand
 import net.bandithemepark.bandicore.server.regions.BandiRegionManager
 import net.bandithemepark.bandicore.server.regions.events.BandiRegionEvents
 import net.bandithemepark.bandicore.util.ItemFactory
+import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.entity.HoverableEntity
 import net.bandithemepark.bandicore.util.entity.PacketEntitySeat
 import org.bukkit.Material
@@ -134,6 +135,7 @@ class BandiCore: JavaPlugin() {
     companion object {
         lateinit var instance: BandiCore
     }
+    var devMode = true
 
     var startTime = 0L
     lateinit var server: Server
@@ -155,7 +157,15 @@ class BandiCore: JavaPlugin() {
     var restarter = Restart()
 
     override fun onEnable() {
+        Bukkit.getConsoleSender().sendMessage("BandiCore is starting...")
         instance = this
+        if(Bukkit.getServer().port == 25566) {
+            devMode = false
+            Bukkit.getConsoleSender().sendMessage("Starting in PRODUCTION mode")
+        } else {
+            logger.warning("Starting in DEVELOPMENT mode")
+        }
+
         startTime = System.currentTimeMillis()
         Bukkit.getConsoleSender().sendMessage("Server start time set to $startTime")
         smoothCoastersAPI = SmoothCoastersAPI(this)
