@@ -71,9 +71,7 @@ import net.bandithemepark.bandicore.park.cosmetics.dressingroom.DressingRoomMenu
 import net.bandithemepark.bandicore.park.cosmetics.requirements.types.AchievementCosmeticRequirement
 import net.bandithemepark.bandicore.park.cosmetics.requirements.types.RidecounterCosmeticRequirement
 import net.bandithemepark.bandicore.park.cosmetics.requirements.types.VIPCosmeticRequirement
-import net.bandithemepark.bandicore.park.cosmetics.types.HandheldCosmetic
-import net.bandithemepark.bandicore.park.cosmetics.types.HatCosmetic
-import net.bandithemepark.bandicore.park.cosmetics.types.TitleCosmetic
+import net.bandithemepark.bandicore.park.cosmetics.types.*
 import net.bandithemepark.bandicore.park.modsupport.SmoothCoastersChecker
 import net.bandithemepark.bandicore.park.npc.ThemeParkNPCSkin
 import net.bandithemepark.bandicore.park.npc.path.editor.PathPointEditorCommand
@@ -215,6 +213,7 @@ class BandiCore: JavaPlugin() {
         // Starting the necessary timers
         //NPC.startTimer()
         PlayerNameTag.Timer().runTaskTimerAsynchronously(this, 0, 1)
+        Backpack.Timer().runTaskTimerAsynchronously(this, 0, 1)
         Playtime.startTimer()
         KalibaEffects()
         AmbientEffect.startTimer()
@@ -375,6 +374,7 @@ class BandiCore: JavaPlugin() {
         getServer().pluginManager.registerEvents(HandheldCosmetic.Events(), this)
         getServer().pluginManager.registerEvents(DressingRoomMenu.Events(), this)
         getServer().pluginManager.registerEvents(DressingRoomCategoryMenu.Events(), this)
+        getServer().pluginManager.registerEvents(Backpack.Events(), this)
     }
 
     private fun prepareSettings() {
@@ -431,6 +431,7 @@ class BandiCore: JavaPlugin() {
         HatCosmetic().register()
         HandheldCosmetic().register()
         TitleCosmetic().register()
+        BackpackCosmetic().register()
     }
 
     private fun registerCosmeticRequirementTypes() {
