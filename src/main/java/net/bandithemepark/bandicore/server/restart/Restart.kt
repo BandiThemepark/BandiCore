@@ -97,7 +97,12 @@ class Restart {
     private fun sendToQueue(player: Player) {
         val out = ByteStreams.newDataOutput()
         out.writeUTF("Connect")
-        out.writeUTF(BandiCore.instance.server.queueServer)
+
+        if(BandiCore.instance.devMode) {
+            out.writeUTF("bandithemepark")
+        } else {
+            out.writeUTF(BandiCore.instance.server.queueServer)
+        }
         player.sendPluginMessage(BandiCore.instance, "BungeeCord", out.toByteArray())
     }
 }
