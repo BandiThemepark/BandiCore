@@ -1,5 +1,6 @@
 package net.bandithemepark.bandicore.server
 
+import com.google.common.io.ByteStreams
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.server.mode.ServerMode
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedMessage
@@ -13,6 +14,7 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerCommandPreprocessEvent
@@ -28,6 +30,17 @@ class BandiThemeParkCommand: CommandExecutor, TabCompleter, Listener {
         if(args.size == 1) {
             if(args[0].equals("restart", true)) {
                 BandiCore.instance.restarter.start()
+            } else if(args[0].equals("switch", true)) {
+                if(sender !is Player) return false
+
+                val out = ByteStreams.newDataOutput()
+                out.writeUTF("Connect")
+                if(BandiCore.instance.devMode) {
+                    out.writeUTF("development")
+                } else {
+                    out.writeUTF("development")
+                }
+                sender.sendPluginMessage(BandiCore.instance, "BungeeCord", out.toByteArray())
             } else {
                 sendHelp(sender)
             }
@@ -90,6 +103,7 @@ class BandiThemeParkCommand: CommandExecutor, TabCompleter, Listener {
     private fun sendHelp(sender: CommandSender) {
         sender.sendMessage(Util.color("<${BandiColors.RED}>/bandithemepark help"))
         sender.sendMessage(Util.color("<${BandiColors.RED}>/bandithemepark restart"))
+        sender.sendMessage(Util.color("<${BandiColors.RED}>/bandithemepark switch"))
         sender.sendMessage(Util.color("<${BandiColors.RED}>/bandithemepark servermode <mode>"))
         sender.sendMessage(Util.color("<${BandiColors.RED}>/bandithemepark debug <option>"))
         sender.sendMessage(Util.color("<${BandiColors.RED}>/bandithemepark test <option>"))
@@ -100,7 +114,7 @@ class BandiThemeParkCommand: CommandExecutor, TabCompleter, Listener {
         if(!command.name.equals("bandithemepark", true)) return null
 
         if(args.size == 1) {
-            return Util.getTabCompletions(args[0], listOf("restart", "servermode", "debug", "help", "test", "reload"))
+            return Util.getTabCompletions(args[0], listOf("restart", "servermode", "debug", "help", "test", "reload", "switch"))
         } else if(args.size == 2) {
             if(args[0].equals("servermode", true)) {
                 return Util.getTabCompletions(args[1], ServerMode.getAllIds())
