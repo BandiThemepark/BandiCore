@@ -36,7 +36,7 @@ class BandiThemeParkCommand: CommandExecutor, TabCompleter, Listener {
                 val out = ByteStreams.newDataOutput()
                 out.writeUTF("Connect")
                 if(BandiCore.instance.devMode) {
-                    out.writeUTF("development")
+                    out.writeUTF("bandithemepark")
                 } else {
                     out.writeUTF("development")
                 }
