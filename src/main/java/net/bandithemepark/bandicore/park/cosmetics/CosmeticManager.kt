@@ -31,7 +31,7 @@ class CosmeticManager: Reloadable {
     val dressingRoom = DressingRoom()
 
     fun setup() {
-        loadCosmetics()
+        loadCosmetics(true)
         dressingRoom.spawnDecorations()
         startTimer()
         register("cosmetics")
@@ -46,12 +46,14 @@ class CosmeticManager: Reloadable {
     /**
      * Loads all cosmetics from the database
      */
-    private fun loadCosmetics() {
-        BackendCosmetic.getAll() { array ->
+    private fun loadCosmetics(loadShops: Boolean = false) {
+        BackendCosmetic.getAll { array ->
             for(element in array) {
                 val cosmetic = Cosmetic.fromJson(element.asJsonObject)
                 cosmetics.add(cosmetic)
             }
+
+            if(loadShops) BandiCore.instance.shopManager.setup()
 
             Bukkit.getConsoleSender().sendMessage("Loaded ${cosmetics.size} cosmetics")
         }

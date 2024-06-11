@@ -76,6 +76,7 @@ import net.bandithemepark.bandicore.park.modsupport.SmoothCoastersChecker
 import net.bandithemepark.bandicore.park.npc.ThemeParkNPCSkin
 import net.bandithemepark.bandicore.park.npc.path.editor.PathPointEditorCommand
 import net.bandithemepark.bandicore.park.npc.path.editor.PathPointEditorEvents
+import net.bandithemepark.bandicore.park.shops.ShopManager
 import net.bandithemepark.bandicore.server.BandiThemeParkCommand
 import net.bandithemepark.bandicore.server.achievements.AchievementManager
 import net.bandithemepark.bandicore.server.achievements.menu.AchievementCategoriesMenu
@@ -151,6 +152,7 @@ class BandiCore: JavaPlugin() {
     lateinit var effectManager: EffectManager
     lateinit var placeableManager: PlaceableManager
     lateinit var cosmeticManager: CosmeticManager
+    lateinit var shopManager: ShopManager
     lateinit var casino: Casino
 
     var okHttpClient = OkHttpClient()
@@ -217,6 +219,7 @@ class BandiCore: JavaPlugin() {
         // Everything related to cosmetics and shops
         registerCosmeticTypes()
         registerCosmeticRequirementTypes()
+        shopManager = ShopManager()
         cosmeticManager = CosmeticManager()
         cosmeticManager.setup()
 

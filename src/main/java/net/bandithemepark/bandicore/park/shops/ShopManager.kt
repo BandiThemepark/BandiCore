@@ -1,0 +1,30 @@
+package net.bandithemepark.bandicore.park.shops
+
+import net.bandithemepark.bandicore.network.backend.BackendShop
+import net.bandithemepark.bandicore.util.debug.Reloadable
+import org.bukkit.Bukkit
+
+class ShopManager: Reloadable {
+    val shops = mutableListOf<Shop>()
+
+    fun setup() {
+        loadShops()
+        register("shops")
+    }
+
+    private fun loadShops() {
+        BackendShop.getAll { array ->
+            for(element in array) {
+                val shop = Shop.fromJson(element.asJsonObject)
+                shops.add(shop)
+            }
+
+            Bukkit.getConsoleSender().sendMessage("Loaded ${shops.size} shops")
+        }
+    }
+
+    override fun reload() {
+        shops.clear()
+        loadShops()
+    }
+}
