@@ -6,6 +6,7 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockPlaceEvent
+import org.bukkit.event.entity.FoodLevelChangeEvent
 import org.bukkit.event.hanging.HangingBreakByEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerJoinEvent
@@ -33,11 +34,17 @@ class ProtectionEvents: Listener {
     fun onPlayerJoin(event: PlayerJoinEvent) {
         if(event.player.hasPermission("bandithemepark.crew")) return
         event.player.gameMode = GameMode.ADVENTURE
+        event.player.foodLevel = 20
     }
 
     @EventHandler
     fun onBreakItemFrame(event: HangingBreakByEntityEvent) {
         if(event.remover.hasPermission("bandithemepark.crew")) return
         event.isCancelled = true
+    }
+
+    @EventHandler
+    fun onFoodLevelChange(event: FoodLevelChangeEvent) {
+        event.entity.foodLevel = 20
     }
 }
