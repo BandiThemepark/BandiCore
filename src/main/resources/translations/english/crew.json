@@ -202,5 +202,6 @@
   "player-already-owns-cosmetic": "The target player already owns this cosmetic",
   "cosmetic-given": "You have successfully given the target player the cosmetic",
   "cosmetic-removed": "You have successfully removed the cosmetic from the target player",
-  "vip-door-created": "VIP Door created successfully"
+  "vip-door-created": "VIP Door created successfully",
+  "one-way-gate-created": "One Way Gate (anti-naar-binnen) created successfully"
 }

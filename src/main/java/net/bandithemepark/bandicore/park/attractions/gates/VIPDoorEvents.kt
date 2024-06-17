@@ -4,7 +4,6 @@ import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTransla
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedMessage
 import net.bandithemepark.bandicore.util.Util.getText
 import net.bandithemepark.bandicore.util.chat.BandiColors
-import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.Particle
