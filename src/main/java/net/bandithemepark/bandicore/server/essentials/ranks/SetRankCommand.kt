@@ -18,6 +18,7 @@ import org.bukkit.entity.Player
 class SetRankCommand: CommandExecutor, TabCompleter {
     override fun onCommand(sender: CommandSender, command: org.bukkit.command.Command, label: String, args: Array<out String>): Boolean {
         if(command.name.equals("setrank", true)) {
+            if(!sender.hasPermission("bandithemepark.crew")) return false
             if(sender is Player) {
                 if(args.size == 2) {
                     val rank = BandiCore.instance.server.rankManager.loadedRanks.find { it.id == args[1] }
@@ -44,6 +45,7 @@ class SetRankCommand: CommandExecutor, TabCompleter {
 
     override fun onTabComplete(sender: CommandSender, command: org.bukkit.command.Command, label: String, args: Array<out String>): MutableList<String>? {
         if(command.name.equals("setrank", true)) {
+            if(!sender.hasPermission("bandithemepark.crew")) return null
             if(args.size == 2) {
                 return Util.getTabCompletions(args[1], BandiCore.instance.server.rankManager.loadedRanks.map { it.id })
             }
