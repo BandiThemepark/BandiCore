@@ -388,6 +388,7 @@ class BandiCore: JavaPlugin() {
         getServer().pluginManager.registerEvents(DressingRoomMenu.Events(), this)
         getServer().pluginManager.registerEvents(DressingRoomCategoryMenu.Events(), this)
         getServer().pluginManager.registerEvents(Backpack.Events(), this)
+        getServer().pluginManager.registerEvents(ProtectionEvents(), this)
     }
 
     private fun prepareSettings() {
