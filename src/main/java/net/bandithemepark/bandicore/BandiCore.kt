@@ -50,6 +50,7 @@ import net.bandithemepark.bandicore.network.backend.audioserver.BackendAudioServ
 import net.bandithemepark.bandicore.network.mqtt.MQTTConnector
 import net.bandithemepark.bandicore.network.queue.QueueCommand
 import net.bandithemepark.bandicore.park.attractions.AttractionCommand
+import net.bandithemepark.bandicore.park.attractions.gates.VIPDoorEvents
 import net.bandithemepark.bandicore.park.attractions.ridecounter.RidecounterManager
 import net.bandithemepark.bandicore.park.attractions.info.AttractionInfoBoard
 import net.bandithemepark.bandicore.park.attractions.menu.AttractionMenu
@@ -388,6 +389,7 @@ class BandiCore: JavaPlugin() {
         getServer().pluginManager.registerEvents(DressingRoomMenu.Events(), this)
         getServer().pluginManager.registerEvents(DressingRoomCategoryMenu.Events(), this)
         getServer().pluginManager.registerEvents(Backpack.Events(), this)
+        getServer().pluginManager.registerEvents(VIPDoorEvents(), this)
         getServer().pluginManager.registerEvents(ProtectionEvents(), this)
     }
 
