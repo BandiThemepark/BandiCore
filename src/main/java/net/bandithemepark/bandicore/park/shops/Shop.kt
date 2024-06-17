@@ -35,6 +35,8 @@ class Shop(
             val cosmetics = mutableListOf<Cosmetic>()
             for(element in cosmeticsArray) {
                 val cosmetic = BandiCore.instance.cosmeticManager.cosmetics.find { it.id === UUID.fromString(element.asJsonObject.get("id").asString) }
+                if(cosmetic != null) cosmetics.add(cosmetic)
+                else BandiCore.instance.logger.warning("Shop $name has a cosmetic that does not seem to exist (ID ${element.asJsonObject.get("id").asString})")
             }
 
             return Shop(id, name, displayName, itemFactory.build(), warp, cosmetics)
