@@ -163,3 +163,5 @@ commands:
     description: Equip a cosmetic
   unequip:
     description: Unequip a cosmetic
+  fly:
+    description: Toggle flying

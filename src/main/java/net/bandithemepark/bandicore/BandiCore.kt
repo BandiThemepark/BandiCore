@@ -333,6 +333,7 @@ class BandiCore: JavaPlugin() {
         getCommand("bandithemepark")!!.setExecutor(BandiThemeParkCommand())
         getCommand("equip")!!.setExecutor(EquipCommand())
         getCommand("unequip")!!.setExecutor(UnEquipCommand())
+        getCommand("fly")!!.setExecutor(FlyCommand())
     }
 
     private fun registerEvents() {

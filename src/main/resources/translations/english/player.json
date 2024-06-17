@@ -95,5 +95,9 @@
   "equip-type-not-found": "The entered cosmetic type was not found",
   "equip-cosmetic-not-found": "The entered cosmetic was not found",
   "equip-success": "Equipped cosmetic %cosmetic%",
-  "unequip-success": "Unequipped cosmetic"
+  "unequip-success": "Unequipped cosmetic",
+  "vip-door-no-permission": "You need to be VIP to enter this area!",
+  "no-fly-permissions": "A VIP rank is required to use /fly and other perks. You can visit our store to purchase VIP",
+  "fly-disabled": "You have stopped flying",
+  "fly-enabled": "You have started flying"
 }
