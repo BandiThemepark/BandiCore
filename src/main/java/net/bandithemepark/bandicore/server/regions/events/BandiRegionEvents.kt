@@ -42,12 +42,14 @@ class BandiRegionEvents: Listener {
     @EventHandler
     fun onPlayerRegionEnter(event: PlayerRegionEnterEvent) {
         event.toRegion.packetEntities.forEach {
-            if(it.getPlayersVisibleFor().contains(event.player) && !it.playersInRegion.contains(event.player)) {
-                it.playersInRegion.add(event.player)
-                it.spawnFor(event.player)
-                it.updateMetadataFor(event.player)
-                it.updateEquipmentFor(event.player)
-                it.updatePassengersFor(event.player)
+            if(it != null) {
+                if (it.getPlayersVisibleFor().contains(event.player) && !it.playersInRegion.contains(event.player)) {
+                    it.playersInRegion.add(event.player)
+                    it.spawnFor(event.player)
+                    it.updateMetadataFor(event.player)
+                    it.updateEquipmentFor(event.player)
+                    it.updatePassengersFor(event.player)
+                }
             }
         }
     }
