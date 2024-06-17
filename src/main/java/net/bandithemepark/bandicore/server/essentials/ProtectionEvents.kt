@@ -1,11 +1,13 @@
 package net.bandithemepark.bandicore.server.essentials
 
+import org.bukkit.GameMode
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.event.player.PlayerJoinEvent
 
 class ProtectionEvents: Listener {
     @EventHandler
@@ -24,5 +26,11 @@ class ProtectionEvents: Listener {
     fun onPlayerInteract(event: PlayerInteractEvent) {
         if(event.player.hasPermission("bandithemepark.crew")) return
         event.isCancelled = true
+    }
+
+    @EventHandler
+    fun onPlayerJoin(event: PlayerJoinEvent) {
+        if(event.player.hasPermission("bandithemepark.crew")) return
+        event.player.gameMode = GameMode.ADVENTURE
     }
 }
