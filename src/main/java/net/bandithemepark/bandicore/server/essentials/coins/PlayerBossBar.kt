@@ -1,6 +1,7 @@
 package net.bandithemepark.bandicore.server.essentials.coins
 
 import net.bandithemepark.bandicore.server.essentials.coins.CoinManager.Companion.getBalance
+import net.bandithemepark.bandicore.util.Util
 import org.bukkit.Bukkit
 import org.bukkit.boss.BarColor
 import org.bukkit.boss.BarStyle
@@ -24,7 +25,10 @@ class PlayerBossBar(val player: Player) {
             return
         }
 
-        bossBar.setTitle("§7${getDisplayedRegionText()} | ${player.getBalance()} coins")
+        val regionText = getDisplayedRegionText()
+        val coinsText = "${player.getBalance()} coins"
+
+        bossBar.setTitle("${Util.getBackgroundText(regionText)}§7$regionText \uE003 §r${Util.getBackgroundText(coinsText)}§7$coinsText")
     }
 
     private fun getDisplayedRegionText(): String {
