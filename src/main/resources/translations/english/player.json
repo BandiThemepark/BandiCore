@@ -100,5 +100,6 @@
   "no-fly-permissions": "A VIP rank is required to use /fly and other perks. You can visit our store to purchase VIP",
   "fly-disabled": "You have stopped flying",
   "fly-enabled": "You have started flying",
-  "one-way-gate-blocked": "You can only go through this gate from the other side!"
+  "one-way-gate-blocked": "You can only go through this gate from the other side!",
+  "border-no-permission": "You cannot go beyond this area!"
 }

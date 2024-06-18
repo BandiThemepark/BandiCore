@@ -203,5 +203,6 @@
   "cosmetic-given": "You have successfully given the target player the cosmetic",
   "cosmetic-removed": "You have successfully removed the cosmetic from the target player",
   "vip-door-created": "VIP Door created successfully",
-  "one-way-gate-created": "One Way Gate (anti-naar-binnen) created successfully"
+  "one-way-gate-created": "One Way Gate (anti-naar-binnen) created successfully",
+  "border-crew": "You are leaving the area accessible to guests and VIPs"
 }
