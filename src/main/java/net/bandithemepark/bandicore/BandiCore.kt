@@ -335,6 +335,8 @@ class BandiCore: JavaPlugin() {
         getCommand("equip")!!.setExecutor(EquipCommand())
         getCommand("unequip")!!.setExecutor(UnEquipCommand())
         getCommand("fly")!!.setExecutor(FlyCommand())
+        getCommand("message")!!.setExecutor(MessageCommand())
+        getCommand("react")!!.setExecutor(ReactCommand())
     }
 
     private fun registerEvents() {

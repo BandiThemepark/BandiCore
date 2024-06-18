@@ -165,3 +165,15 @@ commands:
     description: Unequip a cosmetic
   fly:
     description: Toggle flying
+  message:
+    description: Send a message to a player
+    aliases:
+      - msg
+      - m
+      - whisper
+  react:
+    description: Reply to the last message you received
+    aliases:
+      - r
+      - reply
+      - re

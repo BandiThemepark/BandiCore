@@ -101,5 +101,6 @@
   "fly-disabled": "You have stopped flying",
   "fly-enabled": "You have started flying",
   "one-way-gate-blocked": "You can only go through this gate from the other side!",
-  "border-no-permission": "You cannot go beyond this area!"
+  "border-no-permission": "You cannot go beyond this area!",
+  "no-one-to-react": "There is no one to react to"
 }
