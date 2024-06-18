@@ -122,14 +122,6 @@ object LanguageUtil {
             getMessage(BandiCore.instance.server.getLanguage("english")!!, messageId, *replacements)
         }
 
-        val length = Util.getLengthOfText(message)
-        val amountOfBackgroundCharacters = ceil(length / 5.0).toInt() + 1
-        val negativeTextLength = (amountOfBackgroundCharacters * 5) - 3
-
-        var backgroundText = ""
-        for(i in 0 until amountOfBackgroundCharacters) { backgroundText += "\uE024\uE019" }
-        val negativeText = Util.getNegativeText(negativeTextLength)
-
-        this.sendActionBar(Util.color("$backgroundText$negativeText<$color>$message"))
+        this.sendActionBar(Util.color("${Util.getBackgroundText(message)}<$color>$message"))
     }
 }

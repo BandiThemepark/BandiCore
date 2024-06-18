@@ -14,6 +14,7 @@ import org.bukkit.map.MinecraftFont
 import org.bukkit.util.StringUtil
 import org.bukkit.util.Vector
 import java.util.*
+import kotlin.math.ceil
 import kotlin.math.sqrt
 
 object Util {
@@ -128,5 +129,17 @@ object Util {
         var text = ""
         for(i in 0 until amount) { text += "\uE019" }
         return text
+    }
+
+    fun getBackgroundText(text: String): String {
+        val length = getLengthOfText(text)
+        val amountOfBackgroundCharacters = ceil(length / 5.0).toInt() + 1
+        val negativeTextLength = (amountOfBackgroundCharacters * 5) - 3
+
+        var backgroundText = ""
+        for(i in 0 until amountOfBackgroundCharacters) { backgroundText += "\uE024\uE019" }
+        val negativeText = getNegativeText(negativeTextLength)
+
+        return "$backgroundText$negativeText"
     }
 }
