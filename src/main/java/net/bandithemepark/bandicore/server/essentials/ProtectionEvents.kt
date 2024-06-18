@@ -12,6 +12,7 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockPlaceEvent
+import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.FoodLevelChangeEvent
 import org.bukkit.event.hanging.HangingBreakByEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
@@ -72,5 +73,11 @@ class ProtectionEvents: Listener {
         toLocation.yaw = event.player.location.yaw
         toLocation.pitch = event.player.location.pitch
         event.player.teleport(toLocation)
+    }
+
+    @EventHandler
+    fun onPlayerDamage(event: EntityDamageByEntityEvent) {
+        if(event.damager.hasPermission("bandithemepark.crew")) return
+        event.isCancelled = true
     }
 }
