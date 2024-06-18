@@ -128,6 +128,18 @@ class BandiRegionCommand: CommandExecutor, TabCompleter {
                 } else {
                     sender.sendTranslatedMessage("region-command-region-does-not-exist", BandiColors.RED.toString(), MessageReplacement("region", args[1]))
                 }
+            } else if(args[0].equals("settext", true)) {
+                val region = BandiCore.instance.regionManager.getFromId(args[1])
+
+                if(region != null) {
+                    val text = args.drop(2).joinToString(" ")
+                    region.displayName = text
+                    BandiCore.instance.regionManager.saveRegion(region) {
+                        sender.sendTranslatedMessage("region-command-text-set", BandiColors.YELLOW.toString(), MessageReplacement("region", region.name), MessageReplacement("text", text))
+                    }
+                } else {
+                    sender.sendTranslatedMessage("region-command-region-does-not-exist", BandiColors.RED.toString(), MessageReplacement("region", args[1]))
+                }
             } else {
                 sendHelp(sender)
             }
