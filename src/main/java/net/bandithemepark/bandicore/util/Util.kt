@@ -10,6 +10,7 @@ import org.bukkit.ChatColor
 import org.bukkit.Location
 import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer
 import org.bukkit.entity.Player
+import org.bukkit.map.MinecraftFont
 import org.bukkit.util.StringUtil
 import org.bukkit.util.Vector
 import java.util.*
@@ -40,6 +41,20 @@ object Util {
 
     fun Player.sendColoredActionBar(message: String) {
         this.sendActionBar(color(message))
+    }
+
+    /**
+     * Get the length of a string in pixels
+     */
+    fun getLengthOfText(text: String): Int {
+        return MinecraftFont.Font.getWidth(text)
+    }
+
+    /**
+     * Get the length of a component in pixels
+     */
+    fun getLengthOfText(text: Component): Int {
+        return MinecraftFont.Font.getWidth(text.getText())
     }
 
     /**

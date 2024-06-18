@@ -9,6 +9,7 @@ import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import kotlin.math.ceil
 
 object LanguageUtil {
     val loadedLanguages = hashMapOf<Player, Language>()
@@ -115,10 +116,20 @@ object LanguageUtil {
      * @param replacements The replacements to replace in the message. Optional
      */
     fun CommandSender.sendTranslatedActionBar(messageId: String, color: String, vararg replacements: MessageReplacement) {
-        if(this is Player) {
-            this.sendActionBar(Util.color("<$color>"+this.getTranslatedMessage(messageId, *replacements)))
+        val message = if(this is Player) {
+            this.getTranslatedMessage(messageId, *replacements)
         } else {
-            this.sendActionBar(Util.color("<$color>"+getMessage(BandiCore.instance.server.getLanguage("english")!!, messageId, *replacements)))
+            getMessage(BandiCore.instance.server.getLanguage("english")!!, messageId, *replacements)
         }
+
+        val length = Util.getLengthOfText(message)
+        val amountOfBackgroundCharacters = ceil(length / 5.0).toInt() + 1
+        val negativeTextLength = (amountOfBackgroundCharacters * 5) - 3
+
+        var backgroundText = ""
+        for(i in 0 until amountOfBackgroundCharacters) { backgroundText += "\uE024\uE019" }
+        val negativeText = Util.getNegativeText(negativeTextLength)
+
+        this.sendActionBar(Util.color("$backgroundText$negativeText<$color>$message"))
     }
 }
