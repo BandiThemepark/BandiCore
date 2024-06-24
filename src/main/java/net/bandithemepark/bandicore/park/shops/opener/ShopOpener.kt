@@ -4,11 +4,15 @@ import com.google.gson.JsonObject
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.park.shops.ShopMenu
 import net.bandithemepark.bandicore.util.ItemFactory
+import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.entity.display.HoverableItemDisplay
 import net.bandithemepark.bandicore.util.entity.display.PacketItemDisplay
+import net.bandithemepark.bandicore.util.entity.display.PacketTextDisplay
 import org.bukkit.Bukkit
+import org.bukkit.Color
 import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.entity.Display
 import org.bukkit.entity.ItemDisplay
 import org.bukkit.entity.Player
 import java.util.UUID
@@ -24,16 +28,25 @@ class ShopOpener(
         }
     }
 
+    val textDisplay = PacketTextDisplay()
+
     fun spawn() {
         itemDisplay.spawn(location)
-
         itemDisplay.setItemStack(ItemFactory(Material.DIAMOND_SHOVEL).setCustomModelData(21).build())
         itemDisplay.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.HEAD)
         itemDisplay.updateMetadata()
+
+        textDisplay.spawn(location.clone().add(0.0, 0.3, 0.0))
+        textDisplay.setText(Util.color("\uE033"))
+        textDisplay.setShadow(false)
+        textDisplay.setBackgroundColor(Color.fromARGB(0, 0, 0, 0))
+        textDisplay.setBillboard(Display.Billboard.CENTER)
+        textDisplay.updateMetadata()
     }
 
     fun deSpawn() {
         itemDisplay.deSpawn()
+        textDisplay.deSpawn()
     }
 
     fun toJSON(): JsonObject {
