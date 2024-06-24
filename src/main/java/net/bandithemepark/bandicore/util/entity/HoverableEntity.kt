@@ -74,6 +74,7 @@ interface HoverableEntity {
         fun onHandSwap(event: PlayerSwapHandItemsEvent) {
             if(timer.currentlyLookingAt.containsKey(event.player)) {
                 (timer.currentlyLookingAt[event.player] as HoverableEntity).onInteract(event.player)
+                event.isCancelled = true
             }
         }
     }
