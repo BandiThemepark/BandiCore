@@ -10,6 +10,7 @@ class ShopManager: Reloadable {
     fun setup() {
         loadShops()
         register("shops")
+        ShopMenu.Test().register("shop-menu")
     }
 
     private fun loadShops() {

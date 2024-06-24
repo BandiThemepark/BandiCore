@@ -2,11 +2,13 @@ package net.bandithemepark.bandicore.park.cosmetics
 
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import net.bandithemepark.bandicore.park.cosmetics.CosmeticManager.Companion.getOwnedCosmetics
 import net.bandithemepark.bandicore.park.cosmetics.requirements.CosmeticRequirement
 import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.chat.BandiColors
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
+import org.bukkit.entity.Player
 import java.util.UUID
 
 class Cosmetic(
@@ -38,6 +40,49 @@ class Cosmetic(
 
         for(line in description) {
             components.add(Util.color("<!i><${BandiColors.LIGHT_GRAY}>$line"))
+        }
+
+        return components
+    }
+
+    fun getShopDescription(player: Player): MutableList<Component> {
+        val components = mutableListOf<Component>()
+
+        // Tags
+        if(tags.isNotEmpty()) {
+            for(tag in tags) {
+                components.add(Util.color("<!i><${BandiColors.GREEN}>${tag.displayName}"))
+            }
+            components.add(Util.color(" "))
+        }
+
+        // Description
+        for(line in description) {
+            components.add(Util.color("<!i><${BandiColors.LIGHT_GRAY}>$line"))
+        }
+        components.add(Util.color(" "))
+
+        // Requirements
+        if(requirements.isNotEmpty()) {
+            components.add(Util.color("<!i><${BandiColors.YELLOW}>Requirements"))
+            for (requirement in requirements) {
+                if (requirement.check(player)) {
+                    components.add(Util.color("<!i><${BandiColors.GREEN}>✔ ${requirement.type.getText(requirement.settings)}"))
+                } else {
+                    components.add(Util.color("<!i><${BandiColors.RED}>✘ ${requirement.type.getText(requirement.settings)}"))
+                }
+            }
+            components.add(Util.color(" "))
+        }
+
+        // Buy text and such
+        if(player.getOwnedCosmetics()!!.ownedCosmetics.any { it.cosmetic.id === id }) {
+            // Already owned, show text to equip
+            components.add(Util.color("<!i><${BandiColors.YELLOW}>Click to equip this cosmetic"))
+        } else {
+            // Not owned, show buy and preview text
+            components.add(Util.color("<!i><${BandiColors.YELLOW}>Left click to buy for $price coins"))
+            components.add(Util.color("<!i><${BandiColors.YELLOW}>Right click to preview in dressing room"))
         }
 
         return components
