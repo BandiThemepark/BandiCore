@@ -137,7 +137,7 @@ class BandiScoreboard {
             val serverName = if(BandiCore.instance.devMode) "Development" else "BandiThemepark"
             val serverColor = if(BandiCore.instance.devMode) "#ef4444" else "#ffbb1d"
 
-            this.sendPlayerListHeaderAndFooter(Util.color("<newline><${serverColor}><bold>${serverName}<newline><!bold><${BandiColors.LIGHT_GRAY}> Welcome! There are $onlinePlayers player(s) online <newline>"),
+            this.sendPlayerListHeaderAndFooter(Util.color("<newline><newline><${serverColor}><bold>${serverName}<newline><!bold><${BandiColors.LIGHT_GRAY}> Welcome! There are $onlinePlayers player(s) online <newline>"),
             Util.color("<newline><${BandiColors.LIGHT_GRAY}>You've played for ${formatTime(player!!.getPlaytime())}<newline>of which ${formatTime(player!!.getPlaytimeAfk())} you were AFK<newline>"))
         }
 
