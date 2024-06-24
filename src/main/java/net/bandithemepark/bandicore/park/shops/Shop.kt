@@ -6,6 +6,7 @@ import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.park.cosmetics.Cosmetic
 import net.bandithemepark.bandicore.server.essentials.warps.Warp
 import net.bandithemepark.bandicore.util.ItemFactory
+import net.bandithemepark.bandicore.util.Util
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 import java.util.*
@@ -34,7 +35,7 @@ class Shop(
             val cosmeticsArray = json.get("cosmetics").asJsonArray
             val cosmetics = mutableListOf<Cosmetic>()
             for(element in cosmeticsArray) {
-                val cosmetic = BandiCore.instance.cosmeticManager.cosmetics.find { it.id === UUID.fromString(element.asJsonObject.get("id").asString) }
+                val cosmetic = BandiCore.instance.cosmeticManager.cosmetics.find { it.id.toString() == element.asJsonObject.get("id").asString }
                 if(cosmetic != null) cosmetics.add(cosmetic)
                 else BandiCore.instance.logger.warning("Shop $name has a cosmetic that does not seem to exist (ID ${element.asJsonObject.get("id").asString})")
             }
