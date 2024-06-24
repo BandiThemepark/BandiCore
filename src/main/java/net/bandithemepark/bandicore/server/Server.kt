@@ -97,8 +97,10 @@ class Server {
         fm.getConfig("config.yml").get().set("serverMode", mode.id)
         fm.saveConfig("config.yml")
 
-        BackendSetting("serverMode").setValue(mode.id)
-        BackendSetting("motd").setValue(mode.motd)
+        if(!BandiCore.instance.devMode) {
+            BackendSetting("serverMode").setValue(mode.id)
+            BackendSetting("motd").setValue(mode.motd)
+        }
 
         BandiCore.instance.mqttConnector.sendMessage("/proxy/mode/trigger", "update")
     }
