@@ -19,6 +19,7 @@ import org.bukkit.util.Vector
 interface HoverableEntity {
     val translationId: String
     val permission: String?
+    val detectionOffset: Double
     fun onInteract(player: Player)
 
     fun makeGlowFor(player: Player) {
@@ -56,8 +57,8 @@ interface HoverableEntity {
     }
 
     object LookAtUtil {
-        fun isLookingAt(eyeLocation: Location, target: PacketEntity): Boolean {
-            val toEntity = target.location!!.toVector().add(Vector(0.0, 2.0, 0.0)).subtract(eyeLocation.toVector())
+        fun isLookingAt(eyeLocation: Location, target: PacketEntity, detectionOffset: Double = 0.0): Boolean {
+            val toEntity = target.location.toVector().add(Vector(0.0, detectionOffset, 0.0)).subtract(eyeLocation.toVector())
             val dot = toEntity.normalize().dot(eyeLocation.direction)
             return dot > 0.94
         }
@@ -89,7 +90,7 @@ interface HoverableEntity {
                 val hoverableForPlayer = hoverableEntities.filter { (it as HoverableEntity).canUse(player) }.filter { Util.getLengthBetween(it.location!!.clone().add(0.0, 1.7, 0.0), movements[player]!!) < 3.0 }
 
                 for(hoverable in hoverableForPlayer) {
-                    if(LookAtUtil.isLookingAt(movements[player]!!, hoverable)) {
+                    if(LookAtUtil.isLookingAt(movements[player]!!, hoverable, (hoverable as HoverableEntity).detectionOffset)) {
                         currentlyLookingAt[player] = hoverable
                         (hoverable as HoverableEntity).makeGlowFor(player)
 
