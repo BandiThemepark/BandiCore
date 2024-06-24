@@ -177,7 +177,7 @@ object Util {
     }
 
     fun getBackgroundText(text: String, additionalLength: Int = 0): String {
-        val length = getLengthOfText(text) + additionalLength + 4
+        val length = getLengthOfText(text) + additionalLength + 8
 
         var backgroundText = "\uE024\uE019"
 
@@ -194,7 +194,7 @@ object Util {
 
         backgroundText += "\uE024\uE019"
 
-        val negativeText = getNegativeText(length - 1)
+        val negativeText = getNegativeText(length - 3)
 
         return "$backgroundText$negativeText"
     }
