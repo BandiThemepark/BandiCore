@@ -68,6 +68,7 @@ class ShopMenu(val player: Player, val shop: Shop): InventoryHolder {
             // Check if it is a shop menu, if so cancel interaction
             if (event.clickedInventory?.holder !is ShopMenu) return
             event.isCancelled = true
+            val session = event.clickedInventory?.holder as ShopMenu
 
             // Check if an item was clicked
             if (event.clickedInventory!!.getItem(event.slot) == null) return
@@ -96,7 +97,7 @@ class ShopMenu(val player: Player, val shop: Shop): InventoryHolder {
                     }
                 } else {
                     // Open dressing room preview for cosmetic
-                    DressingRoomSession(event.whoClicked as Player, BandiCore.instance.cosmeticManager.dressingRoom, cosmetic)
+                    DressingRoomSession(event.whoClicked as Player, BandiCore.instance.cosmeticManager.dressingRoom, cosmetic, session.shop)
                 }
             }
 

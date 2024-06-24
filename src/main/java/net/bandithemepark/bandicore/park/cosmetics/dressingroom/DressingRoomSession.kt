@@ -5,6 +5,8 @@ import net.bandithemepark.bandicore.park.cosmetics.Cosmetic
 import net.bandithemepark.bandicore.park.cosmetics.CosmeticManager.Companion.getEquipped
 import net.bandithemepark.bandicore.park.cosmetics.OwnedCosmetic
 import net.bandithemepark.bandicore.park.cosmetics.types.TitleCosmetic
+import net.bandithemepark.bandicore.park.shops.Shop
+import net.bandithemepark.bandicore.park.shops.ShopMenu
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayerRig
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin.Companion.getAdaptedSkin
 import net.bandithemepark.bandicore.server.essentials.ranks.nametag.PlayerNameTag
@@ -30,7 +32,8 @@ import java.time.Duration
 class DressingRoomSession(
     val player: Player,
     val dressingRoom: DressingRoom,
-    val previewCosmetic: Cosmetic? = null
+    val previewCosmetic: Cosmetic? = null,
+    val previewShop: Shop? = null
 ) {
     val beforeGameMode = player.gameMode
     val beforeLocation = player.location.clone()
@@ -161,6 +164,12 @@ class DressingRoomSession(
             removeCustomPlayer()
             removeCamera()
         }, 10)
+
+        if(previewShop != null) {
+            Bukkit.getScheduler().runTaskLater(BandiCore.instance, Runnable {
+                ShopMenu(player, previewShop)
+            }, 13)
+        }
     }
 
     private fun startCamera() {
