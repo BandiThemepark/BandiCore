@@ -30,7 +30,7 @@ class Shop(
             if(iconData.has("customModelData")) itemFactory.setCustomModelData(iconData.get("customModelData").asInt)
 
             var warp: Warp? = null
-            if(json.has("warp")) warp = BandiCore.instance.server.warpManager.warps.find { it.uuid === UUID.fromString(json.get("warp").asString) }
+            if(json.has("warp")) warp = BandiCore.instance.server.warpManager.warps.find { it.uuid === UUID.fromString(json.getAsJsonObject("warp").get("id").asString) }
 
             val cosmeticsArray = json.get("cosmetics").asJsonArray
             val cosmetics = mutableListOf<Cosmetic>()
