@@ -198,4 +198,13 @@ object Util {
 
         return "$backgroundText$negativeText"
     }
+
+    private val characters = "abcdefghijklmnopqrstuvwxyz0123456789"
+    private val smallCharacters = "ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀѕᴛᴜᴠᴡxʏᴢ0123456789"
+
+    fun convertToSmallText(text: String): String {
+        var newText = ""
+        for(character in text.lowercase()) newText += smallCharacters[characters.indexOf(character)]
+        return newText
+    }
 }
