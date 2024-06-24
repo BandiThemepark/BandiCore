@@ -1,6 +1,7 @@
 package net.bandithemepark.bandicore.park.cosmetics.dressingroom
 
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.park.cosmetics.Cosmetic
 import net.bandithemepark.bandicore.park.cosmetics.CosmeticManager.Companion.getEquipped
 import net.bandithemepark.bandicore.park.cosmetics.OwnedCosmetic
 import net.bandithemepark.bandicore.park.cosmetics.types.TitleCosmetic
@@ -29,7 +30,7 @@ import java.time.Duration
 class DressingRoomSession(
     val player: Player,
     val dressingRoom: DressingRoom,
-
+    val previewCosmetic: Cosmetic? = null
 ) {
     val beforeGameMode = player.gameMode
     val beforeLocation = player.location.clone()
@@ -61,12 +62,24 @@ class DressingRoomSession(
         val handheld = player.getEquipped("handheld")
         if(handheld != null) customPlayer.setHandheld(handheld.cosmetic.type.getDressingRoomItem(player, handheld.color, handheld.cosmetic))
 
+        showPreviewCosmetic()
+
         Bukkit.getScheduler().runTaskLater(BandiCore.instance, Runnable {
             customPlayer.playAnimationOnce("dressing_room_enter") { playRandomIdleAnimation() }
         }, 10)
 
         spawnNameTag()
         if (player.getEquipped("title") != null) spawnTitle()
+    }
+
+    private fun showPreviewCosmetic() {
+        if(previewCosmetic == null) return
+
+        if(previewCosmetic.type.id == "hat") {
+            customPlayer.setHat(previewCosmetic.type.getDressingRoomItem(player, null, previewCosmetic))
+        } else if(previewCosmetic.type.id == "handheld") {
+            customPlayer.setHandheld(previewCosmetic.type.getDressingRoomItem(player, null, previewCosmetic))
+        }
     }
 
     val idleAnimations = listOf("dressing_room_idle_1", "dressing_room_idle_2")

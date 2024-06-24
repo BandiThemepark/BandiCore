@@ -79,6 +79,7 @@ import net.bandithemepark.bandicore.park.npc.ThemeParkNPCSkin
 import net.bandithemepark.bandicore.park.npc.path.editor.PathPointEditorCommand
 import net.bandithemepark.bandicore.park.npc.path.editor.PathPointEditorEvents
 import net.bandithemepark.bandicore.park.shops.ShopManager
+import net.bandithemepark.bandicore.park.shops.ShopMenu
 import net.bandithemepark.bandicore.server.BandiThemeParkCommand
 import net.bandithemepark.bandicore.server.achievements.AchievementManager
 import net.bandithemepark.bandicore.server.achievements.menu.AchievementCategoriesMenu
@@ -396,6 +397,7 @@ class BandiCore: JavaPlugin() {
         getServer().pluginManager.registerEvents(VIPDoorEvents(), this)
         getServer().pluginManager.registerEvents(ProtectionEvents(), this)
         getServer().pluginManager.registerEvents(OneWayGateEvents(), this)
+        getServer().pluginManager.registerEvents(ShopMenu.Events(), this)
     }
 
     private fun prepareSettings() {

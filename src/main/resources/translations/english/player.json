@@ -102,5 +102,8 @@
   "fly-enabled": "You have started flying",
   "one-way-gate-blocked": "You can only go through this gate from the other side!",
   "border-no-permission": "You cannot go beyond this area!",
-  "no-one-to-react": "There is no one to react to"
+  "no-one-to-react": "There is no one to react to",
+  "shop-requirement-not-met": "You do not meet all requirements to purchase this cosmetic!",
+  "shop-purchase-success": "You have successfully purchased %cosmetic%. Use /cosmetic to equip it",
+  "shop-not-enough-coins": "You do not have enough coins to purchase this cosmetic!"
 }
