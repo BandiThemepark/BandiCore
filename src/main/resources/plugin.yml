@@ -177,3 +177,5 @@ commands:
       - r
       - reply
       - re
+  shopopener:
+    description: Place and remove shop opener models

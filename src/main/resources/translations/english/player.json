@@ -105,5 +105,6 @@
   "no-one-to-react": "There is no one to react to",
   "shop-requirement-not-met": "You do not meet all requirements to purchase this cosmetic!",
   "shop-purchase-success": "You have successfully purchased %cosmetic%. Use /cosmetic to equip it",
-  "shop-not-enough-coins": "You do not have enough coins to purchase this cosmetic!"
+  "shop-not-enough-coins": "You do not have enough coins to purchase this cosmetic!",
+  "open-shop": "Press F to open shop"
 }

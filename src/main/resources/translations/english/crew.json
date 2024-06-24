@@ -204,5 +204,9 @@
   "cosmetic-removed": "You have successfully removed the cosmetic from the target player",
   "vip-door-created": "VIP Door created successfully",
   "one-way-gate-created": "One Way Gate (anti-naar-binnen) created successfully",
-  "border-crew": "You are leaving the area accessible to guests and VIPs"
+  "border-crew": "You are leaving the area accessible to guests and VIPs",
+  "shop-opener-not-found": "No shop opener was found in a 3 block radius",
+  "shop-opener-deleted": "Successfully deleted the nearest shop opener in a 3 block radius",
+  "shop-not-found": "No shop was found matching the given name",
+  "shop-opener-created": "Shop opener created successfully"
 }

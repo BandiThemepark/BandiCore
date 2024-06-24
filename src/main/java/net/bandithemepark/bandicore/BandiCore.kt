@@ -80,6 +80,7 @@ import net.bandithemepark.bandicore.park.npc.path.editor.PathPointEditorCommand
 import net.bandithemepark.bandicore.park.npc.path.editor.PathPointEditorEvents
 import net.bandithemepark.bandicore.park.shops.ShopManager
 import net.bandithemepark.bandicore.park.shops.ShopMenu
+import net.bandithemepark.bandicore.park.shops.opener.ShopOpenerCommand
 import net.bandithemepark.bandicore.server.BandiThemeParkCommand
 import net.bandithemepark.bandicore.server.achievements.AchievementManager
 import net.bandithemepark.bandicore.server.achievements.menu.AchievementCategoriesMenu
@@ -338,6 +339,7 @@ class BandiCore: JavaPlugin() {
         getCommand("fly")!!.setExecutor(FlyCommand())
         getCommand("message")!!.setExecutor(MessageCommand())
         getCommand("react")!!.setExecutor(ReactCommand())
+        getCommand("shopopener")!!.setExecutor(ShopOpenerCommand())
     }
 
     private fun registerEvents() {
