@@ -16,7 +16,7 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.joml.Matrix4f
 
-class PacketItemDisplay: PacketEntity() {
+open class PacketItemDisplay: PacketEntity() {
     override fun getInstance(world: ServerLevel, x: Double, y: Double, z: Double): Entity {
         return ItemDisplay(EntityType.ITEM_DISPLAY, world)
     }
