@@ -105,7 +105,7 @@ class PlayerNameTag(val player: Player) {
             textDisplay.spawn(player.location.clone().add(0.0, 2.0 + heightOffset, 0.0))
 
             val rank = BandiCore.instance.server.rankManager.loadedPlayerRanks[player]!!
-            val text = Util.color("<${rank.color}>${rank.name} ${player.name}")
+            val text = Util.color("${rank.name} <${rank.color}>${player.name}")
             textDisplay.setText(text)
 
             textDisplay.setBillboard(Display.Billboard.CENTER)
@@ -138,7 +138,7 @@ class PlayerNameTag(val player: Player) {
      */
     fun updateName() {
         val rank = BandiCore.instance.server.rankManager.loadedPlayerRanks[player]!!
-        val text = Util.color("<${rank.color}>${rank.name} ${player.name}")
+        val text = Util.color("${rank.name} <${rank.color}>${player.name}")
         textDisplay.setText(text)
         textDisplay.updateMetadata()
     }

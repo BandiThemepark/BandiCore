@@ -108,7 +108,7 @@ class RankManager {
             if(!event.isCancelled) {
                 event.isCancelled = true
                 val rank = BandiCore.instance.server.rankManager.loadedPlayerRanks[event.player]!!
-                Bukkit.broadcast(Util.color("<${rank.color}>${rank.name} ${event.player.name} ").append(event.message().color(TextColor.fromHexString(rank.textColor))))
+                Bukkit.broadcast(Util.color("${rank.name} <${rank.color}>${event.player.name} ").append(event.message().color(TextColor.fromHexString(rank.textColor))))
             }
         }
     }

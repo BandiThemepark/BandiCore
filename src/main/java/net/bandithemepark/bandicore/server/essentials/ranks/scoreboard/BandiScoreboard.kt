@@ -84,7 +84,7 @@ class BandiScoreboard {
             // Update name
             val rank = BandiCore.instance.server.rankManager.loadedPlayerRanks[player]
             val rankName = rank?.name ?: "Guest"
-            player.playerListName(Util.color("$rankName ${player.name}").color(TextColor.fromHexString(rank?.color ?: "#64666b")))
+            player.playerListName(Util.color("$rankName <${rank?.color ?: "#64666b"}>${player.name}"))
 
             // Update tablist for player
             player.updatePlayerList()
