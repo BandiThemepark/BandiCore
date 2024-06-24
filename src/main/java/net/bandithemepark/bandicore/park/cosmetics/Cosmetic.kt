@@ -4,6 +4,8 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import net.bandithemepark.bandicore.park.cosmetics.CosmeticManager.Companion.getOwnedCosmetics
 import net.bandithemepark.bandicore.park.cosmetics.requirements.CosmeticRequirement
+import net.bandithemepark.bandicore.server.essentials.coins.CoinManager.Companion.getBalance
+import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedMessage
 import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.chat.BandiColors
 import net.kyori.adventure.text.Component
@@ -86,6 +88,22 @@ class Cosmetic(
         }
 
         return components
+    }
+
+    fun canPurchase(player: Player): Boolean {
+        if(requirements.any { !it.check(player) }) {
+            player.sendTranslatedMessage("shop-requirement-not-met", BandiColors.RED.toString())
+            return false
+        }
+
+        if(player.getBalance() < price) {
+            player.sendTranslatedMessage("shop-not-enough-coins", BandiColors.RED.toString())
+            return false
+        }
+
+        if(player.getOwnedCosmetics()!!.ownedCosmetics.any { it.cosmetic.id === id }) return false
+
+        return true
     }
 
     companion object {
