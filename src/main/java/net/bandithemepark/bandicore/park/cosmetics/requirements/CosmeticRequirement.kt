@@ -11,7 +11,7 @@ class CosmeticRequirement(val type: CosmeticRequirementType, val settings: Strin
     companion object {
         fun fromJson(json: JsonObject): CosmeticRequirement {
             val type = CosmeticRequirementType.getType(json.get("type").asString)!!
-            val settings = json.get("settings").asString
+            val settings = if(json.has("settings")) json.get("settings").asString else ""
             return CosmeticRequirement(type, settings)
         }
     }
