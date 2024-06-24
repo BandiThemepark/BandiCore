@@ -1,6 +1,5 @@
 package net.bandithemepark.bandicore.util
 
-import com.google.gson.JsonElement
 import com.google.gson.JsonParser
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.MiniMessage
@@ -14,7 +13,6 @@ import org.bukkit.map.MinecraftFont
 import org.bukkit.util.StringUtil
 import org.bukkit.util.Vector
 import java.util.*
-import kotlin.math.ceil
 import kotlin.math.sqrt
 
 object Util {
@@ -131,14 +129,72 @@ object Util {
         return text
     }
 
-    fun getBackgroundText(text: String): String {
-        val length = getLengthOfText(text)
-        val amountOfBackgroundCharacters = ceil(length / 5.0).toInt() + 1
-        val negativeTextLength = (amountOfBackgroundCharacters * 5) - 3
+    data class BackgroundCharacter(val character: String, val length: Int)
 
-        var backgroundText = ""
-        for(i in 0 until amountOfBackgroundCharacters) { backgroundText += "\uE024\uE019" }
-        val negativeText = getNegativeText(negativeTextLength)
+    val bossBarBackgroundCharacters = listOf(
+        BackgroundCharacter("\uE009", 128),
+        BackgroundCharacter("\uE008", 64),
+        BackgroundCharacter("\uE007", 32),
+        BackgroundCharacter("\uE006", 16),
+        BackgroundCharacter("\uE005", 8),
+        BackgroundCharacter("\uE004", 4),
+        BackgroundCharacter("\uE003", 2),
+        BackgroundCharacter("\uE002", 1)
+    )
+
+    val backgroundCharacters = listOf(
+        BackgroundCharacter("\uE032", 128),
+        BackgroundCharacter("\uE031", 64),
+        BackgroundCharacter("\uE030", 32),
+        BackgroundCharacter("\uE029", 16),
+        BackgroundCharacter("\uE028", 8),
+        BackgroundCharacter("\uE027", 4),
+        BackgroundCharacter("\uE026", 2),
+        BackgroundCharacter("\uE025", 1)
+    )
+
+    fun getBossBarBackgroundText(text: String, additionalLength: Int = 0): String {
+        val length = getLengthOfText(text) + additionalLength + 4
+
+        var backgroundText = "<font:boss_bar>\uE001\uE012"
+
+        var remainingLength = length
+        while(remainingLength > 0) {
+            for(character in bossBarBackgroundCharacters) {
+                if(remainingLength >= character.length) {
+                    backgroundText += "${character.character}\uE012"
+                    remainingLength -= character.length
+                    break
+                }
+            }
+        }
+
+        backgroundText += "\uE001\uE012</font>"
+
+        val negativeText = getNegativeText(length - 1)
+
+        return "$backgroundText$negativeText"
+    }
+
+    fun getBackgroundText(text: String, additionalLength: Int = 0): String {
+        val length = getLengthOfText(text) + additionalLength + 4
+
+        var backgroundText = "\uE024\uE019"
+
+        var remainingLength = length
+        while(remainingLength > 0) {
+            for(character in backgroundCharacters) {
+                if(remainingLength >= character.length) {
+                    backgroundText += "${character.character}\uE019"
+                    remainingLength -= character.length
+                    break
+                }
+            }
+        }
+
+        backgroundText += "\uE024\uE019"
+
+        val negativeText = getNegativeText(length - 1)
 
         return "$backgroundText$negativeText"
     }
