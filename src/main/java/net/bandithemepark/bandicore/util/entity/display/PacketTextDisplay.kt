@@ -47,6 +47,12 @@ class PacketTextDisplay: PacketEntity() {
      * @param color The color to set, can be null to remove the background. ARGB supported
      */
     fun setBackgroundColor(color: Color?) {
+        if(color == null) {
+            handle.entityData.set(TextDisplay.DATA_BACKGROUND_COLOR_ID, -1)
+        } else {
+            handle.entityData.set(TextDisplay.DATA_BACKGROUND_COLOR_ID, Color.fromARGB(0, 0, 0, 0).asARGB())
+
+        }
         //if(color == null) (handle as TextDisplay).backgroundColor = -1 else (handle as TextDisplay).backgroundColor = color.asARGB()
     }
 
