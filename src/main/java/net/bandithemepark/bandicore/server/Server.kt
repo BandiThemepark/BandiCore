@@ -35,10 +35,10 @@ class Server {
     val themePark = ThemePark(Bukkit.getWorld("world")!!)
 
     init {
-        ServerMode("open", "§6§lBandiThemepark §7- §aOpen||§7Come and visit us right now!", true, true).register()
-        ServerMode("vip", "§6§lBandiThemepark §7- §eVIPs only||§7Come and visit us right now! (If you're a VIP)", true, false).register()
-        ServerMode("maintenance", "§6§lBandiThemepark §7- §cMaintenance||§7Check our Discord for more information", false, false).register()
-        ServerMode("restart", "§6§lBandiThemepark §7- §cRestarting||§7You can still join our queue though!", false, false).register()
+        ServerMode("open", "          <color:#ffc738><b>BandiThemepark</b></color> <color:#404040>-</color> <color:#77aa61>We are open!</color><br>               <color:#94a9b3>Come and visit us right now!</color>", true, true).register()
+        ServerMode("vip", "        <color:#ffc738><b>BandiThemepark</b></color> <color:#404040>-</color> <color:#ffe37d>Only open for VIPs</color><br>          <color:#94a9b3>Go and visit shop.bandithemepark.net</color>", true, false).register()
+        ServerMode("maintenance", "     <color:#ffc738><b>BandiThemepark</b></color> <color:#404040>-</color> <color:#ff5b3b>Closed for maintenance</color><br>             <color:#94a9b3>Check our Discord for updates!</color>", false, false).register()
+        ServerMode("restart", "       <color:#ffc738><b>BandiThemepark</b></color> <color:#404040>-</color> <color:#5789ff>We are restarting...</color><br>         <color:#94a9b3>Join our queue to be the first one in!</color>", false, false).register()
 
         val fm = FileManager()
 
