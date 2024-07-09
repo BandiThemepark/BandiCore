@@ -266,7 +266,7 @@ class DressingRoomSession(
         textDisplay!!.spawn(customPlayer.animatronic.basePosition.toLocation(player.world).add(0.0, 2.0 + player.getNameTag()!!.heightOffset, 0.0))
 
         val rank = BandiCore.instance.server.rankManager.loadedPlayerRanks[player]!!
-        val text = Util.color("<${rank.color}>${rank.name} ${player.name}")
+        val text = Util.color("<#FFFFFF>${rank.name} <${rank.color}>${player.name}")
         textDisplay!!.setText(text)
         textDisplay!!.setBillboard(Display.Billboard.CENTER)
         textDisplay!!.setDefaultBackground(true)
