@@ -24,6 +24,7 @@ import javax.imageio.ImageIO
 class CustomPlayerSkin(val playerUUID: UUID?, val texture: String, val slim: Boolean) {
     companion object {
         val adaptedSkins = mutableMapOf<Player, CustomPlayerSkin>()
+        const val BACKUP_SKIN = "e11371e8c60249e0ad8f53c74a2c99217d7a6f1fe47f057b86f8cb44c2e6cc61"
 
         fun convertProfileTexture(texture: String): String {
             val decodedValue = String(Base64.getDecoder().decode(texture))
@@ -35,7 +36,13 @@ class CustomPlayerSkin(val playerUUID: UUID?, val texture: String, val slim: Boo
         }
 
         fun Player.getAdaptedSkin(): CustomPlayerSkin {
-            return adaptedSkins[this]!!
+            if(adaptedSkins[this] != null) {
+                return adaptedSkins[this]!!
+            } else {
+                Util.debug("CustomPlayerSkin", "Failed to load adapted skin for player ${this.name}. Returning a default skin for now, and generating a new skin in the meanwhile...")
+                generateSkin(this)
+                return CustomPlayerSkin(this.uniqueId, BACKUP_SKIN, false)
+            }
         }
 
         fun Player.getCustomPlayerSkin(): CustomPlayerSkin {
