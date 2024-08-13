@@ -206,7 +206,8 @@ class DressingRoomSession(
     }
 
     fun onTick() {
-        player.sendActionBar(Util.color("<${BandiColors.YELLOW}>JUMP to equip | CROUCH to exit"))
+        val message = "JUMP to equip | CROUCH to exit"
+        player.sendActionBar(Util.color("${Util.getBackgroundText(message)}<${BandiColors.YELLOW}>$message"))
     }
 
     val equipAnimations = hashMapOf(
