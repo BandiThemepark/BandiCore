@@ -20,6 +20,7 @@ class DressingRoomEvents: Listener {
     @EventHandler
     fun onEntityInput(event: PacketEntityInputEvent) {
         if(event.jumping) {
+            DressingRoomSession.activeSessions.find { it.player == event.player } ?: return
             DressingRoomMenu().open(event.player)
             BandiCore.instance.afkManager.resetAfkTime(event.player)
         }
