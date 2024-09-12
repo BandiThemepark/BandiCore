@@ -1,11 +1,11 @@
 plugins {
     `java-library`
-    id("io.papermc.paperweight.userdev") version "1.5.11"
-    id("xyz.jpenilla.run-paper") version "2.2.2"
+    id("io.papermc.paperweight.userdev") version "1.7.1"
+    id("xyz.jpenilla.run-paper") version "2.3.0"
 
     id("maven-publish")
     id("com.github.johnrengelman.shadow") version "7.0.0"
-    kotlin("jvm") version "1.6.10"
+    kotlin("jvm") version "2.0.0"
 }
 
 group = "net.bandithemepark"
@@ -13,7 +13,7 @@ version = "1.0.0"
 description = "The plugin that runs the main server of BandiThemepark"
 
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
 
 repositories {
@@ -42,9 +42,9 @@ repositories {
 
 dependencies {
     implementation("org.mineskin:java-client:1.2.2-SNAPSHOT")
-    paperweight.paperDevBundle("1.20.4-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("1.21-R0.1-SNAPSHOT")
     compileOnly("javax.annotation:javax.annotation-api:1.3.2")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.0.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.6.10")
     compileOnly("com.comphenix.protocol", "ProtocolLib", "5.0.0")
@@ -61,7 +61,7 @@ tasks {
 
     compileJava {
         options.encoding = Charsets.UTF_8.name()
-        options.release.set(17)
+        options.release.set(21)
     }
 
     javadoc {

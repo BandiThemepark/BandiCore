@@ -14,7 +14,7 @@ class Fountain(val location: Location, var direction: Vector): AmbientEffect() {
     override fun onTick() {
         if(!active) return
 
-        location.world!!.spawnParticle(Particle.ITEM_CRACK, location, 0, direction.x, direction.y, direction.z, getParticleBlock())
+        location.world!!.spawnParticle(Particle.ITEM, location, 0, direction.x, direction.y, direction.z, getParticleBlock())
     }
 
     fun getParticleBlock(): ItemStack {

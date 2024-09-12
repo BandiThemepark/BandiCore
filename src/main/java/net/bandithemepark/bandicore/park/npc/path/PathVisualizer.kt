@@ -56,7 +56,7 @@ class PathVisualizer {
 
     fun sendParticle(location: Location, options: Particle.DustOptions) {
         PathPointEditor.activeSessions.forEach {
-            it.player.spawnParticle(Particle.REDSTONE, location, 1, options)
+            it.player.spawnParticle(Particle.DUST, location, 1, options)
         }
     }
 }

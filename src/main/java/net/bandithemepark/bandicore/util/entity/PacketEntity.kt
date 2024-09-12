@@ -23,9 +23,9 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EquipmentSlot
 import org.bukkit.Bukkit
 import org.bukkit.Location
-import org.bukkit.craftbukkit.v1_20_R3.CraftWorld
-import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer
-import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack
+import org.bukkit.craftbukkit.CraftWorld
+import org.bukkit.craftbukkit.entity.CraftPlayer
+import org.bukkit.craftbukkit.inventory.CraftItemStack
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -254,7 +254,8 @@ abstract class PacketEntity {
             return
         }
 
-        handle.entityData.refresh((player as CraftPlayer).handle)
+        val packet = ClientboundSetEntityDataPacket(handle.id, handle.entityData.packAll()!!)
+        (player as CraftPlayer).handle.connection.send(packet)
     }
 
     private fun sendPacket(packet: Packet<*>) {

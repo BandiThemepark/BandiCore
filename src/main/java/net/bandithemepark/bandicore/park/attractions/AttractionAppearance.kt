@@ -30,7 +30,7 @@ class AttractionAppearance(val displayName: String, val description: List<String
 
         if(attraction.mode.glow) {
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS)
-            meta.addEnchant(org.bukkit.enchantments.Enchantment.DURABILITY, 1, true)
+            meta.addEnchant(org.bukkit.enchantments.Enchantment.SILK_TOUCH, 1, true)
         }
 
         meta!!.persistentDataContainer.set(NamespacedKey(BandiCore.instance, "attraction"), PersistentDataType.STRING, attraction.id)

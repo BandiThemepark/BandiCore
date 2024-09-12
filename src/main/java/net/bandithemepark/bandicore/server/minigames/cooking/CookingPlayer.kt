@@ -37,7 +37,7 @@ class CookingPlayer(player: Player, val game: CookingGame, val type: CookingMini
     override fun reset() {
         super.reset()
         removeBossBar()
-        removePotionEffect(PotionEffectType.JUMP)
+        removePotionEffect(PotionEffectType.JUMP_BOOST)
     }
 
     override var currentItem: CookingItem? = null

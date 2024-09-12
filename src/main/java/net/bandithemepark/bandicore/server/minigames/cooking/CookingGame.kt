@@ -48,7 +48,7 @@ class CookingGame(val map: CookingMap) {
             player.foodLevel = 5
             player.createBossBar()
             player.inventory.heldItemSlot = 4
-            player.addPotionEffect(PotionEffect(PotionEffectType.JUMP, 999999, 200, false, false))
+            player.addPotionEffect(PotionEffect(PotionEffectType.JUMP_BOOST, 999999, 200, false, false))
         }
 
         map.placeables.forEach {

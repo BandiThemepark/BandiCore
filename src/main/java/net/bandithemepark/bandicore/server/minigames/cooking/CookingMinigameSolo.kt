@@ -12,6 +12,7 @@ import net.bandithemepark.bandicore.util.ItemFactory
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.entity.Player
 
 class CookingMinigameSolo: CookingMinigameGame("cooking-solo", 1, 1, "Cooking (Solo)", listOf("Play solo"), ItemFactory(Material.PAPER).build()) {
     override val map = CookingMap(listOf(
@@ -81,6 +82,6 @@ class CookingMinigameSolo: CookingMinigameGame("cooking-solo", 1, 1, "Cooking (S
 
     override fun onStart(players: List<MinigamePlayer>) {
         currentPlayers = players
-        game.start(players.map { CookingPlayer(it, game, this) })
+        game.start(players.map { CookingPlayer(it as Player, game, this) })
     }
 }

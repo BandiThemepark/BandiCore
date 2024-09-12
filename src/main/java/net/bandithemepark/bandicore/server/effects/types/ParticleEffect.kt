@@ -104,7 +104,7 @@ class ParticleEffect: EffectType("particle") {
             }
 
             var dustOptions: Particle.DustOptions? = null
-            if(particle === Particle.REDSTONE && color != null) {
+            if(particle === Particle.DUST && color != null) {
                 dustOptions = Particle.DustOptions(color!!, size.toFloat())
             }
 
@@ -121,7 +121,7 @@ class ParticleEffect: EffectType("particle") {
                 } else if(blocks != null) {
                     val randomMaterial = blocks!!.random()
                     val itemStack = ItemStack(randomMaterial)
-                    player.spawnParticle(Particle.ITEM_CRACK, spawnLocation, 0, velocity.x, velocity.y, velocity.z, itemStack)
+                    player.spawnParticle(Particle.BLOCK, spawnLocation, 0, velocity.x, velocity.y, velocity.z, itemStack)
                 } else {
                     player.spawnParticle(
                         particle, spawnLocation, 0, velocity.x, velocity.y, velocity.z

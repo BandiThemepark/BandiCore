@@ -8,8 +8,8 @@ import net.minecraft.world.entity.Display.BlockDisplay
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import org.bukkit.block.data.BlockData
-import org.bukkit.craftbukkit.v1_20_R3.block.data.CraftBlockData
-import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer
+import org.bukkit.craftbukkit.block.data.CraftBlockData
+import org.bukkit.craftbukkit.entity.CraftPlayer
 import org.joml.Matrix4f
 
 class PacketBlockDisplay: PacketEntity() {

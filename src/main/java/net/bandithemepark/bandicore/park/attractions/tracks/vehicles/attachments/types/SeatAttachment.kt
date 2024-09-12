@@ -20,27 +20,15 @@ import net.bandithemepark.bandicore.util.entity.event.SeatEnterEvent
 import net.bandithemepark.bandicore.util.entity.event.SeatExitEvent
 import net.bandithemepark.bandicore.util.entity.marker.PacketEntityMarker
 import net.bandithemepark.bandicore.util.math.Quaternion
-import net.kyori.adventure.text.Component
-import net.minecraft.network.protocol.game.ClientboundPlayerInfoRemovePacket
-import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket
-import net.minecraft.network.protocol.game.ClientboundRemoveMobEffectPacket
-import net.minecraft.network.protocol.game.ClientboundUpdateMobEffectPacket
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.effect.MobEffect
-import net.minecraft.world.effect.MobEffectInstance
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.World
 import org.bukkit.attribute.Attribute
-import org.bukkit.craftbukkit.v1_20_R3.CraftServer
-import org.bukkit.craftbukkit.v1_20_R3.CraftWorld
-import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.util.Vector
-import java.util.*
 import kotlin.collections.HashMap
 
 class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID, REGION_ID?, HARNESS_ATTACHMENT_ID?") {

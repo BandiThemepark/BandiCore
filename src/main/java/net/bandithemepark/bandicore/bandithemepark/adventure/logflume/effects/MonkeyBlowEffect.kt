@@ -40,7 +40,7 @@ class MonkeyBlowEffect(val location: Location, val direction: Direction, val amo
             }
 
             location.world.spawnParticle(
-                Particle.REDSTONE,
+                Particle.DUST,
                 location,
                 0,
                 xOffset,

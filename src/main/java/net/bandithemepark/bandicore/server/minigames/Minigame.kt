@@ -22,7 +22,7 @@ abstract class Minigame(val id: String, val name: String, val description: List<
         }
 
         fun getCurrentGame(player: Player): MinigameGame? {
-            return minigames.flatMap { it.games }.find { it.currentPlayers.contains(player) }
+            return minigames.flatMap { it.games }.find { it.currentPlayers.contains(player as MinigamePlayer) }
         }
 
         fun startTimer() {
