@@ -121,7 +121,7 @@ class ParticleEffect: EffectType("particle") {
                 } else if(blocks != null) {
                     val randomMaterial = blocks!!.random()
                     val itemStack = ItemStack(randomMaterial)
-                    player.spawnParticle(Particle.BLOCK, spawnLocation, 0, velocity.x, velocity.y, velocity.z, itemStack)
+                    player.spawnParticle(Particle.ITEM, spawnLocation, 0, velocity.x, velocity.y, velocity.z, itemStack)
                 } else {
                     player.spawnParticle(
                         particle, spawnLocation, 0, velocity.x, velocity.y, velocity.z
