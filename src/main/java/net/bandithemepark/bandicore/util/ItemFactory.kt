@@ -5,6 +5,8 @@ import com.mojang.authlib.properties.Property
 import net.bandithemepark.bandicore.BandiCore
 import net.kyori.adventure.text.Component
 import org.bukkit.*
+import org.bukkit.attribute.Attribute
+import org.bukkit.attribute.AttributeModifier
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
@@ -161,7 +163,10 @@ class ItemFactory {
     }
 
     fun setAttributesHidden(bool: Boolean): ItemFactory {
-        if (bool) itemMeta!!.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+        if (bool) {
+            itemMeta!!.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+            if(!itemMeta!!.hasAttributeModifiers()) itemMeta!!.addAttributeModifier(Attribute.GENERIC_LUCK, AttributeModifier(NamespacedKey(BandiCore.instance, "luck"), 0.0, AttributeModifier.Operation.ADD_NUMBER))
+        }
         else itemMeta!!.removeItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         return this
     }
