@@ -179,3 +179,5 @@ commands:
       - re
   shopopener:
     description: Place and remove shop opener models
+  spawn:
+    description: Teleport to the spawn

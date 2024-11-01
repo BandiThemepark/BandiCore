@@ -113,10 +113,7 @@ import net.bandithemepark.bandicore.server.essentials.worlds.WorldManager
 import net.bandithemepark.bandicore.server.essentials.teleport.BackCommand
 import net.bandithemepark.bandicore.server.essentials.teleport.SelfCommand
 import net.bandithemepark.bandicore.server.essentials.teleport.TeleportCommand
-import net.bandithemepark.bandicore.server.essentials.warps.DeleteWarpCommand
-import net.bandithemepark.bandicore.server.essentials.warps.NearestWarpCommand
-import net.bandithemepark.bandicore.server.essentials.warps.SetWarpCommand
-import net.bandithemepark.bandicore.server.essentials.warps.WarpCommand
+import net.bandithemepark.bandicore.server.essentials.warps.*
 import net.bandithemepark.bandicore.server.minigames.Minigame
 import net.bandithemepark.bandicore.server.minigames.MinigameTest
 import net.bandithemepark.bandicore.server.minigames.casino.Casino
@@ -340,6 +337,7 @@ class BandiCore: JavaPlugin() {
         getCommand("message")!!.setExecutor(MessageCommand())
         getCommand("react")!!.setExecutor(ReactCommand())
         getCommand("shopopener")!!.setExecutor(ShopOpenerCommand())
+        getCommand("spawn")!!.setExecutor(SpawnCommand())
     }
 
     private fun registerEvents() {
