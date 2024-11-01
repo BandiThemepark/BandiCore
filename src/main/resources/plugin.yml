@@ -185,3 +185,5 @@ commands:
     description: Ban a player
   unban:
     description: Unban a player
+  kick:
+    description: Kick a player

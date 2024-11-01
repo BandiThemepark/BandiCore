@@ -213,5 +213,7 @@
   "ban-success": "Successfully banned %player%",
   "unban-invalid-args": "Invalid arguments! Usage: /unban <uuid>",
   "unban-success": "Successfully unbanned player with UUID %uuid% (%username%)",
-  "invalid-uuid": "The UUID you entered was invalid"
+  "invalid-uuid": "The UUID you entered was invalid",
+  "kick-invalid-args": "Invalid arguments! Usage: /kick <player> <reason>",
+  "kick-success": "Successfully kicked %player%"
 }

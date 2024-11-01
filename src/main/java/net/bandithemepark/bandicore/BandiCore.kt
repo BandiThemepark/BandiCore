@@ -109,6 +109,7 @@ import net.bandithemepark.bandicore.server.essentials.coins.CoinsListener
 import net.bandithemepark.bandicore.server.essentials.coins.PlayerBossBar
 import net.bandithemepark.bandicore.server.essentials.coins.PlayerBossBar.Companion.getBossBar
 import net.bandithemepark.bandicore.server.essentials.moderation.BanCommand
+import net.bandithemepark.bandicore.server.essentials.moderation.KickCommand
 import net.bandithemepark.bandicore.server.essentials.moderation.UnBanCommand
 import net.bandithemepark.bandicore.server.essentials.worlds.WorldCommands
 import net.bandithemepark.bandicore.server.essentials.worlds.WorldManager
@@ -343,6 +344,7 @@ class BandiCore: JavaPlugin() {
         getCommand("spawn")!!.setExecutor(SpawnCommand())
         getCommand("ban")!!.setExecutor(BanCommand())
         getCommand("unban")!!.setExecutor(UnBanCommand())
+        getCommand("kick")!!.setExecutor(KickCommand())
     }
 
     private fun registerEvents() {
