@@ -181,3 +181,5 @@ commands:
     description: Place and remove shop opener models
   spawn:
     description: Teleport to the spawn
+  ban:
+    description: Ban a player

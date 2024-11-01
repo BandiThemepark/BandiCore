@@ -208,5 +208,6 @@
   "shop-opener-not-found": "No shop opener was found in a 3 block radius",
   "shop-opener-deleted": "Successfully deleted the nearest shop opener in a 3 block radius",
   "shop-not-found": "No shop was found matching the given name",
-  "shop-opener-created": "Shop opener created successfully"
+  "shop-opener-created": "Shop opener created successfully",
+  "ban-invalid-args": "Invalid arguments! Usage: /ban <player> <reason>"
 }

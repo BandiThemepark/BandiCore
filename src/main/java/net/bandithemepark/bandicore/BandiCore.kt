@@ -108,6 +108,7 @@ import net.bandithemepark.bandicore.server.essentials.coins.CoinManager
 import net.bandithemepark.bandicore.server.essentials.coins.CoinsListener
 import net.bandithemepark.bandicore.server.essentials.coins.PlayerBossBar
 import net.bandithemepark.bandicore.server.essentials.coins.PlayerBossBar.Companion.getBossBar
+import net.bandithemepark.bandicore.server.essentials.moderation.BanCommand
 import net.bandithemepark.bandicore.server.essentials.worlds.WorldCommands
 import net.bandithemepark.bandicore.server.essentials.worlds.WorldManager
 import net.bandithemepark.bandicore.server.essentials.teleport.BackCommand
@@ -263,8 +264,9 @@ class BandiCore: JavaPlugin() {
         // Things that need to be done for players who are already online (Like when a reload happens)
         forOnlinePlayers()
 
-        // Registering the messaging channel for sending players
+        // Registering the messaging channel for sending players and banning
         Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord")
+        Bukkit.getMessenger().registerOutgoingPluginChannel(this, "bandicore:ban")
     }
 
     override fun onDisable() {
@@ -338,6 +340,7 @@ class BandiCore: JavaPlugin() {
         getCommand("react")!!.setExecutor(ReactCommand())
         getCommand("shopopener")!!.setExecutor(ShopOpenerCommand())
         getCommand("spawn")!!.setExecutor(SpawnCommand())
+        getCommand("ban")!!.setExecutor(BanCommand())
     }
 
     private fun registerEvents() {
