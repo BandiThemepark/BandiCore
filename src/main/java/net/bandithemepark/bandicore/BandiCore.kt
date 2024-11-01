@@ -109,6 +109,7 @@ import net.bandithemepark.bandicore.server.essentials.coins.CoinsListener
 import net.bandithemepark.bandicore.server.essentials.coins.PlayerBossBar
 import net.bandithemepark.bandicore.server.essentials.coins.PlayerBossBar.Companion.getBossBar
 import net.bandithemepark.bandicore.server.essentials.moderation.BanCommand
+import net.bandithemepark.bandicore.server.essentials.moderation.UnBanCommand
 import net.bandithemepark.bandicore.server.essentials.worlds.WorldCommands
 import net.bandithemepark.bandicore.server.essentials.worlds.WorldManager
 import net.bandithemepark.bandicore.server.essentials.teleport.BackCommand
@@ -341,6 +342,7 @@ class BandiCore: JavaPlugin() {
         getCommand("shopopener")!!.setExecutor(ShopOpenerCommand())
         getCommand("spawn")!!.setExecutor(SpawnCommand())
         getCommand("ban")!!.setExecutor(BanCommand())
+        getCommand("unban")!!.setExecutor(UnBanCommand())
     }
 
     private fun registerEvents() {

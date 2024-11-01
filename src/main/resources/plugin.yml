@@ -183,3 +183,5 @@ commands:
     description: Teleport to the spawn
   ban:
     description: Ban a player
+  unban:
+    description: Unban a player

@@ -10,38 +10,40 @@ import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
+import java.util.*
 
-class BanCommand: CommandExecutor {
+class UnBanCommand: CommandExecutor {
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
-        if (!command.name.equals("ban", true)) return false
+        if (!command.name.equals("unban", true)) return false
         if (!sender.hasPermission("bandithemepark.crew")) {
             sender.sendTranslatedMessage("no-permission", BandiColors.RED.toString())
             return true
         }
 
-        if(args.size < 2) {
-            sender.sendTranslatedMessage("ban-invalid-args", BandiColors.RED.toString())
+        if(args.isEmpty()) {
+            sender.sendTranslatedMessage("unban-invalid-args", BandiColors.RED.toString())
             return true
         }
 
-        val target = Bukkit.getPlayer(args[0])
-
-        if(target == null) {
-            sender.sendTranslatedMessage("player-not-online", BandiColors.RED.toString())
+        try {
+            UUID.fromString(args[0])
+        } catch (e: IllegalArgumentException) {
+            sender.sendTranslatedMessage("invalid-uuid", BandiColors.RED.toString())
             return true
         }
 
-        val reason = args.sliceArray(1 until args.size).joinToString(" ")
+        val uuid = UUID.fromString(args[0])
+
         val messageJson = JsonObject()
-        messageJson.addProperty("action", "ban")
-        messageJson.addProperty("uuid", target.uniqueId.toString())
-        messageJson.addProperty("reason", reason)
+        messageJson.addProperty("action", "unban")
+        messageJson.addProperty("uuid", uuid.toString())
 
         val out = ByteStreams.newDataOutput()
         out.writeUTF(messageJson.toString())
         Bukkit.getServer().sendPluginMessage(BandiCore.instance, "bandicore:ban", out.toByteArray())
 
-        sender.sendTranslatedMessage("ban-success", BandiColors.GREEN.toString(), MessageReplacement("player", target.name))
+        val offlinePlayer = Bukkit.getOfflinePlayer(uuid)
+        sender.sendTranslatedMessage("unban-success", BandiColors.GREEN.toString(), MessageReplacement("uuid", uuid.toString()), MessageReplacement("username", offlinePlayer.name ?: "unknown player"))
 
         return false
     }

@@ -209,5 +209,9 @@
   "shop-opener-deleted": "Successfully deleted the nearest shop opener in a 3 block radius",
   "shop-not-found": "No shop was found matching the given name",
   "shop-opener-created": "Shop opener created successfully",
-  "ban-invalid-args": "Invalid arguments! Usage: /ban <player> <reason>"
+  "ban-invalid-args": "Invalid arguments! Usage: /ban <player> <reason>",
+  "ban-success": "Successfully banned %player%",
+  "unban-invalid-args": "Invalid arguments! Usage: /unban <uuid>",
+  "unban-success": "Successfully unbanned player with UUID %uuid% (%username%)",
+  "invalid-uuid": "The UUID you entered was invalid"
 }
