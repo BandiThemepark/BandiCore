@@ -1,5 +1,9 @@
 package net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types
 
+import com.comphenix.protocol.PacketType
+import com.comphenix.protocol.events.ListenerPriority
+import com.comphenix.protocol.events.PacketAdapter
+import com.comphenix.protocol.events.PacketEvent
 import com.mojang.authlib.GameProfile
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.network.audioserver.ride.SpecialAudioManagement
@@ -20,6 +24,8 @@ import net.bandithemepark.bandicore.util.entity.event.SeatEnterEvent
 import net.bandithemepark.bandicore.util.entity.event.SeatExitEvent
 import net.bandithemepark.bandicore.util.entity.marker.PacketEntityMarker
 import net.bandithemepark.bandicore.util.math.Quaternion
+import net.minecraft.network.protocol.game.ClientboundPlayerInfoRemovePacket
+import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.World
@@ -243,6 +249,24 @@ class SeatAttachment: AttachmentType("seat", "ATTRACTION_ID, REGION_ID?, HARNESS
                         if(seat.attraction?.rideOP?.operator != null) harness.unMarkFor(seat.attraction!!.rideOP!!.operator!!)
                     } else {
                         harness.harnessPosition -= 0.5
+                    }
+                }
+            }
+        }
+
+        init {
+            startTabListListener()
+        }
+
+        private fun startTabListListener() {
+            object: PacketAdapter(BandiCore.instance, ListenerPriority.NORMAL, PacketType.Play.Server.PLAYER_INFO_REMOVE) {
+                override fun onPacketSending(event: PacketEvent) {
+                    val packet = event.packet.handle as ClientboundPlayerInfoRemovePacket
+
+                    hiddenPlayers.forEach {
+                        if(packet.profileIds.contains(it.uniqueId)) {
+                            packet.profileIds.remove(it.uniqueId)
+                        }
                     }
                 }
             }
