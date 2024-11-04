@@ -4,6 +4,7 @@ import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.network.backend.BackendAchievement
 import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.chat.BandiColors
+import net.bandithemepark.bandicore.util.debug.Reloadable
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -15,7 +16,7 @@ import java.lang.Exception
 import java.lang.NullPointerException
 import java.util.*
 
-class AchievementManager {
+class AchievementManager: Reloadable {
     val categories = mutableListOf<AchievementCategory>()
     val ownedAchievements = hashMapOf<Player, MutableList<Achievement>>()
 
@@ -138,7 +139,7 @@ class AchievementManager {
             }
 
             val totalAchievements = categories.sumOf { it.achievements.size }
-            Bukkit.getLogger().info("Loaded $totalAchievements achievements")
+            Util.debug("Achievements", "Loaded $totalAchievements achievements")
         }
     }
 
@@ -152,5 +153,13 @@ class AchievementManager {
         fun onQuit(event: PlayerQuitEvent) {
             BandiCore.instance.server.achievementManager.unloadOf(event.player)
         }
+    }
+
+    override fun reload() {
+        categories.clear()
+        setup()
+
+        ownedAchievements.clear()
+        Bukkit.getOnlinePlayers().forEach { BandiCore.instance.server.achievementManager.loadOf(it) }
     }
 }

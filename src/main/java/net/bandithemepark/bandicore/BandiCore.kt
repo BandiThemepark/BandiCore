@@ -219,6 +219,7 @@ class BandiCore: JavaPlugin() {
 
         // Setup achievements after triggers have been registered
         server.achievementManager.setup()
+        server.achievementManager.register("achievements")
 
         // Everything related to cosmetics and shops
         registerCosmeticTypes()
