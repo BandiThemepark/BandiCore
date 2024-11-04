@@ -107,5 +107,7 @@
   "shop-purchase-success": "You have successfully purchased %cosmetic%. Use /cosmetic to equip it",
   "shop-not-enough-coins": "You do not have enough coins to purchase this cosmetic!",
   "open-shop": "Press F to open shop",
-  "spawn-not-set": "No spawn has been set yet. Blame the crew for this"
+  "spawn-not-set": "No spawn has been set yet. Blame the crew for this",
+  "cosmetics": "Cosmetics",
+  "attractions": "Attractions"
 }
