@@ -208,6 +208,15 @@ class ItemFactory {
         return ItemFactory(itemStack.type)
     }
 
+    /**
+     * Adds an enchantment and hides it, so that the item glows
+     */
+    fun addGlow(): ItemFactory {
+        itemMeta!!.addItemFlags(ItemFlag.HIDE_ENCHANTS)
+        itemMeta!!.addEnchant(org.bukkit.enchantments.Enchantment.SILK_TOUCH, 1, true)
+        return this
+    }
+
     companion object {
         /**
          * Store persistent data on this ItemStack
