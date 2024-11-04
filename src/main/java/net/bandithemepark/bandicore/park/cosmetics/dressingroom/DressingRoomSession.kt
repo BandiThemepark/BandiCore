@@ -164,6 +164,7 @@ class DressingRoomSession(
             stopCamera()
             removeCustomPlayer()
             removeCamera()
+            player.sendActionBar(Component.text(" "))
         }, 10)
 
         if(previewShop != null) {
