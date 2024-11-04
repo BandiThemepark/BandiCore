@@ -37,6 +37,7 @@ class DressingRoomSession(
 ) {
     val beforeGameMode = player.gameMode
     val beforeLocation = player.location.clone()
+    val startedAt = System.currentTimeMillis()
 
     lateinit var bukkitEntity: ArmorStand
     lateinit var vehicleEntity: PacketEntityArmorStand
@@ -206,6 +207,8 @@ class DressingRoomSession(
     }
 
     fun onTick() {
+        if(System.currentTimeMillis() - startedAt < 600) return
+
         val message = "JUMP to equip | CROUCH to exit"
         player.sendActionBar(Util.color("${Util.getBackgroundText(message)}<${BandiColors.YELLOW}>$message"))
     }
