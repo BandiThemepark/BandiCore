@@ -18,19 +18,22 @@ import org.bukkit.inventory.EquipmentSlot
 class JoinItems: Listener {
     @EventHandler
     fun onJoin(event: PlayerJoinEvent) {
-        event.player.inventory.setItem(3, ItemFactory(Material.ENDER_CHEST)
+        event.player.inventory.setItem(3, ItemFactory(Material.PAPER)
             .setDisplayName(Util.color("<!i><${BandiColors.YELLOW}>${event.player.getTranslatedMessage("cosmetics")}"))
             .setKeyInPersistentStorage("join_item", "cosmetics")
+            .setCustomModelData(1022)
             .build())
 
-        event.player.inventory.setItem(4, ItemFactory(Material.NETHER_STAR)
+        event.player.inventory.setItem(4, ItemFactory(Material.PAPER)
             .setDisplayName(Util.color("<!i><${BandiColors.YELLOW}>BandiThemepark"))
             .setKeyInPersistentStorage("join_item", "bandithemepark")
+            .setCustomModelData(1023)
             .build())
 
-        event.player.inventory.setItem(5, ItemFactory(Material.MINECART)
+        event.player.inventory.setItem(5, ItemFactory(Material.PAPER)
             .setDisplayName(Util.color("<!i><${BandiColors.YELLOW}>${event.player.getTranslatedMessage("attractions")}"))
             .setKeyInPersistentStorage("join_item", "attractions")
+            .setCustomModelData(1024)
             .build())
     }
 
