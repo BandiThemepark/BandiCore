@@ -20,6 +20,16 @@ class DressingRoomColorMenu(val player: Player, val ownedCosmetic: OwnedCosmetic
     var activeShadeGroup = ShadeGroup.WHITE
     var activeShadeIndex = 0
 
+    init {
+        if(ownedCosmetic.color != null) {
+            activeShadeGroup = ShadeGroup.entries.find { it.shades.contains(ownedCosmetic.color) } ?: ShadeGroup.WHITE
+            activeShadeIndex = activeShadeGroup.shades.indexOf(ownedCosmetic.color)
+            if(activeShadeIndex == -1) {
+                activeShadeIndex = 0
+            }
+        }
+    }
+
     fun open() {
         val inv = Bukkit.createInventory(this, 45, Util.color("<#FFFFFF>\uE002\uE009"))
         lastInventory = inv
