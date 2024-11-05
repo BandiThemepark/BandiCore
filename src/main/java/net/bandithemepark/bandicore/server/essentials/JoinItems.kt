@@ -48,6 +48,7 @@ class JoinItems: Listener {
 
         when(persistentData) {
             "cosmetics" -> {
+                if(DressingRoomSession.activeSessions.find { it.player == event.player } != null) return
                 DressingRoomSession(event.player, BandiCore.instance.cosmeticManager.dressingRoom)
             }
             "bandithemepark" -> {
