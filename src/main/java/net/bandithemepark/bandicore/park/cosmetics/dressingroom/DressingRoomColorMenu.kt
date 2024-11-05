@@ -1,0 +1,144 @@
+package net.bandithemepark.bandicore.park.cosmetics.dressingroom
+
+import net.bandithemepark.bandicore.park.cosmetics.OwnedCosmetic
+import net.bandithemepark.bandicore.util.ItemFactory
+import net.bandithemepark.bandicore.util.Util
+import net.bandithemepark.bandicore.util.chat.BandiColors
+import org.bukkit.Bukkit
+import org.bukkit.Color
+import org.bukkit.Material
+import org.bukkit.entity.Player
+import org.bukkit.inventory.Inventory
+import org.bukkit.inventory.InventoryHolder
+
+class DressingRoomColorMenu(val player: Player, val ownedCosmetic: OwnedCosmetic): InventoryHolder {
+    var lastInventory = Bukkit.createInventory(this, 45, Util.color("<#FFFFFF>\uE002\uE009"))
+    var activeShadeGroup = ShadeGroup.WHITE
+    var activeShadeIndex = 0
+
+    fun open() {
+        val inv = Bukkit.createInventory(this, 45, Util.color("<#FFFFFF>\uE002\uE009"))
+        lastInventory = inv
+
+        inv.setItem(10, ownedCosmetic.cosmetic.type.getDressingRoomItem(player, ShadeGroup.WHITE.templateShade, ownedCosmetic.cosmetic))
+        inv.setItem(16, ownedCosmetic.cosmetic.type.getDressingRoomItem(player, activeShadeGroup.shades[activeShadeIndex], ownedCosmetic.cosmetic))
+
+        val shadeGroupSlots = listOf(3, 4, 5, 12, 13, 14, 21, 22, 23)
+        for(shadeGroup in ShadeGroup.entries) {
+            val isSelected = shadeGroup == activeShadeGroup
+            val itemStack = ItemFactory(Material.LEATHER_HORSE_ARMOR).setArmorColor(shadeGroup.templateShade).setDisplayName(Util.color("<!i><${shadeGroup.templateShade.toHex()}>${shadeGroup.displayName}"))
+                .setLore(mutableListOf(
+                    if(isSelected) Util.color("<!i><${BandiColors.GREEN}>Selected") else Util.color("<!i><${BandiColors.LIGHT_GRAY}>Click to select"),
+                )).build()
+            inv.setItem(shadeGroupSlots[shadeGroup.ordinal], itemStack)
+        }
+
+        val shadesSlots = listOf(37, 38, 39, 40, 41, 42, 43)
+        for(shade in activeShadeGroup.shades) {
+            val isSelected = shade == activeShadeGroup.shades[activeShadeIndex]
+            val itemStack = ItemFactory(Material.LEATHER_HORSE_ARMOR).setArmorColor(shade).setDisplayName(Util.color("<!i><${BandiColors.YELLOW}>Shade #${activeShadeGroup.shades.indexOf(shade) + 1}"))
+                .setLore(mutableListOf(
+                    if(isSelected) Util.color("<!i><${BandiColors.GREEN}>Selected") else Util.color("<!i><${BandiColors.LIGHT_GRAY}>Click to select"),
+                )).build()
+            inv.setItem(shadesSlots[activeShadeGroup.shades.indexOf(shade)], itemStack)
+        }
+
+        player.openInventory(inv)
+    }
+
+    override fun getInventory(): Inventory {
+        return lastInventory
+    }
+
+    private fun Color.toHex(): String {
+        return String.format("#%02x%02x%02x", red, green, blue)
+    }
+
+    enum class ShadeGroup(
+        val displayName: String,
+        val templateShade: Color,
+        val shades: List<Color>
+    ) {
+        RED("Red", Color.fromRGB(255, 0, 0), listOf(
+            Color.fromRGB(255, 0, 0),
+            Color.fromRGB(204, 0, 0),
+            Color.fromRGB(153, 0, 0),
+            Color.fromRGB(102, 0, 0),
+            Color.fromRGB(51, 0, 0),
+            Color.fromRGB(0, 0, 0),
+        )),
+
+        ORANGE("Orange", Color.fromRGB(255, 128, 0), listOf(
+            Color.fromRGB(255, 128, 0),
+            Color.fromRGB(204, 102, 0),
+            Color.fromRGB(153, 76, 0),
+            Color.fromRGB(102, 51, 0),
+            Color.fromRGB(51, 26, 0),
+            Color.fromRGB(0, 0, 0),
+        )),
+
+        YELLOW("Yellow", Color.fromRGB(255, 255, 0), listOf(
+            Color.fromRGB(255, 255, 0),
+            Color.fromRGB(204, 204, 0),
+            Color.fromRGB(153, 153, 0),
+            Color.fromRGB(102, 102, 0),
+            Color.fromRGB(51, 51, 0),
+            Color.fromRGB(0, 0, 0),
+        )),
+
+        PINK("Pink", Color.fromRGB(255, 0, 255), listOf(
+            Color.fromRGB(255, 0, 255),
+            Color.fromRGB(204, 0, 204),
+            Color.fromRGB(153, 0, 153),
+            Color.fromRGB(102, 0, 102),
+            Color.fromRGB(51, 0, 51),
+            Color.fromRGB(0, 0, 0),
+        )),
+
+        WHITE("White", Color.fromRGB(255, 255, 255), listOf(
+            Color.fromRGB(255, 255, 255),
+            Color.fromRGB(230, 230, 230),
+            Color.fromRGB(204, 204, 204),
+            Color.fromRGB(179, 179, 179),
+            Color.fromRGB(153, 153, 153),
+            Color.fromRGB(128, 128, 128),
+            Color.fromRGB(102, 102, 102),
+        )),
+
+        GREEN("Green", Color.fromRGB(0, 255, 0), listOf(
+            Color.fromRGB(0, 255, 0),
+            Color.fromRGB(0, 204, 0),
+            Color.fromRGB(0, 153, 0),
+            Color.fromRGB(0, 102, 0),
+            Color.fromRGB(0, 51, 0),
+            Color.fromRGB(0, 0, 0),
+        )),
+
+        PURPLE("Purple", Color.fromRGB(128, 0, 255), listOf(
+            Color.fromRGB(128, 0, 255),
+            Color.fromRGB(102, 0, 204),
+            Color.fromRGB(76, 0, 153),
+            Color.fromRGB(51, 0, 102),
+            Color.fromRGB(26, 0, 51),
+            Color.fromRGB(0, 0, 0),
+        )),
+
+        BLUE("Blue", Color.fromRGB(0, 0, 255), listOf(
+            Color.fromRGB(0, 0, 255),
+            Color.fromRGB(0, 0, 204),
+            Color.fromRGB(0, 0, 153),
+            Color.fromRGB(0, 0, 102),
+            Color.fromRGB(0, 0, 51),
+            Color.fromRGB(0, 0, 0),
+        )),
+
+        LIGHT_BLUE("Light Blue", Color.fromRGB(0, 255, 255), listOf(
+            Color.fromRGB(0, 255, 255),
+            Color.fromRGB(0, 204, 204),
+            Color.fromRGB(0, 153, 153),
+            Color.fromRGB(0, 102, 102),
+            Color.fromRGB(0, 51, 51),
+            Color.fromRGB(0, 0, 0),
+        )),
+    }
+}

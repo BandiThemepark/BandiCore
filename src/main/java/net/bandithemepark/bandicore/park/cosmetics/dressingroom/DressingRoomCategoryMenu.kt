@@ -127,12 +127,18 @@ class DressingRoomCategoryMenu(val player: Player, val category: CosmeticType): 
                     val uuid = UUID.fromString(uuidString)
                     val cosmetic = (event.whoClicked as Player).getOwnedCosmetics()!!.ownedCosmetics.find { it.cosmetic.id == uuid } ?: return
 
-                    val dressingRoomSession = DressingRoomSession.activeSessions.find { it.player == event.whoClicked } ?: return
-                    dressingRoomSession.equipCosmetic(cosmetic)
+                    if(cosmetic.cosmetic.type.isColorable()) {
+                        Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
+                            DressingRoomColorMenu(event.whoClicked as Player, cosmetic).open()
+                        })
+                    } else {
+                        val dressingRoomSession = DressingRoomSession.activeSessions.find { it.player == event.whoClicked } ?: return
+                        dressingRoomSession.equipCosmetic(cosmetic)
 
-                    Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
-                        event.whoClicked.closeInventory()
-                    })
+                        Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
+                            event.whoClicked.closeInventory()
+                        })
+                    }
                 }
             }
         }
