@@ -42,7 +42,7 @@ class DressingRoomColorMenu(val player: Player, val ownedCosmetic: OwnedCosmetic
         val shadeGroupSlots = listOf(3, 4, 5, 12, 13, 14, 21, 22, 23)
         for(shadeGroup in ShadeGroup.entries) {
             val isSelected = shadeGroup == activeShadeGroup
-            val itemStack = ItemFactory(Material.LEATHER_HORSE_ARMOR).setArmorColor(shadeGroup.templateShade).setDisplayName(Util.color("<!i><${shadeGroup.templateShade.toHex()}>${shadeGroup.displayName}"))
+            val itemStack = ItemFactory(Material.LEATHER_HORSE_ARMOR).setArmorColor(shadeGroup.templateShade).setCustomModelData(1002).setDisplayName(Util.color("<!i><${shadeGroup.templateShade.toHex()}>${shadeGroup.displayName}"))
                 .setLore(mutableListOf(
                     if(isSelected) Util.color("<!i><${BandiColors.GREEN}>Selected") else Util.color("<!i><${BandiColors.LIGHT_GRAY}>Click to select"),
                 )).build()
@@ -52,7 +52,7 @@ class DressingRoomColorMenu(val player: Player, val ownedCosmetic: OwnedCosmetic
         val shadesSlots = listOf(37, 38, 39, 40, 41, 42, 43)
         for(shade in activeShadeGroup.shades) {
             val isSelected = shade == activeShadeGroup.shades[activeShadeIndex]
-            val itemStack = ItemFactory(Material.LEATHER_HORSE_ARMOR).setArmorColor(shade).setDisplayName(Util.color("<!i><${BandiColors.YELLOW}>Shade #${activeShadeGroup.shades.indexOf(shade) + 1}"))
+            val itemStack = ItemFactory(Material.LEATHER_HORSE_ARMOR).setArmorColor(shade).setCustomModelData(1002).setDisplayName(Util.color("<!i><${BandiColors.YELLOW}>Shade #${activeShadeGroup.shades.indexOf(shade) + 1}"))
                 .setLore(mutableListOf(
                     if(isSelected) Util.color("<!i><${BandiColors.GREEN}>Selected") else Util.color("<!i><${BandiColors.LIGHT_GRAY}>Click to select"),
                 )).build()
