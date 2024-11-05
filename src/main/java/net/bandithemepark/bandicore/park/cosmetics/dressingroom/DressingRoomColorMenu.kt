@@ -96,7 +96,7 @@ class DressingRoomColorMenu(val player: Player, val ownedCosmetic: OwnedCosmetic
                     session.activeShadeIndex = 0
                     Bukkit.getScheduler().runTask(BandiCore.instance, Runnable { session.open() })
                 }
-                in 37..42 -> {
+                in 37..43 -> {
                     val shade = session.activeShadeGroup.shades[event.slot - 37]
                     session.activeShadeIndex = session.activeShadeGroup.shades.indexOf(shade)
                     Bukkit.getScheduler().runTask(BandiCore.instance, Runnable { session.open() })
