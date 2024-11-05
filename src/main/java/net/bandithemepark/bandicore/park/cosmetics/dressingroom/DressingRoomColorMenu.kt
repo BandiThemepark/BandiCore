@@ -1,5 +1,6 @@
 package net.bandithemepark.bandicore.park.cosmetics.dressingroom
 
+import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.park.cosmetics.OwnedCosmetic
 import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.Util
@@ -8,6 +9,9 @@ import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.Material
 import org.bukkit.entity.Player
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
 
@@ -54,6 +58,48 @@ class DressingRoomColorMenu(val player: Player, val ownedCosmetic: OwnedCosmetic
         return String.format("#%02x%02x%02x", red, green, blue)
     }
 
+    class Events: Listener {
+        @EventHandler
+        fun onInventoryClick(event: InventoryClickEvent) {
+            if (event.clickedInventory?.holder !is DressingRoomColorMenu) return
+            event.isCancelled = true
+
+            val session = (event.clickedInventory!!.holder as DressingRoomColorMenu)
+            when(event.slot) {
+                in 3..5 -> {
+                    val shadeGroup = ShadeGroup.entries[event.slot - 3]
+                    session.activeShadeGroup = shadeGroup
+                    session.activeShadeIndex = 0
+                    Bukkit.getScheduler().runTask(BandiCore.instance, Runnable { session.open() })
+                }
+                in 12..14 -> {
+                    val shadeGroup = ShadeGroup.entries[event.slot - 9]
+                    session.activeShadeGroup = shadeGroup
+                    session.activeShadeIndex = 0
+                    Bukkit.getScheduler().runTask(BandiCore.instance, Runnable { session.open() })
+                }
+                in 21..23 -> {
+                    val shadeGroup = ShadeGroup.entries[event.slot - 15]
+                    session.activeShadeGroup = shadeGroup
+                    session.activeShadeIndex = 0
+                    Bukkit.getScheduler().runTask(BandiCore.instance, Runnable { session.open() })
+                }
+                in 37..42 -> {
+                    val shade = session.activeShadeGroup.shades[event.slot - 37]
+                    session.activeShadeIndex = session.activeShadeGroup.shades.indexOf(shade)
+                    Bukkit.getScheduler().runTask(BandiCore.instance, Runnable { session.open() })
+                }
+                16 -> {
+                    val dressingRoomSession = DressingRoomSession.activeSessions.find { it.player == event.whoClicked } ?: return
+                    session.ownedCosmetic.color = session.activeShadeGroup.shades[session.activeShadeIndex]
+                    dressingRoomSession.equipCosmetic(session.ownedCosmetic)
+
+                    Bukkit.getScheduler().runTask(BandiCore.instance, Runnable { event.whoClicked.closeInventory() })
+                }
+            }
+        }
+    }
+
     enum class ShadeGroup(
         val displayName: String,
         val templateShade: Color,
@@ -65,6 +111,7 @@ class DressingRoomColorMenu(val player: Player, val ownedCosmetic: OwnedCosmetic
             Color.fromRGB(153, 0, 0),
             Color.fromRGB(102, 0, 0),
             Color.fromRGB(51, 0, 0),
+            Color.fromRGB(25, 0, 0),
             Color.fromRGB(0, 0, 0),
         )),
 
@@ -74,6 +121,7 @@ class DressingRoomColorMenu(val player: Player, val ownedCosmetic: OwnedCosmetic
             Color.fromRGB(153, 76, 0),
             Color.fromRGB(102, 51, 0),
             Color.fromRGB(51, 26, 0),
+            Color.fromRGB(25, 13, 0),
             Color.fromRGB(0, 0, 0),
         )),
 
@@ -83,6 +131,7 @@ class DressingRoomColorMenu(val player: Player, val ownedCosmetic: OwnedCosmetic
             Color.fromRGB(153, 153, 0),
             Color.fromRGB(102, 102, 0),
             Color.fromRGB(51, 51, 0),
+            Color.fromRGB(25, 25, 0),
             Color.fromRGB(0, 0, 0),
         )),
 
@@ -92,6 +141,7 @@ class DressingRoomColorMenu(val player: Player, val ownedCosmetic: OwnedCosmetic
             Color.fromRGB(153, 0, 153),
             Color.fromRGB(102, 0, 102),
             Color.fromRGB(51, 0, 51),
+            Color.fromRGB(25, 0, 25),
             Color.fromRGB(0, 0, 0),
         )),
 
@@ -111,6 +161,7 @@ class DressingRoomColorMenu(val player: Player, val ownedCosmetic: OwnedCosmetic
             Color.fromRGB(0, 153, 0),
             Color.fromRGB(0, 102, 0),
             Color.fromRGB(0, 51, 0),
+            Color.fromRGB(0, 25, 0),
             Color.fromRGB(0, 0, 0),
         )),
 
@@ -120,6 +171,7 @@ class DressingRoomColorMenu(val player: Player, val ownedCosmetic: OwnedCosmetic
             Color.fromRGB(76, 0, 153),
             Color.fromRGB(51, 0, 102),
             Color.fromRGB(26, 0, 51),
+            Color.fromRGB(13, 0, 25),
             Color.fromRGB(0, 0, 0),
         )),
 
@@ -129,6 +181,7 @@ class DressingRoomColorMenu(val player: Player, val ownedCosmetic: OwnedCosmetic
             Color.fromRGB(0, 0, 153),
             Color.fromRGB(0, 0, 102),
             Color.fromRGB(0, 0, 51),
+            Color.fromRGB(0, 0, 25),
             Color.fromRGB(0, 0, 0),
         )),
 
@@ -138,6 +191,7 @@ class DressingRoomColorMenu(val player: Player, val ownedCosmetic: OwnedCosmetic
             Color.fromRGB(0, 153, 153),
             Color.fromRGB(0, 102, 102),
             Color.fromRGB(0, 51, 51),
+            Color.fromRGB(0, 25, 25),
             Color.fromRGB(0, 0, 0),
         )),
     }
