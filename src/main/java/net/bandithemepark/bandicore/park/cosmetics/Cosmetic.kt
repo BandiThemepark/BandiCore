@@ -32,8 +32,10 @@ class Cosmetic(
     fun getItemStackDescription(): MutableList<Component> {
         val components = mutableListOf<Component>()
 
-        if(tags.isNotEmpty()) {
-            for(tag in tags) {
+        val tempTags = tags.toMutableList()
+        if(type.isColorable()) tempTags.add(CosmeticTag.COLORABLE)
+        if(tempTags.isNotEmpty()) {
+            for(tag in tempTags) {
                 components.add(Util.color("<!i><${BandiColors.GREEN}>${tag.displayName}"))
             }
 
@@ -51,8 +53,10 @@ class Cosmetic(
         val components = mutableListOf<Component>()
 
         // Tags
-        if(tags.isNotEmpty()) {
-            for(tag in tags) {
+        val tempTags = tags.toMutableList()
+        if(type.isColorable()) tempTags.add(CosmeticTag.COLORABLE)
+        if(tempTags.isNotEmpty()) {
+            for(tag in tempTags) {
                 components.add(Util.color("<!i><${BandiColors.GREEN}>${tag.displayName}"))
             }
             components.add(Util.color(" "))
