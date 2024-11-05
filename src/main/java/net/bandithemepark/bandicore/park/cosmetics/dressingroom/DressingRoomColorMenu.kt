@@ -1,6 +1,7 @@
 package net.bandithemepark.bandicore.park.cosmetics.dressingroom
 
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.park.cosmetics.CosmeticType
 import net.bandithemepark.bandicore.park.cosmetics.OwnedCosmetic
 import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.Util
@@ -36,6 +37,7 @@ class DressingRoomColorMenu(val player: Player, val ownedCosmetic: OwnedCosmetic
 
         inv.setItem(10, ownedCosmetic.cosmetic.type.getDressingRoomItem(player, ShadeGroup.WHITE.templateShade, ownedCosmetic.cosmetic))
         inv.setItem(16, ownedCosmetic.cosmetic.type.getDressingRoomItem(player, activeShadeGroup.shades[activeShadeIndex], ownedCosmetic.cosmetic))
+        inv.setItem(19, ItemFactory(Material.PAPER).setDisplayName(Util.color("<!i><${BandiColors.YELLOW}>Back")).setCustomModelData(1004).build())
 
         val shadeGroupSlots = listOf(3, 4, 5, 12, 13, 14, 21, 22, 23)
         for(shadeGroup in ShadeGroup.entries) {
@@ -105,6 +107,11 @@ class DressingRoomColorMenu(val player: Player, val ownedCosmetic: OwnedCosmetic
                     dressingRoomSession.equipCosmetic(session.ownedCosmetic)
 
                     Bukkit.getScheduler().runTask(BandiCore.instance, Runnable { event.whoClicked.closeInventory() })
+                }
+                19 -> {
+                    Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
+                        DressingRoomCategoryMenu(event.whoClicked as Player, session.ownedCosmetic.cosmetic.type).open(0)
+                    })
                 }
             }
         }
