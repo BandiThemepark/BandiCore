@@ -1,7 +1,6 @@
 package net.bandithemepark.bandicore.park.cosmetics.dressingroom
 
 import net.bandithemepark.bandicore.BandiCore
-import net.bandithemepark.bandicore.park.cosmetics.CosmeticType
 import net.bandithemepark.bandicore.park.cosmetics.OwnedCosmetic
 import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.Util
@@ -17,7 +16,7 @@ import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
 
 class DressingRoomColorMenu(val player: Player, val ownedCosmetic: OwnedCosmetic): InventoryHolder {
-    var lastInventory = Bukkit.createInventory(this, 45, Util.color("<#FFFFFF>\uE002\uE009"))
+    var lastInventory = Bukkit.createInventory(this, 45, Util.color("<#FFFFFF>\uE002\uE041"))
     var activeShadeGroup = ShadeGroup.WHITE
     var activeShadeIndex = 0
 
@@ -32,7 +31,7 @@ class DressingRoomColorMenu(val player: Player, val ownedCosmetic: OwnedCosmetic
     }
 
     fun open() {
-        val inv = Bukkit.createInventory(this, 45, Util.color("<#FFFFFF>\uE002\uE009"))
+        val inv = Bukkit.createInventory(this, 45, Util.color("<#FFFFFF>\uE002\uE041"))
         lastInventory = inv
 
         inv.setItem(10, ownedCosmetic.cosmetic.type.getDressingRoomItem(player, ShadeGroup.WHITE.templateShade, ownedCosmetic.cosmetic))
