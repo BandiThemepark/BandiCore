@@ -4,6 +4,7 @@ import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.network.audioserver.events.AudioServerConnectEvent
 import net.bandithemepark.bandicore.park.attractions.ridecounter.RidecounterIncreaseEvent
 import net.bandithemepark.bandicore.park.attractions.rideop.events.RideDispatchEvent
+import net.bandithemepark.bandicore.park.cosmetics.dressingroom.DressingRoomEnterEvent
 import net.bandithemepark.bandicore.server.achievements.AchievementTriggerType
 import net.bandithemepark.bandicore.server.regions.events.PlayerPriorityRegionEnterEvent
 import org.bukkit.Bukkit
@@ -39,6 +40,13 @@ class AchievementTriggerSpecial: AchievementTriggerType("SPECIAL"), Listener {
     @EventHandler
     fun onRideDispatch(event: RideDispatchEvent) {
         listeners.filter { it.value == "dispatch" }.forEach { (achievement) ->
+            achievement.give(event.player)
+        }
+    }
+
+    @EventHandler
+    fun onDressingRoomEnter(event: DressingRoomEnterEvent) {
+        listeners.filter { it.value == "dressingroom" }.forEach { (achievement) ->
             achievement.give(event.player)
         }
     }
