@@ -229,6 +229,8 @@ class DressingRoomSession(
         // Update custom player
         if(cosmetic.type.id == "hat") {
             customPlayer.setHat(cosmetic.type.getDressingRoomItem(player, ownedCosmetic.color, cosmetic))
+            updateTitleHeight()
+            updateNameTagHeight()
         } else if(cosmetic.type.id == "handheld") {
             customPlayer.setHandheld(cosmetic.type.getDressingRoomItem(player, ownedCosmetic.color, cosmetic))
         } else if(cosmetic.type.id == "title") {
@@ -251,6 +253,8 @@ class DressingRoomSession(
         // Update custom player
         if(typeId == "hat") {
             customPlayer.setHat(null)
+            updateTitleHeight()
+            updateNameTagHeight()
         } else if(typeId == "handheld") {
             customPlayer.setHandheld(null)
         } else if(typeId == "title") {
@@ -309,6 +313,16 @@ class DressingRoomSession(
         if(titleDisplay == null) return
         titleDisplay!!.deSpawn()
         titleDisplay = null
+    }
+
+    private fun updateTitleHeight() {
+        if(titleDisplay == null) return
+        titleDisplay!!.teleport(customPlayer.animatronic.basePosition.toLocation(player.world).add(0.0, 2.0 + player.getNameTag()!!.heightOffset + PlayerNameTag.TITLE_HEIGHT_OFFSET, 0.0))
+    }
+
+    private fun updateNameTagHeight() {
+        if(textDisplay == null) return
+        textDisplay!!.teleport(customPlayer.animatronic.basePosition.toLocation(player.world).add(0.0, 2.0 + player.getNameTag()!!.heightOffset, 0.0))
     }
 
     companion object {
