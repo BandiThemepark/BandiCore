@@ -164,10 +164,10 @@ class ItemFactory {
 
     fun setAttributesHidden(bool: Boolean): ItemFactory {
         if (bool) {
-            itemMeta!!.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+            itemMeta!!.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DYE)
             if(!itemMeta!!.hasAttributeModifiers()) itemMeta!!.addAttributeModifier(Attribute.GENERIC_LUCK, AttributeModifier(NamespacedKey(BandiCore.instance, "luck"), 0.0, AttributeModifier.Operation.ADD_NUMBER))
         }
-        else itemMeta!!.removeItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+        else itemMeta!!.removeItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DYE)
         return this
     }
 
