@@ -50,6 +50,8 @@ class DressingRoomSession(
         setupCustomPlayer()
         startView()
 
+        Bukkit.getServer().pluginManager.callEvent(DressingRoomEnterEvent(player))
+
         activeSessions.add(this)
     }
 
