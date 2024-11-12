@@ -6,6 +6,7 @@ import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
+import org.bukkit.Color
 import org.bukkit.Location
 import org.bukkit.craftbukkit.entity.CraftPlayer
 import org.bukkit.entity.Player
@@ -206,5 +207,17 @@ object Util {
         var newText = ""
         for(character in text.lowercase()) newText += smallCharacters[characters.indexOf(character)]
         return newText
+    }
+
+    /**
+     * Converts a hex string to a Bukkit Color
+     * @param hex Hex string to convert
+     * @return Bukkit Color
+     */
+    fun hexToColor(hex: String): Color {
+        val r = hex.substring(1, 3).toInt(16)
+        val g = hex.substring(3, 5).toInt(16)
+        val b = hex.substring(5, 7).toInt(16)
+        return Color.fromRGB(r, g, b)
     }
 }
