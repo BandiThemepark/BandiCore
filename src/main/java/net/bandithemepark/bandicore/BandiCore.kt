@@ -485,6 +485,6 @@ class BandiCore: JavaPlugin() {
     }
 
     private fun registerTests() {
-        Balloon(ItemFactory(Material.RED_WOOL).build(), Vector(-89.5, 29.0, -125.5), Bukkit.getWorld("world")!!).register("balloon")
+        Balloon(ItemFactory(Material.RED_WOOL).build(), Bukkit.getWorld("world")!!).register("balloon")
     }
 }
