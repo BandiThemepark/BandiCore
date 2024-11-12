@@ -463,6 +463,7 @@ class BandiCore: JavaPlugin() {
         TitleCosmetic().register()
         BackpackCosmetic().register()
         BootsCosmetic().register()
+        LeggingsCosmetic().register()
     }
 
     private fun registerCosmeticRequirementTypes() {

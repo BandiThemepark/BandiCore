@@ -65,9 +65,18 @@ class DressingRoomMenu: InventoryHolder {
                 Util.color("<!i><${BandiColors.LIGHT_GRAY}>protect your feet!")
             )).setCustomModelData(1020).build()
         inv.setItem(18, bootsItem)
-        inv.setItem(19, bootsItem)
         inv.setItem(27, bootsItem)
+        inv.setItem(19, bootsItem)
         inv.setItem(28, bootsItem)
+
+        val leggingsItem = ItemFactory(Material.PAPER).setDisplayName(Util.color("<!i><${BandiColors.YELLOW}>Leggings")).setLore(mutableListOf(
+                Util.color("<!i><${BandiColors.LIGHT_GRAY}>Choose a stylish pair to"),
+                Util.color("<!i><${BandiColors.LIGHT_GRAY}>protect your legs!")
+            )).setCustomModelData(1020).build()
+        inv.setItem(20, leggingsItem)
+        inv.setItem(21, leggingsItem)
+        inv.setItem(29, leggingsItem)
+        inv.setItem(30, leggingsItem)
 
         player.openInventory(inv)
     }
@@ -103,6 +112,12 @@ class DressingRoomMenu: InventoryHolder {
             if(event.slot == 18 || event.slot == 19 || event.slot == 27 || event.slot == 28) {
                 Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
                     DressingRoomCategoryMenu(event.whoClicked as Player, CosmeticType.getType("boots")!!).open(0)
+                })
+            }
+
+            if(event.slot == 20 || event.slot == 21 || event.slot == 29 || event.slot == 30) {
+                Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
+                    DressingRoomCategoryMenu(event.whoClicked as Player, CosmeticType.getType("leggings")!!).open(0)
                 })
             }
         }
