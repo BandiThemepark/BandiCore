@@ -2,6 +2,7 @@ package net.bandithemepark.bandicore.server
 
 import com.google.common.io.ByteStreams
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.server.essentials.JoinItems
 import net.bandithemepark.bandicore.server.mode.ServerMode
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedMessage
 import net.bandithemepark.bandicore.server.translations.MessageReplacement
@@ -41,6 +42,10 @@ class BandiThemeParkCommand: CommandExecutor, TabCompleter, Listener {
                     out.writeUTF("development")
                 }
                 sender.sendPluginMessage(BandiCore.instance, "BungeeCord", out.toByteArray())
+            } else if(args[0].equals("items", true)) {
+                if(sender !is Player) return false
+                JoinItems.giveJoinItems(sender)
+                BandiCore.instance.cosmeticManager.giveEquippedCosmetics(sender)
             } else {
                 sendHelp(sender)
             }
@@ -104,6 +109,7 @@ class BandiThemeParkCommand: CommandExecutor, TabCompleter, Listener {
         sender.sendMessage(Util.color("<${BandiColors.RED}>/bandithemepark help"))
         sender.sendMessage(Util.color("<${BandiColors.RED}>/bandithemepark restart"))
         sender.sendMessage(Util.color("<${BandiColors.RED}>/bandithemepark switch"))
+        sender.sendMessage(Util.color("<${BandiColors.RED}>/bandithemepark items"))
         sender.sendMessage(Util.color("<${BandiColors.RED}>/bandithemepark servermode <mode>"))
         sender.sendMessage(Util.color("<${BandiColors.RED}>/bandithemepark debug <option>"))
         sender.sendMessage(Util.color("<${BandiColors.RED}>/bandithemepark test <option>"))
@@ -114,7 +120,7 @@ class BandiThemeParkCommand: CommandExecutor, TabCompleter, Listener {
         if(!command.name.equals("bandithemepark", true)) return null
 
         if(args.size == 1) {
-            return Util.getTabCompletions(args[0], listOf("restart", "servermode", "debug", "help", "test", "reload", "switch"))
+            return Util.getTabCompletions(args[0], listOf("restart", "servermode", "debug", "help", "test", "reload", "switch", "items"))
         } else if(args.size == 2) {
             if(args[0].equals("servermode", true)) {
                 return Util.getTabCompletions(args[1], ServerMode.getAllIds())

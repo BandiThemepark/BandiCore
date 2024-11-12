@@ -145,19 +145,24 @@ class CosmeticManager: Reloadable {
         BackendCosmetic.updateOwned(player, equipped.cosmetic, equipped = false) { }
     }
 
+    /**
+     * Re-equips all equipped cosmetics for a player
+     */
+    fun giveEquippedCosmetics(player: Player) {
+        val ownedCosmetic = ownedCosmetics.find { it.owner == player } ?: return
+
+        CosmeticType.types.forEach { it.onJoin(player) }
+
+        ownedCosmetic.ownedCosmetics.forEach {
+            if(it.equipped) it.cosmetic.type.onEquip(player, it.color, it.cosmetic)
+        }
+    }
+
     class Events: Listener {
         @EventHandler(priority = EventPriority.HIGHEST)
         fun onJoin(event: PlayerJoinEvent) {
             BandiCore.instance.cosmeticManager.loadOwnedCosmetics(event.player) {
-                val ownedCosmetics = BandiCore.instance.cosmeticManager.ownedCosmetics.find { it.owner == event.player } ?: return@loadOwnedCosmetics
-
-                CosmeticType.types.forEach { it.onJoin(event.player) }
-
-                ownedCosmetics.ownedCosmetics.forEach {
-                    if(it.equipped) {
-                        it.cosmetic.type.onEquip(event.player, it.color, it.cosmetic)
-                    }
-                }
+                BandiCore.instance.cosmeticManager.giveEquippedCosmetics(event.player)
             }
         }
 

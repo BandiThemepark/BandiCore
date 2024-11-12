@@ -9,6 +9,7 @@ import net.bandithemepark.bandicore.util.ItemFactory.Companion.getPersistentData
 import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.chat.BandiColors
 import org.bukkit.Material
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerInteractEvent
@@ -18,23 +19,29 @@ import org.bukkit.inventory.EquipmentSlot
 class JoinItems: Listener {
     @EventHandler
     fun onJoin(event: PlayerJoinEvent) {
-        event.player.inventory.setItem(3, ItemFactory(Material.PAPER)
-            .setDisplayName(Util.color("<!i><${BandiColors.YELLOW}>${event.player.getTranslatedMessage("cosmetics")}"))
-            .setKeyInPersistentStorage("join_item", "cosmetics")
-            .setCustomModelData(1022)
-            .build())
+        giveJoinItems(event.player)
+    }
 
-        event.player.inventory.setItem(4, ItemFactory(Material.PAPER)
-            .setDisplayName(Util.color("<!i><${BandiColors.YELLOW}>BandiThemepark"))
-            .setKeyInPersistentStorage("join_item", "bandithemepark")
-            .setCustomModelData(1023)
-            .build())
+    companion object {
+        fun giveJoinItems(player: Player) {
+            player.inventory.setItem(3, ItemFactory(Material.PAPER)
+                .setDisplayName(Util.color("<!i><${BandiColors.YELLOW}>${player.getTranslatedMessage("cosmetics")}"))
+                .setKeyInPersistentStorage("join_item", "cosmetics")
+                .setCustomModelData(1022)
+                .build())
 
-        event.player.inventory.setItem(5, ItemFactory(Material.PAPER)
-            .setDisplayName(Util.color("<!i><${BandiColors.YELLOW}>${event.player.getTranslatedMessage("attractions")}"))
-            .setKeyInPersistentStorage("join_item", "attractions")
-            .setCustomModelData(1024)
-            .build())
+            player.inventory.setItem(4, ItemFactory(Material.PAPER)
+                .setDisplayName(Util.color("<!i><${BandiColors.YELLOW}>BandiThemepark"))
+                .setKeyInPersistentStorage("join_item", "bandithemepark")
+                .setCustomModelData(1023)
+                .build())
+
+            player.inventory.setItem(5, ItemFactory(Material.PAPER)
+                .setDisplayName(Util.color("<!i><${BandiColors.YELLOW}>${player.getTranslatedMessage("attractions")}"))
+                .setKeyInPersistentStorage("join_item", "attractions")
+                .setCustomModelData(1024)
+                .build())
+        }
     }
 
     @EventHandler
