@@ -43,8 +43,7 @@ class BalloonPhysics(attachmentPoint: Vector, val onDespawn: () -> Unit) {
             velocity.y = MAX_UPWARDS_WIND_VELOCITY
         }
 
-        updateWindSimulation()
-        rotation = Vector(actualPitch, actualYaw+90, 0.0).add(windRotationOffset)
+        updateRotation()
 
         if(flyAwayTicks > DESPAWN_TIME_TICKS) {
             onDespawn()
