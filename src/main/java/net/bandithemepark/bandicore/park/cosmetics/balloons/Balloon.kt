@@ -18,6 +18,8 @@ class Balloon(val model: ItemStack, val world: World, var attachedToPlayer: Play
     val displayEntity = PacketItemDisplay()
     var leash: BalloonLeash? = null
 
+    var overrideAttachmentPoint: Vector? = null
+
     private fun spawnLeash() {
         leash = BalloonLeash(attachedToPlayer!!, physics!!.position.toLocation(world))
         leash!!.spawn()
@@ -66,7 +68,7 @@ class Balloon(val model: ItemStack, val world: World, var attachedToPlayer: Play
     private fun updatePhysics() {
         if(physics == null) return
 
-        physics!!.attachmentPoint = if(attachedToPlayer != null) getPlayerAttachmentPosition(attachedToPlayer!!) else null
+        physics!!.attachmentPoint = if(overrideAttachmentPoint != null) overrideAttachmentPoint else if(attachedToPlayer != null) getPlayerAttachmentPosition(attachedToPlayer!!) else null
         physics!!.tick()
 
         updatePosition()
