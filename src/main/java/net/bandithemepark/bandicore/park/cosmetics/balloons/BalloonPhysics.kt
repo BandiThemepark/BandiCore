@@ -18,14 +18,6 @@ class BalloonPhysics(attachmentPoint: Vector, val onDespawn: () -> Unit) {
         private set
 
     fun tick() {
-        if(attachmentPoint == null) {
-            //updateFlyAwayPhysics()
-        } else {
-            updateAttachedPhysics()
-        }
-    }
-
-    private fun updateAttachedPhysics() {
         if(velocity.y < MAX_UPWARDS_VELOCITY) {
             velocity.y += UPWARDS_ACCELERATION_PER_TICK
         }
@@ -33,6 +25,33 @@ class BalloonPhysics(attachmentPoint: Vector, val onDespawn: () -> Unit) {
         velocity = velocity.multiply(FRICTION_PER_TICK)
         internalPosition = internalPosition.add(velocity)
 
+        if(attachmentPoint == null) {
+            updateFlyAwayPhysics()
+        } else {
+            updateAttachedPhysics()
+            flyAwayTicks = 0
+        }
+
+        position = internalPosition.clone().add(windPositionOffset)
+    }
+
+    private var flyAwayTicks = 0
+    private fun updateFlyAwayPhysics() {
+        flyAwayTicks++
+
+        if(velocity.y > MAX_UPWARDS_WIND_VELOCITY) {
+            velocity.y = MAX_UPWARDS_WIND_VELOCITY
+        }
+
+        updateWindSimulation()
+        rotation = Vector(actualPitch, actualYaw+90, 0.0).add(windRotationOffset)
+
+        if(flyAwayTicks > DESPAWN_TIME_TICKS) {
+            onDespawn()
+        }
+    }
+
+    private fun updateAttachedPhysics() {
         val ropeLength = internalPosition.distance(attachmentPoint!!)
         if(ropeLength > MAX_ROPE_LENGTH) {
             // Update velocity to bounce back
@@ -43,7 +62,6 @@ class BalloonPhysics(attachmentPoint: Vector, val onDespawn: () -> Unit) {
             internalPosition = attachmentPoint!!.clone().subtract(direction.clone().multiply(MAX_ROPE_LENGTH))
         }
 
-        position = internalPosition.clone().add(windPositionOffset)
         updateRotation()
     }
 
@@ -117,5 +135,7 @@ class BalloonPhysics(attachmentPoint: Vector, val onDespawn: () -> Unit) {
         const val WIND_TILT_TIME_YAW = 80
         const val WIND_Y_STRENGTH = 0.1
         const val WIND_Y_TIME = 90
+        const val DESPAWN_TIME_TICKS = 200
+        const val MAX_UPWARDS_WIND_VELOCITY = 0.1
     }
 }
