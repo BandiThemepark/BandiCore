@@ -4,6 +4,7 @@ import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.park.cosmetics.Cosmetic
 import net.bandithemepark.bandicore.park.cosmetics.CosmeticManager.Companion.getEquipped
 import net.bandithemepark.bandicore.park.cosmetics.OwnedCosmetic
+import net.bandithemepark.bandicore.park.cosmetics.types.BalloonCosmetic.Companion.getBalloon
 import net.bandithemepark.bandicore.park.cosmetics.types.TitleCosmetic
 import net.bandithemepark.bandicore.park.shops.Shop
 import net.bandithemepark.bandicore.park.shops.ShopMenu
@@ -146,10 +147,12 @@ class DressingRoomSession(
 
         Bukkit.getScheduler().runTaskLater(BandiCore.instance, Runnable {
             player.teleport(dressingRoom.cameraPosition.toLocation(dressingRoom.world))
+            player.getBalloon()?.overrideAttachmentPoint = dressingRoom.balloonAttachmentPosition
         }, 10)
 
         Bukkit.getScheduler().runTaskLater(BandiCore.instance, Runnable {
             startCamera()
+            player.getBalloon()?.resetVelocity()
         }, 12)
     }
 
@@ -167,6 +170,7 @@ class DressingRoomSession(
             removeCustomPlayer()
             removeCamera()
             player.sendActionBar(Component.text(" "))
+            player.getBalloon()?.overrideAttachmentPoint = null
         }, 10)
 
         if(previewShop != null) {
