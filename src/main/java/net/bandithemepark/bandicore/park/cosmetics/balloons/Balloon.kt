@@ -30,6 +30,10 @@ class Balloon(val model: ItemStack, val world: World, var attachedToPlayer: Play
         leash = null
     }
 
+    fun resetVelocity() {
+        physics?.resetVelocity()
+    }
+
     var spawned = false
         private set
 

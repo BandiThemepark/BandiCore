@@ -17,6 +17,11 @@ class BalloonPhysics(attachmentPoint: Vector, val onDespawn: () -> Unit) {
     var rotation: Vector = Vector(0, 0, 0)
         private set
 
+    fun resetVelocity() {
+        velocity = Vector(0, 0, 0)
+        if(attachmentPoint != null) internalPosition = Vector(attachmentPoint!!.x, attachmentPoint!!.y+SPAWN_HEIGHT, attachmentPoint!!.z)
+    }
+
     fun tick() {
         if(velocity.y < MAX_UPWARDS_VELOCITY) {
             velocity.y += UPWARDS_ACCELERATION_PER_TICK
