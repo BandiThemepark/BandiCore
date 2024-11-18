@@ -43,7 +43,6 @@ class HandheldCosmetic: CosmeticType("handheld") {
     override fun getDressingRoomItem(player: Player, color: Color?, cosmetic: Cosmetic): ItemStack {
         return if(colorable) ItemFactory(Material.LEATHER_HORSE_ARMOR).setCustomModelData(customModelData).setDisplayName(cosmetic.getItemName()).setLore(cosmetic.getItemStackDescription()).setArmorColor(color).setKeyInPersistentStorage("handheld", cosmetic.name).build()
         else ItemFactory(material).setCustomModelData(customModelData).setDisplayName(cosmetic.getItemName()).setLore(cosmetic.getItemStackDescription()).setKeyInPersistentStorage("handheld", cosmetic.name).build()
-
     }
 
     override fun onJoin(player: Player) {

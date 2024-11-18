@@ -28,7 +28,13 @@ class Balloon(val model: ItemStack, val world: World, var attachedToPlayer: Play
         leash = null
     }
 
-    private fun spawn(attachmentPoint: Vector) {
+    var spawned = false
+        private set
+
+    fun spawn(attachmentPoint: Vector) {
+        if(spawned) return
+        spawned = true
+
         spawnedBalloons.add(this)
         physics = BalloonPhysics(attachmentPoint, this::deSpawn)
         if(attachedToPlayer != null) spawnLeash()
@@ -39,7 +45,10 @@ class Balloon(val model: ItemStack, val world: World, var attachedToPlayer: Play
         displayEntity.updateMetadata()
     }
 
-    private fun deSpawn() {
+    fun deSpawn() {
+        if(!spawned) return
+        spawned = false
+
         displayEntity.deSpawn()
         spawnedBalloons.remove(this)
         if(attachedToPlayer != null) deSpawnLeash()
@@ -50,11 +59,11 @@ class Balloon(val model: ItemStack, val world: World, var attachedToPlayer: Play
         world.spawnParticle(Particle.CLOUD, physics!!.position.toLocation(world).add(0.0, 0.2, 0.0), 20, 0.3, 0.3, 0.3, 0.0)
     }
 
-    private fun getPlayerAttachmentPosition(player: Player): Vector {
+    fun getPlayerAttachmentPosition(player: Player): Vector {
         return player.location.toVector().add(Vector(0.0, 0.75, 0.0))
     }
 
-    fun updatePhysics() {
+    private fun updatePhysics() {
         if(physics == null) return
 
         physics!!.attachmentPoint = if(attachedToPlayer != null) getPlayerAttachmentPosition(attachedToPlayer!!) else null
