@@ -12,6 +12,7 @@ class PacketEntityBat: PacketEntity() {
     }
 
     fun setVisible(visible: Boolean) {
+        (this.handle as Bat).isResting = false
         this.handle.isInvisible = !visible
         this.updateMetadata()
     }
