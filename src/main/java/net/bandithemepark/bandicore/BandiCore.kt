@@ -405,6 +405,7 @@ class BandiCore: JavaPlugin() {
         getServer().pluginManager.registerEvents(ShopMenu.Events(), this)
         getServer().pluginManager.registerEvents(JoinItems(), this)
         getServer().pluginManager.registerEvents(DressingRoomColorMenu.Events(), this)
+        getServer().pluginManager.registerEvents(Balloon.Events(), this)
     }
 
     private fun prepareSettings() {

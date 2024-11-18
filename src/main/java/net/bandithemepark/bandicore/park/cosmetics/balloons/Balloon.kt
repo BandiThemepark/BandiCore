@@ -1,14 +1,24 @@
 package net.bandithemepark.bandicore.park.cosmetics.balloons
 
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.park.cosmetics.types.BalloonCosmetic.Companion.getBalloon
+import net.bandithemepark.bandicore.server.essentials.ranks.nametag.PlayerNameTag.Companion.active
+import net.bandithemepark.bandicore.server.essentials.ranks.nametag.PlayerNameTag.Companion.getNameTag
 import net.bandithemepark.bandicore.util.debug.Testable
 import net.bandithemepark.bandicore.util.entity.display.PacketItemDisplay
+import net.bandithemepark.bandicore.util.entity.event.SeatEnterEvent
+import net.bandithemepark.bandicore.util.entity.event.SeatExitEvent
 import net.bandithemepark.bandicore.util.math.Quaternion
 import org.bukkit.Bukkit
+import org.bukkit.GameMode
 import org.bukkit.Particle
 import org.bukkit.World
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerGameModeChangeEvent
+import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
 import org.joml.Matrix4f
@@ -119,5 +129,33 @@ class Balloon(val model: ItemStack, val world: World, var attachedToPlayer: Play
         Bukkit.getScheduler().runTaskLater(BandiCore.instance, Runnable {
             attachedToPlayer = null
         }, 20*10)
+    }
+
+    class Events: Listener {
+        @EventHandler
+        fun onGameModeSwitch(event: PlayerGameModeChangeEvent) {
+            if(event.newGameMode == GameMode.SPECTATOR) {
+                event.player.getBalloon()?.deSpawn()
+            } else {
+                if(event.player.gameMode == GameMode.SPECTATOR) {
+                    event.player.getBalloon()?.spawn(event.player.getBalloon()!!.getPlayerAttachmentPosition(event.player))
+                }
+            }
+        }
+
+        @EventHandler
+        fun onQuit(event: PlayerQuitEvent) {
+            event.player.getBalloon()?.deSpawn()
+        }
+
+        @EventHandler
+        fun onSeatEnter(event: SeatEnterEvent) {
+            event.player.getBalloon()?.deSpawn()
+        }
+
+        @EventHandler
+        fun onSeatExit(event: SeatExitEvent) {
+            event.player.getBalloon()?.spawn(event.player.getBalloon()!!.getPlayerAttachmentPosition(event.player))
+        }
     }
 }
