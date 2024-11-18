@@ -25,15 +25,7 @@ class Balloon(val model: ItemStack, val world: World, var attachedToPlayer: Play
     private var physics: BalloonPhysics? = null
     val displayEntity = PacketItemDisplay()
     var leash: BalloonLeash? = null
-    val trailParts = mutableListOf<BalloonTrailPart>(
-        BalloonTrailPart(ItemFactory(Material.DIAMOND_HOE).setCustomModelData(7).build(), world, 1.4),
-        BalloonTrailPart(ItemFactory(Material.DIAMOND_HOE).setCustomModelData(7).build(), world, 1.4),
-        BalloonTrailPart(ItemFactory(Material.DIAMOND_HOE).setCustomModelData(7).build(), world, 1.4),
-        BalloonTrailPart(ItemFactory(Material.DIAMOND_HOE).setCustomModelData(7).build(), world, 1.4),
-        BalloonTrailPart(ItemFactory(Material.DIAMOND_HOE).setCustomModelData(7).build(), world, 1.4),
-        BalloonTrailPart(ItemFactory(Material.DIAMOND_HOE).setCustomModelData(7).build(), world, 1.4),
-        BalloonTrailPart(ItemFactory(Material.DIAMOND_HOE).setCustomModelData(7).build(), world, 1.4),
-    )
+    val trailParts = mutableListOf<BalloonTrailPart>()
 
     var overrideAttachmentPoint: Vector? = null
 
