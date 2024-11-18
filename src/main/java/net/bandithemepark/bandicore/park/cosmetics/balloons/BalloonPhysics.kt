@@ -84,7 +84,7 @@ class BalloonPhysics(attachmentPoint: Vector, val onDespawn: () -> Unit) {
         actualPitch += (targetPitch - actualPitch) * PITCH_ROTATION_SPEED
 
         updateWindSimulation()
-        rotation = Vector(actualPitch, actualYaw+90, 0.0).add(windRotationOffset)
+        rotation = Vector(actualPitch, actualYaw-90, 0.0).add(windRotationOffset)
 
     }
 
