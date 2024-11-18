@@ -109,7 +109,9 @@ class DressingRoomMenu: InventoryHolder {
             }
 
             if(event.slot == 5 || event.slot == 6 || event.slot == 14 || event.slot == 15) {
-                Bukkit.broadcast(Component.text("Balloons"))
+                Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
+                    DressingRoomCategoryMenu(event.whoClicked as Player, CosmeticType.getType("balloon")!!).open(0)
+                })
             }
 
             if(event.slot == 7 || event.slot == 8 || event.slot == 16 || event.slot == 17) {
