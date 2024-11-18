@@ -129,7 +129,7 @@ class PacketEntitySeat(val attraction: Attraction?): PacketEntity() {
         }
 
         fun isRiding(entity: Entity): Boolean {
-            return seats.any { it.getPassengers().contains(entity) }
+            return seats.any { if(it != null) it.getPassengers().contains(entity) else false }
         }
     }
 }
