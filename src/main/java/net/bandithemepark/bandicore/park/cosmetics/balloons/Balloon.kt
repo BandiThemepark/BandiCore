@@ -16,10 +16,22 @@ import org.joml.Matrix4f
 class Balloon(val model: ItemStack, val world: World, var attachedToPlayer: Player? = null): Testable {
     private var physics: BalloonPhysics? = null
     val displayEntity = PacketItemDisplay()
+    var leash: BalloonLeash? = null
+
+    private fun spawnLeash() {
+        leash = BalloonLeash(attachedToPlayer!!, physics!!.position.toLocation(world))
+        leash!!.spawn()
+    }
+
+    private fun deSpawnLeash() {
+        leash!!.deSpawn()
+        leash = null
+    }
 
     private fun spawn(attachmentPoint: Vector) {
         spawnedBalloons.add(this)
         physics = BalloonPhysics(attachmentPoint, this::deSpawn)
+        if(attachedToPlayer != null) spawnLeash()
 
         displayEntity.spawn(physics!!.position.toLocation(world))
         displayEntity.setItemStack(model)
@@ -30,6 +42,7 @@ class Balloon(val model: ItemStack, val world: World, var attachedToPlayer: Play
     private fun deSpawn() {
         displayEntity.deSpawn()
         spawnedBalloons.remove(this)
+        if(attachedToPlayer != null) deSpawnLeash()
         playPopParticles()
     }
 
@@ -45,9 +58,23 @@ class Balloon(val model: ItemStack, val world: World, var attachedToPlayer: Play
         if(physics == null) return
 
         physics!!.attachmentPoint = if(attachedToPlayer != null) getPlayerAttachmentPosition(attachedToPlayer!!) else null
-
         physics!!.tick()
+
         updatePosition()
+        updateLeash()
+    }
+
+    private fun updateLeash() {
+        if(leash == null) {
+            if(attachedToPlayer != null) spawnLeash()
+        } else {
+            if(attachedToPlayer == null) {
+                deSpawnLeash()
+            } else {
+                leash!!.to = physics!!.position.toLocation(leash!!.to.world)
+                leash!!.update()
+            }
+        }
     }
 
     private fun updatePosition() {
@@ -60,8 +87,6 @@ class Balloon(val model: ItemStack, val world: World, var attachedToPlayer: Play
     }
 
     companion object {
-        const val POP_PARTICLES_OFFSET_TICKS = 5
-
         val spawnedBalloons = mutableListOf<Balloon>()
 
         fun startTimer() {
