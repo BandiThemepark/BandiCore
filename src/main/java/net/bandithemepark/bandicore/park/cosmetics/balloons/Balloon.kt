@@ -4,15 +4,13 @@ import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.park.cosmetics.types.BalloonCosmetic.Companion.getBalloon
 import net.bandithemepark.bandicore.server.essentials.ranks.nametag.PlayerNameTag.Companion.active
 import net.bandithemepark.bandicore.server.essentials.ranks.nametag.PlayerNameTag.Companion.getNameTag
+import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.debug.Testable
 import net.bandithemepark.bandicore.util.entity.display.PacketItemDisplay
 import net.bandithemepark.bandicore.util.entity.event.SeatEnterEvent
 import net.bandithemepark.bandicore.util.entity.event.SeatExitEvent
 import net.bandithemepark.bandicore.util.math.Quaternion
-import org.bukkit.Bukkit
-import org.bukkit.GameMode
-import org.bukkit.Particle
-import org.bukkit.World
+import org.bukkit.*
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -27,6 +25,15 @@ class Balloon(val model: ItemStack, val world: World, var attachedToPlayer: Play
     private var physics: BalloonPhysics? = null
     val displayEntity = PacketItemDisplay()
     var leash: BalloonLeash? = null
+    val trailParts = mutableListOf<BalloonTrailPart>(
+        BalloonTrailPart(ItemFactory(Material.DIAMOND_HOE).setCustomModelData(7).build(), world, 1.4),
+        BalloonTrailPart(ItemFactory(Material.DIAMOND_HOE).setCustomModelData(7).build(), world, 1.4),
+        BalloonTrailPart(ItemFactory(Material.DIAMOND_HOE).setCustomModelData(7).build(), world, 1.4),
+        BalloonTrailPart(ItemFactory(Material.DIAMOND_HOE).setCustomModelData(7).build(), world, 1.4),
+        BalloonTrailPart(ItemFactory(Material.DIAMOND_HOE).setCustomModelData(7).build(), world, 1.4),
+        BalloonTrailPart(ItemFactory(Material.DIAMOND_HOE).setCustomModelData(7).build(), world, 1.4),
+        BalloonTrailPart(ItemFactory(Material.DIAMOND_HOE).setCustomModelData(7).build(), world, 1.4),
+    )
 
     var overrideAttachmentPoint: Vector? = null
 
@@ -59,6 +66,7 @@ class Balloon(val model: ItemStack, val world: World, var attachedToPlayer: Play
         displayEntity.setItemStack(model)
         displayEntity.setInterpolationDuration(2)
         displayEntity.updateMetadata()
+        trailParts.forEach { it.spawn(physics!!.position) }
     }
 
     fun deSpawn() {
@@ -69,6 +77,7 @@ class Balloon(val model: ItemStack, val world: World, var attachedToPlayer: Play
         spawnedBalloons.remove(this)
         if(attachedToPlayer != null) deSpawnLeash()
         playPopParticles()
+        trailParts.forEach { it.deSpawn() }
     }
 
     private fun playPopParticles() {
@@ -79,6 +88,52 @@ class Balloon(val model: ItemStack, val world: World, var attachedToPlayer: Play
         return player.location.toVector().add(Vector(0.0, 0.75, 0.0))
     }
 
+    private val trailPosition = mutableListOf(Vector())
+    private var lastPosition = Vector()
+    private fun updateTrailPhysics() {
+        val totalTrailLength = trailParts.sumOf { it.pieceLength }
+
+        var passedDistanceCheck = false
+        if(trailPosition.size == 0) {
+            trailPosition.add(physics!!.position)
+        } else {
+            val distance = physics!!.position.distance(lastPosition)
+            if(distance > TRAIL_POINT_DISTANCE) {
+                passedDistanceCheck = true
+                val direction = physics!!.position.clone().subtract(lastPosition).normalize()
+                val currentTrailPosition = lastPosition.clone()
+                while(currentTrailPosition.distance(physics!!.position) > TRAIL_POINT_DISTANCE) {
+                    currentTrailPosition.add(direction.clone().multiply(TRAIL_POINT_DISTANCE))
+                    trailPosition.add(0, currentTrailPosition.clone())
+                }
+            }
+        }
+
+        while(trailPosition.size > totalTrailLength/TRAIL_POINT_DISTANCE) {
+            trailPosition.removeAt(trailPosition.size-1)
+        }
+
+        var passedLength = 0.0
+        var lastPartPosition = physics!!.position
+        for(trailPart in trailParts) {
+            passedLength += trailPart.pieceLength
+
+            val index = (passedLength/TRAIL_POINT_DISTANCE).toInt()
+            trailPart.position = if(index >= trailPosition.size) trailPosition.last() else trailPosition[index]
+
+            // Rotate looking to previous position
+            val direction = lastPartPosition.clone().subtract(trailPart.position).normalize()
+            val yaw = Math.toDegrees(Math.atan2(direction.z, direction.x))
+            val pitch = Math.toDegrees(Math.asin(direction.y))
+            trailPart.rotation = Vector(-pitch, yaw-90, 0.0)
+
+            lastPartPosition = trailPart.position
+        }
+
+        trailParts.forEach { it.updatePosition() }
+        if(passedDistanceCheck) lastPosition = physics!!.position
+    }
+
     private fun updatePhysics() {
         if(physics == null) return
 
@@ -87,6 +142,7 @@ class Balloon(val model: ItemStack, val world: World, var attachedToPlayer: Play
 
         updatePosition()
         updateLeash()
+        updateTrailPhysics()
     }
 
     private fun updateLeash() {
@@ -112,6 +168,8 @@ class Balloon(val model: ItemStack, val world: World, var attachedToPlayer: Play
     }
 
     companion object {
+        const val TRAIL_POINT_DISTANCE = 0.1
+
         val spawnedBalloons = mutableListOf<Balloon>()
 
         fun startTimer() {
