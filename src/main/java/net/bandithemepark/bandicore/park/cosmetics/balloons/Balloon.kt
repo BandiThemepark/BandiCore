@@ -59,9 +59,6 @@ class Balloon(val model: ItemStack, val world: World, var attachedToPlayer: Play
     }
 
     companion object {
-        const val MAX_ROPE_LENGTH = 3.0
-        const val POP_TIME_TICKS = 200
-        const val SPAWN_HEIGHT = 2.0
         const val POP_PARTICLES_OFFSET_TICKS = 5
 
         val spawnedBalloons = mutableListOf<Balloon>()
@@ -77,5 +74,9 @@ class Balloon(val model: ItemStack, val world: World, var attachedToPlayer: Play
         if(sender !is Player) return
         attachedToPlayer = sender
         spawn(getPlayerAttachmentPosition(sender))
+
+        Bukkit.getScheduler().runTaskLater(BandiCore.instance, Runnable {
+            attachedToPlayer = null
+        }, 20*10)
     }
 }
