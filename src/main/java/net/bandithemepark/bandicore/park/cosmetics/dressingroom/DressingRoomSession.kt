@@ -240,6 +240,9 @@ class DressingRoomSession(
         } else if(cosmetic.type.id == "title") {
             deSpawnTitle()
             spawnTitle()
+        } else if(cosmetic.type.id == "balloon") {
+            player.getBalloon()?.overrideAttachmentPoint = dressingRoom.balloonAttachmentPosition
+            Bukkit.getScheduler().runTaskLater(BandiCore.instance, Runnable { player.getBalloon()?.resetVelocity() }, 1)
         }
 
         // Play animation if present
