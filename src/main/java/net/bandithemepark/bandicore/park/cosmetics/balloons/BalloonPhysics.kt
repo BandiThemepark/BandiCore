@@ -1,11 +1,8 @@
 package net.bandithemepark.bandicore.park.cosmetics.balloons
 
 import net.bandithemepark.bandicore.util.math.MathUtil
-import net.kyori.adventure.text.Component
-import org.bukkit.Bukkit
 import org.bukkit.util.Vector
 import kotlin.math.atan2
-import kotlin.math.min
 import kotlin.math.sin
 
 class BalloonPhysics(attachmentPoint: Vector, val onDespawn: () -> Unit) {
@@ -14,6 +11,8 @@ class BalloonPhysics(attachmentPoint: Vector, val onDespawn: () -> Unit) {
 
     var position: Vector = Vector(attachmentPoint.x, attachmentPoint.y+SPAWN_HEIGHT, attachmentPoint.z)
         private set
+
+    private var internalPosition = Vector(attachmentPoint.x, attachmentPoint.y+SPAWN_HEIGHT, attachmentPoint.z)
 
     var rotation: Vector = Vector(0, 0, 0)
         private set
@@ -32,18 +31,19 @@ class BalloonPhysics(attachmentPoint: Vector, val onDespawn: () -> Unit) {
         }
 
         velocity = velocity.multiply(FRICTION_PER_TICK)
-        position = position.add(velocity)
+        internalPosition = internalPosition.add(velocity)
 
-        val ropeLength = position.distance(attachmentPoint!!)
+        val ropeLength = internalPosition.distance(attachmentPoint!!)
         if(ropeLength > MAX_ROPE_LENGTH) {
             // Update velocity to bounce back
-            val direction = attachmentPoint!!.clone().subtract(position).normalize()
+            val direction = attachmentPoint!!.clone().subtract(internalPosition).normalize()
             velocity = direction.clone().multiply(velocity.length()).multiply(BOUNCE_FRICTION)
 
             // Move to the point where rope is at max length
-            position = attachmentPoint!!.clone().subtract(direction.clone().multiply(MAX_ROPE_LENGTH))
+            internalPosition = attachmentPoint!!.clone().subtract(direction.clone().multiply(MAX_ROPE_LENGTH))
         }
 
+        position = internalPosition.clone().add(windPositionOffset)
         updateRotation()
     }
 
@@ -74,6 +74,7 @@ class BalloonPhysics(attachmentPoint: Vector, val onDespawn: () -> Unit) {
     private var idleTime = 0
     private var windTime = 0
     private var windRotationOffset = Vector()
+    private var windPositionOffset = Vector()
 
     private fun updateWindSimulation() {
         windTime++
@@ -94,6 +95,10 @@ class BalloonPhysics(attachmentPoint: Vector, val onDespawn: () -> Unit) {
         // Dampen the effect when idleTime is at 0, with full effect at 20
         val idleDampening = idleTime.toDouble() / FULL_WIND_EFFECT_TIME
         windRotationOffset = windRotationOffset.multiply(idleDampening)
+
+        val windYOffset = sin(windTime.toDouble() / WIND_Y_TIME * Math.PI * 2) * WIND_Y_STRENGTH
+        windPositionOffset = Vector(0.0, windYOffset, 0.0)
+        windPositionOffset = windPositionOffset.multiply(idleDampening)
     }
 
     companion object {
@@ -110,5 +115,7 @@ class BalloonPhysics(attachmentPoint: Vector, val onDespawn: () -> Unit) {
         const val FULL_WIND_EFFECT_TIME = 20
         const val WIND_TILT_TIME_PITCH = 73
         const val WIND_TILT_TIME_YAW = 80
+        const val WIND_Y_STRENGTH = 0.1
+        const val WIND_Y_TIME = 90
     }
 }
