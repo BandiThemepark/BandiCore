@@ -30,11 +30,12 @@ class Balloon(val model: ItemStack, val world: World, var attachedToPlayer: Play
     private fun deSpawn() {
         displayEntity.deSpawn()
         spawnedBalloons.remove(this)
+        playPopParticles()
     }
 
-//    private fun playPopParticles() {
-//        world.spawnParticle(Particle.CLOUD, position.toLocation(world).add(0.0, 0.2, 0.0), 20, 0.3, 0.3, 0.3, 0.0)
-//    }
+    private fun playPopParticles() {
+        world.spawnParticle(Particle.CLOUD, physics!!.position.toLocation(world).add(0.0, 0.2, 0.0), 20, 0.3, 0.3, 0.3, 0.0)
+    }
 
     private fun getPlayerAttachmentPosition(player: Player): Vector {
         return player.location.toVector().add(Vector(0.0, 0.75, 0.0))
@@ -43,7 +44,7 @@ class Balloon(val model: ItemStack, val world: World, var attachedToPlayer: Play
     fun updatePhysics() {
         if(physics == null) return
 
-        if(attachedToPlayer != null) physics!!.attachmentPoint = getPlayerAttachmentPosition(attachedToPlayer!!)
+        physics!!.attachmentPoint = if(attachedToPlayer != null) getPlayerAttachmentPosition(attachedToPlayer!!) else null
 
         physics!!.tick()
         updatePosition()
