@@ -121,20 +121,20 @@ class Cosmetic(
             val price = json.get("price").asInt
 
             val requirements = mutableListOf<CosmeticRequirement>()
-            for(element in JsonParser().parse(json.get("requirements").asString).asJsonArray) {
-                val requirement = CosmeticRequirement.fromJson(element.asJsonObject)
-                requirements.add(requirement)
+            if(!json.get("requirements").isJsonNull) {
+                for (element in json.getAsJsonArray("requirements")) {
+                    val requirement = CosmeticRequirement.fromJson(element.asJsonObject)
+                    requirements.add(requirement)
+                }
             }
 
-            val metadata = JsonParser().parse(json.get("metaData").asString).asJsonObject
+            val metadata = json.getAsJsonObject("metaData")
             type.onMetadataLoad(metadata)
 
             val tags = mutableListOf<CosmeticTag>()
-            for (element in json.get("itemTags").asString.replace("\"", "").replace("[", "").replace("]", "")
-                .replace(", ", ",").split(",")) {
-                if(element == "") continue
+            for (element in json.get("itemTags").asJsonArray) {
                 try {
-                    val tag = CosmeticTag.valueOf(element)
+                    val tag = CosmeticTag.valueOf(element.asString)
                     tags.add(tag)
                 } catch (e: IllegalArgumentException) {
                     Bukkit.getConsoleSender().sendMessage("No tag named $element found for cosmetic $name")
