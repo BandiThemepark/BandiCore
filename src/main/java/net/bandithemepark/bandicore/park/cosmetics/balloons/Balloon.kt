@@ -26,6 +26,7 @@ class Balloon(val model: ItemStack, val world: World, var attachedToPlayer: Play
     val displayEntity = PacketItemDisplay()
     var leash: BalloonLeash? = null
     val trailParts = mutableListOf<BalloonTrailPart>()
+    var showParticles = true
 
     var overrideAttachmentPoint: Vector? = null
 
@@ -73,7 +74,7 @@ class Balloon(val model: ItemStack, val world: World, var attachedToPlayer: Play
     }
 
     private fun playPopParticles() {
-        world.spawnParticle(Particle.CLOUD, physics!!.position.toLocation(world).add(0.0, 0.2, 0.0), 20, 0.3, 0.3, 0.3, 0.0)
+        if(showParticles) world.spawnParticle(Particle.CLOUD, physics!!.position.toLocation(world).add(0.0, 0.2, 0.0), 20, 0.3, 0.3, 0.3, 0.0)
     }
 
     fun getPlayerAttachmentPosition(player: Player): Vector {
