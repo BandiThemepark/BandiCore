@@ -35,7 +35,7 @@ object BackendCosmetic {
             override fun onResponse(call: Call, response: Response) {
                 val responseJson = JsonParser().parse(response.body!!.string()).asJsonObject
                 if(responseJson.has("data") && !responseJson.get("data").isJsonNull) {
-                    val data = responseJson.getAsJsonObject("data").getAsJsonArray("cosmetics")
+                    val data = responseJson.getAsJsonArray("data")
                     callback.invoke(data)
                 } else {
                     BandiCore.instance.logger.severe("An attempt was made at loading all cosmetics, but no data was found. The following message was given: ${responseJson.get("message")}")
