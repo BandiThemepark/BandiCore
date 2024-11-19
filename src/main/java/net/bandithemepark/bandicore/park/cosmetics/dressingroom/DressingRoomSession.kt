@@ -153,6 +153,7 @@ class DressingRoomSession(
         Bukkit.getScheduler().runTaskLater(BandiCore.instance, Runnable {
             startCamera()
             player.getBalloon()?.resetVelocity()
+            player.getBalloon()?.spawn(dressingRoom.balloonAttachmentPosition)
         }, 12)
     }
 
