@@ -137,6 +137,8 @@ class DressingRoomSession(
     }
 
     private fun startView() {
+        player.getBalloon()?.showParticles = false
+
         player.showTitle(
             Title.title(
                 Component.text("\uE000"),
@@ -154,6 +156,7 @@ class DressingRoomSession(
             startCamera()
             player.getBalloon()?.resetVelocity()
             player.getBalloon()?.spawn(dressingRoom.balloonAttachmentPosition)
+            player.getBalloon()?.showParticles = true
         }, 12)
     }
 
