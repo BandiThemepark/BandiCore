@@ -12,6 +12,7 @@ import net.bandithemepark.bandicore.util.entity.event.SeatExitEvent
 import net.bandithemepark.bandicore.util.math.Quaternion
 import org.bukkit.*
 import org.bukkit.command.CommandSender
+import org.bukkit.entity.ItemDisplay
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -57,6 +58,7 @@ class Balloon(val model: ItemStack, val world: World, var attachedToPlayer: Play
 
         displayEntity.spawn(physics!!.position.toLocation(world))
         displayEntity.setItemStack(model)
+        displayEntity.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.HEAD)
         displayEntity.setInterpolationDuration(2)
         displayEntity.updateMetadata()
         trailParts.forEach { it.spawn(physics!!.position) }
