@@ -70,23 +70,19 @@ class CustomPlayerRig(val skin: CustomPlayerSkin) {
 
     fun deSpawn() {
         animatronic.deSpawn()
-        //parentArmorStand.deSpawn()
         spawned = false
     }
 
     fun moveTo(position: Vector, rotation: Quaternion) {
         if(!spawned) return
-
-        //parentArmorStand.moveEntity(position.x, position.y, position.z)
         animatronic.baseRotation = rotation
+        animatronic.setBasePosition(position)
     }
 
     private fun updateDisplayEntities() {
         animatronic.displayEntities.values.forEach {
             it.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.THIRDPERSON_RIGHTHAND)
-            //parentArmorStand.addPassenger(it.handle!!.id)
         }
-        //parentArmorStand.updatePassengers()
 
         setItem("body", 7)
         setItem("head", 8)
