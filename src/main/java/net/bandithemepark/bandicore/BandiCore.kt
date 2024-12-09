@@ -92,6 +92,7 @@ import net.bandithemepark.bandicore.server.animation.rig.RigTest
 import net.bandithemepark.bandicore.server.animatronics.AnimatronicManager
 import net.bandithemepark.bandicore.server.custom.blocks.CustomBlock
 import net.bandithemepark.bandicore.server.custom.blocks.CustomBlockMenu
+import net.bandithemepark.bandicore.server.custom.player.CustomPlayerRigTest
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin
 import net.bandithemepark.bandicore.server.custom.player.editor.CustomPlayerEditor
 import net.bandithemepark.bandicore.server.effects.EffectCommand
@@ -488,5 +489,6 @@ class BandiCore: JavaPlugin() {
 
     private fun registerTests() {
         Balloon(ItemFactory(Material.RED_WOOL).build(), Bukkit.getWorld("world")!!).register("balloon")
+        CustomPlayerRigTest().register("custom-player-shaders")
     }
 }
