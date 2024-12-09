@@ -110,7 +110,7 @@ interface HoverableEntity {
 
             for(player in currentlyLookingAt.keys) {
                 val lookingAt = currentlyLookingAt[player] as HoverableEntity
-                player.sendTranslatedActionBar(lookingAt.translationId, BandiColors.YELLOW.toString(), MessageReplacement("key", "<key:key.swapOffhand>"))
+                player.sendTranslatedActionBar(lookingAt.translationId, BandiColors.YELLOW.toString())
             }
 
             movements.clear()

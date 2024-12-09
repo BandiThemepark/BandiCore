@@ -80,7 +80,7 @@
   "rideop-logflume-transfer-send-description": "Send current boat on transfer into storage",
   "rideop-logflume-transfer-retrieve-title": "Retrieve from storage",
   "rideop-logflume-transfer-retrieve-description": "Retrieve a boat from storage",
-  "rideop-panel-hover-text": "Press %key% to open RideOP",
+  "rideop-panel-hover-text": "Swap hand to open RideOP",
   "already-in-dressing-room": "You are already in the dressing room",
   "rideop-cancan-transfer-mode-title": "Transfer mode",
   "rideop-cancan-transfer-mode-description": "No players can be on the ride",
