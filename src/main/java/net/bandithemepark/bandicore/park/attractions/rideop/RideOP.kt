@@ -83,12 +83,14 @@ abstract class RideOP(val id: String, val regionId: String, private val panelLoc
         if(operator == null) {
             inv.setItem(48, ItemFactory(Material.PLAYER_HEAD)
                 .setSkullTexture("bc8ea1f51f253ff5142ca11ae45193a4ad8c3ab5e9c6eec8ba7a4fcb7bac40")
+                .setCustomModelData(10)
                 .setDisplayName(Util.color("<!i><${BandiColors.YELLOW}>${player.getTranslatedMessage("rideop-operator-title")}"))
                 .setLore(mutableListOf(Util.color("<!i><${BandiColors.LIGHT_GRAY}>${player.getTranslatedMessage("rideop-operator-empty")}")))
                 .build())
         } else {
             inv.setItem(48, ItemFactory(Material.PLAYER_HEAD)
                 .setSkullOwner(operator!!)
+                .setCustomModelData(10)
                 .setDisplayName(Util.color("<!i><${BandiColors.YELLOW}>${player.getTranslatedMessage("rideop-operator-title")}"))
                 .setLore(mutableListOf(Util.color("<!i><${BandiColors.LIGHT_GRAY}>${operator!!.name}")))
                 .build())

@@ -47,7 +47,7 @@ class RideCounterMenu(val attraction: Attraction): InventoryHolder {
             if(availablePlayerSlots.isEmpty()) break
 
             val slot = availablePlayerSlots.removeFirst()
-            val customModelData = if(slot == 19) 10 else 0
+            val customModelData = if(slot == 19) 9 else 10
 
             val item = ItemFactory(Material.PLAYER_HEAD)
                 .setDisplayName(Util.color("<!i><${BandiColors.YELLOW}>#${counter+1} ${rideCounter.player.name}"))
