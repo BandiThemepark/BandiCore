@@ -174,6 +174,8 @@ class DressingRoomSession(
             removeCustomPlayer()
             removeCamera()
             player.sendActionBar(Component.text(" "))
+            player.getBalloon()?.showParticles = false
+            player.getBalloon()?.deSpawn()
             player.getBalloon()?.overrideAttachmentPoint = null
         }, 10)
 
@@ -214,6 +216,7 @@ class DressingRoomSession(
 
         Bukkit.getScheduler().runTaskLater(BandiCore.instance, Runnable {
             player.teleport(beforeLocation)
+            player.getBalloon()?.spawn(player.getBalloon()!!.getPlayerAttachmentPosition(player))
         }, 2)
     }
 
