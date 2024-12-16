@@ -117,6 +117,7 @@ import net.bandithemepark.bandicore.server.essentials.teleport.BackCommand
 import net.bandithemepark.bandicore.server.essentials.teleport.SelfCommand
 import net.bandithemepark.bandicore.server.essentials.teleport.TeleportCommand
 import net.bandithemepark.bandicore.server.essentials.warps.*
+import net.bandithemepark.bandicore.server.menu.MainMenu
 import net.bandithemepark.bandicore.server.minigames.Minigame
 import net.bandithemepark.bandicore.server.minigames.MinigameTest
 import net.bandithemepark.bandicore.server.minigames.casino.Casino
@@ -411,6 +412,7 @@ class BandiCore: JavaPlugin() {
         getServer().pluginManager.registerEvents(DressingRoomColorMenu.Events(), this)
         getServer().pluginManager.registerEvents(Balloon.Events(), this)
         getServer().pluginManager.registerEvents(ShopsMenu.Events(), this)
+        getServer().pluginManager.registerEvents(MainMenu.Events(), this)
     }
 
     private fun prepareSettings() {

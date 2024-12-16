@@ -3,6 +3,7 @@ package net.bandithemepark.bandicore.server.essentials
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.park.attractions.menu.AttractionMenu
 import net.bandithemepark.bandicore.park.cosmetics.dressingroom.DressingRoomSession
+import net.bandithemepark.bandicore.server.menu.MainMenu
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.getTranslatedMessage
 import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.ItemFactory.Companion.getPersistentData
@@ -59,7 +60,7 @@ class JoinItems: Listener {
                 DressingRoomSession(event.player, BandiCore.instance.cosmeticManager.dressingRoom)
             }
             "bandithemepark" -> {
-                // Open BandiThemepark menu
+                MainMenu(event.player).open()
             }
             "attractions" -> {
                 AttractionMenu(event.player)

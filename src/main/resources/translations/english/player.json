@@ -109,5 +109,7 @@
   "open-shop": "Press F to open shop",
   "spawn-not-set": "No spawn has been set yet. Blame the crew for this",
   "cosmetics": "Cosmetics",
-  "attractions": "Attractions"
+  "attractions": "Attractions",
+  "website-link": "Click here to open our website",
+  "discord-link": "Click here to join our Discord server"
 }

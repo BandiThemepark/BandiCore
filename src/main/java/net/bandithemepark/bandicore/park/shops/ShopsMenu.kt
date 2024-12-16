@@ -1,6 +1,7 @@
 package net.bandithemepark.bandicore.park.shops
 
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.server.menu.MainMenu
 import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.ItemFactory.Companion.getPersistentData
 import net.bandithemepark.bandicore.util.ItemFactory.Companion.setPersistentData
@@ -87,7 +88,7 @@ class ShopsMenu(val player: Player): InventoryHolder {
                 37 -> {
                     if(session.currentPage == 0) {
                         Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
-                            // TODO: Open main menu
+                            MainMenu(session.player).open()
                         })
                         return
                     }
