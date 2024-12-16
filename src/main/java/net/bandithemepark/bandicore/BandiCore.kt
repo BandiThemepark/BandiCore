@@ -78,6 +78,7 @@ import net.bandithemepark.bandicore.park.npc.path.editor.PathPointEditorEvents
 import net.bandithemepark.bandicore.park.shops.ShopManager
 import net.bandithemepark.bandicore.park.shops.ShopMenu
 import net.bandithemepark.bandicore.park.shops.ShopsMenu
+import net.bandithemepark.bandicore.park.shops.ShopsMenuCommand
 import net.bandithemepark.bandicore.park.shops.opener.ShopOpenerCommand
 import net.bandithemepark.bandicore.server.BandiThemeParkCommand
 import net.bandithemepark.bandicore.server.achievements.AchievementManager
@@ -345,6 +346,7 @@ class BandiCore: JavaPlugin() {
         getCommand("ban")!!.setExecutor(BanCommand())
         getCommand("unban")!!.setExecutor(UnBanCommand())
         getCommand("kick")!!.setExecutor(KickCommand())
+        getCommand("shops")!!.setExecutor(ShopsMenuCommand())
     }
 
     private fun registerEvents() {
