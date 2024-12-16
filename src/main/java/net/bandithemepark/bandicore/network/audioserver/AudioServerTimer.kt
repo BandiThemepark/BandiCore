@@ -9,6 +9,8 @@ import org.bukkit.scheduler.BukkitRunnable
 class AudioServerTimer: BukkitRunnable() {
     var currentTick = 0
     override fun run() {
+        if(BandiCore.instance.devMode) return
+
         currentTick++
         if(currentTick == 1) {
             currentTick = 0
