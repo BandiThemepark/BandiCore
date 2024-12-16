@@ -7,6 +7,8 @@ import net.bandithemepark.bandicore.park.cosmetics.Cosmetic
 import net.bandithemepark.bandicore.server.essentials.warps.Warp
 import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.Util
+import net.kyori.adventure.text.Component
+import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 import java.util.*
@@ -30,7 +32,7 @@ class Shop(
             if(iconData.has("customModelData")) itemFactory.setCustomModelData(iconData.get("customModelData").asInt)
 
             var warp: Warp? = null
-            if(json.has("warp")) warp = BandiCore.instance.server.warpManager.warps.find { it.uuid === UUID.fromString(json.getAsJsonObject("warp").get("id").asString) }
+            if(json.has("warp")) warp = BandiCore.instance.server.warpManager.warps.find { it.name == json.getAsJsonObject("warp").get("name").asString }
 
             val cosmeticsArray = json.get("cosmetics").asJsonArray
             val cosmetics = mutableListOf<Cosmetic>()
