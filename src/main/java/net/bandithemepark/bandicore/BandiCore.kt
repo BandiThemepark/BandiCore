@@ -77,6 +77,7 @@ import net.bandithemepark.bandicore.park.npc.path.editor.PathPointEditorCommand
 import net.bandithemepark.bandicore.park.npc.path.editor.PathPointEditorEvents
 import net.bandithemepark.bandicore.park.shops.ShopManager
 import net.bandithemepark.bandicore.park.shops.ShopMenu
+import net.bandithemepark.bandicore.park.shops.ShopsMenu
 import net.bandithemepark.bandicore.park.shops.opener.ShopOpenerCommand
 import net.bandithemepark.bandicore.server.BandiThemeParkCommand
 import net.bandithemepark.bandicore.server.achievements.AchievementManager
@@ -407,6 +408,7 @@ class BandiCore: JavaPlugin() {
         getServer().pluginManager.registerEvents(JoinItems(), this)
         getServer().pluginManager.registerEvents(DressingRoomColorMenu.Events(), this)
         getServer().pluginManager.registerEvents(Balloon.Events(), this)
+        getServer().pluginManager.registerEvents(ShopsMenu.Events(), this)
     }
 
     private fun prepareSettings() {
