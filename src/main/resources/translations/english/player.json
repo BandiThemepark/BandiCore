@@ -111,5 +111,13 @@
   "cosmetics": "Cosmetics",
   "attractions": "Attractions",
   "website-link": "Click here to open our website",
-  "discord-link": "Click here to join our Discord server"
+  "discord-link": "Click here to join our Discord server",
+  "parkour-started": "Parkour started",
+  "parkour-started-subtitle": "Get to the end as quickly as possible!",
+  "parkour-finished": "Parkour complete",
+  "parkour-finished-subtitle": "You finished in %time%",
+  "parkour-cancelled": "Parkour cancelled",
+  "parkour-cancelled-subtitle": "Your attempt was ended",
+  "parkour-finished-chat": "You finished %parkour% in %time%",
+  "parkour-time": "You are %time% in"
 }

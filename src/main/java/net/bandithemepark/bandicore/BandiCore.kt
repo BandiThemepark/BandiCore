@@ -75,6 +75,8 @@ import net.bandithemepark.bandicore.park.modsupport.SmoothCoastersChecker
 import net.bandithemepark.bandicore.park.npc.ThemeParkNPCSkin
 import net.bandithemepark.bandicore.park.npc.path.editor.PathPointEditorCommand
 import net.bandithemepark.bandicore.park.npc.path.editor.PathPointEditorEvents
+import net.bandithemepark.bandicore.park.parkours.ParkourEvents
+import net.bandithemepark.bandicore.park.parkours.ParkourManager
 import net.bandithemepark.bandicore.park.shops.ShopManager
 import net.bandithemepark.bandicore.park.shops.ShopMenu
 import net.bandithemepark.bandicore.park.shops.ShopsMenu
@@ -159,6 +161,7 @@ class BandiCore: JavaPlugin() {
     lateinit var cosmeticManager: CosmeticManager
     lateinit var shopManager: ShopManager
     lateinit var casino: Casino
+    lateinit var parkourManager: ParkourManager
 
     var okHttpClient = OkHttpClient()
     var restarter = Restart()
@@ -413,6 +416,7 @@ class BandiCore: JavaPlugin() {
         getServer().pluginManager.registerEvents(Balloon.Events(), this)
         getServer().pluginManager.registerEvents(ShopsMenu.Events(), this)
         getServer().pluginManager.registerEvents(MainMenu.Events(), this)
+        getServer().pluginManager.registerEvents(ParkourEvents(), this)
     }
 
     private fun prepareSettings() {
@@ -484,6 +488,8 @@ class BandiCore: JavaPlugin() {
 
     private fun registerMinigames() {
         casino = Casino()
+        parkourManager = ParkourManager()
+        parkourManager.setup()
 
         CookingMinigame().register()
         Minigame.startTimer()
