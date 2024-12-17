@@ -20,7 +20,6 @@ import java.lang.Exception
 
 open class ModelAttachment(id: String = "model", howToConfigure: String = "MATERIAL, CUSTOM_MODEL_DATA, REGION_ID?"): AttachmentType(id, howToConfigure) {
 
-    var parentArmorStand: PacketEntityArmorStand? = null
     var displayEntity: PacketItemDisplay? = null
     var model: ItemStack? = null
     var spawnLocation: Location? = null
@@ -31,28 +30,9 @@ open class ModelAttachment(id: String = "model", howToConfigure: String = "MATER
         armorStandSpawnLocation.pitch = 0.0f
         armorStandSpawnLocation.yaw = 0.0f
 
-        // Spawn an ArmorStand to hold the item display (used for smoothness)
-        parentArmorStand = PacketEntityArmorStand()
-        parentArmorStand!!.spawn(armorStandSpawnLocation, regionId)
-
         // Spawn the display entity
         displayEntity = PacketItemDisplay()
         displayEntity!!.spawn(location, regionId)
-
-        // Set properties of armorstand
-        if(parentArmorStand!!.isInitialized()) {
-            parentArmorStand!!.handle.isInvisible = true
-            parentArmorStand!!.handle.isNoGravity = true
-            (parentArmorStand!!.handle as ArmorStand).isMarker = true
-            parentArmorStand!!.updateMetadata()
-        } else {
-            Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
-                parentArmorStand!!.handle.isInvisible = true
-                parentArmorStand!!.handle.isNoGravity = true
-                (parentArmorStand!!.handle as ArmorStand).isMarker = true
-                parentArmorStand!!.updateMetadata()
-            })
-        }
 
         // Set properties of the display entity
         if(displayEntity!!.isInitialized()) {
@@ -68,10 +48,6 @@ open class ModelAttachment(id: String = "model", howToConfigure: String = "MATER
                 displayEntity!!.updateMetadata()
             })
         }
-
-        // Attach the display entity to the ArmorStand
-        parentArmorStand!!.addPassenger(displayEntity!!.handle.id)
-        parentArmorStand!!.updatePassengers()
 
         spawnLocation = location
     }
@@ -94,20 +70,14 @@ open class ModelAttachment(id: String = "model", howToConfigure: String = "MATER
         displayEntity!!.updateMetadata()
 
         val position = mainPosition.add(Vector(0.0, 0.45, 0.0))
-        parentArmorStand!!.moveEntity(position.x, position.y, position.z)
+        displayEntity!!.moveEntity(position.x, position.y, position.z)
 
         lastRotation = mainRotation
-
-        // Attach the display entity to the ArmorStand
-        parentArmorStand!!.updatePassengers()
     }
 
     override fun onDeSpawn() {
         displayEntity?.deSpawn()
         displayEntity = null
-
-        parentArmorStand?.deSpawn()
-        parentArmorStand = null
     }
 
     override fun onMetadataLoad(metadata: List<String>) {
