@@ -4,6 +4,7 @@ import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.park.attractions.tracks.splines.BezierSpline
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.TrackVehicle
 import net.bandithemepark.bandicore.util.TrackUtil
+import net.bandithemepark.bandicore.util.math.MathUtil
 import net.bandithemepark.bandicore.util.math.Quaternion
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
@@ -267,7 +268,7 @@ class TrackVehicleUpdater {
                 val z = BezierSpline().linear(wheelsBackPoint.z, wheelsFrontPoint.z, 0.5) + vehicle.ridingOn.origin.z
 
                 // Roll at current position
-                val roll = (wheelsBackPoint.roll + wheelsFrontPoint.roll) / 2.0
+                val roll = MathUtil.interpolateAngles(wheelsBackPoint.roll, wheelsFrontPoint.roll, 0.5)
 
                 // Preparing pitch and yaw to calculate a rotation quaternion
                 val deltaLoc = wheelsFrontPoint.asVector().subtract(wheelsBackPoint.asVector())
@@ -293,39 +294,5 @@ class TrackVehicleUpdater {
                 }
             }
         }
-
-//        // Everything before for the collisions
-//        for(track in BandiCore.instance.trackManager.loadedTracks) {
-//            if(track.getVehicles().size <= 1) continue
-//
-//            for(vehicle in track.getVehicles()) {
-//                if(vehicle.speed == 0.0) continue
-//
-//                if(vehicle.speed > 0) {
-//                    val nextVehicle = vehicle.getNextVehicle() ?: continue
-//
-//                    if(vehicle.overlaps(nextVehicle)) {
-//                        if(nextVehicle.physicsType == TrackVehicle.PhysicsType.NONE) {
-//                            vehicle.speed = nextVehicle.speed
-//                        } else {
-//                            vehicle.speed = vehicle.speed/10.0
-//                            nextVehicle.speed += vehicle.speed
-//                        }
-//
-//                        val backSecond = nextVehicle.getBack()
-//                        val frontFirst = vehicle.getFront()
-//                        val distance = backSecond.getDistanceTo(frontFirst)
-//
-//                        Bukkit.broadcast(Component.text("backSecond: ${backSecond.nodePosition.id} at ${backSecond.position}"))
-//                        Bukkit.broadcast(Component.text("frontFirst: ${frontFirst.nodePosition.id} at ${frontFirst.position}"))
-//                        Bukkit.broadcast(Component.text("Position before: " + vehicle.position.nodePosition.id + " at " + vehicle.position.position + ", moving ${-(distance + 2)}"))
-//                        vehicle.position.move(vehicle.ridingOn, -(distance + 2))
-//                        Bukkit.broadcast(Component.text("Position after: " + vehicle.position.nodePosition.id + " at " + vehicle.position.position))
-//                    }
-//                } else {
-//
-//                }
-//            }
-//        }
     }
 }
