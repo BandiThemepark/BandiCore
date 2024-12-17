@@ -58,6 +58,7 @@ class TrackEditorNode: TrackEditorType(), InventoryHolder {
                 inv.setItem(2, ItemFactory(Material.RED_STAINED_GLASS_PANE).setDisplayName(Util.color("<!i><${BandiColors.GREEN}>Set strict")).build())
                 inv.setItem(3, ItemFactory(Material.LIME_STAINED_GLASS_PANE).setDisplayName(Util.color("<!i><${BandiColors.GREEN}>Set not strict")).build())
                 inv.setItem(4, ItemFactory(Material.NAME_TAG).setDisplayName(Util.color("<!i><${BandiColors.GREEN}>Rename node")).build())
+                inv.setItem(5, ItemFactory(Material.STRUCTURE_VOID).setDisplayName(Util.color("<!i><${BandiColors.GREEN}>Debug node")).build())
                 player!!.openInventory(inv)
             }
 
@@ -267,6 +268,16 @@ class TrackEditorNode: TrackEditorType(), InventoryHolder {
                         ChatPrompt(event.whoClicked as Player, (event.whoClicked as Player).getTranslatedMessage("track-editor-rename-node"), BandiColors.YELLOW.toString(), (event.whoClicked as Player).getTranslatedMessage("track-editor-rename-node-cancelled")) { player: Player, message: String ->
                             selectedNode.id = message
                             player.sendTranslatedMessage("track-editor-renamed-node", BandiColors.YELLOW.toString(), MessageReplacement("to", selectedNode.id!!))
+                        }
+                    }
+
+                    5 -> {
+                        Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
+                            event.whoClicked.closeInventory()
+                        })
+
+                        for((index, node) in selectedNode.curve.withIndex()) {
+                            event.whoClicked.sendMessage("Curve point $index has roll ${node.roll}")
                         }
                     }
                 }
