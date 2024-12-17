@@ -24,6 +24,7 @@ class ParkourSession(val player: Player, val parkour: Parkour) {
         )
 
         BandiCore.instance.parkourManager.sessions.remove(this)
+        resetFlying()
     }
 
     fun finish() {
@@ -43,10 +44,15 @@ class ParkourSession(val player: Player, val parkour: Parkour) {
         )
 
         BandiCore.instance.parkourManager.sessions.remove(this)
+        resetFlying()
     }
 
     fun showActionBar() {
         player.sendTranslatedActionBar("parkour-time", BandiColors.YELLOW.toString(), MessageReplacement("time", formatTime(System.currentTimeMillis() - startTime)))
+    }
+
+    fun resetFlying() {
+        if(player.hasPermission("bandithemepark.vip")) player.allowFlight = true
     }
 
     /**
