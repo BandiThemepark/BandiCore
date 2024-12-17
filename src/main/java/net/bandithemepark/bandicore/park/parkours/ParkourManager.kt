@@ -3,7 +3,6 @@ package net.bandithemepark.bandicore.park.parkours
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.util.FileUtil
 import net.bandithemepark.bandicore.util.debug.Reloadable
-import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 

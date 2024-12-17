@@ -2,8 +2,8 @@ package net.bandithemepark.bandicore.park.parkours
 
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.park.parkours.ParkourManager.Companion.getParkourSession
-import net.bandithemepark.bandicore.server.regions.events.PlayerRegionEnterEvent
-import net.bandithemepark.bandicore.server.regions.events.PlayerRegionLeaveEvent
+import net.bandithemepark.bandicore.server.regions.events.PlayerPriorityRegionEnterEvent
+import net.bandithemepark.bandicore.server.regions.events.PlayerPriorityRegionLeaveEvent
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerTeleportEvent
@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerToggleFlightEvent
 
 class ParkourEvents : Listener {
     @EventHandler
-    fun onRegionEnter(event: PlayerRegionEnterEvent) {
+    fun onRegionEnter(event: PlayerPriorityRegionEnterEvent) {
         val parkourSession = event.player.getParkourSession()
         if(parkourSession != null) return
         if(event.fromRegion == null) return
@@ -25,7 +25,7 @@ class ParkourEvents : Listener {
     }
 
     @EventHandler
-    fun onRegionLeave(event: PlayerRegionLeaveEvent) {
+    fun onRegionLeave(event: PlayerPriorityRegionLeaveEvent) {
         val parkourSession = event.player.getParkourSession() ?: return
 
         if(event.fromRegion.name == parkourSession.parkour.coreRegionId) {
