@@ -3,7 +3,6 @@ package net.bandithemepark.bandicore.park.attractions
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.park.attractions.mode.AttractionMode
 import net.bandithemepark.bandicore.park.attractions.rideop.RideOP
-import net.bandithemepark.bandicore.util.FileManager
 import org.bukkit.Location
 import org.bukkit.entity.Player
 
@@ -12,15 +11,13 @@ abstract class Attraction(val id: String, val appearance: AttractionAppearance, 
     val rideOP = RideOP.get(id)
 
     fun updateModeInConfig() {
-        val fm = FileManager()
-        fm.getConfig("config.yml").get().set("attraction-mode.$id", mode.id)
-        fm.saveConfig("config.yml")
+        BandiCore.instance.config.json.getAsJsonObject("attraction-mode").addProperty(id, mode.id)
+        BandiCore.instance.config.save()
     }
 
     init {
-        val fm = FileManager()
-        mode = if(fm.getConfig("config.yml").get().contains("attraction-mode.$id")) {
-            AttractionMode.getMode(fm.getConfig("config.yml").get().getString("attraction-mode.$id")!!)!!
+        mode = if(BandiCore.instance.config.json.getAsJsonObject("attraction-mode").has(id)) {
+            AttractionMode.getMode(BandiCore.instance.config.json.getAsJsonObject("attraction-mode").get(id).asString)!!
         } else {
             AttractionMode.getMode("closed")!!
         }
