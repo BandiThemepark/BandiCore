@@ -21,8 +21,7 @@ class MQTTConnector {
     private var reconnecting = false
 
     init {
-        val fm = FileManager()
-        adress = fm.getConfig("config.yml").get().getString("mqtt-address")!!
+        adress = BandiCore.instance.config.json.get("mqtt-address").asString
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(BandiCore.instance, {
             connect()
@@ -30,7 +29,7 @@ class MQTTConnector {
     }
 
     /**
-     * Connects to the MQTT server using the specified data in the config.yml
+     * Connects to the MQTT server using the specified data in the config.json
      */
     private fun connect() {
         client = MqttClient(adress, publisherId, memoryPersistence)
