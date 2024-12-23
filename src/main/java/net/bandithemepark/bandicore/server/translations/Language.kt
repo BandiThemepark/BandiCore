@@ -1,14 +1,9 @@
 package net.bandithemepark.bandicore.server.translations
 
 import com.google.gson.JsonParser
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.network.backend.BackendPlayer
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedMessage
-import net.bandithemepark.bandicore.util.FileManager
 import net.bandithemepark.bandicore.util.chat.BandiColors
 import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.debug.Reloadable
@@ -34,11 +29,10 @@ class Language(val id: String, val shortenedId: String): Reloadable {
     private fun loadTranslations() {
         translations.clear()
 
-        val fm = FileManager()
-        val filesToTranslate = fm.getConfig("config.yml").get().getStringList("filesToTranslate")
+        val filesToTranslate = BandiCore.instance.config.json.getAsJsonArray("filesToTranslate")
 
         for(fileName in filesToTranslate) {
-            val file = File(BandiCore.instance.dataFolder, "/translations/$id/$fileName.json")
+            val file = File(BandiCore.instance.dataFolder, "/translations/$id/${fileName.asString}.json")
             val data = FileUtils.readFileToString(file, Charset.defaultCharset())
             val json = JsonParser().parse(data).asJsonObject
 

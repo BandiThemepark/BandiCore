@@ -40,14 +40,12 @@ class Server {
         ServerMode("maintenance", "     <color:#ffc738><b>BandiThemepark</b></color> <color:#404040>-</color> <color:#ff5b3b>Closed for maintenance</color><br>             <color:#94a9b3>Check our Discord for updates!</color>", false, false).register()
         ServerMode("restart", "       <color:#ffc738><b>BandiThemepark</b></color> <color:#404040>-</color> <color:#5789ff>We are restarting...</color><br>         <color:#94a9b3>Join our queue to be the first one in!</color>", false, false).register()
 
-        val fm = FileManager()
-
         // Loading the server mode. It will get the server mode from before a restart if it is present.
-        serverMode = if(fm.getConfig("config.yml").get().contains("preRestartMode")) {
-            val serverMode = ServerMode.getFromId(fm.getConfig("config.yml").get().getString("preRestartMode")!!)!!
-            fm.getConfig("config.yml").get().set("preRestartMode", null)
-            fm.getConfig("config.yml").get().set("serverMode", serverMode.id)
-            fm.saveConfig("config.yml")
+        serverMode = if(BandiCore.instance.config.json.has("preRestartMode")) {
+            val serverMode = ServerMode.getFromId(BandiCore.instance.config.json.get("preRestartMode").asString)!!
+            BandiCore.instance.config.json.remove("preRestartMode")
+            BandiCore.instance.config.json.addProperty("serverMode", serverMode.id)
+            BandiCore.instance.config.save()
 
             Bukkit.getScheduler().runTaskLater(BandiCore.instance, Runnable {
                 BandiCore.instance.mqttConnector.sendMessage("/proxy/mode/trigger", "update")
@@ -55,17 +53,17 @@ class Server {
 
             serverMode
         } else {
-            ServerMode.getFromId(fm.getConfig("config.yml").get().getString("serverMode")!!)!!
+            ServerMode.getFromId(BandiCore.instance.config.json.get("serverMode").asString)!!
         }
 
-        apiKey = fm.getConfig("config.yml").get().getString("apiKey")!!
+        apiKey = BandiCore.instance.config.json.get("apiKey").asString
 
-        queueServer = fm.getConfig("config.yml").get().getString("queueServer")!!
-        queueServerHost = fm.getConfig("config.yml").get().getString("queueServerHost")!!
-        queueServerPort = fm.getConfig("config.yml").get().getInt("queueServerPort")
+        queueServer = BandiCore.instance.config.json.get("queueServer").asString
+        queueServerHost = BandiCore.instance.config.json.get("queueServerHost").asString
+        queueServerPort = BandiCore.instance.config.json.get("queueServerPort").asInt
 
-        for(language in fm.getConfig("config.yml").get().getStringList("languages")) {
-            languages.add(Language(language.split("-")[0], language.split("-")[1]))
+        for(language in BandiCore.instance.config.json.getAsJsonArray("languages")) {
+            languages.add(Language(language.asString.split("-")[0], language.asString.split("-")[1]))
         }
     }
 
@@ -93,9 +91,8 @@ class Server {
      */
     fun changeServerMode(mode: ServerMode) {
         serverMode = mode
-        val fm = FileManager()
-        fm.getConfig("config.yml").get().set("serverMode", mode.id)
-        fm.saveConfig("config.yml")
+        BandiCore.instance.config.json.addProperty("serverMode", mode.id)
+        BandiCore.instance.config.save()
 
         if(!BandiCore.instance.devMode) {
             BackendSetting("serverMode").setValue(mode.id)

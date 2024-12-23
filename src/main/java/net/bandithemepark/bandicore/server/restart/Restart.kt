@@ -9,7 +9,6 @@ import net.bandithemepark.bandicore.server.translations.LanguageUtil.getTranslat
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedActionBar
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedMessage
 import net.bandithemepark.bandicore.server.translations.MessageReplacement
-import net.bandithemepark.bandicore.util.FileManager
 import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.chat.BandiColors
 import net.kyori.adventure.title.Title
@@ -40,9 +39,8 @@ class Restart {
             player.sendMessage(" ")
         }
 
-        val fm = FileManager()
-        fm.getConfig("config.yml").get().set("preRestartMode", BandiCore.instance.server.serverMode.id)
-        fm.saveConfig("config.yml")
+        BandiCore.instance.config.json.addProperty("preRestartMode", BandiCore.instance.server.serverMode.id)
+        BandiCore.instance.config.save()
 
         BandiCore.instance.server.changeServerMode(ServerMode.getFromId("restart")!!)
 
