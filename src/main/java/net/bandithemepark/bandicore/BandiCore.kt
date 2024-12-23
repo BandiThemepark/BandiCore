@@ -132,6 +132,7 @@ import net.bandithemepark.bandicore.server.placeables.PlaceableRemoveCommand
 import net.bandithemepark.bandicore.server.regions.BandiRegionCommand
 import net.bandithemepark.bandicore.server.regions.BandiRegionManager
 import net.bandithemepark.bandicore.server.regions.events.BandiRegionEvents
+import net.bandithemepark.bandicore.util.BandiConfig
 import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.entity.HoverableEntity
@@ -146,6 +147,7 @@ class BandiCore: JavaPlugin() {
     var devMode = true
 
     var startTime = 0L
+    lateinit var config: BandiConfig
     lateinit var server: Server
     lateinit var trackManager: TrackManager
     lateinit var afkManager: AfkManager
@@ -193,6 +195,7 @@ class BandiCore: JavaPlugin() {
             fm.getConfig("translations/english/crew.json").saveDefaultConfig()
             fm.getConfig("translations/english/player.json").saveDefaultConfig()
         }
+        config = BandiConfig()
 
         worldManager = WorldManager()
         registerAchievementRewardTypes()
