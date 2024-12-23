@@ -1,7 +1,6 @@
 package net.bandithemepark.bandicore.server.effects
 
 import net.bandithemepark.bandicore.BandiCore
-import net.bandithemepark.bandicore.util.FileManager
 import net.bandithemepark.bandicore.util.debug.Reloadable
 import org.bukkit.Bukkit
 
@@ -14,18 +13,17 @@ class EffectManager: Reloadable {
     }
 
     /**
-     * Plays all effects that have been listed in the config.yml at server-start-effects
+     * Plays all effects that have been listed in the config.json at server-start-effects
      */
     fun playServerStartEffects() {
-        val fm = FileManager()
-        val effectNames = fm.getConfig("config.yml").get().getStringList("server-start-effects")
+        val effectNames = BandiCore.instance.config.json.getAsJsonArray("server-start-effects").map { it.asString }
 
         for(effectName in effectNames) {
             try {
                 val effect = Effect(effectName, null)
                 effect.play()
             } catch (e: Exception) {
-                Bukkit.getLogger().warning("Could not load effect $effectName on server start. Please remove it from the config.yml if it has been deleted")
+                Bukkit.getLogger().warning("Could not load effect $effectName on server start. Please remove it from the config.json if it has been deleted")
             }
         }
 
@@ -33,28 +31,17 @@ class EffectManager: Reloadable {
     }
 
     /**
-     * Reloads the config.yml file, stops all effects that were previously playing from server start and starts the new effects
+     * Reloads the config.json file, stops all effects that were previously playing from server start and starts the new effects
      */
     fun reloadServerStartEffects() {
-        val fm = FileManager()
-        val beforeEffectNames = fm.getConfig("config.yml").get().getStringList("server-start-effects")
+        val beforeEffectNames = BandiCore.instance.config.json.getAsJsonArray("server-start-effects").map { it.asString }
 
         for(effectName in beforeEffectNames) {
             playingEffects.find { it.fileName == effectName }?.stop()
         }
 
-        fm.reloadConfig("config.yml")
-        fm.saveConfig("config.yml")
-        val newEffectNames = fm.getConfig("config.yml").get().getStringList("server-start-effects")
-
-        for(effectName in newEffectNames) {
-            try {
-                val effect = Effect(effectName, null)
-                effect.play()
-            } catch (e: Exception) {
-                Bukkit.getLogger().warning("Could not load effect $effectName on server start. Please remove it from the config.yml if it has been deleted")
-            }
-        }
+        BandiCore.instance.config.reload()
+        playServerStartEffects()
     }
 
     private fun startTimer() {
