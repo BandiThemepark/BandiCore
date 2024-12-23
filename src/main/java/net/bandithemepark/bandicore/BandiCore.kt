@@ -185,7 +185,6 @@ class BandiCore: JavaPlugin() {
         // Saving the default settings
         if(!dataFolder.exists()) {
             val fm = FileManager()
-            fm.getConfig("config.yml").saveDefaultConfig()
             fm.getConfig("ranks.yml").saveDefaultConfig()
             fm.getConfig("afkTitles.yml").saveDefaultConfig()
             fm.getConfig("blocks.yml").saveDefaultConfig()
