@@ -1,6 +1,7 @@
 package net.bandithemepark.bandicore.server.essentials.worlds
 
-import net.bandithemepark.bandicore.util.FileManager
+import com.google.gson.JsonArray
+import net.bandithemepark.bandicore.BandiCore
 import org.bukkit.Bukkit
 import org.bukkit.WorldCreator
 
@@ -13,10 +14,8 @@ class WorldManager {
 
     private fun setupWorlds() {
         // Load all worlds from the config
-        val fm = FileManager()
-
-        if(fm.getConfig("config.yml").get().contains("worlds")) return
-        loadedWorldNames = fm.getConfig("config.yml").get().getStringList("worlds")
+        if(!BandiCore.instance.config.json.has("worlds")) return
+        loadedWorldNames = BandiCore.instance.config.json.getAsJsonArray("worlds").map { it.asString }.toMutableList()
 
         // Loading the worlds if they don't exist
         for(worldName in loadedWorldNames) {
@@ -34,10 +33,12 @@ class WorldManager {
             val worldCreator = WorldCreator(id)
             Bukkit.getServer().createWorld(worldCreator)
 
-            val fm = FileManager()
             loadedWorldNames.add(id)
-            fm.getConfig("config.yml").get().set("worlds", loadedWorldNames)
-            fm.saveConfig("config.yml")
+
+            val array = JsonArray()
+            loadedWorldNames.forEach { array.add(it) }
+            BandiCore.instance.config.json.add("worlds", array)
+            BandiCore.instance.config.save()
 
             true
         } catch(e: Exception) {
@@ -49,9 +50,10 @@ class WorldManager {
     fun unloadWorld(id: String) {
         Bukkit.getServer().unloadWorld(id, true)
 
-        val fm = FileManager()
         loadedWorldNames.remove(id)
-        fm.getConfig("config.yml").get().set("worlds", loadedWorldNames)
-        fm.saveConfig("config.yml")
+        val array = JsonArray()
+        loadedWorldNames.forEach { array.add(it) }
+        BandiCore.instance.config.json.add("worlds", array)
+        BandiCore.instance.config.save()
     }
 }
