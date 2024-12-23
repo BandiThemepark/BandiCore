@@ -1,5 +1,6 @@
 package net.bandithemepark.bandicore.park.attractions.tracks
 
+import com.google.gson.JsonArray
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.segments.*
 import net.bandithemepark.bandicore.bandithemepark.adventure.logflume.switch.LogFlumePreSwitchSegment
@@ -31,7 +32,6 @@ import net.bandithemepark.bandicore.park.attractions.tracks.triggers.types.TestT
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.TrackVehicleManager
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.*
 import net.bandithemepark.bandicore.util.FileManager
-import net.bandithemepark.bandicore.util.entity.PacketEntitySeat
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.util.Vector
@@ -115,7 +115,7 @@ class TrackManager(val splineType: SplineType, val pointsPerMeter: Int, val fric
     }
 
     private fun getLoadedTrackIds(): List<String> {
-        return FileManager().getConfig("config.yml").get().getStringList("loadedTracks")
+        return BandiCore.instance.config.json.getAsJsonArray("loadedTracks").map { it.asString }
     }
 
     private fun loadTracks() {
@@ -127,12 +127,13 @@ class TrackManager(val splineType: SplineType, val pointsPerMeter: Int, val fric
      * @param id The id of the track to load
      */
     fun loadTrack(id: String) {
-        val fm = FileManager()
 
         val old = getLoadedTrackIds().toMutableList()
         old.add(id)
-        fm.getConfig("config.yml").get().set("loadedTracks", old)
-        fm.saveConfig("config.yml")
+        val jsonArray = JsonArray()
+        old.forEach { jsonArray.add(it) }
+        BandiCore.instance.config.json.add("loadedTracks", jsonArray)
+        BandiCore.instance.config.save()
 
         loadInternally(id)
     }
@@ -142,12 +143,12 @@ class TrackManager(val splineType: SplineType, val pointsPerMeter: Int, val fric
      * @param id The id of the track to unload
      */
     fun unloadTrack(id: String) {
-        val fm = FileManager()
-
         val old = getLoadedTrackIds().toMutableList()
         old.remove(id)
-        fm.getConfig("config.yml").get().set("loadedTracks", old)
-        fm.saveConfig("config.yml")
+        val jsonArray = JsonArray()
+        old.forEach { jsonArray.add(it) }
+        BandiCore.instance.config.json.add("loadedTracks", jsonArray)
+        BandiCore.instance.config.save()
 
         loadedTracks.removeIf { it.id == id }
     }
@@ -241,11 +242,12 @@ class TrackManager(val splineType: SplineType, val pointsPerMeter: Int, val fric
         val track = TrackLayout(id, origin.toVector(), origin.world!!, mutableListOf(TrackNode("0", 0.0, 0.0, 0.0, false)), mutableListOf(), mutableListOf(), mutableListOf())
         loadedTracks.add(track)
 
-        val fm = FileManager()
         val old = getLoadedTrackIds().toMutableList()
         old.add(id)
-        fm.getConfig("config.yml").get().set("loadedTracks", old)
-        fm.saveConfig("config.yml")
+        val jsonArray = JsonArray()
+        old.forEach { jsonArray.add(it) }
+        BandiCore.instance.config.json.add("loadedTracks", jsonArray)
+        BandiCore.instance.config.save()
 
         track.save()
     }
