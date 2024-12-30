@@ -41,10 +41,8 @@ class BandiScoreboard {
     }
 
     private fun clearScoreboardTeams() {
-        val teams = mainScoreboard.teams.toMutableList()
-        for(team in teams) {
-            team.unregister()
-        }
+        val teamNames = mainScoreboard.teams.map { it.name }
+        teamNames.forEach { mainScoreboard.getTeam(it)?.unregister() }
     }
 
     /**
