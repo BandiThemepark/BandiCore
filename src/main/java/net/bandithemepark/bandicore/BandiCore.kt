@@ -113,6 +113,7 @@ import net.bandithemepark.bandicore.server.essentials.coins.PlayerBossBar.Compan
 import net.bandithemepark.bandicore.server.essentials.moderation.BanCommand
 import net.bandithemepark.bandicore.server.essentials.moderation.KickCommand
 import net.bandithemepark.bandicore.server.essentials.moderation.UnBanCommand
+import net.bandithemepark.bandicore.server.essentials.ranks.test.RankTest
 import net.bandithemepark.bandicore.server.essentials.worlds.WorldCommands
 import net.bandithemepark.bandicore.server.essentials.worlds.WorldManager
 import net.bandithemepark.bandicore.server.essentials.teleport.BackCommand
@@ -503,5 +504,6 @@ class BandiCore: JavaPlugin() {
     private fun registerTests() {
         Balloon(ItemFactory(Material.RED_WOOL).build(), Bukkit.getWorld("world")!!).register("balloon")
         CustomPlayerRigTest().register("custom-player-shaders")
+        RankTest.getInstance()
     }
 }
