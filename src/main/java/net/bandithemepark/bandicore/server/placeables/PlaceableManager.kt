@@ -3,6 +3,7 @@ package net.bandithemepark.bandicore.server.placeables
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import net.bandithemepark.bandicore.util.Util
 import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.Location
@@ -26,7 +27,7 @@ class PlaceableManager {
             types.add(PlaceableType.fromJson(it.asJsonObject))
         }
 
-        Bukkit.getLogger().info("Loaded ${types.size} placeable types")
+        Util.debug("Placeables", "Loaded ${types.size} placeable types")
     }
 
     fun loadPlaced() {
@@ -37,8 +38,7 @@ class PlaceableManager {
             placed.add(PlacedPlaceable.fromJson(it.asJsonObject))
         }
 
-        Bukkit.getLogger().info("Loaded ${placed.size} placed placeables")
-
+        Util.debug("Placeables", "Loaded ${placed.size} placed placeables")
         spawnPlaced()
     }
 

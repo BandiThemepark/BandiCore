@@ -4,6 +4,7 @@ import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.network.backend.BackendCosmetic
 import net.bandithemepark.bandicore.park.cosmetics.dressingroom.DressingRoom
 import net.bandithemepark.bandicore.park.cosmetics.dressingroom.DressingRoomSession
+import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.debug.Reloadable
 import org.bukkit.Bukkit
 import org.bukkit.Color
@@ -55,7 +56,7 @@ class CosmeticManager: Reloadable {
 
             if(loadShops) BandiCore.instance.shopManager.setup()
 
-            Bukkit.getConsoleSender().sendMessage("Loaded ${cosmetics.size} cosmetics")
+            Util.debug("Cosmetics", "Loaded ${cosmetics.size} cosmetics")
         }
     }
 

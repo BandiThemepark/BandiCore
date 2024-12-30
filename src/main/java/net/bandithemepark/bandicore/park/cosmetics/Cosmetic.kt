@@ -137,7 +137,7 @@ class Cosmetic(
                     val tag = CosmeticTag.valueOf(element.asString)
                     tags.add(tag)
                 } catch (e: IllegalArgumentException) {
-                    Bukkit.getConsoleSender().sendMessage("No tag named $element found for cosmetic $name")
+                    Util.debug("Cosmetics", "No tag named $element found for cosmetic $name")
                 }
             }
 

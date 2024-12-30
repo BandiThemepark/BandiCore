@@ -1,6 +1,7 @@
 package net.bandithemepark.bandicore.server.effects
 
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.debug.Reloadable
 import org.bukkit.Bukkit
 
@@ -23,11 +24,11 @@ class EffectManager: Reloadable {
                 val effect = Effect(effectName, null)
                 effect.play()
             } catch (e: Exception) {
-                Bukkit.getLogger().warning("Could not load effect $effectName on server start. Please remove it from the config.json if it has been deleted")
+                Util.debug("Effects", "Could not load effect $effectName on server start. Please remove it from the config.json if it has been deleted")
             }
         }
 
-        Bukkit.getLogger().info("Loaded ${playingEffects.size} server start effects")
+        Util.debug("Effects", "Started ${effectNames.size} server start effects")
     }
 
     /**

@@ -32,6 +32,7 @@ import net.bandithemepark.bandicore.park.attractions.tracks.triggers.types.TestT
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.TrackVehicleManager
 import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.attachments.types.*
 import net.bandithemepark.bandicore.util.FileManager
+import net.bandithemepark.bandicore.util.Util
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.util.Vector
@@ -48,7 +49,8 @@ class TrackManager(val splineType: SplineType, val pointsPerMeter: Int, val fric
         registerCommands()
         registerEditors()
         registerAttachments()
-        Bukkit.getLogger().info("Loaded ${loadedTracks.size} tracks")
+
+        Util.debug("TrackManager", "Loaded ${loadedTracks.size} tracks")
     }
 
     private fun registerSegments() {

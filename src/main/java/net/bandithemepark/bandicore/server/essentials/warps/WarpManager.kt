@@ -1,6 +1,7 @@
 package net.bandithemepark.bandicore.server.essentials.warps
 
 import net.bandithemepark.bandicore.network.backend.BackendWarp
+import net.bandithemepark.bandicore.util.Util
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.entity.Player
@@ -34,7 +35,7 @@ class WarpManager {
                 warps.add(warp)
             }
 
-            Bukkit.getLogger().info("Loaded ${warps.size} warps")
+            Util.debug("Warps", "Loaded ${warps.size} warps")
         }
     }
 

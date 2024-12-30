@@ -2,6 +2,7 @@ package net.bandithemepark.bandicore.server.regions
 
 import net.bandithemepark.bandicore.network.backend.BackendRegion
 import net.bandithemepark.bandicore.park.attractions.rideop.RideOP
+import net.bandithemepark.bandicore.util.Util
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Location
@@ -75,7 +76,7 @@ class BandiRegionManager {
 
             this.regions = regions
 
-            Bukkit.getLogger().info("Loaded ${regions.size} regions")
+            Util.debug("Regions", "Loaded ${regions.size} regions")
 
             // Doing everything that needs to happen after loading the regions
             for(rideOP in RideOP.rideOPs) rideOP.region = regions.find { it.name == rideOP.regionId }!!

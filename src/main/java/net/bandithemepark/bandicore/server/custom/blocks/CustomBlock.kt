@@ -186,7 +186,7 @@ class CustomBlock(id: String, name: String, val customModelData: Int, val instru
                 types.add(CustomBlock(id, name, customModelData, instrument, note, powered))
             }
 
-            Bukkit.getLogger().info("Loaded ${types.size} custom block types")
+            Util.debug("CustomBlocks", "Loaded ${types.size} custom block types")
         }
 
         fun loadPlaced() {

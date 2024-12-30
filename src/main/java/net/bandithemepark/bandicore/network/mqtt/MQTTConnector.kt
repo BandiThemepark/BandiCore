@@ -3,6 +3,7 @@ package net.bandithemepark.bandicore.network.mqtt
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.server.mode.ServerMode
 import net.bandithemepark.bandicore.util.FileManager
+import net.bandithemepark.bandicore.util.Util
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.eclipse.paho.client.mqttv3.MqttClient
@@ -54,7 +55,7 @@ class MQTTConnector {
             reconnecting = false
             client!!.connect(options)
             sendMessage("/core/connection", "connected")
-            Bukkit.getLogger().info("Connected to MQTT server, and sent out a connection message.")
+            Util.debug("MQTT", "Connected to MQTT server, and sent out a connection message.")
 
             // Start registered listeners
             for(listener in MQTTListener.registered) registerListener(listener)
@@ -72,7 +73,7 @@ class MQTTConnector {
         if(!client!!.isConnected) return
 
         client!!.disconnect()
-        Bukkit.getLogger().info("Disconnected from the MQTT server.")
+        Util.debug("MQTT", "Disconnected from the MQTT server.")
     }
 
     /**

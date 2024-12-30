@@ -2,6 +2,7 @@ package net.bandithemepark.bandicore.park.parkours
 
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.util.FileUtil
+import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.debug.Reloadable
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -21,12 +22,17 @@ class ParkourManager: Reloadable {
         parkours = mutableListOf()
         val json = FileUtil.loadJsonFrom("plugins/BandiCore/parkours.json")
 
+        if(!json.has("parkours")) {
+            Util.debug("Parkours", "No parkours found. Create a parkours.json file and add configuration to it")
+            return
+        }
+
         json.getAsJsonArray("parkours").forEach {
             val parkour = Parkour.fromJson(it.asJsonObject)
             parkours.add(parkour)
         }
 
-        Bukkit.getLogger().info("Loaded ${parkours.size} parkours")
+        Util.debug("Parkours", "Loaded ${parkours.size} parkours")
     }
 
     private fun startTimer() {

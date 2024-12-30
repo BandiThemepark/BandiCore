@@ -169,7 +169,6 @@ class BandiCore: JavaPlugin() {
     var restarter = Restart()
 
     override fun onEnable() {
-        Bukkit.getConsoleSender().sendMessage("BandiCore is starting...")
         instance = this
         if(Bukkit.getServer().port == 25566) {
             devMode = false
@@ -179,7 +178,7 @@ class BandiCore: JavaPlugin() {
         }
 
         startTime = System.currentTimeMillis()
-        Bukkit.getConsoleSender().sendMessage("Server start time set to $startTime")
+        Util.debug("AudioServer", "Server start time set to $startTime")
         smoothCoastersAPI = SmoothCoastersAPI(this)
 
         // Saving the default settings
