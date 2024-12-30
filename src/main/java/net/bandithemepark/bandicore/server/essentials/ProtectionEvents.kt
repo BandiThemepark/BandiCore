@@ -70,6 +70,7 @@ class ProtectionEvents: Listener {
         event.player.sendTranslatedActionBar("border-no-permission", BandiColors.RED.toString())
 
         val delta = event.toLocation.toVector().subtract(event.fromLocation.toVector()).multiply(-1.5)
+        delta.y = 0.0
         val toLocation = event.fromLocation.toVector().add(delta).toLocation(event.fromLocation.world)
         toLocation.yaw = event.player.location.yaw
         toLocation.pitch = event.player.location.pitch
