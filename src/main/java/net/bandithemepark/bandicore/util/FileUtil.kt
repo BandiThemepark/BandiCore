@@ -8,6 +8,7 @@ import java.io.FileReader
 
 object FileUtil {
     fun loadJsonFrom(path: String): JsonObject {
+        if(!doesFileExist(path)) return JsonObject()
         val reader = FileReader(path)
         return JsonParser().parse(reader).asJsonObject
     }
