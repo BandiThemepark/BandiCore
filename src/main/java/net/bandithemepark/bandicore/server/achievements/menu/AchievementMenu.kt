@@ -32,7 +32,7 @@ class AchievementMenu(val player: Player, category: AchievementCategory) {
     fun open(page: Int, category: AchievementCategory) {
         currentPage = page
         this.category = category
-        val inv = Bukkit.createInventory(null, 54, Util.color("<#FFFFFF>\uE002\uE015"))
+        val inv = Bukkit.createInventory(null, 54, Util.color("<#FFFFFF>\uE002\uE015\uE002"))
 
         inv.setItem(40, category.getItemStack(player))
 
@@ -96,7 +96,7 @@ class AchievementMenu(val player: Player, category: AchievementCategory) {
     class Events : Listener {
         @EventHandler
         fun onInventoryClick(event: InventoryClickEvent) {
-            if (event.view.title() != Util.color("<#FFFFFF>\uE002\uE015")) return
+            if (event.view.title() != Util.color("<#FFFFFF>\uE002\uE015\uE002")) return
             if (event.view.topInventory != event.clickedInventory) return
 
             event.isCancelled = true

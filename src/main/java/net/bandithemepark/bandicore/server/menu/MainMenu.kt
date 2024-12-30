@@ -95,7 +95,7 @@ class MainMenu(val player: Player): InventoryHolder {
 
                 3, 4, 5, 12, 13, 14, 21, 22, 23 -> {
                     Bukkit.getScheduler().runTask(BandiCore.instance, Runnable {
-                        AchievementCategoriesMenu(event.whoClicked as Player).open(0)
+                        AchievementCategoriesMenu(event.whoClicked as Player)
                     })
                 }
 
