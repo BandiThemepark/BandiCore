@@ -44,6 +44,11 @@ class RankTest private constructor() {
         else endRankTest(player)
     }
 
+    fun endAllTests() {
+        activeSessions.forEach { it.end() }
+        activeSessions.clear()
+    }
+
     private fun getRank(id: String): Rank? {
         return BandiCore.instance.server.rankManager.loadedRanks.find { it.id.equals(id, true) }
     }

@@ -4,6 +4,7 @@ import com.google.common.io.ByteStreams
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.park.attractions.Attraction
 import net.bandithemepark.bandicore.park.attractions.mode.AttractionMode
+import net.bandithemepark.bandicore.server.essentials.ranks.test.RankTest
 import net.bandithemepark.bandicore.server.mode.ServerMode
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.getTranslatedMessage
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedActionBar
@@ -23,6 +24,8 @@ class Restart {
     private var restartSent = false
 
     fun start() {
+        RankTest.getInstance().endAllTests()
+
         for(attraction in Attraction.attractions) {
             attraction.mode = AttractionMode.getMode("closedshown")!!
         }
