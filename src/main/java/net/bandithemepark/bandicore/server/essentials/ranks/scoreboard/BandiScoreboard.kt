@@ -9,7 +9,6 @@ import net.bandithemepark.bandicore.util.chat.BandiColors
 import net.bandithemepark.bandicore.util.npc.NPC
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Bukkit
-import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -67,8 +66,8 @@ class BandiScoreboard {
         }
 
         // Update team entries for each color
-        for(color in ChatColor.entries) {
-            val team = mainScoreboard.getTeam(color.name)!!
+        for((name, color) in NamedTextColor.NAMES.keyToValue()) {
+            val team = mainScoreboard.getTeam(name)!!
 
             // Add all entities with the color to the team
             for ((key, value) in selectedColors.entries.toSet()) {
@@ -114,8 +113,8 @@ class BandiScoreboard {
         }
     }
 
-    private val selectedColors = hashMapOf<String, ChatColor>()
-    fun setGlowColor(entityUUID: String, color: ChatColor) {
+    private val selectedColors = hashMapOf<String, NamedTextColor>()
+    fun setGlowColor(entityUUID: String, color: NamedTextColor) {
         selectedColors[entityUUID] = color
     }
 

@@ -16,6 +16,7 @@ import net.bandithemepark.bandicore.util.entity.event.SeatEnterEvent
 import net.bandithemepark.bandicore.util.entity.event.SeatExitEvent
 import net.bandithemepark.bandicore.util.math.MathUtil
 import net.bandithemepark.bandicore.util.math.Quaternion
+import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Location
@@ -125,7 +126,7 @@ class RupsbaanCart {
         if((harnessAttachment.type as ModelAttachment).displayEntity != null) return
 
         harnessAttachment.type.onSpawn(spawnLocation, harnessAttachment)
-        BandiCore.instance.server.scoreboard.setGlowColor((harnessAttachment.type as ModelAttachment).displayEntity!!.handle!!.uuid.toString(), ChatColor.RED)
+        BandiCore.instance.server.scoreboard.setGlowColor((harnessAttachment.type as ModelAttachment).displayEntity!!.handle!!.uuid.toString(), NamedTextColor.RED)
         try { BandiCore.instance.server.scoreboard.updateScoreboard() } catch(_: Exception) {}
         modelAttachment.children.add(harnessAttachment)
 

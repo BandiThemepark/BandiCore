@@ -7,6 +7,7 @@ import net.bandithemepark.bandicore.util.ItemFactory
 import net.bandithemepark.bandicore.util.math.MathUtil
 import net.bandithemepark.bandicore.util.math.Quaternion
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Location
@@ -78,7 +79,7 @@ class HarnessAttachment: ModelAttachment("harness", "MATERIAL, CUSTOM_MODEL_DATA
         spawned = true
 
         super.onSpawn(location, parent)
-        BandiCore.instance.server.scoreboard.setGlowColor(displayEntity!!.handle.uuid.toString(), ChatColor.RED)
+        BandiCore.instance.server.scoreboard.setGlowColor(displayEntity!!.handle.uuid.toString(), NamedTextColor.RED)
         // TODO Spawn hitbox
     }
 
