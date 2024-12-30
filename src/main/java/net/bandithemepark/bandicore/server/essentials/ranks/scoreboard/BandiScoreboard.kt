@@ -22,22 +22,25 @@ class BandiScoreboard {
     private fun setupScoreboardTeams() {
         // Register teams for all ranks
         for (rank in BandiCore.instance.server.rankManager.loadedRanks) {
-            val team = mainScoreboard.registerNewTeam(rank.scoreboardName)
-            team.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER)
-            team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER)
+            createTeam(rank.scoreboardName)
         }
 
         // Register team for NPCs
-        val npcTeam = mainScoreboard.registerNewTeam("npc")
-        npcTeam.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER)
+        createTeam("npc")
 
         // Register team for each color (used for hover)
         for(color in NamedTextColor.NAMES.keys()) {
-            val team = mainScoreboard.registerNewTeam(color)
+            createTeam(color, NamedTextColor.NAMES.value(color))
+        }
+    }
+
+    private fun createTeam(name: String, color: NamedTextColor? = null) {
+        try {
+            val team = mainScoreboard.registerNewTeam(name)
             team.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER)
             team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER)
-            team.color(NamedTextColor.NAMES.value(color))
-        }
+            if (color != null) team.color(color)
+        } catch (_: IllegalArgumentException) { /* Team already exists */ }
     }
 
     private fun clearScoreboardTeams() {
