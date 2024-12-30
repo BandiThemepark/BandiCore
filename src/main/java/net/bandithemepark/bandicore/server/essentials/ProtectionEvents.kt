@@ -13,6 +13,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.FoodLevelChangeEvent
 import org.bukkit.event.hanging.HangingBreakByEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
@@ -78,6 +79,12 @@ class ProtectionEvents: Listener {
     @EventHandler
     fun onPlayerDamage(event: EntityDamageByEntityEvent) {
         if(event.damager.hasPermission("bandithemepark.crew")) return
+        event.isCancelled = true
+    }
+
+    @EventHandler
+    fun onFallDamage(event: EntityDamageEvent) {
+        if(event.cause != EntityDamageEvent.DamageCause.FALL) return
         event.isCancelled = true
     }
 }
