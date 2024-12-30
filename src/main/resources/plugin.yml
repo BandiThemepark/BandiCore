@@ -191,3 +191,5 @@ commands:
     description: View a list of all shops
     aliases:
       - shop
+  ranktest:
+    description: Used to reset the rank test from /bandi test

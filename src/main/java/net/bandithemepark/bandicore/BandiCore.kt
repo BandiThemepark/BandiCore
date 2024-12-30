@@ -353,6 +353,7 @@ class BandiCore: JavaPlugin() {
         getCommand("unban")!!.setExecutor(UnBanCommand())
         getCommand("kick")!!.setExecutor(KickCommand())
         getCommand("shops")!!.setExecutor(ShopsMenuCommand())
+        getCommand("ranktest")!!.setExecutor(RankTest.Command())
     }
 
     private fun registerEvents() {

@@ -215,5 +215,7 @@
   "unban-success": "Successfully unbanned player with UUID %uuid% (%username%)",
   "invalid-uuid": "The UUID you entered was invalid",
   "kick-invalid-args": "Invalid arguments! Usage: /kick <player> <reason>",
-  "kick-success": "Successfully kicked %player%"
+  "kick-success": "Successfully kicked %player%",
+  "rank-test-started": "Started rank test. Use /ranktest to stop it",
+  "rank-test-stopped": "Stopped rank test"
 }

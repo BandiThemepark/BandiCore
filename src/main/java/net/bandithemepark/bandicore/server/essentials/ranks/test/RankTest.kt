@@ -3,8 +3,12 @@ package net.bandithemepark.bandicore.server.essentials.ranks.test
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.server.essentials.ranks.Rank
 import net.bandithemepark.bandicore.util.debug.Testable
+import org.bukkit.command.Command
+import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
 
 class RankTest private constructor() {
 
@@ -55,6 +59,18 @@ class RankTest private constructor() {
         override fun test(sender: CommandSender) {
             if(sender !is Player) return
             getInstance().toggleRankTest(sender, "vip")
+        }
+    }
+
+    class Command: CommandExecutor {
+        override fun onCommand(sender: CommandSender, command: org.bukkit.command.Command, label: String, args: Array<out String>?): Boolean {
+            if(sender !is Player) return false
+            if(!command.name.equals("ranktest", true)) return false
+            if(!sender.hasPermission("bandithemepark.ranktest")) return false
+
+            getInstance().endRankTest(sender)
+
+            return false
         }
     }
 }
