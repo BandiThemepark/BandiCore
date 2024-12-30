@@ -4,6 +4,7 @@ import net.bandithemepark.bandicore.server.essentials.coins.PlayerBossBar.Compan
 import net.bandithemepark.bandicore.server.minigames.MinigamePlayer
 import net.bandithemepark.bandicore.server.minigames.cooking.item.CookingItem
 import net.bandithemepark.bandicore.server.minigames.cooking.item.CookingItemHolder
+import net.bandithemepark.bandicore.util.chat.BandiColors
 import org.bukkit.Bukkit
 import org.bukkit.boss.BarColor
 import org.bukkit.boss.BarStyle
@@ -24,7 +25,7 @@ class CookingPlayer(player: Player, val game: CookingGame, val type: CookingMini
     }
 
     fun updateBossBar() {
-        getBossBar()?.overrideText = "§7${type.name} | ${game.getTimeLeftString()} left | ${game.points} points"
+        getBossBar()?.overrideText = "<${BandiColors.LIGHT_GRAY}>${type.name} | ${game.getTimeLeftString()} left | ${game.points} points"
         getBossBar()?.update()
 
         var ordersText = ""
