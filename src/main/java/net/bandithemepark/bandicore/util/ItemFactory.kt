@@ -235,7 +235,7 @@ class ItemFactory {
          * @return the value stored at the given key, or null if no value was found
          */
         fun ItemStack.getPersistentData(key: String): String? {
-            val itemMeta = this.itemMeta
+            val itemMeta = this.itemMeta ?: return null
             return itemMeta.persistentDataContainer.get(NamespacedKey(BandiCore.instance, key), PersistentDataType.STRING)
         }
 
