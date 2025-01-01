@@ -10,7 +10,7 @@ import org.bukkit.entity.Player
 
 /**
  * An instance of a physical leaderboard in the world.
- * Will update itself when the settings update, and will automatically spawn when instantiated.
+ * Will update itself when the settings update
  *
  * @param settings The settings for this leaderboard.
  * @param location The location of this leaderboard, the yaw will be used to determine the direction the leaderboard is facing.
@@ -27,13 +27,12 @@ class Leaderboard(
         const val NAME_SCALE = 1.0
     }
 
-    init {
-        settings.addUpdateHook { update() }
-        spawn()
-    }
-
     private var entryTexts = settings.entries.mapIndexed { index, entry ->
         LeaderboardEntryText(entry, location, index, regionId)
+    }
+
+    init {
+        settings.addUpdateHook { update() }
     }
 
     var nameText = LeaderboardText(settings.name, location.clone().add(0.0, NAME_HEIGHT, 0.0), Color.WHITE, NAME_SCALE, regionId)
@@ -96,5 +95,7 @@ class LeaderboardTest: Testable {
             sender.location,
             null
         )
+
+        leaderboard.spawn()
     }
 }
