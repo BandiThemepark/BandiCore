@@ -6,6 +6,7 @@ import net.bandithemepark.bandicore.server.regions.events.PlayerPriorityRegionEn
 import net.bandithemepark.bandicore.server.regions.events.PlayerPriorityRegionLeaveEvent
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerTeleportEvent
 import org.bukkit.event.player.PlayerToggleFlightEvent
 
@@ -46,6 +47,12 @@ class ParkourEvents : Listener {
     @EventHandler
     fun onPlayerFly(event: PlayerToggleFlightEvent) {
         if(!event.isFlying) return
+        val parkourSession = event.player.getParkourSession() ?: return
+        parkourSession.cancel()
+    }
+
+    @EventHandler
+    fun onPlayerQuit(event: PlayerQuitEvent) {
         val parkourSession = event.player.getParkourSession() ?: return
         parkourSession.cancel()
     }
