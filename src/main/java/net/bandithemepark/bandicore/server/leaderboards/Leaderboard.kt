@@ -2,8 +2,11 @@ package net.bandithemepark.bandicore.server.leaderboards
 
 import net.bandithemepark.bandicore.server.leaderboards.display.LeaderboardEntryText
 import net.bandithemepark.bandicore.server.leaderboards.display.LeaderboardText
+import net.bandithemepark.bandicore.util.debug.Testable
 import org.bukkit.Color
 import org.bukkit.Location
+import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
 
 /**
  * An instance of a physical leaderboard in the world.
@@ -71,5 +74,27 @@ class Leaderboard(
         }
 
         entryTexts.forEach { it.spawn() }
+    }
+}
+
+class LeaderboardTest: Testable {
+    override fun test(sender: CommandSender) {
+        if(sender !is Player) return
+
+        val leaderboard = Leaderboard(
+            LeaderboardSettings(
+                "Test Leaderboard",
+                "Test Subtext",
+                listOf(
+                    LeaderboardEntry("Test Entry 1", "1"),
+                    LeaderboardEntry("Test Entry 2", "2"),
+                    LeaderboardEntry("Test Entry 3", "3"),
+                    LeaderboardEntry("Test Entry 4", "4"),
+                    LeaderboardEntry("Test Entry 5", "5"),
+                )
+            ),
+            sender.location,
+            null
+        )
     }
 }
