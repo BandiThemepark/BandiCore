@@ -2,6 +2,7 @@ package net.bandithemepark.bandicore.park.parkours
 
 import com.google.gson.JsonObject
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.server.leaderboards.LeaderboardSettings
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.getTranslatedMessage
 import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.chat.BandiColors
@@ -16,6 +17,9 @@ class Parkour(
     val coreRegionId: String,
     val endRegionId: String
 ) {
+    private val leaderboardSettings = LeaderboardSettings(displayName, "Best times", listOf())
+    val leaderboards = mutableListOf<ParkourLeaderboard>()
+
     fun start(player: Player): ParkourSession {
         val session = ParkourSession(player, this)
         BandiCore.instance.parkourManager.sessions.add(session)
@@ -40,6 +44,19 @@ class Parkour(
             val startRegionId = json.get("startRegionId").asString
             val coreRegionId = json.get("coreRegionId").asString
             val endRegionId = json.get("endRegionId").asString
+
+            val parkour = Parkour(id, displayName, startRegionId, coreRegionId, endRegionId)
+
+            if(json.has("leaderboards")) {
+                val leaderboardsArray = json.getAsJsonArray("leaderboards")
+                for (leaderboardJson in leaderboardsArray) {
+                    val leaderboard =
+                        ParkourLeaderboard.fromJson(leaderboardJson.asJsonObject, parkour.leaderboardSettings)
+                    leaderboard.spawn()
+                    parkour.leaderboards.add(leaderboard)
+                }
+            }
+
             return Parkour(id, displayName, startRegionId, coreRegionId, endRegionId)
         }
     }
