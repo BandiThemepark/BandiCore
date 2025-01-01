@@ -41,7 +41,7 @@ class ParkourSession(val player: Player, val parkour: Parkour) {
 
         player.sendTranslatedMessage("parkour-finished-chat",
             BandiColors.GREEN.toString(),
-            MessageReplacement("time", formatTime(deltaTime)),
+            MessageReplacement("time", formatTimeWithMillis(deltaTime)),
             MessageReplacement("parkour", parkour.displayName)
         )
 
@@ -81,6 +81,30 @@ class ParkourSession(val player: Player, val parkour: Parkour) {
             "${formattedMinutes}m ${formattedSeconds}s"
         } else {
             "${formattedSeconds}s"
+        }
+    }
+
+    /**
+     * Formats the time in milliseconds to a human-readable format, like this:
+     * 1h 2m 3s 4ms
+     * If hours or minutes are 0, they will not be displayed.
+     * @param millis The time in milliseconds
+     * @return The formatted time
+     */
+    private fun formatTimeWithMillis(millis: Long): String {
+        val seconds = millis / 1000
+        val minutes = seconds / 60
+        val hours = minutes / 60
+
+        val formattedSeconds = seconds % 60
+        val formattedMinutes = minutes % 60
+
+        return if(hours > 0) {
+            "${hours}h ${formattedMinutes}m ${formattedSeconds}s ${millis % 1000}ms"
+        } else if(minutes > 0) {
+            "${formattedMinutes}m ${formattedSeconds}s ${millis % 1000}ms"
+        } else {
+            "${formattedSeconds}s ${millis % 1000}ms"
         }
     }
 }
