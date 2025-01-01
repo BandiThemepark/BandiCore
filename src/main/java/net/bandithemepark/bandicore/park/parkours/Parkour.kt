@@ -50,14 +50,13 @@ class Parkour(
             if(json.has("leaderboards")) {
                 val leaderboardsArray = json.getAsJsonArray("leaderboards")
                 for (leaderboardJson in leaderboardsArray) {
-                    val leaderboard =
-                        ParkourLeaderboard.fromJson(leaderboardJson.asJsonObject, parkour.leaderboardSettings)
+                    val leaderboard = ParkourLeaderboard.fromJson(leaderboardJson.asJsonObject, parkour.leaderboardSettings)
                     leaderboard.spawn()
                     parkour.leaderboards.add(leaderboard)
                 }
             }
 
-            return Parkour(id, displayName, startRegionId, coreRegionId, endRegionId)
+            return parkour
         }
     }
 }
