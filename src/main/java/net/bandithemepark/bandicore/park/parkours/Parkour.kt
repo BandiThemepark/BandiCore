@@ -43,7 +43,7 @@ class Parkour(
 
     fun updateTop() {
         BackendParkour.getTopTenOfParkour(id) { data ->
-            val entries = mutableListOf<LeaderboardEntry>()
+            var entries = mutableListOf<LeaderboardEntry>()
 
             for(json in data) {
                 val jsonObject = json.asJsonObject
@@ -56,6 +56,7 @@ class Parkour(
                 entries.add(LeaderboardEntry(playerName, formattedTime))
             }
 
+            entries = entries.subList(0, 5)
             leaderboardSettings.entries = entries
         }
     }
