@@ -205,7 +205,14 @@ object Util {
 
     fun convertToSmallText(text: String): String {
         var newText = ""
-        for(character in text.lowercase()) newText += smallCharacters[characters.indexOf(character)]
+        for(character in text.lowercase()) {
+            if(characters.indexOf(character) == -1) {
+                newText += character
+                continue
+            }
+
+            newText += smallCharacters[characters.indexOf(character)]
+        }
         return newText
     }
 
