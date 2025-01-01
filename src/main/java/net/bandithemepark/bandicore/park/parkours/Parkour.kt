@@ -56,7 +56,7 @@ class Parkour(
                 entries.add(LeaderboardEntry(playerName, formattedTime))
             }
 
-            entries = entries.subList(0, 5)
+            if(entries.size > 5) entries = entries.subList(0, 5)
             leaderboardSettings.entries = entries
         }
     }
