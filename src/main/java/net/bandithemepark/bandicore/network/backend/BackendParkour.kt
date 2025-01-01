@@ -37,7 +37,6 @@ object BackendParkour {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                Util.debug("Parkours", "Response on save: ${response.body!!.string()}, sent body: $json")
                 val responseJson = JsonParser().parse(response.body!!.string()).asJsonObject
                 if(responseJson.has("data") && !responseJson.get("data").isJsonNull) {
                     callback.invoke(true)
