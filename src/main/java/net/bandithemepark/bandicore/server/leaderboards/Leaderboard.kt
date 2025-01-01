@@ -2,6 +2,7 @@ package net.bandithemepark.bandicore.server.leaderboards
 
 import net.bandithemepark.bandicore.server.leaderboards.display.LeaderboardEntryText
 import net.bandithemepark.bandicore.server.leaderboards.display.LeaderboardText
+import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.debug.Testable
 import org.bukkit.Color
 import org.bukkit.Location
@@ -22,9 +23,9 @@ class Leaderboard(
     val regionId: String? = null
 ) {
     companion object {
-        const val NAME_HEIGHT = 1.9
+        const val NAME_HEIGHT = 1.8
         const val SUBTEXT_OFFSET = 0.1
-        const val NAME_SCALE = 1.0
+        const val NAME_SCALE = 0.5
     }
 
     private var entryTexts = settings.entries.mapIndexed { index, entry ->
@@ -35,8 +36,8 @@ class Leaderboard(
         settings.addUpdateHook { update() }
     }
 
-    var nameText = LeaderboardText(settings.name, location.clone().add(0.0, NAME_HEIGHT, 0.0), Color.WHITE, NAME_SCALE, regionId)
-    var subtextText = LeaderboardText(settings.subtext, location.clone().add(0.0, NAME_HEIGHT - SUBTEXT_OFFSET, 0.0), Color.SILVER, NAME_SCALE, regionId)
+    private val nameText = LeaderboardText(Util.convertToSmallText(settings.name), location.clone().add(0.0, NAME_HEIGHT, 0.0), Color.WHITE, NAME_SCALE, regionId)
+    private val subtextText = LeaderboardText(Util.convertToSmallText(settings.subtext), location.clone().add(0.0, NAME_HEIGHT - SUBTEXT_OFFSET, 0.0), Color.SILVER, NAME_SCALE, regionId)
 
     var spawned = false
     fun spawn() {
@@ -82,14 +83,14 @@ class LeaderboardTest: Testable {
 
         val leaderboard = Leaderboard(
             LeaderboardSettings(
-                "Test Leaderboard",
-                "Test Subtext",
+                "Warehouse",
+                "Best times",
                 listOf(
-                    LeaderboardEntry("Test Entry 1", "1"),
-                    LeaderboardEntry("Test Entry 2", "2"),
-                    LeaderboardEntry("Test Entry 3", "3"),
-                    LeaderboardEntry("Test Entry 4", "4"),
-                    LeaderboardEntry("Test Entry 5", "5"),
+                    LeaderboardEntry("PartyProNL", "1m 21s 321ms"),
+                    LeaderboardEntry("PartyProNL", "1m 21s 321ms"),
+                    LeaderboardEntry("PartyProNL", "1m 21s 321ms"),
+                    LeaderboardEntry("PartyProNL", "1m 21s 321ms"),
+                    LeaderboardEntry("PartyProNL", "1m 21s 321ms"),
                 )
             ),
             sender.location,

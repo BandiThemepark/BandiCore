@@ -34,6 +34,7 @@ class LeaderboardText(text: String, val location: Location, val color: Color, va
         textDisplay!!.setBillboard(Display.Billboard.FIXED)
         textDisplay!!.setAlignment(TextDisplay.TextAlignment.CENTER)
         textDisplay!!.setScale(scale)
+        textDisplay!!.setBackgroundColor(Color.fromARGB(0, 0, 0, 0))
         textDisplay!!.updateMetadata()
 
         spawned = true

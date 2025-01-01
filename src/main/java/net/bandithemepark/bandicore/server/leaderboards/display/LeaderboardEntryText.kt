@@ -1,26 +1,27 @@
 package net.bandithemepark.bandicore.server.leaderboards.display
 
 import net.bandithemepark.bandicore.server.leaderboards.LeaderboardEntry
+import net.bandithemepark.bandicore.util.Util
 import org.bukkit.Color
 import org.bukkit.Location
 
 class LeaderboardEntryText(var entry: LeaderboardEntry, baseLocation: Location, val index: Int, val regionId: String? = null) {
     companion object {
-        const val TEXT_SCALE = 1.0
-        const val DISTANCE_BETWEEN_ENTRIES = 0.25
+        const val TEXT_SCALE = 0.35
+        const val DISTANCE_BETWEEN_ENTRIES = 0.30
         const val DISTANCE_BETWEEN_NAME_AND_SCORE = 0.1
-        const val ENTRIES_START_HEIGHT = 1.7
+        const val ENTRIES_START_HEIGHT = 1.5
     }
 
     private var nameText = LeaderboardText(
-        entry.name,
+        Util.convertToSmallText(entry.name),
         baseLocation.clone().add(0.0, ENTRIES_START_HEIGHT - (index * DISTANCE_BETWEEN_ENTRIES), 0.0),
         Color.WHITE, TEXT_SCALE,
         regionId
     )
 
     private var scoreText  = LeaderboardText(
-        entry.score,
+        Util.convertToSmallText(entry.score),
         baseLocation.clone().add(0.0, ENTRIES_START_HEIGHT - (index * DISTANCE_BETWEEN_ENTRIES) - DISTANCE_BETWEEN_NAME_AND_SCORE, 0.0),
         Color.SILVER, TEXT_SCALE,
         regionId
