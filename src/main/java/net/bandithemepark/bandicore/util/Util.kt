@@ -220,4 +220,12 @@ object Util {
         val b = hex.substring(5, 7).toInt(16)
         return Color.fromRGB(r, g, b)
     }
+
+    /**
+     * Converts a Bukkit Color to a hex string
+     * @return Hex string, e.g. "#FFFFFF"
+     */
+    fun Color.toHexString(): String {
+        return "#${Integer.toHexString(this.red)}${Integer.toHexString(this.green)}${Integer.toHexString(this.blue)}"
+    }
 }
