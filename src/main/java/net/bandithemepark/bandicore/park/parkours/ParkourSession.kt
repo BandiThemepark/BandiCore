@@ -47,7 +47,9 @@ class ParkourSession(val player: Player, val parkour: Parkour) {
 
         BandiCore.instance.parkourManager.sessions.remove(this)
         resetFlying()
-        BackendParkour.saveEntry(player.uniqueId, parkour.id, deltaTime, true) { }
+        BackendParkour.saveEntry(player.uniqueId, parkour.id, deltaTime, true) { success ->
+            if(success) parkour.updateTop()
+        }
     }
 
     fun showActionBar() {
