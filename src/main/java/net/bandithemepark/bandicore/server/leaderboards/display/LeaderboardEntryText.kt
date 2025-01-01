@@ -22,7 +22,7 @@ class LeaderboardEntryText(var entry: LeaderboardEntry, baseLocation: Location, 
     private var scoreText  = LeaderboardText(
         entry.score,
         baseLocation.clone().add(0.0, ENTRIES_START_HEIGHT - (index * DISTANCE_BETWEEN_ENTRIES) - DISTANCE_BETWEEN_NAME_AND_SCORE, 0.0),
-        Color.WHITE, TEXT_SCALE,
+        Color.SILVER, TEXT_SCALE,
         regionId
     )
 
