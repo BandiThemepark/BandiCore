@@ -1,6 +1,7 @@
 package net.bandithemepark.bandicore.park.parkours
 
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.network.backend.BackendParkour
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.getTranslatedMessage
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedActionBar
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedMessage
@@ -25,6 +26,7 @@ class ParkourSession(val player: Player, val parkour: Parkour) {
 
         BandiCore.instance.parkourManager.sessions.remove(this)
         resetFlying()
+        BackendParkour.saveEntry(player.uniqueId, parkour.id, System.currentTimeMillis()-startTime, false) { }
     }
 
     fun finish() {
@@ -45,6 +47,7 @@ class ParkourSession(val player: Player, val parkour: Parkour) {
 
         BandiCore.instance.parkourManager.sessions.remove(this)
         resetFlying()
+        BackendParkour.saveEntry(player.uniqueId, parkour.id, deltaTime, true) { }
     }
 
     fun showActionBar() {
