@@ -123,7 +123,7 @@ class TrackVehicleManager {
                     if(attachmentParent != null) {
                         attachmentParent.children.add(child)
                     } else {
-                        Bukkit.getLogger().severe("An attempt was made at assigning attachment ${child.id} of train $id to a parent, but the given parent with ID $parentId was not found. It will now not be added")
+                        BandiCore.instance.logger.severe("An attempt was made at assigning attachment ${child.id} of train $id to a parent, but the given parent with ID $parentId was not found. It will now not be added")
                     }
                 }
             }

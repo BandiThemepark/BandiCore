@@ -1,6 +1,7 @@
 package net.bandithemepark.bandicore.util
 
 import com.google.gson.JsonParser
+import net.bandithemepark.bandicore.BandiCore
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
@@ -18,7 +19,7 @@ import kotlin.math.sqrt
 
 object Util {
     fun debug(topic: String, message: String) {
-        Bukkit.getConsoleSender().sendMessage("[DEBUG] [$topic] $message")
+       BandiCore.instance.logger.info("[DEBUG] [$topic] $message")
     }
 
     /**

@@ -46,9 +46,9 @@ class BackendSetting(val name: String) {
             override fun onResponse(call: Call, response: Response) {
                 val responseJson = JsonParser().parse(response.body!!.string()).asJsonObject
                 if(responseJson.has("data") && !responseJson.get("data").isJsonNull) {
-                    Bukkit.getLogger().info("Created a new setting called $name with value $defaultValue because it did not exist yet.")
+                    BandiCore.instance.logger.info("Created a new setting called $name with value $defaultValue because it did not exist yet.")
                 } else {
-                    Bukkit.getLogger().severe("Failed to create a new setting called $name with value $defaultValue.")
+                    BandiCore.instance.logger.severe("Failed to create a new setting called $name with value $defaultValue.")
                 }
             }
         })
