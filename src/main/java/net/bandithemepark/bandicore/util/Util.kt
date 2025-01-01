@@ -206,7 +206,14 @@ object Util {
 
     fun convertToSmallText(text: String): String {
         var newText = ""
-        for(character in text.lowercase()) newText += smallCharacters[characters.indexOf(character)]
+        for(character in text.lowercase()) {
+            if(characters.indexOf(character) == -1) {
+                newText += character
+                continue
+            }
+
+            newText += smallCharacters[characters.indexOf(character)]
+        }
         return newText
     }
 
@@ -220,5 +227,13 @@ object Util {
         val g = hex.substring(3, 5).toInt(16)
         val b = hex.substring(5, 7).toInt(16)
         return Color.fromRGB(r, g, b)
+    }
+
+    /**
+     * Converts a Bukkit Color to a hex string
+     * @return Hex string, e.g. "#FFFFFF"
+     */
+    fun Color.toHexString(): String {
+        return "#${Integer.toHexString(this.red)}${Integer.toHexString(this.green)}${Integer.toHexString(this.blue)}"
     }
 }

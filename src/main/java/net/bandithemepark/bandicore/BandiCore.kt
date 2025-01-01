@@ -120,6 +120,7 @@ import net.bandithemepark.bandicore.server.essentials.teleport.BackCommand
 import net.bandithemepark.bandicore.server.essentials.teleport.SelfCommand
 import net.bandithemepark.bandicore.server.essentials.teleport.TeleportCommand
 import net.bandithemepark.bandicore.server.essentials.warps.*
+import net.bandithemepark.bandicore.server.leaderboards.LeaderboardTest
 import net.bandithemepark.bandicore.server.menu.MainMenu
 import net.bandithemepark.bandicore.server.minigames.Minigame
 import net.bandithemepark.bandicore.server.minigames.MinigameTest
@@ -506,5 +507,6 @@ class BandiCore: JavaPlugin() {
         Balloon(ItemFactory(Material.RED_WOOL).build(), Bukkit.getWorld("world")!!).register("balloon")
         CustomPlayerRigTest().register("custom-player-shaders")
         RankTest.getInstance()
+        LeaderboardTest().register("leaderboard")
     }
 }
