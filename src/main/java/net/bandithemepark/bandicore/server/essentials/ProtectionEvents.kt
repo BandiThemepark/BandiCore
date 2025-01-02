@@ -7,6 +7,7 @@ import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.Particle
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
@@ -53,7 +54,9 @@ class ProtectionEvents: Listener {
 
     @EventHandler
     fun onFoodLevelChange(event: FoodLevelChangeEvent) {
-        event.entity.foodLevel = 20
+        if(event.entity !is Player) return
+        event.isCancelled = true
+        (event.entity as Player).foodLevel = 20
     }
 
     @EventHandler
