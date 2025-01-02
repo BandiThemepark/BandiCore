@@ -60,7 +60,7 @@ class MQTTConnector {
             // Start registered listeners
             for(listener in MQTTListener.registered) registerListener(listener)
         } catch (e: Exception) {
-            Bukkit.getLogger().severe("A failed attempt was made to connect to the MQTT server. The following message was sent back: ${e.message}. The server will now go into maintenance.")
+            BandiCore.instance.logger.severe("A failed attempt was made to connect to the MQTT server. The following message was sent back: ${e.message}. The server will now go into maintenance.")
             BandiCore.instance.server.changeServerMode(ServerMode.getFromId("maintenance")!!)
         }
     }
@@ -87,7 +87,7 @@ class MQTTConnector {
             try {
                 client!!.publish(topic, MqttMessage(message.toByteArray()))
             } catch (e: Exception) {
-                Bukkit.getLogger().severe("There was an attempt at sending a message to the MQTT server, but an error occured. The client will now reconnect...")
+                BandiCore.instance.logger.severe("There was an attempt at sending a message to the MQTT server, but an error occured. The client will now reconnect...")
                 if(!reconnecting) {
                     reconnecting = true
                     reconnect()
@@ -95,7 +95,7 @@ class MQTTConnector {
             }
         } else {
             if(client != null && !client!!.isConnected) {
-                Bukkit.getLogger().severe("There was an attempt at sending a message to the MQTT server, but the client was not connected. The client will now reconnect...")
+                BandiCore.instance.logger.severe("There was an attempt at sending a message to the MQTT server, but the client was not connected. The client will now reconnect...")
                 try {
                     throw Exception("test for stacktrace")
                 } catch (e: Exception) {

@@ -60,6 +60,7 @@ class PacketTextDisplay: PacketEntity() {
      * Sets the maximum line width used to split lines
      * @param lineWidth The maximum line width in amount of characters
      */
+    @Deprecated("Deprecated for now since this was broken in a recent update, will be fixed in the future")
     fun setLineWidth(lineWidth: Int) {
         //(handle as TextDisplay).lineWidth = lineWidth
     }

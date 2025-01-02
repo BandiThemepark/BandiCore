@@ -1,6 +1,7 @@
 package net.bandithemepark.bandicore.park.parkours
 
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.network.backend.BackendParkour
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.getTranslatedMessage
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedActionBar
 import net.bandithemepark.bandicore.server.translations.LanguageUtil.sendTranslatedMessage
@@ -8,11 +9,17 @@ import net.bandithemepark.bandicore.server.translations.MessageReplacement
 import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.chat.BandiColors
 import net.kyori.adventure.title.Title
+import org.bukkit.GameMode
 import org.bukkit.entity.Player
 import java.time.Duration
 
 class ParkourSession(val player: Player, val parkour: Parkour) {
     private val startTime = System.currentTimeMillis()
+
+    val beforeGameMode = player.gameMode
+    init {
+       player.gameMode = GameMode.ADVENTURE
+    }
 
     fun cancel() {
         player.showTitle(
@@ -25,6 +32,7 @@ class ParkourSession(val player: Player, val parkour: Parkour) {
 
         BandiCore.instance.parkourManager.sessions.remove(this)
         resetFlying()
+        BackendParkour.saveEntry(player.uniqueId, parkour.id, System.currentTimeMillis()-startTime, false) { }
     }
 
     fun finish() {
@@ -39,12 +47,15 @@ class ParkourSession(val player: Player, val parkour: Parkour) {
 
         player.sendTranslatedMessage("parkour-finished-chat",
             BandiColors.GREEN.toString(),
-            MessageReplacement("time", formatTime(deltaTime)),
+            MessageReplacement("time", formatTimeWithMillis(deltaTime)),
             MessageReplacement("parkour", parkour.displayName)
         )
 
         BandiCore.instance.parkourManager.sessions.remove(this)
         resetFlying()
+        BackendParkour.saveEntry(player.uniqueId, parkour.id, deltaTime, true) { success ->
+            if(success) parkour.updateTop()
+        }
     }
 
     fun showActionBar() {
@@ -52,6 +63,7 @@ class ParkourSession(val player: Player, val parkour: Parkour) {
     }
 
     fun resetFlying() {
+        player.gameMode = beforeGameMode
         if(player.hasPermission("bandithemepark.vip")) player.allowFlight = true
     }
 
@@ -76,6 +88,30 @@ class ParkourSession(val player: Player, val parkour: Parkour) {
             "${formattedMinutes}m ${formattedSeconds}s"
         } else {
             "${formattedSeconds}s"
+        }
+    }
+
+    /**
+     * Formats the time in milliseconds to a human-readable format, like this:
+     * 1h 2m 3s 4ms
+     * If hours or minutes are 0, they will not be displayed.
+     * @param millis The time in milliseconds
+     * @return The formatted time
+     */
+    private fun formatTimeWithMillis(millis: Long): String {
+        val seconds = millis / 1000
+        val minutes = seconds / 60
+        val hours = minutes / 60
+
+        val formattedSeconds = seconds % 60
+        val formattedMinutes = minutes % 60
+
+        return if(hours > 0) {
+            "${hours}h ${formattedMinutes}m ${formattedSeconds}s ${millis % 1000}ms"
+        } else if(minutes > 0) {
+            "${formattedMinutes}m ${formattedSeconds}s ${millis % 1000}ms"
+        } else {
+            "${formattedSeconds}s ${millis % 1000}ms"
         }
     }
 }

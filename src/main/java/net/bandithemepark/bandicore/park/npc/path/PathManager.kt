@@ -71,7 +71,7 @@ class PathManager {
             // Getting radius and type
             val radius = fm.getConfig("paths.yml").get().getDouble("paths.$id.radius")
             val typeId = fm.getConfig("paths.yml").get().getInt("paths.$id.type")
-            val type = PathPointType.values()[typeId]
+            val type = PathPointType.entries[typeId]
 
             // Create instance with empty list for connections (those will be applied later)
             val pathPoint = PathPoint(UUID.fromString(id), location, radius, type, mutableListOf())
@@ -92,7 +92,7 @@ class PathManager {
 
         // Add all points to the list
         pathPoints.addAll(newPathPoints.keys)
-        Bukkit.getLogger().info("Loaded ${pathPoints.size} path points")
+        BandiCore.instance.logger.info("Loaded ${pathPoints.size} path points")
 
         // Precalculating the paths where needed
         Bukkit.getScheduler().scheduleSyncDelayedTask(BandiCore.instance, { preCalculatePaths() }, 20)

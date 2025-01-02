@@ -52,6 +52,7 @@ class ParkourManager: Reloadable {
     }
 
     override fun reload() {
+        parkours.forEach { parkour -> parkour.leaderboards.forEach { it.deSpawn() } }
         loadParkours()
     }
 }
