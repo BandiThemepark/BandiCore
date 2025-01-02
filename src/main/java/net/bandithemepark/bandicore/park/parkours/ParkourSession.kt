@@ -9,11 +9,17 @@ import net.bandithemepark.bandicore.server.translations.MessageReplacement
 import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.chat.BandiColors
 import net.kyori.adventure.title.Title
+import org.bukkit.GameMode
 import org.bukkit.entity.Player
 import java.time.Duration
 
 class ParkourSession(val player: Player, val parkour: Parkour) {
     private val startTime = System.currentTimeMillis()
+
+    val beforeGameMode = player.gameMode
+    init {
+       player.gameMode = GameMode.ADVENTURE
+    }
 
     fun cancel() {
         player.showTitle(
@@ -57,6 +63,7 @@ class ParkourSession(val player: Player, val parkour: Parkour) {
     }
 
     fun resetFlying() {
+        player.gameMode = beforeGameMode
         if(player.hasPermission("bandithemepark.vip")) player.allowFlight = true
     }
 
