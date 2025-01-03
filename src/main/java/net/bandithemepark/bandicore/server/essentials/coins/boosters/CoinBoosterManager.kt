@@ -14,6 +14,31 @@ class CoinBoosterManager {
     private fun getPlayerCoinBoosters(player: Player): List<CoinBooster> {
         val playerCoinBoosters = activeBoosters.toMutableList()
 
+        playerCoinBoosters.add(CoinBooster(
+            id = UUID.randomUUID(),
+            name = "Passive",
+            perMinute = 5,
+            durationMillis = -1
+        ))
+
+        if(player.hasPermission("bandithemepark.vip")) {
+            playerCoinBoosters.add(CoinBooster(
+                id = UUID.randomUUID(),
+                name = "VIP",
+                perMinute = 5,
+                durationMillis = -1
+            ))
+        }
+
+        if(player.usingSmoothCoasters()) {
+            playerCoinBoosters.add(CoinBooster(
+                id = UUID.randomUUID(),
+                name = "SmoothCoasters",
+                perMinute = 1,
+                durationMillis = -1
+            ))
+        }
+
         return playerCoinBoosters
     }
 
