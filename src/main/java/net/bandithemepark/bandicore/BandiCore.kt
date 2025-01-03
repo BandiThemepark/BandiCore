@@ -110,6 +110,7 @@ import net.bandithemepark.bandicore.server.essentials.coins.CoinManager
 import net.bandithemepark.bandicore.server.essentials.coins.CoinsListener
 import net.bandithemepark.bandicore.server.essentials.coins.PlayerBossBar
 import net.bandithemepark.bandicore.server.essentials.coins.PlayerBossBar.Companion.getBossBar
+import net.bandithemepark.bandicore.server.essentials.coins.boosters.CoinBoosterManager
 import net.bandithemepark.bandicore.server.essentials.moderation.BanCommand
 import net.bandithemepark.bandicore.server.essentials.moderation.KickCommand
 import net.bandithemepark.bandicore.server.essentials.moderation.UnBanCommand
@@ -206,6 +207,7 @@ class BandiCore: JavaPlugin() {
         server.warpManager.loadWarps()
         prepareSettings()
         coinManager = CoinManager()
+        CoinBoosterManager.getInstance()
 
         // Connecting to the MQTT server and registering listeners
         CoinsListener().register()
