@@ -50,7 +50,7 @@ class CoinBoosterManager {
         Bukkit.getScheduler().runTaskTimerAsynchronously(BandiCore.instance, Runnable {
             for(player in Bukkit.getOnlinePlayers()) {
                 if(BandiCore.instance.afkManager.isAfk(player)) continue
-                
+
                 val coinBoosters = getPlayerCoinBoosters(player)
                 val coinsPerMinute = coinBoosters.sumOf { it.perMinute }
                 CoinManager.setLoadedBalance(player, player.getBalance() + coinsPerMinute)
