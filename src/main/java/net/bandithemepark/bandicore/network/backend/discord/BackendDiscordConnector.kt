@@ -42,21 +42,11 @@ object BackendDiscordConnector {
 
                 val message = responseJson.get("message").asString
                 when(message.lowercase()) {
-                    "not found" -> {
-                        onError(PlayerWithUUIDNotFoundException())
-                    }
-                    "already exists" -> {
-                        onError(DiscordAlreadyConnectedException())
-                    }
-                    "invalid" -> {
-                        onError(DiscordTokenExpiredException())
-                    }
-                    "success" -> {
-                        onSuccess.invoke()
-                    }
-                    else -> {
-                        onError(DiscordConnectFailedException())
-                    }
+                    "not found" -> onError(PlayerWithUUIDNotFoundException())
+                    "already exists" -> onError(DiscordAlreadyConnectedException())
+                    "invalid" -> onError(DiscordTokenExpiredException())
+                    "success" -> onSuccess.invoke()
+                    else -> onError(DiscordConnectFailedException())
                 }
             }
         })
