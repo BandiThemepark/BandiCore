@@ -99,6 +99,7 @@ import net.bandithemepark.bandicore.server.custom.blocks.CustomBlockMenu
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayerRigTest
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin
 import net.bandithemepark.bandicore.server.custom.player.editor.CustomPlayerEditor
+import net.bandithemepark.bandicore.server.discord.DiscordConnectCommand
 import net.bandithemepark.bandicore.server.effects.EffectCommand
 import net.bandithemepark.bandicore.server.effects.EffectManager
 import net.bandithemepark.bandicore.server.effects.types.AnimatronicEffect
@@ -357,6 +358,7 @@ class BandiCore: JavaPlugin() {
         getCommand("kick")!!.setExecutor(KickCommand())
         getCommand("shops")!!.setExecutor(ShopsMenuCommand())
         getCommand("ranktest")!!.setExecutor(RankTest.Command())
+        getCommand("discord")!!.setExecutor(DiscordConnectCommand())
     }
 
     private fun registerEvents() {
