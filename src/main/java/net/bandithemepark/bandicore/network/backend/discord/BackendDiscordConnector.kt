@@ -13,7 +13,12 @@ import java.io.IOException
 import java.util.UUID
 
 object BackendDiscordConnector {
-    fun connect(playerUUID: UUID, token: String, callback: () -> Unit) {
+    fun connect(
+        playerUUID: UUID,
+        token: String,
+        onSuccess: () -> Unit,
+        onError: (Exception) -> Unit
+    ) {
         val client = BandiCore.instance.okHttpClient
         val mediaType = "application/json".toMediaTypeOrNull()
 
@@ -38,19 +43,19 @@ object BackendDiscordConnector {
                 val message = responseJson.get("message").asString
                 when(message.lowercase()) {
                     "not found" -> {
-                        throw PlayerWithUUIDNotFoundException()
+                        onError(PlayerWithUUIDNotFoundException())
                     }
                     "already exists" -> {
-                        throw DiscordAlreadyConnectedException()
+                        onError(DiscordAlreadyConnectedException())
                     }
                     "invalid" -> {
-                        throw DiscordTokenExpiredException()
+                        onError(DiscordTokenExpiredException())
                     }
                     "success" -> {
-                        callback.invoke()
+                        onSuccess.invoke()
                     }
                     else -> {
-                        throw DiscordConnectFailedException()
+                        onError(DiscordConnectFailedException())
                     }
                 }
             }

@@ -20,17 +20,30 @@ class DiscordConnectCommand: CommandExecutor, TabCompleter {
 
         if(args.size == 2) {
             if(args[0].equals("connect", ignoreCase = true)) {
-                try {
-                    BackendDiscordConnector.connect(sender.uniqueId, args[1]) {
+                BackendDiscordConnector.connect(
+                    sender.uniqueId,
+                    args[1],
+                    onSuccess = {
                         sender.sendTranslatedMessage("discord-connected", BandiColors.YELLOW.toString())
+                    },
+                    onError = {
+                        when(it) {
+                            is DiscordAlreadyConnectedException -> {
+                                sender.sendTranslatedMessage("discord-connected-already", BandiColors.RED.toString())
+                            }
+                            is DiscordTokenExpiredException -> {
+                                sender.sendTranslatedMessage("discord-connect-token-expired", BandiColors.RED.toString())
+                            }
+                            is DiscordConnectFailedException -> {
+                                sender.sendTranslatedMessage("discord-connect-failed", BandiColors.RED.toString())
+                            }
+                            else -> {
+                                it.printStackTrace()
+                                sender.sendTranslatedMessage("discord-connect-failed", BandiColors.RED.toString())
+                            }
+                        }
                     }
-                } catch (e: DiscordAlreadyConnectedException) {
-                    sender.sendTranslatedMessage("discord-connected-already", BandiColors.RED.toString())
-                } catch (e: DiscordTokenExpiredException) {
-                    sender.sendTranslatedMessage("discord-connect-token-expired", BandiColors.RED.toString())
-                } catch (e: DiscordConnectFailedException) {
-                    sender.sendTranslatedMessage("discord-connect-failed", BandiColors.RED.toString())
-                }
+                )
             } else {
                 sendHelp(sender)
             }
