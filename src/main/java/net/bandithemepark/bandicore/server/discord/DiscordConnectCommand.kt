@@ -10,9 +10,10 @@ import net.bandithemepark.bandicore.util.chat.BandiColors
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
+import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
 
-class DiscordConnectCommand: CommandExecutor {
+class DiscordConnectCommand: CommandExecutor, TabCompleter {
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if(!command.name.equals("discord", ignoreCase = true)) return false
         if(sender !is Player) return false
@@ -42,5 +43,15 @@ class DiscordConnectCommand: CommandExecutor {
 
     fun sendHelp(sender: CommandSender) {
         sender.sendMessage(Util.color("<${BandiColors.RED}>/discord connect <token>"))
+    }
+
+    override fun onTabComplete(sender: CommandSender, command: org.bukkit.command.Command, label: String, args: Array<out String>): MutableList<String>? {
+        if(!command.name.equals("discord", ignoreCase = true)) return null
+
+        if(args.size == 1) {
+            return Util.getTabCompletions(args[0], listOf("connect"))
+        }
+
+        return null
     }
 }
