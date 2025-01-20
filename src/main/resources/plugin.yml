@@ -193,3 +193,5 @@ commands:
       - shop
   ranktest:
     description: Used to reset the rank test from /bandi test
+  discord:
+    description: Connect your Discord account

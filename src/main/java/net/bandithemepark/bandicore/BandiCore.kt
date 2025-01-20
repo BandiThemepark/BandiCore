@@ -99,6 +99,7 @@ import net.bandithemepark.bandicore.server.custom.blocks.CustomBlockMenu
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayerRigTest
 import net.bandithemepark.bandicore.server.custom.player.CustomPlayerSkin
 import net.bandithemepark.bandicore.server.custom.player.editor.CustomPlayerEditor
+import net.bandithemepark.bandicore.server.discord.DiscordConnectCommand
 import net.bandithemepark.bandicore.server.effects.EffectCommand
 import net.bandithemepark.bandicore.server.effects.EffectManager
 import net.bandithemepark.bandicore.server.effects.types.AnimatronicEffect
@@ -110,6 +111,7 @@ import net.bandithemepark.bandicore.server.essentials.coins.CoinManager
 import net.bandithemepark.bandicore.server.essentials.coins.CoinsListener
 import net.bandithemepark.bandicore.server.essentials.coins.PlayerBossBar
 import net.bandithemepark.bandicore.server.essentials.coins.PlayerBossBar.Companion.getBossBar
+import net.bandithemepark.bandicore.server.essentials.coins.boosters.CoinBoosterManager
 import net.bandithemepark.bandicore.server.essentials.moderation.BanCommand
 import net.bandithemepark.bandicore.server.essentials.moderation.KickCommand
 import net.bandithemepark.bandicore.server.essentials.moderation.UnBanCommand
@@ -206,6 +208,7 @@ class BandiCore: JavaPlugin() {
         server.warpManager.loadWarps()
         prepareSettings()
         coinManager = CoinManager()
+        CoinBoosterManager.getInstance()
 
         // Connecting to the MQTT server and registering listeners
         CoinsListener().register()
@@ -355,6 +358,7 @@ class BandiCore: JavaPlugin() {
         getCommand("kick")!!.setExecutor(KickCommand())
         getCommand("shops")!!.setExecutor(ShopsMenuCommand())
         getCommand("ranktest")!!.setExecutor(RankTest.Command())
+        getCommand("discord")!!.setExecutor(DiscordConnectCommand())
     }
 
     private fun registerEvents() {
