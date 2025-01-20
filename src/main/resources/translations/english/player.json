@@ -120,7 +120,7 @@
   "parkour-cancelled-subtitle": "Your attempt was ended",
   "parkour-finished-chat": "You finished %parkour% in %time%",
   "parkour-time": "You are %time% in",
-  "discord-connected": "Your account has been connected to our Discord server",
+  "discord-connected": "Your account has been connected to our Discord server. You should receive a message on Discord in about 5 minutes, verifying your connection",
   "discord-connect-failed": "Failed to connect your account to our Discord server",
   "discord-connect-token-expired": "Your Discord token has expired. Please generate a new one on our Discord server",
   "discord-connected-already": "Your account is already connected to our Discord server"
