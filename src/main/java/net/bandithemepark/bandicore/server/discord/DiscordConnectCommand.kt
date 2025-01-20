@@ -28,15 +28,10 @@ class DiscordConnectCommand: CommandExecutor, TabCompleter {
                     },
                     onError = {
                         when(it) {
-                            is DiscordAlreadyConnectedException -> {
-                                sender.sendTranslatedMessage("discord-connected-already", BandiColors.RED.toString())
-                            }
-                            is DiscordTokenExpiredException -> {
-                                sender.sendTranslatedMessage("discord-connect-token-expired", BandiColors.RED.toString())
-                            }
-                            is DiscordConnectFailedException -> {
-                                sender.sendTranslatedMessage("discord-connect-failed", BandiColors.RED.toString())
-                            }
+                            is DiscordAlreadyConnectedException -> sender.sendTranslatedMessage("discord-connected-already", BandiColors.RED.toString())
+                            is DiscordTokenExpiredException -> sender.sendTranslatedMessage("discord-connect-token-expired", BandiColors.RED.toString())
+                            is DiscordConnectFailedException -> sender.sendTranslatedMessage("discord-connect-failed", BandiColors.RED.toString())
+
                             else -> {
                                 it.printStackTrace()
                                 sender.sendTranslatedMessage("discord-connect-failed", BandiColors.RED.toString())
