@@ -5,9 +5,10 @@ import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.coroutines.Scheduler
 import net.bandithemepark.bandicore.util.debug.Reloadable
 import org.bukkit.Bukkit
+import java.util.*
 
 class EffectManager: Reloadable {
-    val playingEffects = mutableListOf<Effect>()
+    val playingEffects = Collections.synchronizedList(mutableListOf<Effect>())
 
     init {
         startTimer()
@@ -48,7 +49,7 @@ class EffectManager: Reloadable {
 
     private fun startTimer() {
         Scheduler.loopAsync(50) {
-            playingEffects.forEach { it.tick() }
+            playingEffects.toList().forEach { it.tick() }
         }
     }
 

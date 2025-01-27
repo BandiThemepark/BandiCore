@@ -16,7 +16,7 @@ import kotlin.math.sin
 class TrackVehicleUpdater {
     fun onTick() {
         // Normal moving
-        for(vehicle in BandiCore.instance.trackManager.vehicleManager.vehicles) {
+        for(vehicle in BandiCore.instance.trackManager.vehicleManager.vehicles.toList()) {
             // Saving the position before moving to use later
             val oldPosition = vehicle.position.clone()
 

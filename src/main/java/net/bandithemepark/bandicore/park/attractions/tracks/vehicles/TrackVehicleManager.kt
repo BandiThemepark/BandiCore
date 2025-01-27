@@ -11,9 +11,10 @@ import net.bandithemepark.bandicore.park.attractions.tracks.vehicles.commands.*
 import net.bandithemepark.bandicore.util.FileManager
 import org.bukkit.Bukkit
 import org.bukkit.Location
+import java.util.Collections
 
 class TrackVehicleManager {
-    val vehicles = mutableListOf<TrackVehicle>()
+    val vehicles = Collections.synchronizedList(mutableListOf<TrackVehicle>())
     val lastSegments = hashMapOf<TrackVehicle, SegmentSeparator>()
 
     init {
