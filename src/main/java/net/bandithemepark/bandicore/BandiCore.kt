@@ -1,5 +1,9 @@
 package net.bandithemepark.bandicore
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancelChildren
 import net.bandithemepark.bandicore.util.entity.PacketEntity
 import net.bandithemepark.bandicore.bandithemepark.kaliba.KalibaEffects
 import net.bandithemepark.bandicore.network.backend.BackendSetting
@@ -12,7 +16,6 @@ import net.bandithemepark.bandicore.park.effect.AmbientEffect
 import net.bandithemepark.bandicore.server.Server
 import net.bandithemepark.bandicore.server.tools.armorstandtools.ArmorStandEditorCommand
 import net.bandithemepark.bandicore.server.tools.armorstandtools.ArmorStandEditorEvents
-import net.bandithemepark.bandicore.server.custom.player.CustomPlayer
 import net.bandithemepark.bandicore.server.essentials.afk.AfkManager
 import net.bandithemepark.bandicore.server.essentials.ranks.RankManager
 import net.bandithemepark.bandicore.server.essentials.ranks.SetRankCommand
@@ -28,7 +31,6 @@ import net.bandithemepark.bandicore.server.translations.LanguageUtil
 import net.bandithemepark.bandicore.util.FileManager
 import net.bandithemepark.bandicore.util.chat.prompt.ChatPrompt
 import net.bandithemepark.bandicore.util.npc.NPC
-import net.bandithemepark.bandicore.util.npc.NPCPathfinding
 import okhttp3.OkHttpClient
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
@@ -92,7 +94,6 @@ import net.bandithemepark.bandicore.server.achievements.rewards.AchievementRewar
 import net.bandithemepark.bandicore.server.achievements.triggers.AchievementTriggerRegionEnter
 import net.bandithemepark.bandicore.server.achievements.triggers.AchievementTriggerRidecounterIncrease
 import net.bandithemepark.bandicore.server.achievements.triggers.AchievementTriggerSpecial
-import net.bandithemepark.bandicore.server.animation.rig.RigTest
 import net.bandithemepark.bandicore.server.animatronics.AnimatronicManager
 import net.bandithemepark.bandicore.server.custom.blocks.CustomBlock
 import net.bandithemepark.bandicore.server.custom.blocks.CustomBlockMenu
@@ -142,11 +143,11 @@ import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.entity.HoverableEntity
 import net.bandithemepark.bandicore.util.entity.PacketEntitySeat
 import org.bukkit.Material
-import org.bukkit.util.Vector
 
 class BandiCore: JavaPlugin() {
     companion object {
         lateinit var instance: BandiCore
+        val pluginScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
     }
     var devMode = true
 
@@ -301,6 +302,7 @@ class BandiCore: JavaPlugin() {
 
         // Disconnect any clients
         mqttConnector.disconnect()
+        pluginScope.coroutineContext.cancelChildren()
     }
 
     private fun registerCommands() {
