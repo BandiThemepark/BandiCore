@@ -217,7 +217,7 @@ class BandiCore: JavaPlugin() {
         CoinsListener().register()
         AudioServerEventListeners.ListenerMQTT().register()
         mqttConnector = MQTTConnector()
-        AudioServerTimer().runTaskTimer(this, 20, 1)
+        AudioServerTimer().startTimer()
 
         afkManager = AfkManager()
         HoverableEntity.setup()

@@ -3,22 +3,26 @@ package net.bandithemepark.bandicore.network.audioserver
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.util.coroutines.Scheduler
 import org.bukkit.Bukkit
-import org.bukkit.scheduler.BukkitRunnable
 
-class AudioServerTimer: BukkitRunnable() {
-    var currentTick = 0
-    override fun run() {
+class AudioServerTimer {
+    private var currentTick = 0
+    private fun run() {
         if(BandiCore.instance.devMode) return
 
         currentTick++
         if(currentTick == 1) {
             currentTick = 0
 
-            Bukkit.getScheduler().runTaskAsynchronously(BandiCore.instance, Runnable {
-                SpatialAudioSource.updateSources()
-                BandiCore.instance.mqttConnector.sendMessage("/audioclient/playerlocations", getCurrentPlayerInfo().toString())
-            })
+            SpatialAudioSource.updateSources()
+            BandiCore.instance.mqttConnector.sendMessage("/audioclient/playerlocations", getCurrentPlayerInfo().toString())
+        }
+    }
+
+    fun startTimer() {
+        Scheduler.loopAsyncDelayed(50, 1000) {
+            run()
         }
     }
 
