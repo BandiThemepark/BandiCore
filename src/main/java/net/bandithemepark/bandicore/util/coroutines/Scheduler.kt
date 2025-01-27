@@ -13,7 +13,19 @@ object Scheduler {
      * @param action The action to run
      */
     fun loopAsync(interval: Long, action: suspend () -> Unit) {
+        loopAsyncDelayed(interval, 0, action)
+    }
+
+    /**
+     * Run a task every interval with a delay
+     * @param interval The interval in milliseconds
+     * @param delay The delay in milliseconds
+     * @param action The action to run
+     */
+    fun loopAsyncDelayed(interval: Long, delay: Long, action: suspend () -> Unit) {
         pluginScope.launch {
+            delay(delay)
+
             while(isActive) {
                 action()
                 delay(interval)
