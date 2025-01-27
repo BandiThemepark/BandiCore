@@ -1,9 +1,6 @@
 package net.bandithemepark.bandicore.util.coroutines
 
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.yield
+import kotlinx.coroutines.*
 import net.bandithemepark.bandicore.BandiCore.Companion.pluginScope
 
 object Scheduler {
@@ -12,8 +9,8 @@ object Scheduler {
      * @param interval The interval in milliseconds
      * @param action The action to run
      */
-    fun loopAsync(interval: Long, action: suspend () -> Unit) {
-        loopAsyncDelayed(interval, 0, action)
+    fun loopAsync(interval: Long, action: suspend () -> Unit): Job {
+        return loopAsyncDelayed(interval, 0, action)
     }
 
     /**
@@ -22,8 +19,8 @@ object Scheduler {
      * @param delay The delay in milliseconds
      * @param action The action to run
      */
-    fun loopAsyncDelayed(interval: Long, delay: Long, action: suspend () -> Unit) {
-        pluginScope.launch {
+    fun loopAsyncDelayed(interval: Long, delay: Long, action: suspend () -> Unit): Job {
+        return pluginScope.launch {
             delay(delay)
 
             while(isActive) {
