@@ -3,6 +3,7 @@ package net.bandithemepark.bandicore.park.parkours
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.util.FileUtil
 import net.bandithemepark.bandicore.util.Util
+import net.bandithemepark.bandicore.util.coroutines.Scheduler
 import net.bandithemepark.bandicore.util.debug.Reloadable
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -36,11 +37,9 @@ class ParkourManager: Reloadable {
     }
 
     private fun startTimer() {
-        Bukkit.getScheduler().runTaskTimerAsynchronously(BandiCore.instance, Runnable {
-            sessions.forEach {
-                it.showActionBar()
-            }
-        }, 0, 1)
+        Scheduler.loopAsync(50) {
+            sessions.forEach { it.showActionBar() }
+        }
     }
 
     val sessions = mutableListOf<ParkourSession>()

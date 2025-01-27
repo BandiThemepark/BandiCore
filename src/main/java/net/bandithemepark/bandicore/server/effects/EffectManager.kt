@@ -2,6 +2,7 @@ package net.bandithemepark.bandicore.server.effects
 
 import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.util.Util
+import net.bandithemepark.bandicore.util.coroutines.Scheduler
 import net.bandithemepark.bandicore.util.debug.Reloadable
 import org.bukkit.Bukkit
 
@@ -46,9 +47,9 @@ class EffectManager: Reloadable {
     }
 
     private fun startTimer() {
-        Bukkit.getScheduler().runTaskTimerAsynchronously(BandiCore.instance, Runnable {
-            playingEffects.toList().forEach { it.tick() }
-        }, 0, 1)
+        Scheduler.loopAsync(50) {
+            playingEffects.forEach { it.tick() }
+        }
     }
 
     override fun reload() {

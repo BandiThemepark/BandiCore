@@ -5,6 +5,7 @@ import net.bandithemepark.bandicore.network.backend.BackendCosmetic
 import net.bandithemepark.bandicore.park.cosmetics.dressingroom.DressingRoom
 import net.bandithemepark.bandicore.park.cosmetics.dressingroom.DressingRoomSession
 import net.bandithemepark.bandicore.util.Util
+import net.bandithemepark.bandicore.util.coroutines.Scheduler
 import net.bandithemepark.bandicore.util.debug.Reloadable
 import org.bukkit.Bukkit
 import org.bukkit.Color
@@ -39,9 +40,10 @@ class CosmeticManager: Reloadable {
     }
 
     private fun startTimer() {
-        Bukkit.getScheduler().runTaskTimer(BandiCore.instance, Runnable {
+        Scheduler.loopAsync(50) {
             DressingRoomSession.activeSessions.forEach { it.onTick() }
-        }, 0, 1)
+
+        }
     }
 
     /**

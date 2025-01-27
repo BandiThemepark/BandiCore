@@ -5,6 +5,7 @@ import net.bandithemepark.bandicore.park.cosmetics.types.BalloonCosmetic.Compani
 import net.bandithemepark.bandicore.server.essentials.ranks.nametag.PlayerNameTag.Companion.active
 import net.bandithemepark.bandicore.server.essentials.ranks.nametag.PlayerNameTag.Companion.getNameTag
 import net.bandithemepark.bandicore.util.ItemFactory
+import net.bandithemepark.bandicore.util.coroutines.Scheduler
 import net.bandithemepark.bandicore.util.debug.Testable
 import net.bandithemepark.bandicore.util.entity.display.PacketItemDisplay
 import net.bandithemepark.bandicore.util.entity.event.SeatEnterEvent
@@ -168,9 +169,9 @@ class Balloon(val model: ItemStack, val world: World, var attachedToPlayer: Play
         val spawnedBalloons = mutableListOf<Balloon>()
 
         fun startTimer() {
-            Bukkit.getScheduler().runTaskTimerAsynchronously(BandiCore.instance, Runnable {
+            Scheduler.loopAsync(50) {
                 spawnedBalloons.toList().forEach { it.updatePhysics() }
-            }, 1, 0)
+            }
         }
     }
 
