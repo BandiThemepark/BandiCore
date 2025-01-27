@@ -12,7 +12,7 @@ object Scheduler {
      * @param interval The interval in milliseconds
      * @param action The action to run
      */
-    fun loopAsync(interval: Long, action: () -> Unit) {
+    fun loopAsync(interval: Long, action: suspend () -> Unit) {
         pluginScope.launch {
             while(isActive) {
                 action()
