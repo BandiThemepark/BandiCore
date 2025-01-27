@@ -7,17 +7,12 @@ import net.bandithemepark.bandicore.util.coroutines.Scheduler
 import org.bukkit.Bukkit
 
 class AudioServerTimer {
-    private var currentTick = 0
     private fun run() {
         if(BandiCore.instance.devMode) return
+        if(!BandiCore.instance.mqttConnector.isConnected) return
 
-        currentTick++
-        if(currentTick == 1) {
-            currentTick = 0
-
-            SpatialAudioSource.updateSources()
-            BandiCore.instance.mqttConnector.sendMessage("/audioclient/playerlocations", getCurrentPlayerInfo().toString())
-        }
+        SpatialAudioSource.updateSources()
+        BandiCore.instance.mqttConnector.sendMessage("/audioclient/playerlocations", getCurrentPlayerInfo().toString())
     }
 
     fun startTimer() {
