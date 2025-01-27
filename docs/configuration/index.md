@@ -3,3 +3,4 @@ This part of the documentation describes how to configure and use the BandiCore 
 
 - [Effects](./effects/index.md)
 - [Animatronics](./animatronics/index.md)
+- [Parkours](./parkours.md)
