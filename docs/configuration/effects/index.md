@@ -7,7 +7,7 @@ To create an effect, navigate to the `plugins/BandiCore/effects` folder. Here, y
 
 This is how you configure an effect:
 
-```json
+```json lines
 {
     "duration": 1, // the duration of the effect in milliseconds
     "loop": false, // whether the effect should loop
@@ -38,7 +38,7 @@ You do not have to add the file extension to the effect name. This will trigger 
 ## Playing an effect on server start
 Some effects need to always play when the server has started. Imagine for example a fountain, which is usually a looping particle effect. To play an effect on server start, you can use the `server-start-effects` section in the `config.json` file. Here's an example:
 
-```json
+```json lines
 // config.json
 {
     "server-start-effects": [

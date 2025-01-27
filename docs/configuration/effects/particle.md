@@ -4,7 +4,7 @@ The particle effect can be used to display particles in the world. This can be u
 ## Configuration format
 This is the full configuration format. Many of these options are optional, and some will override others.
 
-```json
+```json lines
 // inside a keyframes list
 {
     "time": 1,

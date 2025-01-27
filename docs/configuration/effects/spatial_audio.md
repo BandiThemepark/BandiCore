@@ -2,7 +2,7 @@
 The spatial audio effect can be used to play a spatial sound at a certain location. These sounds are played through the AudioServer.
 
 ## Configuration format
-```json
+```json lines
 {
     "time": 1,
     "type": "spatial_audio",

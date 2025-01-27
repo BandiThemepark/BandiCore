@@ -2,7 +2,7 @@
 This effect can be used to display a transparent dark overlay on the screen. This is a way to override brightness, useful for indoor scenes or attractions.
 
 ## Configuration format
-```json
+```json lines
 {
   "time": 1,
   "type": "dark_overlay",

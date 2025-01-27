@@ -2,7 +2,7 @@
 This effect is used to play an animatronic at a certain location. See the animatronic documentation for more details on how to set up animatronics.
 
 ## Configuration format
-```json
+```json lines
 // inside a keyframes list
 {
   "time": 1,
