@@ -2,38 +2,32 @@ package net.bandithemepark.bandicore.network.backend.discord
 
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import kotlinx.coroutines.launch
-import net.bandithemepark.bandicore.BandiCore.Companion.pluginScope
 import net.bandithemepark.bandicore.network.Network
 import java.util.UUID
 
 object BackendDiscordConnector {
-    fun connect(
+    suspend fun connect(
         playerUUID: UUID,
-        token: String,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
+        token: String
     ) {
         val json = JsonObject()
         json.addProperty("playerUuid", playerUUID.toString())
         json.addProperty("connectionToken", token)
 
-        pluginScope.launch {
-            val response = Network.post(
-                "/discord/connect",
-                json,
-            )
+        val response = Network.post(
+            "/discord/connect",
+            json,
+        )
 
-            val responseJson = JsonParser().parse(response.body!!.string()).asJsonObject
-            val message = responseJson.get("message").asString
+        val responseJson = JsonParser().parse(response.body!!.string()).asJsonObject
+        val message = responseJson.get("message").asString
 
-            when(message.lowercase()) {
-                "not found" -> onError(PlayerWithUUIDNotFoundException())
-                "already exists" -> onError(DiscordAlreadyConnectedException())
-                "invalid" -> onError(DiscordTokenExpiredException())
-                "success" -> onSuccess.invoke()
-                else -> onError(DiscordConnectFailedException())
-            }
+        when(message.lowercase()) {
+            "not found" -> throw PlayerWithUUIDNotFoundException()
+            "already exists" -> throw DiscordAlreadyConnectedException()
+            "invalid" -> throw DiscordTokenExpiredException()
+            "success" -> {}
+            else -> throw DiscordConnectFailedException()
         }
     }
 }
