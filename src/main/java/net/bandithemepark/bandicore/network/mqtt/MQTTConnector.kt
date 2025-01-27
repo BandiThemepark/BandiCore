@@ -29,6 +29,8 @@ class MQTTConnector {
         }, 10)
     }
 
+    val isConnected get() = client?.isConnected ?: false
+
     /**
      * Connects to the MQTT server using the specified data in the config.json
      */

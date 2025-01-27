@@ -4,6 +4,7 @@ import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.park.modsupport.SmoothCoastersChecker.Companion.usingSmoothCoasters
 import net.bandithemepark.bandicore.server.essentials.coins.CoinManager
 import net.bandithemepark.bandicore.server.essentials.coins.CoinManager.Companion.getBalance
+import net.bandithemepark.bandicore.util.coroutines.Scheduler
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.util.*
@@ -47,7 +48,7 @@ class CoinBoosterManager {
     }
 
     private fun startTimer() {
-        Bukkit.getScheduler().runTaskTimerAsynchronously(BandiCore.instance, Runnable {
+        Scheduler.loopAsyncDelayed(60000L, 60000L) {
             for(player in Bukkit.getOnlinePlayers()) {
                 if(BandiCore.instance.afkManager.isAfk(player)) continue
 
@@ -56,7 +57,7 @@ class CoinBoosterManager {
                 CoinManager.setLoadedBalance(player, player.getBalance() + coinsPerMinute)
                 CoinManager.saveBalance(player)
             }
-        }, 20*60, 20*60)
+        }
     }
 
     companion object {

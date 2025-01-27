@@ -1,6 +1,7 @@
 package net.bandithemepark.bandicore.server.animatronics
 
 import net.bandithemepark.bandicore.BandiCore
+import net.bandithemepark.bandicore.util.coroutines.Scheduler
 import org.bukkit.Bukkit
 
 class AnimatronicManager {
@@ -11,11 +12,11 @@ class AnimatronicManager {
     }
 
     private fun startTimer() {
-        Bukkit.getScheduler().runTaskTimerAsynchronously(BandiCore.instance, Runnable {
+        Scheduler.loopAsync(50) {
             if(spawnedAnimatronics.isNotEmpty()) {
                 spawnedAnimatronics.forEach { it.tick() }
                 spawnedAnimatronics.removeIf { it.queuedForDeSpawn }
             }
-        }, 0, 1)
+        }
     }
 }

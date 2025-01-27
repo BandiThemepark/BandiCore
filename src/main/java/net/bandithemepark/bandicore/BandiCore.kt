@@ -1,5 +1,9 @@
 package net.bandithemepark.bandicore
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancelChildren
 import net.bandithemepark.bandicore.util.entity.PacketEntity
 import net.bandithemepark.bandicore.bandithemepark.kaliba.KalibaEffects
 import net.bandithemepark.bandicore.network.backend.BackendSetting
@@ -12,7 +16,6 @@ import net.bandithemepark.bandicore.park.effect.AmbientEffect
 import net.bandithemepark.bandicore.server.Server
 import net.bandithemepark.bandicore.server.tools.armorstandtools.ArmorStandEditorCommand
 import net.bandithemepark.bandicore.server.tools.armorstandtools.ArmorStandEditorEvents
-import net.bandithemepark.bandicore.server.custom.player.CustomPlayer
 import net.bandithemepark.bandicore.server.essentials.afk.AfkManager
 import net.bandithemepark.bandicore.server.essentials.ranks.RankManager
 import net.bandithemepark.bandicore.server.essentials.ranks.SetRankCommand
@@ -28,7 +31,6 @@ import net.bandithemepark.bandicore.server.translations.LanguageUtil
 import net.bandithemepark.bandicore.util.FileManager
 import net.bandithemepark.bandicore.util.chat.prompt.ChatPrompt
 import net.bandithemepark.bandicore.util.npc.NPC
-import net.bandithemepark.bandicore.util.npc.NPCPathfinding
 import okhttp3.OkHttpClient
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
@@ -92,7 +94,6 @@ import net.bandithemepark.bandicore.server.achievements.rewards.AchievementRewar
 import net.bandithemepark.bandicore.server.achievements.triggers.AchievementTriggerRegionEnter
 import net.bandithemepark.bandicore.server.achievements.triggers.AchievementTriggerRidecounterIncrease
 import net.bandithemepark.bandicore.server.achievements.triggers.AchievementTriggerSpecial
-import net.bandithemepark.bandicore.server.animation.rig.RigTest
 import net.bandithemepark.bandicore.server.animatronics.AnimatronicManager
 import net.bandithemepark.bandicore.server.custom.blocks.CustomBlock
 import net.bandithemepark.bandicore.server.custom.blocks.CustomBlockMenu
@@ -142,11 +143,13 @@ import net.bandithemepark.bandicore.util.Util
 import net.bandithemepark.bandicore.util.entity.HoverableEntity
 import net.bandithemepark.bandicore.util.entity.PacketEntitySeat
 import org.bukkit.Material
-import org.bukkit.util.Vector
+import org.bukkit.command.CommandExecutor
+import org.bukkit.event.Listener
 
 class BandiCore: JavaPlugin() {
     companion object {
         lateinit var instance: BandiCore
+        val pluginScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
     }
     var devMode = true
 
@@ -214,7 +217,7 @@ class BandiCore: JavaPlugin() {
         CoinsListener().register()
         AudioServerEventListeners.ListenerMQTT().register()
         mqttConnector = MQTTConnector()
-        AudioServerTimer().runTaskTimer(this, 20, 1)
+        AudioServerTimer().startTimer()
 
         afkManager = AfkManager()
         HoverableEntity.setup()
@@ -301,130 +304,127 @@ class BandiCore: JavaPlugin() {
 
         // Disconnect any clients
         mqttConnector.disconnect()
+        pluginScope.coroutineContext.cancelChildren()
     }
 
     private fun registerCommands() {
-        getCommand("servermode")!!.setExecutor(ServerModeCommand())
-//        getCommand("npctest")!!.setExecutor(NPCPathfinding.TestCommand())
-        getCommand("ast")!!.setExecutor(ArmorStandEditorCommand())
-//        getCommand("customplayertest")!!.setExecutor(CustomPlayer.TestCommand())
-        getCommand("painter")!!.setExecutor(ItemPainter.Command())
-        getCommand("track")!!.setExecutor(TrackCommand.Command())
-        getCommand("trackvehicle")!!.setExecutor(TrackVehicleCommand.Command())
-        getCommand("gamemode")!!.setExecutor(GamemodeCommand())
-        getCommand("setlanguage")!!.setExecutor(Language.Command())
-        getCommand("setrank")!!.setExecutor(SetRankCommand())
-        getCommand("bandirestart")!!.setExecutor(RestartCommand())
-        getCommand("vanish")!!.setExecutor(VanishCommand())
-        getCommand("queue")!!.setExecutor(QueueCommand())
-//        getCommand("customplayereditor")!!.setExecutor(CustomPlayerEditor.Command())
-        getCommand("bandikea")!!.setExecutor(CustomBlock.Command())
-        getCommand("loadworld")!!.setExecutor(WorldCommands())
-        getCommand("unloadworld")!!.setExecutor(WorldCommands())
-        getCommand("worldtp")!!.setExecutor(WorldCommands())
-        getCommand("teleport")!!.setExecutor(TeleportCommand())
-        getCommand("back")!!.setExecutor(BackCommand())
-        getCommand("self")!!.setExecutor(SelfCommand())
-        getCommand("day")!!.setExecutor(TimeManagement())
-        getCommand("night")!!.setExecutor(TimeManagement())
-        getCommand("region")!!.setExecutor(BandiRegionCommand())
-        getCommand("rideop")!!.setExecutor(RideOPCommand())
-        getCommand("attraction")!!.setExecutor(AttractionCommand())
-        getCommand("chunkrenderer")!!.setExecutor(ChunkRendererCommand())
-        getCommand("patheditor")!!.setExecutor(PathPointEditorCommand())
-        getCommand("volume")!!.setExecutor(VolumeCommand())
-        getCommand("warp")!!.setExecutor(WarpCommand())
-        getCommand("deletewarp")!!.setExecutor(DeleteWarpCommand())
-        getCommand("setwarp")!!.setExecutor(SetWarpCommand())
-        getCommand("nearestwarp")!!.setExecutor(NearestWarpCommand())
-//        getCommand("rigtest")!!.setExecutor(RigTest())
-        getCommand("getskin")!!.setExecutor(CustomPlayerSkin.Command())
-        getCommand("audio")!!.setExecutor(AudioCommand())
-        getCommand("achievements")!!.setExecutor(AchievementMenuCommand())
-        getCommand("effect")!!.setExecutor(EffectCommand())
-        getCommand("removenearplaceables")!!.setExecutor(PlaceableRemoveCommand())
-        getCommand("dressingroom")!!.setExecutor(DressingRoomCommand())
-        getCommand("cooking")!!.setExecutor(MinigameTest())
-        getCommand("bandithemepark")!!.setExecutor(BandiThemeParkCommand())
-        getCommand("equip")!!.setExecutor(EquipCommand())
-        getCommand("unequip")!!.setExecutor(UnEquipCommand())
-        getCommand("fly")!!.setExecutor(FlyCommand())
-        getCommand("message")!!.setExecutor(MessageCommand())
-        getCommand("react")!!.setExecutor(ReactCommand())
-        getCommand("shopopener")!!.setExecutor(ShopOpenerCommand())
-        getCommand("spawn")!!.setExecutor(SpawnCommand())
-        getCommand("ban")!!.setExecutor(BanCommand())
-        getCommand("unban")!!.setExecutor(UnBanCommand())
-        getCommand("kick")!!.setExecutor(KickCommand())
-        getCommand("shops")!!.setExecutor(ShopsMenuCommand())
-        getCommand("ranktest")!!.setExecutor(RankTest.Command())
-        getCommand("discord")!!.setExecutor(DiscordConnectCommand())
+        registerCommand("servermode", ServerModeCommand())
+        registerCommand("ast", ArmorStandEditorCommand())
+        registerCommand("painter", ItemPainter.Command())
+        registerCommand("track", TrackCommand.Command())
+        registerCommand("trackvehicle", TrackVehicleCommand.Command())
+        registerCommand("gamemode", GamemodeCommand())
+        registerCommand("setlanguage", Language.Command())
+        registerCommand("setrank", SetRankCommand())
+        registerCommand("bandirestart", RestartCommand())
+        registerCommand("vanish", VanishCommand())
+        registerCommand("queue", QueueCommand())
+        registerCommand("bandikea", CustomBlock.Command())
+        registerCommand("loadworld", WorldCommands())
+        registerCommand("unloadworld", WorldCommands())
+        registerCommand("worldtp", WorldCommands())
+        registerCommand("teleport", TeleportCommand())
+        registerCommand("back", BackCommand())
+        registerCommand("self", SelfCommand())
+        registerCommand("day", TimeManagement())
+        registerCommand("night", TimeManagement())
+        registerCommand("region", BandiRegionCommand())
+        registerCommand("rideop", RideOPCommand())
+        registerCommand("attraction", AttractionCommand())
+        registerCommand("chunkrenderer", ChunkRendererCommand())
+        registerCommand("patheditor", PathPointEditorCommand())
+        registerCommand("volume", VolumeCommand())
+        registerCommand("warp", WarpCommand())
+        registerCommand("deletewarp", DeleteWarpCommand())
+        registerCommand("setwarp", SetWarpCommand())
+        registerCommand("nearestwarp", NearestWarpCommand())
+        registerCommand("getskin", CustomPlayerSkin.Command())
+        registerCommand("audio", AudioCommand())
+        registerCommand("achievements", AchievementMenuCommand())
+        registerCommand("effect", EffectCommand())
+        registerCommand("removenearplaceables", PlaceableRemoveCommand())
+        registerCommand("dressingroom", DressingRoomCommand())
+        registerCommand("cooking", MinigameTest())
+        registerCommand("bandithemepark", BandiThemeParkCommand())
+        registerCommand("equip", EquipCommand())
+        registerCommand("unequip", UnEquipCommand())
+        registerCommand("fly", FlyCommand())
+        registerCommand("message", MessageCommand())
+        registerCommand("react", ReactCommand())
+        registerCommand("shopopener", ShopOpenerCommand())
+        registerCommand("spawn", SpawnCommand())
+        registerCommand("ban", BanCommand())
+        registerCommand("unban", UnBanCommand())
+        registerCommand("kick", KickCommand())
+        registerCommand("shops", ShopsMenuCommand())
+        registerCommand("ranktest", RankTest.Command())
+        registerCommand("discord", DiscordConnectCommand())
     }
 
     private fun registerEvents() {
-        getServer().pluginManager.registerEvents(PacketEntity.Events(), this)
-        getServer().pluginManager.registerEvents(NPC.Events(), this)
-        getServer().pluginManager.registerEvents(ArmorStandEditorEvents(), this)
-        getServer().pluginManager.registerEvents(ItemPainter.Events(), this)
-        getServer().pluginManager.registerEvents(Language.Events(), this)
-        getServer().pluginManager.registerEvents(RankManager.Events(), this)
-        getServer().pluginManager.registerEvents(ChatPrompt.Events(), this)
-        getServer().pluginManager.registerEvents(BandiScoreboard.Events(), this)
-        getServer().pluginManager.registerEvents(PlayerNameTag.Events(), this)
-        getServer().pluginManager.registerEvents(TrackVehicleEditor.Events(), this)
-        getServer().pluginManager.registerEvents(JoinMessages(), this)
-        getServer().pluginManager.registerEvents(Playtime.Events(), this)
-        getServer().pluginManager.registerEvents(PacketEntitySeat.Events(), this)
-        getServer().pluginManager.registerEvents(CustomPlayerEditor.Events(), this)
-        getServer().pluginManager.registerEvents(SeatAttachment.Listeners(), this)
-        getServer().pluginManager.registerEvents(CustomBlock.Events(), this)
-        getServer().pluginManager.registerEvents(CustomBlockMenu.Events(), this)
-        getServer().pluginManager.registerEvents(BackCommand.Events(), this)
-        getServer().pluginManager.registerEvents(PlayerBossBar.Events(), this)
-        getServer().pluginManager.registerEvents(ColoredSigns(), this)
-        getServer().pluginManager.registerEvents(BandiRegionEvents(), this)
-        getServer().pluginManager.registerEvents(RideOPEvents(), this)
-        getServer().pluginManager.registerEvents(AttractionMenu.Events(), this)
-        getServer().pluginManager.registerEvents(RupsbaanCart.Events(), this)
-        getServer().pluginManager.registerEvents(SmoothCoastersChecker(), this)
-        getServer().pluginManager.registerEvents(PathPointEditorEvents(), this)
-        getServer().pluginManager.registerEvents(ThemeParkNPCSkin.Caching.Events(), this)
-        getServer().pluginManager.registerEvents(AudioServerEventListeners.BukkitEventListeners(), this)
-        getServer().pluginManager.registerEvents(AttractionInfoBoard.Events(), this)
-        getServer().pluginManager.registerEvents(RideCounterMenu.Events(), this)
-        getServer().pluginManager.registerEvents(CustomPlayerSkin.Events(), this)
-        getServer().pluginManager.registerEvents(BackendAudioServerCredentials.Events(), this)
-        getServer().pluginManager.registerEvents(AudioCommand.Events(), this)
-        getServer().pluginManager.registerEvents(RidecounterManager.Events(), this)
-        getServer().pluginManager.registerEvents(AchievementManager.Events(), this)
-        getServer().pluginManager.registerEvents(AchievementTriggerRegionEnter(), this)
-        getServer().pluginManager.registerEvents(AchievementTriggerRidecounterIncrease(), this)
-        getServer().pluginManager.registerEvents(AchievementTriggerSpecial(), this)
-        getServer().pluginManager.registerEvents(AchievementCategoriesMenu.Events(), this)
-        getServer().pluginManager.registerEvents(AchievementMenu.Events(), this)
-        getServer().pluginManager.registerEvents(SpecialAudioManagement(), this)
-        getServer().pluginManager.registerEvents(PlaceableEvents(), this)
-        getServer().pluginManager.registerEvents(RideOPCamera.Events(), this)
-        getServer().pluginManager.registerEvents(CosmeticManager.Events(), this)
-        getServer().pluginManager.registerEvents(DressingRoomEvents(), this)
-        getServer().pluginManager.registerEvents(CanCanRideOP.Events(), this)
-        getServer().pluginManager.registerEvents(CookingEvents(), this)
-        getServer().pluginManager.registerEvents(SlotMachineEvents(), this)
-        getServer().pluginManager.registerEvents(BandiThemeParkCommand(), this)
-        getServer().pluginManager.registerEvents(HandheldCosmetic.Events(), this)
-        getServer().pluginManager.registerEvents(DressingRoomMenu.Events(), this)
-        getServer().pluginManager.registerEvents(DressingRoomCategoryMenu.Events(), this)
-        getServer().pluginManager.registerEvents(Backpack.Events(), this)
-        getServer().pluginManager.registerEvents(VIPDoorEvents(), this)
-        getServer().pluginManager.registerEvents(ProtectionEvents(), this)
-        getServer().pluginManager.registerEvents(OneWayGateEvents(), this)
-        getServer().pluginManager.registerEvents(ShopMenu.Events(), this)
-        getServer().pluginManager.registerEvents(JoinItems(), this)
-        getServer().pluginManager.registerEvents(DressingRoomColorMenu.Events(), this)
-        getServer().pluginManager.registerEvents(Balloon.Events(), this)
-        getServer().pluginManager.registerEvents(ShopsMenu.Events(), this)
-        getServer().pluginManager.registerEvents(MainMenu.Events(), this)
-        getServer().pluginManager.registerEvents(ParkourEvents(), this)
+        registerEvents(PacketEntity.Events())
+        registerEvents(NPC.Events())
+        registerEvents(ArmorStandEditorEvents())
+        registerEvents(ItemPainter.Events())
+        registerEvents(Language.Events())
+        registerEvents(RankManager.Events())
+        registerEvents(ChatPrompt.Events())
+        registerEvents(BandiScoreboard.Events())
+        registerEvents(PlayerNameTag.Events())
+        registerEvents(TrackVehicleEditor.Events())
+        registerEvents(JoinMessages())
+        registerEvents(Playtime.Events())
+        registerEvents(PacketEntitySeat.Events())
+        registerEvents(CustomPlayerEditor.Events())
+        registerEvents(SeatAttachment.Listeners())
+        registerEvents(CustomBlock.Events())
+        registerEvents(CustomBlockMenu.Events())
+        registerEvents(BackCommand.Events())
+        registerEvents(PlayerBossBar.Events())
+        registerEvents(ColoredSigns())
+        registerEvents(BandiRegionEvents())
+        registerEvents(RideOPEvents())
+        registerEvents(AttractionMenu.Events())
+        registerEvents(RupsbaanCart.Events())
+        registerEvents(SmoothCoastersChecker())
+        registerEvents(PathPointEditorEvents())
+        registerEvents(ThemeParkNPCSkin.Caching.Events())
+        registerEvents(AudioServerEventListeners.BukkitEventListeners())
+        registerEvents(AttractionInfoBoard.Events())
+        registerEvents(RideCounterMenu.Events())
+        registerEvents(CustomPlayerSkin.Events())
+        registerEvents(BackendAudioServerCredentials.Events())
+        registerEvents(AudioCommand.Events())
+        registerEvents(RidecounterManager.Events())
+        registerEvents(AchievementManager.Events())
+        registerEvents(AchievementTriggerRegionEnter())
+        registerEvents(AchievementTriggerRidecounterIncrease())
+        registerEvents(AchievementTriggerSpecial())
+        registerEvents(AchievementCategoriesMenu.Events())
+        registerEvents(AchievementMenu.Events())
+        registerEvents(SpecialAudioManagement())
+        registerEvents(PlaceableEvents())
+        registerEvents(RideOPCamera.Events())
+        registerEvents(CosmeticManager.Events())
+        registerEvents(DressingRoomEvents())
+        registerEvents(CanCanRideOP.Events())
+        registerEvents(CookingEvents())
+        registerEvents(SlotMachineEvents())
+        registerEvents(BandiThemeParkCommand())
+        registerEvents(HandheldCosmetic.Events())
+        registerEvents(DressingRoomMenu.Events())
+        registerEvents(DressingRoomCategoryMenu.Events())
+        registerEvents(Backpack.Events())
+        registerEvents(VIPDoorEvents())
+        registerEvents(ProtectionEvents())
+        registerEvents(OneWayGateEvents())
+        registerEvents(ShopMenu.Events())
+        registerEvents(JoinItems())
+        registerEvents(DressingRoomColorMenu.Events())
+        registerEvents(Balloon.Events())
+        registerEvents(ShopsMenu.Events())
+        registerEvents(MainMenu.Events())
+        registerEvents(ParkourEvents())
     }
 
     private fun prepareSettings() {
@@ -512,5 +512,14 @@ class BandiCore: JavaPlugin() {
         CustomPlayerRigTest().register("custom-player-shaders")
         RankTest.getInstance()
         LeaderboardTest().register("leaderboard")
+    }
+    
+    // Utils
+    private fun registerEvents(listener: Listener) {
+        getServer().pluginManager.registerEvents(listener, this)
+    }
+    
+    private fun registerCommand(name: String, executor: CommandExecutor) {
+        getCommand(name)!!.setExecutor(executor)
     }
 }
