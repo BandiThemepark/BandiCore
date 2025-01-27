@@ -113,7 +113,7 @@ class TrackManager(val splineType: SplineType, val pointsPerMeter: Int, val fric
 
     private fun internalSetup() {
         loadTracks()
-        TrackRunnable().runTaskTimerAsynchronously(BandiCore.instance, 0, 1)
+        TrackRunnable().startTimer()
     }
 
     private fun getLoadedTrackIds(): List<String> {

@@ -1,21 +1,24 @@
 package net.bandithemepark.bandicore.park.attractions.tracks.runnables
 
-import net.bandithemepark.bandicore.BandiCore
 import net.bandithemepark.bandicore.park.attractions.rideop.RideOP
-import net.bandithemepark.bandicore.util.Util
-import org.bukkit.Bukkit
-import org.bukkit.scheduler.BukkitRunnable
+import net.bandithemepark.bandicore.util.coroutines.Scheduler
 
-class TrackRunnable: BukkitRunnable() {
+class TrackRunnable {
     private val rideOpTimer = RideOP.Timer()
     private val trackVisualiser = TrackVisualiser()
     private val trackVehicleUpdater = TrackVehicleUpdater()
     private val trackActionUpdater = TrackVehicleActionUpdater()
 
-    override fun run() {
+    private fun run() {
         rideOpTimer.onTick()
         trackVisualiser.onTick()
         trackVehicleUpdater.onTick()
         trackActionUpdater.onTick()
+    }
+
+    fun startTimer() {
+        Scheduler.loopAsync(50) {
+            run()
+        }
     }
 }
