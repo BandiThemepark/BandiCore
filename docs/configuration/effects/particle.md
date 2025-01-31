@@ -14,6 +14,7 @@ This is the full configuration format. Many of these options are optional, and s
         "particle": "CAMPFIRE_COSY_SMOKE", // the particle type to display, see https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html
         "interval": 2, // the interval in ticks between each particle spawn
         "count": 10, // the amount of particles to spawn each interval
+        "duration": 20, // the duration of the effect in ticks
         "location": { // the location of the particle effect
             "world": "world",
             "x": -17.5,
