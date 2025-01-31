@@ -24,7 +24,12 @@ object Scheduler {
             delay(delay)
 
             while(isActive) {
-                action()
+                try {
+                    action()
+                } catch(e: Exception) {
+                    e.printStackTrace()
+                }
+
                 delay(interval)
                 yield()
             }
